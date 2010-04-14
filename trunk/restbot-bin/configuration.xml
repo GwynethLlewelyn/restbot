@@ -1,0 +1,21 @@
+<restbot>
+    <networking>
+         <ip>127.0.0.1</ip>
+         <port>9080</port>
+	 <loginuri>https://login.agni.lindenlab.com/cgi-bin/login.cgi</loginuri>
+    </networking>
+    <security>
+        <hostnamelock>false</hostnamelock>
+        <serverpassword>pass</serverpassword>
+    </security>
+    <location>
+        <sim>strace island</sim>
+        <x>128</x>
+        <y>128</y>
+        <z>128</z>
+    </location>
+    <debug>
+        <libsl>true</libsl>
+        <restbot>true</restbot>
+    </debug>
+</restbot>
