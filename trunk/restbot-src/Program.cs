@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
-using libsecondlife;
+using OpenMetaverse;
 using System.Threading;
 using System.Reflection;
 using System.IO;
@@ -37,7 +37,7 @@ namespace RESTBot
 {
     public class Session
     {
-        public LLUUID ID;
+        public UUID ID;
         public string Hostname;
         public int Permissions;
         public RestBot Bot;
@@ -52,7 +52,7 @@ namespace RESTBot
         //static HttpListener Listener;
         static Server.Router Listener;
         static bool StillRunning;
-        public static Dictionary<LLUUID, Session> Sessions;
+        public static Dictionary<UUID, Session> Sessions;
 
         //config file
         static string configFile = "configuration.xml";
@@ -66,7 +66,7 @@ namespace RESTBot
         static void Main(string[] args)
         {
             DebugUtilities.WriteInfo("Restbot startup");
-            Sessions = new Dictionary<LLUUID, Session>();
+            Sessions = new Dictionary<UUID, Session>();
 
             DebugUtilities.WriteInfo("Loading plugins");
             RegisterAllCommands(Assembly.GetExecutingAssembly());
@@ -164,7 +164,7 @@ namespace RESTBot
                 if (parts.Length >= 2 && parts[1] == Program.config.security.serverPass
                     && Parameters.ContainsKey("first") && Parameters.ContainsKey("last") && Parameters.ContainsKey("pass"))
                 {
-                    foreach (KeyValuePair<LLUUID, Session> ss in Sessions)
+                    foreach (KeyValuePair<UUID, Session> ss in Sessions)
                     {
                         DebugUtilities.WriteSpecial("Avatar check: [" + ss.Value.Bot.First.ToLower() + "/" + ss.Value.Bot.Last.ToLower() + "] = [" + Parameters["first"].ToLower() + "/" + Parameters["last"].ToLower() + "]");
                         if (Parameters["first"].ToLower() == ss.Value.Bot.First.ToLower() &&
@@ -176,7 +176,7 @@ namespace RESTBot
 
                         }
                     }
-                    LLUUID id = LLUUID.Random();
+                    UUID id = UUID.Random();
                     Session s = new Session();
                     s.ID = id;
                     s.Hostname = headers.Hostname;
@@ -211,7 +211,7 @@ namespace RESTBot
             {
                 if (parts[1] == Program.config.security.serverPass )
                 {
-                    foreach (KeyValuePair<LLUUID, Session> s in Sessions)
+                    foreach (KeyValuePair<UUID, Session> s in Sessions)
                     {
                         lock (Sessions) DisposeSession(s.Key);
                     }
@@ -229,10 +229,10 @@ namespace RESTBot
 
             }
 
-            LLUUID sess = new LLUUID();
+            UUID sess = new UUID();
             try
             {
-                sess = new LLUUID(parts[1]);
+                sess = new UUID(parts[1]);
             }
             catch (FormatException)
             {
@@ -283,13 +283,13 @@ namespace RESTBot
 
         }
 
-        private static bool ValidSession(LLUUID key, string hostname)
+        private static bool ValidSession(UUID key, string hostname)
         {
             return Sessions.ContainsKey(key) && (!config.security.hostnameLock || Sessions[key].Hostname == hostname);
         }
 
         
-        public static void DisposeSession(LLUUID key)
+        public static void DisposeSession(UUID key)
         {
             DebugUtilities.WriteDebug("Disposing of session " + key.ToString());
             if (!Sessions.ContainsKey(key))

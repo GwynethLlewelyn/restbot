@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using libsecondlife;
-using libsecondlife.Packets;
+using OpenMetaverse;
+using OpenMetaverse.Packets;
 using System.Net;
 using System.Threading;
 using System.Timers;
@@ -59,13 +59,13 @@ namespace RESTBot
 
         static void Reaper_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            List<LLUUID> kc = new List<LLUUID>();
-            foreach (LLUUID key in Program.Sessions.Keys) //why not just lock() ? :P
+            List<UUID> kc = new List<UUID>();
+            foreach (UUID key in Program.Sessions.Keys) //why not just lock() ? :P
             {
                 kc.Add(key);
             }
             //Do reaping
-            foreach (LLUUID key in kc)
+            foreach (UUID key in kc)
             {
                 if (Program.Sessions.ContainsKey(key))
                 {
@@ -82,7 +82,7 @@ namespace RESTBot
     }
     public class ReaperPlugin : StatefulPlugin
     {
-        private LLUUID session;
+        private UUID session;
         public ReaperPlugin()
         {
             MethodName = "reaper_info";

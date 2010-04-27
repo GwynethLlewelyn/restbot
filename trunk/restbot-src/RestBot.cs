@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using libsecondlife;
+using OpenMetaverse;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -142,24 +142,24 @@ namespace RESTBot
         public string Last;
         public string MD5Password;
 
-        public SecondLife Client;
+        public GridClient Client;
         public Status myStatus;
-        public LLUUID sessionid;
+        public UUID sessionid;
 		
 		private DateTime uptime = new DateTime();
 		
         private Dictionary<string, StatefulPlugin> StatefulPlugins;
 
         private System.Timers.Timer ReloginTimer;
-		public delegate void BotStatusCallback(LLUUID Session, Status status);
+		public delegate void BotStatusCallback(UUID Session, Status status);
 		public event BotStatusCallback OnBotStatus;
 		
-        public RestBot(LLUUID session, string f, string l, string p)
+        public RestBot(UUID session, string f, string l, string p)
         {
             //setting up some class variables
             sessionid = session;
 			myStatus = Status.Offline;
-            Client = new SecondLife();
+            Client = new GridClient();
             First = f;
             Last = l;
             MD5Password = p;
@@ -168,7 +168,8 @@ namespace RESTBot
             ReloginTimer.Elapsed += new ElapsedEventHandler(ReloginTimer_Elapsed);
             //Some callbacks..
 			DebugUtilities.WriteDebug(session.ToString() + " Initializing callbacks");
-            Client.Network.OnDisconnected += new NetworkManager.DisconnectedCallback(Network_OnDisconnected);
+            // Client.Network.OnDisconnected += new NetworkManager.DisconnectedCallback(Network_OnDisconnected);
+            Client.Network.Disconnected += Network_OnDisconnected; // new syntax
             
 
             //Initialize StatefulPlugins
@@ -193,12 +194,14 @@ namespace RESTBot
             Login();
             //This is where we can handle relogin failures, too.
         }
-        void Network_OnDisconnected(NetworkManager.DisconnectType reason, string message)
+        
+        // rewrote to show message
+        void Network_OnDisconnected(object sender, DisconnectedEventArgs e)
         {
-            if(reason != NetworkManager.DisconnectType.ClientInitiated)
+            if(e.Reason != NetworkManager.DisconnectType.ClientInitiated)
             {
                 myStatus = Status.Reconnecting;
-                DebugUtilities.WriteWarning(sessionid.ToString() + " was disconnected, but I'm logging back in again in 5 minutes.");
+                DebugUtilities.WriteWarning(sessionid.ToString() + " was disconnected (" + e.Message.ToString() + "), but I'm logging back in again in 5 minutes.");
                 ReloginTimer.Stop();
                 ReloginTimer.Interval = 5 * 60 * 1000;
                 ReloginTimer.Start();
@@ -223,7 +226,7 @@ namespace RESTBot
 
             myStatus = Status.LoggingIn;
             //Set up some settings
-            Client.Settings.DEBUG = Program.config.debug.slDebug;
+            //Client.Settings.DEBUG = Program.config.debug.slDebug; //obsolete setting?
             Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
             Client.Settings.MULTIPLE_SIMS = false; //not for now.
             Client.Settings.SEND_PINGS = true;
@@ -232,7 +235,7 @@ namespace RESTBot
 
             LoginReply response = new LoginReply();
             string start = "";
-            if (Program.config.location.startSim.Trim() != "") start = libsecondlife.NetworkManager.StartLocation(Program.config.location.startSim, Program.config.location.x, Program.config.location.y, Program.config.location.z);
+            if (Program.config.location.startSim.Trim() != "") start = OpenMetaverse.NetworkManager.StartLocation(Program.config.location.startSim, Program.config.location.x, Program.config.location.y, Program.config.location.z);
             else start = "last";
             if (Client.Network.Login(First, Last, MD5Password, "RESTBot", start, "Jesse Malthus / Pleiades Consulting"))
             {
