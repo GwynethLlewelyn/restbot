@@ -1,0 +1,57 @@
+#summary Documentation on the API calls for REStbot
+
+= Introduction =
+
+The original instructions are minimalistic, they just deal with establishing a connection and exiting a bot.
+
+= Establishing a Connection =
+
+using cURL:
+
+*curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Zaius -d pass=77e854984fd6a73ece3aedab7ee9e21c* (password is md5'ed)
+
+This will return a _session identification key_.
+
+= Exiting =
+
+*curl http://localhost:9080/exit/<session_id>*
+
+where session_id is the session identification key received on the previous call
+
+= Avatar Plugin =
+
+_Note: all this is currently being back-patched as the callback interfaces changed on libopenmetaverse_
+
+== avatar_name ==
+
+Parameters unknown yet.
+
+== avatar_key ==
+
+Parameters unknown yet.
+
+== avatar_online ==
+
+Parameters unknown yet.
+
+== avatar_profile ==
+
+Parameters unknown yet.
+
+== avatar_groups ==
+
+Parameters unknown yet.
+
+= Reaper Plugin =
+
+== reaper_info ==
+
+= Stats Plugin =
+
+== dilation ==
+
+Parameters unknown yet.
+
+== sim_stat ==
+
+Parameters unknown yet.
