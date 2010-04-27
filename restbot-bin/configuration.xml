@@ -9,7 +9,7 @@
         <serverpassword>pass</serverpassword>
     </security>
     <location>
-        <sim>strace island</sim>
+        <sim>Xerox</sim>
         <x>128</x>
         <y>128</y>
         <z>128</z>

@@ -1,1 +1,0 @@
-"bin/mapgenerator.exe" data/message_template.msg libsecondlife/mapgenerator/template.cs libsecondlife/mapgenerator/unusedpackets.txt libsecondlife/_Packets_.cs

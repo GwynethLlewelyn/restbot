@@ -2,13 +2,16 @@
 <project name="RESTBot" default="build" basedir=".">
 	<description>A SL bot that takes commands via REST</description>
 	<property name="debug" value="true" overwrite="false" />
+	<property name="build.debug" value="false" />
+	<property name="build.dir" value="${project::get-base-directory()}/libsl/OpenMetaverse/bin" />
 	<target name="clean" description="remove all generated files">
 		<delete file="RestBot.exe" failonerror="false" />
 	</target>
 	<target name="build-libsl">
-		<nant buildfile="./libsl/libsecondlife.build" target="build-lib" />
-		<copy file="./libsl/bin/libsecondlife.dll" tofile="./restbot-bin/libsecondlife.dll" overwrite="true" />
-		<copy file="./libsl/bin/CookComputing.XmlRpcV2.dll" tofile="./restbot-bin/CookComputing.XmlRpcV2.dll" overwrite="true" />
+		<nant buildfile="./libsl/OpenMetaverse.build" target="build" />
+		<copy file="./libsl/bin/OpenMetaverse.dll" tofile="./restbot-bin/OpenMetaverse.dll" overwrite="true" />
+		<copy file="./libsl/bin/OpenMetaverseTypes.dll" tofile="./restbot-bin/OpenMetaverseTypes.dll" overwrite="true" />
+		<copy file="./libsl/bin/OpenMetaverse.StructuredData.dll" tofile="./restbot-bin/OpenMetaverse.StructuredData.dll" overwrite="true" />		<copy file="./libsl/bin/XMLRPC.dll" tofile="./restbot-bin/XMLRPC.dll" overwrite="true" />
 	</target>
 	<target name="build" description="compiles the source code" depends="build-libsl">
 		<csc target="exe" output="./restbot-bin/restbot.exe" debug="${debug}">
@@ -23,7 +26,9 @@
 				<include name="./restbot-plugins/StatsPlugin.cs" />
 			</sources>
 			<references>
-				<include name="./restbot-bin/libsecondlife.dll" />
+				<include name="./restbot-bin/OpenMetaverse.dll" />
+				<include name="./restbot-bin/OpenMetaverseTypes.dll" />
+				<include name="./restbot-bin/OpenMetaverse.StructuredData.dll" />
 				<include name="./restbot-bin/log4net.dll" />
 			</references>
 		</csc>

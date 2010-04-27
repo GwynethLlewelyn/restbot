@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using libsecondlife;
-using libsecondlife.Packets;
+using OpenMetaverse;
+using OpenMetaverse.Packets;
 using System.Net;
 using System.Threading;
 
@@ -32,10 +32,10 @@ namespace RESTBot
     public class AvatarNameLookupPlugin : StatefulPlugin
     {
 	
-		protected Dictionary<LLUUID, AutoResetEvent> NameLookupEvents = new Dictionary<LLUUID, AutoResetEvent>();
-		protected Dictionary<LLUUID, Avatar> avatarNames = new Dictionary<LLUUID, Avatar>();
+		protected Dictionary<UUID, AutoResetEvent> NameLookupEvents = new Dictionary<UUID, AutoResetEvent>();
+		protected Dictionary<UUID, String> avatarNames = new Dictionary<UUID, String>();
 		
-		private LLUUID session;
+		private UUID session;
 		
         public AvatarNameLookupPlugin()
         {
@@ -46,18 +46,20 @@ namespace RESTBot
 		{
 			session = bot.sessionid;
             DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
-			bot.Client.Avatars.OnAvatarNames += new AvatarManager.AvatarNamesCallback(Avatars_OnAvatarNames);
+            // new syntax
+			// bot.Client.Avatars.OnAvatarNames += new AvatarManager.AvatarNamesCallback(Avatars_OnAvatarNames); // obsolete
+			bot.Client.Avatars.UUIDNameReply += Avatars_OnAvatarNames;
 		}
         public override string Process(RestBot b, Dictionary<string, string> Paramaters)
         {
-            LLUUID agentKey;
+            UUID agentKey;
             DebugUtilities.WriteDebug("TR - Entering avatarname parser");
             try
             {
 				bool check = false;
                 if ( Paramaters.ContainsKey("key") ) {
                     DebugUtilities.WriteDebug("TR - Attempting to parse from POST");
-                    check = LLUUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
+                    check = UUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
 					DebugUtilities.WriteDebug("TR - Succesfully parsed POST");
                 } else {
                     return "<error>arguments</error>";
@@ -80,7 +82,7 @@ namespace RESTBot
 			
         }
 		
-		private string getName(RestBot b, LLUUID id)
+		private string getName(RestBot b, UUID id)
 		{
             DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Looking up name for " + id.ToString());
 			lock (NameLookupEvents) {
@@ -97,7 +99,7 @@ namespace RESTBot
 			}
 			string response = null;
 			if ( avatarNames.ContainsKey(id) ) {
-                response = avatarNames[id].Name;
+                response = avatarNames[id]; // .Name removed
                 lock ( avatarNames ) {
                     avatarNames.Remove(id);
                 }
@@ -107,16 +109,18 @@ namespace RESTBot
 			return response;
         }
         
-		private void Avatars_OnAvatarNames(Dictionary<LLUUID, string> names)
+        // obsolete syntax changed   
+		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
         {
-            DebugUtilities.WriteInfo(session.ToString() + " Proccesing " + names.Count.ToString() + " AvatarNames replies");
-			foreach (KeyValuePair<LLUUID, string> kvp in names) {
+            DebugUtilities.WriteInfo(session.ToString() + " Processing " + e.Names.Count.ToString() + " AvatarNames replies");
+			foreach (KeyValuePair<UUID, string> kvp in e.Names) {
 				if (!avatarNames.ContainsKey(kvp.Key) || avatarNames[kvp.Key] == null) {
                     DebugUtilities.WriteInfo(session.ToString() + " Reply Name: " + kvp.Value + " Key : " + kvp.Key.ToString());
 					lock (avatarNames) {
-						avatarNames[kvp.Key] = new Avatar();
+						// avatarNames[kvp.Key] = new Avatar(); // why all this trouble?
 						// FIXME: Change this to .name when we move inside libsecondlife
-						avatarNames[kvp.Key].Name = kvp.Value;
+						// avatarNames[kvp.Key].Name = kvp.Value; // protected
+						avatarNames[kvp.Key] = kvp.Value;
 					}
 					if (NameLookupEvents.ContainsKey(kvp.Key)) {
                         NameLookupEvents[kvp.Key].Set();
@@ -125,14 +129,15 @@ namespace RESTBot
             }
 		}
     }
+    
 	
     public class AvatarKeyLookupPlugin : StatefulPlugin
     {
 	
 		protected Dictionary<String, AutoResetEvent> KeyLookupEvents = new Dictionary<String, AutoResetEvent>();
-		protected Dictionary<String, LLUUID> avatarKeys = new Dictionary<String, LLUUID>();
+		protected Dictionary<String, UUID> avatarKeys = new Dictionary<String, UUID>();
 		
-		private LLUUID session;
+		private UUID session;
 		
         public AvatarKeyLookupPlugin()
         {
@@ -162,7 +167,7 @@ namespace RESTBot
 			
 		}
 		
-		public LLUUID getKey(RestBot b, String name)
+		public UUID getKey(RestBot b, String name)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up key for " + name);
 			name = name.ToLower();
@@ -173,11 +178,12 @@ namespace RESTBot
 			}
             DebugUtilities.WriteDebug("Lookup Event added, KeyLookupEvents now has a total of " + KeyLookupEvents.Count.ToString() + " entries");
 			DirFindQueryPacket find = new DirFindQueryPacket();
-			find.AgentData.AgentID = b.Client.Network.AgentID;
-            find.AgentData.SessionID = b.Client.Network.SessionID;
+			find.AgentData.AgentID = b.Client.Self.AgentID;	// was Network and not Self
+            find.AgentData.SessionID = b.Client.Self.SessionID;
             find.QueryData.QueryFlags = 1;
-            find.QueryData.QueryText = Helpers.StringToField(name);
-            find.QueryData.QueryID = new LLUUID("00000000000000000000000000000001");
+            //find.QueryData.QueryText = Helpers.StringToField(name);
+            find.QueryData.QueryText = Utils.StringToBytes(name);
+            find.QueryData.QueryID = new UUID("00000000000000000000000000000001");
             find.QueryData.QueryStart = 0;
 			
 			b.Client.Network.SendPacket((Packet) find);
@@ -188,7 +194,7 @@ namespace RESTBot
 				KeyLookupEvents.Remove(name);
 			}
             DebugUtilities.WriteDebug("Done with KLE, now has " + KeyLookupEvents.Count.ToString() + " entries");
-            LLUUID response = new LLUUID();
+            UUID response = new UUID();
             if ( avatarKeys.ContainsKey(name) ) {
                 response = avatarKeys[name];
                 lock ( avatarKeys ) {
@@ -209,7 +215,7 @@ namespace RESTBot
 				DebugUtilities.WriteInfo(session + " " + MethodName + " Proccesing " + replyCount.ToString() + " DirPeople replies");
                 for ( int i = 0 ; i <  replyCount ; i++ ) {
 					string avatarName = Helpers.FieldToUTF8String(reply.QueryReplies[i].FirstName) + " " + Helpers.FieldToUTF8String(reply.QueryReplies[i].LastName);
-					LLUUID avatarKey = reply.QueryReplies[i].AgentID;
+					UUID avatarKey = reply.QueryReplies[i].AgentID;
                     DebugUtilities.WriteDebug(session + " " + MethodName + " Reply " + (i + 1).ToString() + " of " + replyCount.ToString() + " Key : " + avatarKey.ToString() + " Name : " + avatarName);
 					
                     if ( !avatarKeys.ContainsKey(avatarName) || avatarKeys[avatarName] == null ) {
@@ -232,11 +238,11 @@ namespace RESTBot
     public class AvatarOnlineLookupPlugin : StatefulPlugin
     {
 	
-		protected Dictionary<LLUUID, AutoResetEvent> OnlineLookupEvents = new Dictionary<LLUUID, AutoResetEvent>();
-		protected Dictionary<LLUUID, bool> avatarOnline = new Dictionary<LLUUID, bool>();
+		protected Dictionary<UUID, AutoResetEvent> OnlineLookupEvents = new Dictionary<UUID, AutoResetEvent>();
+		protected Dictionary<UUID, bool> avatarOnline = new Dictionary<UUID, bool>();
 
 		
-		private LLUUID session;
+		private UUID session;
 		
         public AvatarOnlineLookupPlugin()
         {
@@ -251,12 +257,12 @@ namespace RESTBot
 		}
         public override string Process(RestBot b, Dictionary<string, string> Paramaters)
         {
-            LLUUID agentKey;
+            UUID agentKey;
             try
             {
 				bool check = false;
                 if (Paramaters.ContainsKey("key")) {
-                    check = LLUUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
+                    check = UUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
                 } else {
                     return "<error>arguments</error>";
                 }
@@ -276,7 +282,7 @@ namespace RESTBot
 			
 		}
 		
-		public bool getOnline(RestBot b, LLUUID key)
+		public bool getOnline(RestBot b, UUID key)
 		{
             DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up online status for " + key.ToString());
 			
@@ -324,9 +330,9 @@ namespace RESTBot
 	
     public class AvatarProfileLookupPlugin : StatefulPlugin
 	{
-		private LLUUID session;
-        protected Dictionary<LLUUID, AutoResetEvent> ProfileLookupEvents = new Dictionary<LLUUID, AutoResetEvent>();
-        protected Dictionary<LLUUID, Avatar.AvatarProperties> avatarProfile = new Dictionary<LLUUID, Avatar.AvatarProperties>();
+		private UUID session;
+        protected Dictionary<UUID, AutoResetEvent> ProfileLookupEvents = new Dictionary<UUID, AutoResetEvent>();
+        protected Dictionary<UUID, Avatar.AvatarProperties> avatarProfile = new Dictionary<UUID, Avatar.AvatarProperties>();
         
         public AvatarProfileLookupPlugin()
         {
@@ -341,12 +347,12 @@ namespace RESTBot
 		}
 		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
 		{
-            LLUUID agentKey;
+            UUID agentKey;
             try
             {
 				bool check = false;
                 if (Paramaters.ContainsKey("key")) {
-                    check = LLUUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
+                    check = UUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
                 } else {
                     return "<error>arguments</error>";
                 }
@@ -370,7 +376,7 @@ namespace RESTBot
 			
 		}
 
-        public string getProfile(RestBot b, LLUUID key)
+        public string getProfile(RestBot b, UUID key)
 		{
             DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up profile for " + key.ToString());
 			
@@ -411,7 +417,7 @@ namespace RESTBot
             }
 		}
 		
-        public void Avatars_OnAvatarProperties(LLUUID avatarID, Avatar.AvatarProperties properties)
+        public void Avatars_OnAvatarProperties(UUID avatarID, Avatar.AvatarProperties properties)
         {
             lock (avatarProfile) {
                 avatarProfile[avatarID] = properties;
@@ -425,9 +431,9 @@ namespace RESTBot
     
     public class AvatarGroupsLookupPlugin : StatefulPlugin
 	{
-		private LLUUID session;
-        protected Dictionary<LLUUID, AutoResetEvent> GroupsLookupEvents = new Dictionary<LLUUID, AutoResetEvent>();
-        protected Dictionary<LLUUID, AvatarGroupsReplyPacket.GroupDataBlock[] > avatarGroups = new Dictionary<LLUUID, AvatarGroupsReplyPacket.GroupDataBlock[]>();
+		private UUID session;
+        protected Dictionary<UUID, AutoResetEvent> GroupsLookupEvents = new Dictionary<UUID, AutoResetEvent>();
+        protected Dictionary<UUID, AvatarGroupsReplyPacket.GroupDataBlock[] > avatarGroups = new Dictionary<UUID, AvatarGroupsReplyPacket.GroupDataBlock[]>();
         
         public AvatarGroupsLookupPlugin()
         {
@@ -442,12 +448,12 @@ namespace RESTBot
 		}
 		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
 		{
-            LLUUID agentKey;
+            UUID agentKey;
             try
             {
 				bool check = false;
                 if (Paramaters.ContainsKey("key")) {
-                    check = LLUUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
+                    check = UUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
                 } else {
                     return "<error>arguments</error>";
                 }
@@ -471,7 +477,7 @@ namespace RESTBot
 			
 		}
 
-        public string getGroups(RestBot b, LLUUID key)
+        public string getGroups(RestBot b, UUID key)
 		{
             DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up profile for " + key.ToString());
 			
@@ -507,7 +513,7 @@ namespace RESTBot
             }
 		}
 		
-        public void Avatar_OnAvatarGroups(LLUUID avatarID, AvatarGroupsReplyPacket.GroupDataBlock[] groups)
+        public void Avatar_OnAvatarGroups(UUID avatarID, AvatarGroupsReplyPacket.GroupDataBlock[] groups)
         {
             lock (avatarGroups) {
                 avatarGroups[avatarID] = groups;

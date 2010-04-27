@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using libsecondlife;
+using OpenMetaverse;
 using System.Net;
 using System.Threading;
 
