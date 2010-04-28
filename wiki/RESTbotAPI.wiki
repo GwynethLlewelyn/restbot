@@ -34,8 +34,6 @@ Returns:
 
 = Avatar Plugin =
 
-_Note: all this is currently being back-patched as the callback interfaces changed on libopenmetaverse_
-
 == avatar_name ==
 
 Parameters: key
