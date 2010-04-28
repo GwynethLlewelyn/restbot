@@ -1,0 +1,48 @@
+<Project name="OpenMetaverseTypes" description="" standardNamespace="OpenMetaverse" newfilesearch="None" enableviewstate="True" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+  <Configurations active="Debug">
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="./../bin/" assembly="OpenMetaverseTypes" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="False" optimize="True" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="TRACE" generatexmldocumentation="True" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="./../bin/" assembly="OpenMetaverseTypes" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="True" optimize="False" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="TRACE;DEBUG" generatexmldocumentation="False" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <DeploymentInformation target="" script="" strategy="File">
+    <excludeFiles />
+  </DeploymentInformation>
+  <Contents>
+    <File name="./BlockingQueue.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./CRC32.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./CircularQueue.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color4.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./DoubleDictionary.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Enums.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./EnumsPrimitive.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./ExpiringCache.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./LocklessQueue.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Matrix4.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Parallel.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Quaternion.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Ray.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./ReaderWriterLockSlim.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./ThreadSafeDictionary.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./TokenBucket.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./UUID.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Utils.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./UtilsConversions.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Vector2.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Vector3.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Vector3d.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Vector4.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <ProjectReference type="Gac" localcopy="False" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="False" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </References>
+</Project>
