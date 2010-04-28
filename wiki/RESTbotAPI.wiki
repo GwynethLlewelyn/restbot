@@ -16,7 +16,9 @@ Establishing a connection will give you the {{{ <session_id> }}}
 
 using cURL:
 
-{{{ curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Zaius -d pass=77e854984fd6a73ece3aedab7ee9e21c }}} (password is md5'ed)
+{{{ curl http://localhost:9080/establish_session/<RESTbot password> -d first=<BotFirstName> -d last=<BotLastName> -d pass=<md5'ed bot password> }}}
+
+RESTbot password: the default is simply {{{pass}}}.
 
 This will return a _session identification key_.
 
@@ -152,6 +154,8 @@ Returns:
 == reaper_info ==
 
 Function unknown. Seems to have no parameters.
+
+Apparently is tied to an internal garbage collector _or_ deals with specific applications for Pleiades.
 
 = Stats Plugin =
 
