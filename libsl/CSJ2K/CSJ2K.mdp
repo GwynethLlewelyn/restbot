@@ -1,0 +1,246 @@
+<Project name="CSJ2K" description="" standardNamespace="CSJ2K" newfilesearch="None" enableviewstate="True" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+  <Configurations active="Debug">
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="./../bin/" assembly="CSJ2K" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="False" optimize="True" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="TRACE" generatexmldocumentation="False" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="./../bin/" assembly="CSJ2K" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="True" optimize="False" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="TRACE;DEBUG" generatexmldocumentation="False" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <DeploymentInformation target="" script="" strategy="File">
+    <excludeFiles />
+  </DeploymentInformation>
+  <Contents>
+    <File name="./AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./J2KEncoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./J2kImage.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/ChannelDefinitionMapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/ColorSpace.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/ColorSpaceException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/ColorSpaceMapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/EnumeratedColorSpaceMapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/EsRgbColorSpaceMapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/PalettizedColorSpaceMapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/Resampler.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/SYccColorSpaceMapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/boxes/ChannelDefinitionBox.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/boxes/ColorSpecificationBox.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/boxes/ComponentMappingBox.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/boxes/ImageHeaderBox.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/boxes/JP2Box.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Color/boxes/PaletteBox.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/ICCMatrixBasedInputProfile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/ICCMonochromeInputProfile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/ICCProfile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/ICCProfileException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/ICCProfileInvalidException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/ICCProfileNotFoundException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/ICCProfiler.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/MatrixBasedRestrictedProfile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/MonochromeInputRestrictedProfile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/RestrictedICCProfile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable16.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable16Gamma.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable16Interp.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable16LinearSRGBtoSRGB.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable32.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable32Gamma.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable32Interp.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable32LinearSRGBtoSRGB.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable8.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable8Gamma.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTable8Interp.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTableFP.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTableFPGamma.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/LookUpTableFPInterp.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/MatrixBasedTransformException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/MatrixBasedTransformTosRGB.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/MonochromeTransformException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Lut/MonochromeTransformTosRGB.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCCurveType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCCurveTypeReverse.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCDataType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCMeasurementType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCSignatureType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCTag.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCTagTable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCTextDescriptionType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCTextType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCViewType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCXYZType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Tags/ICCXYZTypeReverse.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Types/ICCDateTime.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Types/ICCProfileHeader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Types/ICCProfileVersion.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Icc/Types/XYZNumber.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Util/EndianBinaryReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Util/EndianBinaryWriter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Util/SupportClass.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/IntegerSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/JJ2KExceptionHandler.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/JJ2KInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/ModuleSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/NoNextElementException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/StringSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/CBlkCoordInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/CoordInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/CorruptedCodestreamException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/HeaderInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/Markers.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/PrecCoordInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/PrecInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/ProgressionType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/BitstreamReaderAgent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/CBlkInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/FileBitstreamReaderAgent.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/HeaderDecoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/PktDecoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/PktHeaderBitReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/PktInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/reader/TagTreeDecoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/writer/BitOutputBuffer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/writer/CodestreamWriter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/writer/FileCodestreamWriter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/writer/HeaderEncoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/writer/PktEncoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/codestream/writer/TagTreeEncoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/decoder/DecoderSpecs.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/encoder/EncoderSpecs.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/CBlkSizeSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/CodedCBlk.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/PrecinctSizeSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/Progression.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/ProgressionSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/StdEntropyCoderOptions.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/decoder/ByteInputBuffer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/decoder/ByteToBitInput.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/decoder/CodedCBlkDataSrcDec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/decoder/DecLyrdCBlk.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/decoder/EntropyDecoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/decoder/MQDecoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/decoder/StdEntropyDecoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/BitToByteOutput.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/ByteOutputBuffer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/CBlkRateDistStats.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/CodedCBlkDataSrcEnc.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/EBCOTLayer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/EBCOTRateAllocator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/EntropyCoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/LayersInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/MQCoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/PostCompRateAllocator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/entropy/encoder/StdEntropyCoder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/fileformat/FileFormatBoxes.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/fileformat/reader/FileFormatReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/fileformat/writer/FileFormatWriter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/BlkImgDataSrc.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/CompTransfSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/Coord.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/DataBlk.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/DataBlkFloat.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/DataBlkInt.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/ImgData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/ImgDataAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/ImgDataConverter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/ImgDataJoiner.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/Tiler.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/forwcomptransf/ForwCompTransf.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/forwcomptransf/ForwCompTransfSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/input/ImgReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/input/ImgReaderGDI.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/input/ImgReaderPGM.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/input/ImgReaderPGX.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/input/ImgReaderPPM.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/invcomptransf/InvCompTransf.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/output/ImgWriter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/output/ImgWriterPGM.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/output/ImgWriterPGX.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/image/output/ImgWriterPPM.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/io/BEBufferedRandomAccessFile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/io/BinaryDataInput.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/io/BinaryDataOutput.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/io/BufferedRandomAccessFile.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/io/EndianType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/io/RandomAccessIO.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/GuardBitsSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/QuantStepSizeSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/QuantTypeSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/QuantizationType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/dequantizer/CBlkQuantDataSrcDec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/dequantizer/Dequantizer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/dequantizer/DequantizerParams.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/dequantizer/StdDequantizer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/dequantizer/StdDequantizerParams.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/quantizer/CBlkQuantDataSrcEnc.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/quantizer/Quantizer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/quantization/quantizer/StdQuantizer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/MaxShiftSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/ROIDeScaler.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/encoder/ArbROIMaskGenerator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/encoder/ROI.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/encoder/ROIMaskGenerator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/encoder/ROIScaler.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/encoder/RectROIMaskGenerator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/encoder/SubbandROIMask.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/roi/encoder/SubbandRectROIMask.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/ArrayUtil.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/CodestreamManipulator.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/FacilityManager.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/ISRandomAccessIO.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/MathUtil.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/MsgLogger.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/MsgPrinter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/ParameterList.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/ProgressWatch.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/StreamMsgLogger.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/StringFormatException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/util/ThreadPool.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/FilterTypes.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/Subband.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/WTDecompSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/WTFilterSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/WaveletFilter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/WaveletTransform.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/AnWTFilter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/AnWTFilterFloat.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/AnWTFilterFloatLift9x7.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/AnWTFilterInt.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/AnWTFilterIntLift5x3.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/AnWTFilterSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/CBlkWTData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/CBlkWTDataFloat.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/CBlkWTDataInt.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/CBlkWTDataSrc.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/ForwWT.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/ForwWTDataProps.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/ForwWTFull.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/ForwardWT.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/analysis/SubbandAn.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/CBlkWTDataSrcDec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/InvWT.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/InvWTAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/InvWTData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/InvWTFull.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/InverseWT.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/MultiResImgData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/MultiResImgDataAdapter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/SubbandSyn.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/SynWTFilter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/SynWTFilterFloat.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/SynWTFilterFloatLift9x7.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/SynWTFilterInt.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/SynWTFilterIntLift5x3.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./j2k/wavelet/synthesis/SynWTFilterSpec.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <ProjectReference type="Gac" localcopy="False" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="False" refto="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </References>
+</Project>
