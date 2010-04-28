@@ -1,0 +1,184 @@
+<?xml version="1.0" ?>
+<project name="OpenMetaverse" default="build">
+	  <target name="build">
+		  <echo message="Build Directory is ${build.dir}" />
+		  <mkdir dir="${build.dir}" />
+		  <copy todir="${build.dir}" flatten="true">
+			  <fileset basedir="${project::get-base-directory()}">
+			  </fileset>
+		  </copy>
+		  <copy todir="${build.dir}">
+			  <fileset basedir=".">
+			  </fileset>
+		  </copy>
+		  <csc target="library" debug="${build.debug}" unsafe="True" warnaserror="False" define="TRACE" nostdlib="False" main="" doc="${build.dir}/OpenMetaverse.XML" output="${build.dir}/${project::get-name()}.dll">
+			  <resources prefix="OpenMetaverse" dynamicprefix="true" >
+			  </resources>
+			  <sources failonempty="true">
+				  <include name="AgentManager.cs" />
+				  <include name="AgentManagerCamera.cs" />
+				  <include name="AgentManagerMovement.cs" />
+				  <include name="AgentThrottle.cs" />
+				  <include name="Animations.cs" />
+				  <include name="AppearanceManager.cs" />
+				  <include name="AssemblyInfo.cs" />
+				  <include name="AssetCache.cs" />
+				  <include name="AssetManager.cs" />
+				  <include name="Avatar.cs" />
+				  <include name="AvatarManager.cs" />
+				  <include name="BVHDecoder.cs" />
+				  <include name="BitPack.cs" />
+				  <include name="Caps.cs" />
+				  <include name="CapsToPacket.cs" />
+				  <include name="CoordinateFrame.cs" />
+				  <include name="DirectoryManager.cs" />
+				  <include name="EstateTools.cs" />
+				  <include name="EventDictionary.cs" />
+				  <include name="FriendsManager.cs" />
+				  <include name="GridClient.cs" />
+				  <include name="GridManager.cs" />
+				  <include name="GroupManager.cs" />
+				  <include name="Helpers.cs" />
+				  <include name="InternalDictionary.cs" />
+				  <include name="Inventory.cs" />
+				  <include name="InventoryManager.cs" />
+				  <include name="InventoryNode.cs" />
+				  <include name="InventoryNodeDictionary.cs" />
+				  <include name="Logger.cs" />
+				  <include name="Login.cs" />
+				  <include name="NameValue.cs" />
+				  <include name="NetworkManager.cs" />
+				  <include name="ObjectManager.cs" />
+				  <include name="ObjectPool.cs" />
+				  <include name="ObjectPoolBase.cs" />
+				  <include name="ObservableDictionary.cs" />
+				  <include name="PacketDecoder.cs" />
+				  <include name="ParcelManager.cs" />
+				  <include name="Permissions.cs" />
+				  <include name="ProtocolManager.cs" />
+				  <include name="Settings.cs" />
+				  <include name="Simulator.cs" />
+				  <include name="SoundManager.cs" />
+				  <include name="Sounds.cs" />
+				  <include name="TerrainCompressor.cs" />
+				  <include name="TerrainManager.cs" />
+				  <include name="TexturePipeline.cs" />
+				  <include name="ThreadUtil.cs" />
+				  <include name="UDPBase.cs" />
+				  <include name="UtilizationStatistics.cs" />
+				  <include name="_Packets_.cs" />
+				  <include name="_VisualParam_.cs" />
+				  <include name="Assets/Asset.cs" />
+				  <include name="Assets/Archiving/ArchiveConstants.cs" />
+				  <include name="Assets/Archiving/AssetsArchiver.cs" />
+				  <include name="Assets/Archiving/OarFile.cs" />
+				  <include name="Assets/Archiving/TarArchiveReader.cs" />
+				  <include name="Assets/Archiving/TarArchiveWriter.cs" />
+				  <include name="Assets/AssetTypes/AssetAnimation.cs" />
+				  <include name="Assets/AssetTypes/AssetBodypart.cs" />
+				  <include name="Assets/AssetTypes/AssetClothing.cs" />
+				  <include name="Assets/AssetTypes/AssetGesture.cs" />
+				  <include name="Assets/AssetTypes/AssetLandmark.cs" />
+				  <include name="Assets/AssetTypes/AssetNotecard.cs" />
+				  <include name="Assets/AssetTypes/AssetPrim.cs" />
+				  <include name="Assets/AssetTypes/AssetScriptBinary.cs" />
+				  <include name="Assets/AssetTypes/AssetScriptText.cs" />
+				  <include name="Assets/AssetTypes/AssetSound.cs" />
+				  <include name="Assets/AssetTypes/AssetTexture.cs" />
+				  <include name="Assets/AssetTypes/AssetWearable.cs" />
+				  <include name="Capabilities/CapsBase.cs" />
+				  <include name="Capabilities/CapsClient.cs" />
+				  <include name="Capabilities/EventQueueClient.cs" />
+				  <include name="Imaging/BakeLayer.cs" />
+				  <include name="Imaging/ManagedImage.cs" />
+				  <include name="Imaging/OpenJPEG.cs" />
+				  <include name="Imaging/TGALoader.cs" />
+				  <include name="Interfaces/IMessage.cs" />
+				  <include name="Interfaces/IRendering.cs" />
+				  <include name="Messages/LindenMessages.cs" />
+				  <include name="Messages/MessageEventDecoder.cs" />
+				  <include name="Messages/Messages.cs" />
+				  <include name="Primitives/ObjectMedia.cs" />
+				  <include name="Primitives/ParticleSystem.cs" />
+				  <include name="Primitives/Primitive.cs" />
+				  <include name="Primitives/TextureEntry.cs" />
+				  <include name="Rendering/LindenMesh.cs" />
+				  <include name="Rendering/Rendering.cs" />
+				  <include name="Voice/TCPPipe.cs" />
+				  <include name="Voice/VoiceAccount.cs" />
+				  <include name="Voice/VoiceAux.cs" />
+				  <include name="Voice/VoiceConnector.cs" />
+				  <include name="Voice/VoiceControl.cs" />
+				  <include name="Voice/VoiceDefinitions.cs" />
+				  <include name="Voice/VoiceGateway.cs" />
+				  <include name="Voice/VoiceParticipant.cs" />
+				  <include name="Voice/VoiceSession.cs" />
+			  </sources>
+			  <references basedir="${project::get-base-directory()}">
+				  <lib>
+					  <include name="${project::get-base-directory()}" />
+					  <include name="${build.dir}" />
+				  </lib>
+				  <include name="System.dll" />
+				  <include name="System.Core.dll" />
+				  <include name="System.Xml.dll" />
+				  <include name="System.Data.dll" />
+				  <include name="System.Drawing.dll" />
+				  <include name="${build.dir}/OpenMetaverseTypes.dll" />
+				  <include name="${build.dir}/OpenMetaverse.StructuredData.dll" />
+				  <include name="../bin/log4net.dll" />
+				  <include name="../bin/XMLRPC.dll" />
+			  </references>
+            <nowarn>
+                <warning number="1591" />
+                <warning number="1574" />
+                <warning number="0419" />
+                <warning number="0618" />
+            </nowarn>
+		  </csc>
+	  </target>
+	  <target name="clean">
+		  <delete dir="${bin.dir}" failonerror="false" />
+		  <delete dir="${obj.dir}" failonerror="false" />
+	  </target>
+	  <target name="doc" description="Creates documentation.">
+		  <property name="doc.target" value="" />
+		  <if test="${platform::is-unix()}">
+			  <property name="doc.target" value="Web" />
+		  </if>
+		  <ndoc failonerror="false" verbose="true">
+			  <assemblies basedir="${project::get-base-directory()}">
+				  <include name="${build.dir}/${project::get-name()}.dll" />
+			  </assemblies>
+			  <summaries basedir="${project::get-base-directory()}">
+				  <include name="${build.dir}/${project::get-name()}.xml"/>
+			  </summaries>
+			  <referencepaths basedir="${project::get-base-directory()}">
+				  <include name="${build.dir}" />
+			  </referencepaths>
+			  <documenters>
+				  <documenter name="MSDN">
+					  <property name="OutputDirectory" value="${build.dir}/doc/${project::get-name()}" />
+					  <property name="OutputTarget" value="${doc.target}" />
+					  <property name="HtmlHelpName" value="${project::get-name()}" />
+					  <property name="IncludeFavorites" value="False" />
+					  <property name="Title" value="${project::get-name()} SDK Documentation" />
+					  <property name="SplitTOCs" value="False" />
+					  <property name="DefaulTOC" value="" />
+					  <property name="ShowVisualBasic" value="True" />
+					  <property name="AutoDocumentConstructors" value="True" />
+					  <property name="ShowMissingSummaries" value="${build.debug}" />
+					  <property name="ShowMissingRemarks" value="${build.debug}" />
+					  <property name="ShowMissingParams" value="${build.debug}" />
+					  <property name="ShowMissingReturns" value="${build.debug}" />
+					  <property name="ShowMissingValues" value="${build.debug}" />
+					  <property name="DocumentInternals" value="False" />
+					  <property name="DocumentPrivates" value="False" />
+					  <property name="DocumentProtected" value="True" />
+					  <property name="DocumentEmptyNamespaces" value="${build.debug}" />
+					  <property name="IncludeAssemblyVersion" value="True" />
+				  </documenter>
+			  </documenters>
+		  </ndoc>
+	  </target>
+</project>

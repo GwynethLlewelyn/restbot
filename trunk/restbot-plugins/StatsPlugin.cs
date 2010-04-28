@@ -38,7 +38,8 @@ namespace RESTBot
         public override string Process(RestBot b, Dictionary<string, string> Paramaters)
         {
 			b.Client.Settings.ALWAYS_DECODE_OBJECTS=true;
-            string dilation = b.Client.Network.CurrentSim.Dilation.ToString();
+			
+            string dilation = b.Client.Network.CurrentSim.Stats.Dilation.ToString();
             b.Client.Settings.ALWAYS_DECODE_OBJECTS = false;
 			return("<dilation>" + dilation + "</dilation>\n");
 		}
@@ -55,40 +56,40 @@ namespace RESTBot
         {
 			bool check = false;
 			while ( !check ) {
-				if ( b.Client.Network.CurrentSim.FPS != 0 ) {
+				if ( b.Client.Network.CurrentSim.Stats.FPS != 0 ) {
 					check = true;
 				}
 			}
 			string response = "<stats>\n";
-			response += "<dilation>" + b.Client.Network.CurrentSim.Dilation.ToString() + "</dilation>\n";
-			response += "<inbps>" + b.Client.Network.CurrentSim.IncomingBPS.ToString() + "</inbps>\n";
-			response += "<outbps>" + b.Client.Network.CurrentSim.OutgoingBPS.ToString() + "</outbps>\n";
-			response += "<resentout>" + b.Client.Network.CurrentSim.ResentPackets.ToString() + "</resentout>\n";
-			response += "<resentin>" + b.Client.Network.CurrentSim.ReceivedResends.ToString() + "</resentin>\n";
+			response += "<dilation>" + b.Client.Network.CurrentSim.Stats.Dilation.ToString() + "</dilation>\n";
+			response += "<inbps>" + b.Client.Network.CurrentSim.Stats.IncomingBPS.ToString() + "</inbps>\n";
+			response += "<outbps>" + b.Client.Network.CurrentSim.Stats.OutgoingBPS.ToString() + "</outbps>\n";
+			response += "<resentout>" + b.Client.Network.CurrentSim.Stats.ResentPackets.ToString() + "</resentout>\n";
+			response += "<resentin>" + b.Client.Network.CurrentSim.Stats.ReceivedResends.ToString() + "</resentin>\n";
 			response += "<queue>" + b.Client.Network.InboxCount.ToString() + "</queue>\n";
-			response += "<fps>" + b.Client.Network.CurrentSim.FPS.ToString() + "</fps>\n";
-			response += "<physfps>" + b.Client.Network.CurrentSim.PhysicsFPS.ToString() + "</physfps>\n";
-			response += "<agentupdates>" + b.Client.Network.CurrentSim.AgentUpdates.ToString() + "</agentupdates>\n";
-			response += "<objects>" + b.Client.Network.CurrentSim.Objects.ToString() + "</objects>\n";
-			response += "<scriptedobjects>" + b.Client.Network.CurrentSim.ScriptedObjects.ToString() + "</scriptedobjects>\n";
-			response += "<agents>" + b.Client.Network.CurrentSim.Agents.ToString() + "</agents>\n";
-			response += "<childagents>" + b.Client.Network.CurrentSim.ChildAgents.ToString() + "</childagents>\n";
-			response += "<activescripts>" + b.Client.Network.CurrentSim.ActiveScripts.ToString() + "</activescripts>\n";
-			response += "<lslips>" + b.Client.Network.CurrentSim.LSLIPS.ToString() + "</lslips>\n";
-			response += "<inpps>" + b.Client.Network.CurrentSim.INPPS.ToString() + "</inpps>\n";
-			response += "<outpps>" + b.Client.Network.CurrentSim.OUTPPS.ToString() + "</outpps>\n";
-			response += "<pendingdownloads>" + b.Client.Network.CurrentSim.PendingDownloads.ToString() + "</pendingdownloads>\n";
-			response += "<pendinguploads>" + b.Client.Network.CurrentSim.PendingUploads.ToString() + "</pendinguploads>\n";
-			response += "<virtualsize>" + b.Client.Network.CurrentSim.VirtualSize.ToString() + "</virtualsize>\n";
-			response += "<residentsize>" + b.Client.Network.CurrentSim.ResidentSize.ToString() + "</residentsize>\n";
-			response += "<pendinglocaluploads>" + b.Client.Network.CurrentSim.PendingLocalUploads.ToString() + "</pendinglocaluploads>\n";
-			response += "<unackedbytes>" + b.Client.Network.CurrentSim.UnackedBytes.ToString() + "</unackedbytes>\n";
+			response += "<fps>" + b.Client.Network.CurrentSim.Stats.FPS.ToString() + "</fps>\n";
+			response += "<physfps>" + b.Client.Network.CurrentSim.Stats.PhysicsFPS.ToString() + "</physfps>\n";
+			response += "<agentupdates>" + b.Client.Network.CurrentSim.Stats.AgentUpdates.ToString() + "</agentupdates>\n";
+			response += "<objects>" + b.Client.Network.CurrentSim.Stats.Objects.ToString() + "</objects>\n";
+			response += "<scriptedobjects>" + b.Client.Network.CurrentSim.Stats.ScriptedObjects.ToString() + "</scriptedobjects>\n";
+			response += "<agents>" + b.Client.Network.CurrentSim.Stats.Agents.ToString() + "</agents>\n";
+			response += "<childagents>" + b.Client.Network.CurrentSim.Stats.ChildAgents.ToString() + "</childagents>\n";
+			response += "<activescripts>" + b.Client.Network.CurrentSim.Stats.ActiveScripts.ToString() + "</activescripts>\n";
+			response += "<lslips>" + b.Client.Network.CurrentSim.Stats.LSLIPS.ToString() + "</lslips>\n";
+			response += "<inpps>" + b.Client.Network.CurrentSim.Stats.INPPS.ToString() + "</inpps>\n";
+			response += "<outpps>" + b.Client.Network.CurrentSim.Stats.OUTPPS.ToString() + "</outpps>\n";
+			response += "<pendingdownloads>" + b.Client.Network.CurrentSim.Stats.PendingDownloads.ToString() + "</pendingdownloads>\n";
+			response += "<pendinguploads>" + b.Client.Network.CurrentSim.Stats.PendingUploads.ToString() + "</pendinguploads>\n";
+			response += "<virtualsize>" + b.Client.Network.CurrentSim.Stats.VirtualSize.ToString() + "</virtualsize>\n";
+			response += "<residentsize>" + b.Client.Network.CurrentSim.Stats.ResidentSize.ToString() + "</residentsize>\n";
+			response += "<pendinglocaluploads>" + b.Client.Network.CurrentSim.Stats.PendingLocalUploads.ToString() + "</pendinglocaluploads>\n";
+			response += "<unackedbytes>" + b.Client.Network.CurrentSim.Stats.UnackedBytes.ToString() + "</unackedbytes>\n";
 			response += "<time>\n";
-			response += "<frame>" + b.Client.Network.CurrentSim.FrameTime.ToString() + "</frame>\n";
-			response += "<image>" + b.Client.Network.CurrentSim.ImageTime.ToString() + "</image>\n";
-			response += "<physics>" + b.Client.Network.CurrentSim.PhysicsTime.ToString() + "</physics>\n";
-			response += "<script>" + b.Client.Network.CurrentSim.ScriptTime.ToString() + "</script>\n";
-			response += "<other>" + b.Client.Network.CurrentSim.OtherTime.ToString() + "</other>\n";
+			response += "<frame>" + b.Client.Network.CurrentSim.Stats.FrameTime.ToString() + "</frame>\n";
+			response += "<image>" + b.Client.Network.CurrentSim.Stats.ImageTime.ToString() + "</image>\n";
+			response += "<physics>" + b.Client.Network.CurrentSim.Stats.PhysicsTime.ToString() + "</physics>\n";
+			response += "<script>" + b.Client.Network.CurrentSim.Stats.ScriptTime.ToString() + "</script>\n";
+			response += "<other>" + b.Client.Network.CurrentSim.Stats.OtherTime.ToString() + "</other>\n";
 			response += "</time>\n";
 			response += "</stats>\n";
             return (response);

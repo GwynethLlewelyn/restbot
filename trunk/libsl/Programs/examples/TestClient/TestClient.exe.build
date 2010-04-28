@@ -1,0 +1,171 @@
+<?xml version="1.0" ?>
+<project name="TestClient" default="build">
+	  <target name="build">
+		  <echo message="Build Directory is ${build.dir}" />
+		  <mkdir dir="${build.dir}" />
+		  <copy todir="${build.dir}" flatten="true">
+			  <fileset basedir="${project::get-base-directory()}">
+			  </fileset>
+		  </copy>
+		  <copy todir="${build.dir}">
+			  <fileset basedir=".">
+			  </fileset>
+		  </copy>
+		  <csc target="exe" debug="${build.debug}" unsafe="True" warnaserror="False" define="TRACE" nostdlib="False" main="" output="${build.dir}/${project::get-name()}.exe">
+			  <resources prefix="TestClient" dynamicprefix="true" >
+			  </resources>
+			  <sources failonempty="true">
+				  <include name="Arguments.cs" />
+				  <include name="ClientManager.cs" />
+				  <include name="Command.cs" />
+				  <include name="Parsing.cs" />
+				  <include name="Program.cs" />
+				  <include name="TestClient.cs" />
+				  <include name="Commands/Agent/BotsCommand.cs" />
+				  <include name="Commands/Agent/CloneProfileCommand.cs" />
+				  <include name="Commands/Agent/PlayAnimationCommand.cs" />
+				  <include name="Commands/Agent/TouchCommand.cs" />
+				  <include name="Commands/Agent/WhoCommand.cs" />
+				  <include name="Commands/Appearance/AppearanceCommand.cs" />
+				  <include name="Commands/Appearance/AttachmentsCommand.cs" />
+				  <include name="Commands/Appearance/AvatarInfoCommand.cs" />
+				  <include name="Commands/Appearance/CloneCommand.cs" />
+				  <include name="Commands/Appearance/WearCommand.cs" />
+				  <include name="Commands/Communication/EchoMasterCommand.cs" />
+				  <include name="Commands/Communication/IMCommand.cs" />
+				  <include name="Commands/Communication/IMGroupCommand.cs" />
+				  <include name="Commands/Communication/SayCommand.cs" />
+				  <include name="Commands/Communication/ShoutCommand.cs" />
+				  <include name="Commands/Communication/WhisperCommand.cs" />
+				  <include name="Commands/Directory/Key2NameCommand.cs" />
+				  <include name="Commands/Directory/SearchClassifiedsCommand.cs" />
+				  <include name="Commands/Directory/SearchEventsCommand.cs" />
+				  <include name="Commands/Directory/SearchGroupsCommand.cs" />
+				  <include name="Commands/Directory/SearchLandCommand.cs" />
+				  <include name="Commands/Directory/SearchPeopleCommand.cs" />
+				  <include name="Commands/Directory/SearchPlacesCommand.cs" />
+				  <include name="Commands/Directory/ShowEventDetailsCommand.cs" />
+				  <include name="Commands/Estate/DownloadTerrainCommand.cs" />
+				  <include name="Commands/Estate/UploadRawTerrainCommand.cs" />
+				  <include name="Commands/Friends/FriendsCommand.cs" />
+				  <include name="Commands/Friends/MapFriendCommand.cs" />
+				  <include name="Commands/Groups/ActivateGroupCommand.cs" />
+				  <include name="Commands/Groups/GroupMembersCommand.cs" />
+				  <include name="Commands/Groups/GroupRolesCommand.cs" />
+				  <include name="Commands/Groups/GroupsCommand.cs" />
+				  <include name="Commands/Groups/InviteGroupCommand.cs" />
+				  <include name="Commands/Groups/JoinGroupCommand.cs" />
+				  <include name="Commands/Groups/LeaveGroupCommand.cs" />
+				  <include name="Commands/Inventory/BackupCommand.cs" />
+				  <include name="Commands/Inventory/BalanceCommand.cs" />
+				  <include name="Commands/Inventory/ChangeDirectoryCommand.cs" />
+				  <include name="Commands/Inventory/CreateNotecardCommand.cs" />
+				  <include name="Commands/Inventory/DeleteFolderCommand.cs" />
+				  <include name="Commands/Inventory/DownloadCommand.cs" />
+				  <include name="Commands/Inventory/DumpOutfitCommand.cs" />
+				  <include name="Commands/Inventory/EmptyLostAndFound.cs" />
+				  <include name="Commands/Inventory/EmptyTrashCommand.cs" />
+				  <include name="Commands/Inventory/GiveAllCommand.cs" />
+				  <include name="Commands/Inventory/GiveItemCommand.cs" />
+				  <include name="Commands/Inventory/InventoryCommand.cs" />
+				  <include name="Commands/Inventory/ListContentsCommand.cs" />
+				  <include name="Commands/Inventory/ObjectInventoryCommand.cs" />
+				  <include name="Commands/Inventory/ScriptCommand.cs" />
+				  <include name="Commands/Inventory/TaskRunningCommand.cs" />
+				  <include name="Commands/Inventory/TreeCommand.cs" />
+				  <include name="Commands/Inventory/UploadImageCommand.cs" />
+				  <include name="Commands/Inventory/UploadScriptCommand.cs" />
+				  <include name="Commands/Inventory/ViewNotecardCommand.cs" />
+				  <include name="Commands/Inventory/XferCommand.cs" />
+				  <include name="Commands/Land/AgentLocationsCommand.cs" />
+				  <include name="Commands/Land/FindSimCommand.cs" />
+				  <include name="Commands/Land/GridLayerCommand.cs" />
+				  <include name="Commands/Land/GridMapCommand.cs" />
+				  <include name="Commands/Land/ParcelDetailsCommand.cs" />
+				  <include name="Commands/Land/ParcelInfoCommand.cs" />
+				  <include name="Commands/Land/ParcelPrimOwnersCommand.cs" />
+				  <include name="Commands/Land/ParcelSelectObjectsCommand.cs" />
+				  <include name="Commands/Land/WindCommand.cs" />
+				  <include name="Commands/Movement/BackCommand.cs" />
+				  <include name="Commands/Movement/CrouchCommand.cs" />
+				  <include name="Commands/Movement/FlyCommand.cs" />
+				  <include name="Commands/Movement/FlyToCommand.cs" />
+				  <include name="Commands/Movement/FollowCommand.cs" />
+				  <include name="Commands/Movement/ForwardCommand.cs" />
+				  <include name="Commands/Movement/GoHome.cs" />
+				  <include name="Commands/Movement/GotoCommand.cs" />
+				  <include name="Commands/Movement/GotoLandmark.cs" />
+				  <include name="Commands/Movement/JumpCommand.cs" />
+				  <include name="Commands/Movement/LeftCommand.cs" />
+				  <include name="Commands/Movement/LocationCommand.cs" />
+				  <include name="Commands/Movement/MoveToCommand.cs" />
+				  <include name="Commands/Movement/RightCommand.cs" />
+				  <include name="Commands/Movement/SetHome.cs" />
+				  <include name="Commands/Movement/SitCommand.cs" />
+				  <include name="Commands/Movement/SitOnCommand.cs" />
+				  <include name="Commands/Movement/StandCommand.cs" />
+				  <include name="Commands/Movement/TurnToCommand.cs" />
+				  <include name="Commands/Prims/ChangePermsCommand.cs" />
+				  <include name="Commands/Prims/DeRezObjectCommand.cs" />
+				  <include name="Commands/Prims/DownloadTextureCommand.cs" />
+				  <include name="Commands/Prims/ExportCommand.cs" />
+				  <include name="Commands/Prims/ExportParticlesCommand.cs" />
+				  <include name="Commands/Prims/FindObjectsCommand.cs" />
+				  <include name="Commands/Prims/FindTextureCommand.cs" />
+				  <include name="Commands/Prims/ImportCommand.cs" />
+				  <include name="Commands/Prims/PrimCountCommand.cs" />
+				  <include name="Commands/Prims/PrimInfoCommand.cs" />
+				  <include name="Commands/Prims/PrimRegexCommand.cs" />
+				  <include name="Commands/Prims/TexturesCommand.cs" />
+				  <include name="Commands/Stats/DilationCommand.cs" />
+				  <include name="Commands/Stats/NetstatsCommand.cs" />
+				  <include name="Commands/Stats/RegionInfoCommand.cs" />
+				  <include name="Commands/Stats/StatsCommand.cs" />
+				  <include name="Commands/Stats/UptimeCommand.cs" />
+				  <include name="Commands/System/AtCommand.cs" />
+				  <include name="Commands/System/DebugCommand.cs" />
+				  <include name="Commands/System/HelpCommand.cs" />
+				  <include name="Commands/System/LoadCommand.cs" />
+				  <include name="Commands/System/LoginCommand.cs" />
+				  <include name="Commands/System/LogoutCommand.cs" />
+				  <include name="Commands/System/MD5Command.cs" />
+				  <include name="Commands/System/PacketLogCommand.cs" />
+				  <include name="Commands/System/QuitCommand.cs" />
+				  <include name="Commands/System/SetMasterCommand.cs" />
+				  <include name="Commands/System/SetMasterKeyCommand.cs" />
+				  <include name="Commands/System/ShowEffectsCommand.cs" />
+				  <include name="Commands/System/SleepCommand.cs" />
+				  <include name="Commands/System/WaitForLoginCommand.cs" />
+				  <include name="Commands/Voice/ParcelVoiceInfo.cs" />
+				  <include name="Commands/Voice/VoiceAcountCommand.cs" />
+				  <include name="Properties/AssemblyInfo.cs" />
+			  </sources>
+			  <references basedir="${project::get-base-directory()}">
+				  <lib>
+					  <include name="${project::get-base-directory()}" />
+					  <include name="${build.dir}" />
+				  </lib>
+				  <include name="System.dll" />
+				  <include name="System.Xml.dll" />
+				  <include name="System.Web.dll" />
+				  <include name="System.Drawing.dll" />
+				  <include name="${build.dir}/OpenMetaverse.dll" />
+				  <include name="${build.dir}/OpenMetaverseTypes.dll" />
+				  <include name="${build.dir}/OpenMetaverse.Utilities.dll" />
+				  <include name="${build.dir}/OpenMetaverse.StructuredData.dll" />
+			  </references>
+            <nowarn>
+                <warning number="1591" />
+                <warning number="1574" />
+                <warning number="0419" />
+                <warning number="0618" />
+            </nowarn>
+		  </csc>
+	  </target>
+	  <target name="clean">
+		  <delete dir="${bin.dir}" failonerror="false" />
+		  <delete dir="${obj.dir}" failonerror="false" />
+	  </target>
+	  <target name="doc" description="Creates documentation.">
+	  </target>
+</project>
