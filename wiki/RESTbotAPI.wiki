@@ -4,31 +4,33 @@
 
 The original instructions are minimalistic, they just deal with establishing a connection and exiting a bot.
 
-Except for establishing a connection, the REST API is as following:
+Except for establishing a connection, the _original_ REST API is as following:
 
-Call http://your-host-where-RESTbot-lives.com:9080/<command_name>/<session_id>
+Call {{{ http://your-host-where-RESTbot-lives.com:9080/<command_name>/<session_id> }}}
 
 while on the POST data you put the actual parameters
 
-Establishing a connection will give you the <session_id>
+Establishing a connection will give you the {{{ <session_id> }}}
 
 = Establishing a Connection =
 
 using cURL:
 
-*curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Zaius -d pass=77e854984fd6a73ece3aedab7ee9e21c* (password is md5'ed)
+{{{ curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Zaius -d pass=77e854984fd6a73ece3aedab7ee9e21c }}} (password is md5'ed)
 
 This will return a _session identification key_.
 
 = Exiting =
 
-*curl http://localhost:9080/exit/<session_id>*
+{{{ curl http://localhost:9080/exit/<session_id> }}}
 
 where session_id is the session identification key received on the previous call.
 
 Returns:
 
+{{{
 <restbot><disposed>true</disposed></restbot>
+}}}
 
 = Avatar Plugin =
 
@@ -38,43 +40,50 @@ _Note: all this is currently being back-patched as the callback interfaces chang
 
 Parameters: key
 
-*curl http://localhost:9080/avatar_key/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226*
+{{{ curl http://localhost:9080/avatar_key/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226 }}}
 
 Returns:
 
+{{{
 <restbot><name>Gwyneth Llewelyn</name>
 </restbot>
+}}}
 
 == avatar_key ==
 
 Parameters: name
 
-*curl http://localhost:9080/avatar_key/<session_id>/ -d name=Gwyneth%20Llewelyn*
+{{{ curl http://localhost:9080/avatar_key/<session_id>/ -d name=Gwyneth%20Llewelyn }}}
 
 Returns:
 
+{{{
 <restbot><key>d2cdf457-5027-4887-abd8-573c62a85226</key>
 </restbot>
+}}}
 
 == avatar_online ==
 
 Parameters: key
 
-*curl http://localhost:9080/avatar_online/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226*
+{{{ curl http://localhost:9080/avatar_online/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226 }}}
 
 Returns:
 
+{{{
 <restbot><online>False</online>
 </restbot>
+}}}
 
 == avatar_profile ==
 
 Parameters: key
 
-*curl http://localhost:9080/avatar_profile/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226*
+{{{ curl http://localhost:9080/avatar_profile/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226 }}}
 
 Returns:
 
+{{{
 <restbot><profile>
 <publish>True</publish>
 <firstlife>
@@ -105,15 +114,17 @@ Distorted image? Well, I'm using a viewer that likes it!</about>
 <url>http://gwynethllewelyn.net/</url>
 </profile>
 </restbot>
+}}}
 
 == avatar_groups ==
 
 Parameters: key
 
-*curl http://localhost:9080/avatar_profile/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226*
+{{{ curl http://localhost:9080/avatar_profile/<session_id>/ -d key=d2cdf457-5027-4887-abd8-573c62a85226 }}}
 
 Returns:
 
+{{{
 <restbot><groups>
 <group>
 <name>Fashion Consolidated</name>
@@ -136,6 +147,7 @@ Returns:
 </group>
 </groups>
 </restbot>
+}}}
 
 = Reaper Plugin =
 
@@ -147,21 +159,24 @@ Function unknown. Seems to have no parameters.
 
 == dilation ==
 
-*curl http://localhost:9080/dilation/<session_id>*
+{{{ curl http://localhost:9080/dilation/<session_id> }}}
 
 Returns:
 
+{{{
 <restbot><dilation>0,9987054</dilation>
 </restbot>
+}}}
 
 where the value is the current sim's dilation.
 
 == sim_stat ==
 
-*curl http://localhost:9080/sim_stat/<session_id>*
+{{{ curl http://localhost:9080/sim_stat/<session_id> }}}
 
 Returns:
 
+{{{
 <restbot><stats>
 <dilation>0,9964779</dilation>
 <inbps>459</inbps>
@@ -195,3 +210,4 @@ Returns:
 </time>
 </stats>
 </restbot>
+}}}
