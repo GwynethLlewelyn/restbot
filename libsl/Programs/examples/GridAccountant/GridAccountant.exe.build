@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<project name="GridAccountant" default="build">
+	  <target name="build">
+		  <echo message="Build Directory is ${build.dir}" />
+		  <mkdir dir="${build.dir}" />
+		  <copy todir="${build.dir}" flatten="true">
+			  <fileset basedir="${project::get-base-directory()}">
+			  </fileset>
+		  </copy>
+		  <copy todir="${build.dir}">
+			  <fileset basedir=".">
+			  </fileset>
+		  </copy>
+		  <csc target="winexe" debug="${build.debug}" unsafe="True" warnaserror="False" define="TRACE" nostdlib="False" main="" output="${build.dir}/${project::get-name()}.exe">
+			  <resources prefix="GridAccountant" dynamicprefix="true" >
+				  <include name="frmGridAccountant.resx" />
+			  </resources>
+			  <sources failonempty="true">
+				  <include name="AssemblyInfo.cs" />
+				  <include name="frmGridAccountant.cs" />
+			  </sources>
+			  <references basedir="${project::get-base-directory()}">
+				  <lib>
+					  <include name="${project::get-base-directory()}" />
+					  <include name="${build.dir}" />
+				  </lib>
+				  <include name="System.dll" />
+				  <include name="System.Data.dll" />
+				  <include name="System.Drawing.dll" />
+				  <include name="System.Windows.Forms.dll" />
+				  <include name="${build.dir}/OpenMetaverse.dll" />
+				  <include name="${build.dir}/OpenMetaverseTypes.dll" />
+			  </references>
+            <nowarn>
+                <warning number="1591" />
+                <warning number="1574" />
+                <warning number="0419" />
+                <warning number="0618" />
+            </nowarn>
+		  </csc>
+	  </target>
+	  <target name="clean">
+		  <delete dir="${bin.dir}" failonerror="false" />
+		  <delete dir="${obj.dir}" failonerror="false" />
+	  </target>
+	  <target name="doc" description="Creates documentation.">
+	  </target>
+</project>

@@ -50,16 +50,16 @@ namespace RESTBot
 			// bot.Client.Avatars.OnAvatarNames += new AvatarManager.AvatarNamesCallback(Avatars_OnAvatarNames); // obsolete
 			bot.Client.Avatars.UUIDNameReply += Avatars_OnAvatarNames;
 		}
-		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID agentKey;
 			DebugUtilities.WriteDebug("TR - Entering avatarname parser");
 			try
 			{
 				bool check = false;
-				if ( Paramaters.ContainsKey("key") ) {
+				if ( Parameters.ContainsKey("key") ) {
 					DebugUtilities.WriteDebug("TR - Attempting to parse from POST");
-					check = UUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
+					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out agentKey);
 					DebugUtilities.WriteDebug("TR - Succesfully parsed POST");
 				} else {
 					return "<error>arguments</error>";
