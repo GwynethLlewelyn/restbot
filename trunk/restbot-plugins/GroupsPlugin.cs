@@ -36,8 +36,9 @@ namespace RESTBot
 		protected ManualResetEvent GroupsEvent = new ManualResetEvent(false);
 		// protected Dictionary<UUID, AutoResetEvent> ActivateGroupEvents = new Dictionary<UUID, AutoResetEvent>();
 		// protected Dictionary<UUID, String> groupThingy = new Dictionary<UUID, String>();
-		
+				
 		private UUID session;
+		private string activeGroup;
 		
 		public ActivateGroupPlugin()
 		{
@@ -83,48 +84,33 @@ namespace RESTBot
 		private string activateGroup(RestBot b, UUID groupUUID)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Activating group " + groupUUID.ToString());
-			
+			EventHandler<PacketReceivedEventArgs> pcallback = AgentDataUpdateHandler;
+			b.Client.Network.RegisterCallback(PacketType.AgentDataUpdate, pcallback);
 			b.Client.Groups.ActivateGroup(groupUUID);
-			
-			string response = "false";
 			
 			if ( ! GroupsEvent.WaitOne(15000, true) ) {
 				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on setting active group");
 			}
-			else
-			{
-				response = "true";
-			}
 
 			// ignore everything and just reset the event
+			b.Client.Network.UnregisterCallback(PacketType.AgentDataUpdate, pcallback);
 			GroupsEvent.Reset();			
 
-			return response;
+			if (String.IsNullOrEmpty(activeGroup))
+			   	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
+
+            return activeGroup;
 		}
 		
-		/* 
-		// obsolete syntax changed	 
-		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
-		{
-			DebugUtilities.WriteInfo(session.ToString() + " Processing " + e.Names.Count.ToString() + " AvatarNames replies");
-			foreach (KeyValuePair<UUID, string> kvp in e.Names) {
-				if (!avatarNames.ContainsKey(kvp.Key) || avatarNames[kvp.Key] == null) {
-					DebugUtilities.WriteInfo(session.ToString() + " Reply Name: " + kvp.Value + " Key : " + kvp.Key.ToString());
-					lock (avatarNames) {
-						// avatarNames[kvp.Key] = new Avatar(); // why all this trouble?
-						// FIXME: Change this to .name when we move inside libsecondlife
-						// avatarNames[kvp.Key].Name = kvp.Value; // protected
-						avatarNames[kvp.Key] = kvp.Value;
-					}
-					if (NameLookupEvents.ContainsKey(kvp.Key)) {
-						NameLookupEvents[kvp.Key].Set();
-					}
-				}
-			}
-		}
-	}
-	*/
-	
+		private void AgentDataUpdateHandler(object sender, PacketReceivedEventArgs e)
+        {
+            AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
+            //if (p.AgentData.AgentID == Client.Self.AgentID)
+            //{
+                activeGroup = Utils.BytesToString(p.AgentData.GroupName) + " (" + Utils.BytesToString(p.AgentData.GroupTitle) + ")";
+                GroupsEvent.Set();
+            //}
+        }	
 	// more commands to follow
 	}
 }
