@@ -213,3 +213,38 @@ Returns:
 </stats>
 </restbot>
 }}}
+
+= New Functionality =
+
+The commands below are new and manually added.
+
+== Groups Plugin ==
+
+= group_key_activate =
+
+Used to set the avatar to an active group, using the group UUID. Returns active group and, in parenthesis, the group's role that is shown on the title.
+
+Can be set to NULL key (00000000-0000-0000-0000-000000000000) to unset group.
+
+{{{ curl http://localhost:9080/group_key_activate/<session_id> -d key=150829ee-a295-4ef6-3965-9f5c77ac3b52 }}}
+
+Returns:
+
+{{{
+<restbot><active>Beta Technologies (Beta Technologies)</active>
+</restbot>
+}}}
+
+= group_name_activate =
+
+Used to set the avatar to an active group, using the group name. Returns active group and, in parenthesis, the group's role that is shown on the title.
+
+
+{{{ curl http://localhost:9080/group_name_activate/<session_id> -d name=Beta%20Technologies }}}
+
+Returns:
+
+{{{
+<restbot><active>Beta Technologies (Beta Technologies)</active>
+</restbot>
+}}}
