@@ -218,9 +218,9 @@ Returns:
 
 The commands below are new and manually added.
 
-== Groups Plugin ==
+= Groups Plugin =
 
-= group_key_activate =
+== group_key_activate ==
 
 Used to set the avatar to an active group, using the group UUID. Returns active group and, in parenthesis, the group's role that is shown on the title.
 
@@ -235,7 +235,7 @@ Returns:
 </restbot>
 }}}
 
-= group_name_activate =
+== group_name_activate ==
 
 Used to set the avatar to an active group, using the group name. Returns active group and, in parenthesis, the group's role that is shown on the title.
 
