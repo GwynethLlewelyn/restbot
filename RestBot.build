@@ -3,17 +3,17 @@
 	<description>A SL bot that takes commands via REST</description>
 	<property name="debug" value="true" overwrite="false" />
 	<property name="build.debug" value="false" />
-	<property name="build.dir" value="${project::get-base-directory()}/libsl/OpenMetaverse/bin" />
+	<property name="build.dir" value="${project::get-base-directory()}/libopenmetaverse/OpenMetaverse/bin" />
 	<target name="clean" description="remove all generated files">
 		<delete file="RestBot.exe" failonerror="false" />
 	</target>
-	<target name="build-libsl">
-		<nant buildfile="./libsl/OpenMetaverse.build" target="build" />
-		<copy file="./libsl/bin/OpenMetaverse.dll" tofile="./restbot-bin/OpenMetaverse.dll" overwrite="true" />
-		<copy file="./libsl/bin/OpenMetaverseTypes.dll" tofile="./restbot-bin/OpenMetaverseTypes.dll" overwrite="true" />
-		<copy file="./libsl/bin/OpenMetaverse.StructuredData.dll" tofile="./restbot-bin/OpenMetaverse.StructuredData.dll" overwrite="true" />		<copy file="./libsl/bin/XMLRPC.dll" tofile="./restbot-bin/XMLRPC.dll" overwrite="true" />
+	<target name="build-libopenmetaverse">
+		<nant buildfile="./libopenmetaverse/OpenMetaverse.build" target="build" />
+		<copy file="./libopenmetaverse/bin/OpenMetaverse.dll" tofile="./restbot-bin/OpenMetaverse.dll" overwrite="true" />
+		<copy file="./libopenmetaverse/bin/OpenMetaverseTypes.dll" tofile="./restbot-bin/OpenMetaverseTypes.dll" overwrite="true" />
+		<copy file="./libopenmetaverse/bin/OpenMetaverse.StructuredData.dll" tofile="./restbot-bin/OpenMetaverse.StructuredData.dll" overwrite="true" />		<copy file="./libopenmetaverse/bin/XMLRPC.dll" tofile="./restbot-bin/XMLRPC.dll" overwrite="true" />
 	</target>
-	<target name="build" description="compiles the source code" depends="build-libsl">
+	<target name="build" description="compiles the source code" depends="build-libopenmetaverse">
 		<csc target="exe" output="./restbot-bin/restbot.exe" debug="${debug}">
 			<sources>
 				<include name="./restbot-src/*.cs" />

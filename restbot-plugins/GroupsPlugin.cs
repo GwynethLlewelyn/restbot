@@ -96,20 +96,20 @@ namespace RESTBot
 			GroupsEvent.Reset();			
 
 			if (String.IsNullOrEmpty(activeGroup))
-			   	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
+				  	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
 
-            return activeGroup;
+			return activeGroup;
 		}
 		
 		private void AgentDataUpdateHandler(object sender, PacketReceivedEventArgs e)
-        {
-            AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
-            //if (p.AgentData.AgentID == Client.Self.AgentID)
-            //{
-                activeGroup = Utils.BytesToString(p.AgentData.GroupName) + " (" + Utils.BytesToString(p.AgentData.GroupTitle) + ")";
-                GroupsEvent.Set();
-            //}
-        }	
+		{
+			AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
+			//if (p.AgentData.AgentID == Client.Self.AgentID)
+			//{
+				activeGroup = Utils.BytesToString(p.AgentData.GroupName) + " (" + Utils.BytesToString(p.AgentData.GroupTitle) + ")";
+				GroupsEvent.Set();
+			//}
+		}	
 	}
 	
 	// Set active group, using group Name
@@ -145,8 +145,8 @@ namespace RESTBot
 				DebugUtilities.WriteDebug("TR - Activating group");
 					
 				groupUUID = GroupName2UUID(b, groupName);
-            	if (UUID.Zero != groupUUID)
-            	{
+				if (UUID.Zero != groupUUID)
+				{
 					string response = activateGroup(b, groupUUID);
 					DebugUtilities.WriteDebug("TR - Complete");
 					return "<active>" + response.Trim() + "</active>\n";
@@ -165,43 +165,43 @@ namespace RESTBot
 			
 		}
 		
-        public void ReloadGroupsCache(RestBot b)
-        {
-            b.Client.Groups.CurrentGroups += Groups_CurrentGroups;            
-            b.Client.Groups.RequestCurrentGroups();
-            GroupsEvent.WaitOne(10000, false);
-            b.Client.Groups.CurrentGroups -= Groups_CurrentGroups;
-            GroupsEvent.Reset();
-        }
+		public void ReloadGroupsCache(RestBot b)
+		{
+			b.Client.Groups.CurrentGroups += Groups_CurrentGroups;			  
+			b.Client.Groups.RequestCurrentGroups();
+			GroupsEvent.WaitOne(10000, false);
+			b.Client.Groups.CurrentGroups -= Groups_CurrentGroups;
+			GroupsEvent.Reset();
+		}
 
-        void Groups_CurrentGroups(object sender, CurrentGroupsEventArgs e)
-        {
-            if (null == GroupsCache)
-                GroupsCache = e.Groups;
-            else
-                lock (GroupsCache) { GroupsCache = e.Groups; }
-            GroupsEvent.Set();
-        }
+		void Groups_CurrentGroups(object sender, CurrentGroupsEventArgs e)
+		{
+			if (null == GroupsCache)
+				GroupsCache = e.Groups;
+			else
+				lock (GroupsCache) { GroupsCache = e.Groups; }
+			GroupsEvent.Set();
+		}
 
-        public UUID GroupName2UUID(RestBot b, String groupName)
-        {
-            UUID tryUUID;
-            if (UUID.TryParse(groupName,out tryUUID))
-                    return tryUUID;
-            if (null == GroupsCache) {
-                    ReloadGroupsCache(b);
-                if (null == GroupsCache)
-                    return UUID.Zero;
-            }
-            lock(GroupsCache) {
-                if (GroupsCache.Count > 0) {
-                    foreach (Group currentGroup in GroupsCache.Values)
-                        if (currentGroup.Name.ToLower() == groupName.ToLower())
-                            return currentGroup.ID;
-                }
-            }
-            return UUID.Zero;
-        }
+		public UUID GroupName2UUID(RestBot b, String groupName)
+		{
+			UUID tryUUID;
+			if (UUID.TryParse(groupName,out tryUUID))
+					return tryUUID;
+			if (null == GroupsCache) {
+					ReloadGroupsCache(b);
+				if (null == GroupsCache)
+					return UUID.Zero;
+			}
+			lock(GroupsCache) {
+				if (GroupsCache.Count > 0) {
+					foreach (Group currentGroup in GroupsCache.Values)
+						if (currentGroup.Name.ToLower() == groupName.ToLower())
+							return currentGroup.ID;
+				}
+			}
+			return UUID.Zero;
+		}
 		
 		private string activateGroup(RestBot b, UUID groupUUID)
 		{
@@ -219,20 +219,133 @@ namespace RESTBot
 			GroupsEvent.Reset();			
 
 			if (String.IsNullOrEmpty(activeGroup))
-			   	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
+				  	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
 
-            return activeGroup;
+			return activeGroup;
 		}
 		
 		private void AgentDataUpdateHandler(object sender, PacketReceivedEventArgs e)
-        {
-            AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
-            //if (p.AgentData.AgentID == Client.Self.AgentID)
-            //{
-                activeGroup = Utils.BytesToString(p.AgentData.GroupName) + " (" + Utils.BytesToString(p.AgentData.GroupTitle) + ")";
-                GroupsEvent.Set();
-            //}
-        }	
+		{
+			AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
+			//if (p.AgentData.AgentID == Client.Self.AgentID)
+			//{
+				activeGroup = Utils.BytesToString(p.AgentData.GroupName) + " (" + Utils.BytesToString(p.AgentData.GroupTitle) + ")";
+				GroupsEvent.Set();
+			//}
+		}	
 	}
 
+	// Send Group Instant Message (Group Chat)
+	public class GroupIMPlugin : StatefulPlugin
+	{
+		protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
+		private UUID session;
+		
+		public GroupIMPlugin()
+		{
+			MethodName = "group_im"; // parameters are key (Group UUID) and message
+		}
+		
+		public override void Initialize(RestBot bot)
+		{
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+		}
+		
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			UUID groupUUID;
+			string message;
+			
+			try
+			{
+				bool check = false;
+				if ( Parameters.ContainsKey("key") )
+				{
+					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out groupUUID);
+				}
+				else
+				{
+					return "<error>arguments: no key</error>";
+				}
+				if ( check ) 
+				{
+					if ( Parameters.ContainsKey("message") )
+					{
+						message = Parameters["message"].ToString().Replace("%20"," ").Replace("+"," ");
+					}
+					else
+					{
+						return "<error>arguments: no message</error>";
+					}
+					
+				}
+				else
+				{
+					return "<error>parsekey</error>";
+				}
+
+				message = message.TrimEnd();
+				if (message.Length > 1023)
+				{
+					message = message.Remove(1023);
+					DebugUtilities.WriteDebug(session + " " + MethodName + " Message truncated at 1024 characters");
+				}
+
+				string response = sendIMGroup(b, groupUUID, message);
+					
+				return "<message>" + response.Trim() + "</message>\n";
+			}
+			catch ( Exception e )
+			{
+				DebugUtilities.WriteError(e.Message);
+				return "<error>loads of errors</error>";
+			}
+			
+		}
+				
+		private string sendIMGroup(RestBot b, UUID groupUUID, string message)
+		{
+			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Sending message '" + message + "' to group UUID " + groupUUID.ToString());
+			b.Client.Self.GroupChatJoined += Self_GroupChatJoined;
+			
+			if (!b.Client.Self.GroupChatSessions.ContainsKey(groupUUID))
+			{
+				WaitForSessionStart.Reset();
+				b.Client.Self.RequestJoinGroupChat(groupUUID);
+			}
+			else
+			{
+				WaitForSessionStart.Set();
+			}
+			
+			if (WaitForSessionStart.WaitOne(20000, false))
+			{
+				b.Client.Self.InstantMessageGroup(groupUUID, message);
+			}
+			else
+			{
+				DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Timeout waiting for group session start");
+				return "timeout";
+			}
+
+			b.Client.Self.GroupChatJoined -= Self_GroupChatJoined;
+			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Instant Messaged group " + groupUUID.ToString() + " with message: " + message);
+			
+			return "message sent";
+		}
+		
+		void Self_GroupChatJoined(object sender, GroupChatJoinedEventArgs e)
+		{
+			if (e.Success)
+			{
+				DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + "Joined {0} Group Chat Success!");
+				WaitForSessionStart.Set();
+			}
+			else
+			{
+				DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + "Join Group Chat failed :(");
+			}
+		}
+	}
 }
