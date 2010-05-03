@@ -348,4 +348,184 @@ namespace RESTBot
 			}
 		}
 	}
+	
+	// Invite avatar to join a group
+	//	 Syntax similar to TestClient, e.g. avatar UUID, Group UUID, Role UUID
+	public class InviteGroupPlugin : StatefulPlugin
+	{
+		// protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
+		private UUID session;
+		
+		public InviteGroupPlugin()
+		{
+			MethodName = "group_invite"; // parameters are key (Group UUID) and message
+		}
+		
+		public override void Initialize(RestBot bot)
+		{
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+		}
+		
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			UUID avatar = UUID.Zero;
+			UUID group = UUID.Zero;
+			UUID role = UUID.Zero;
+			List<UUID> roles = new List<UUID>();
+			
+			try
+			{
+				bool check = false;
+				if ( Parameters.ContainsKey("avatar") )
+				{
+					check = UUID.TryParse(Parameters["avatar"].ToString().Replace("_"," "), out avatar);
+				}
+				else
+				{
+					return "<error>arguments: no avatar key</error>";
+				}
+				if ( check ) 
+				{
+					if ( Parameters.ContainsKey("group") )
+					{
+						check = UUID.TryParse(Parameters["group"].ToString().Replace("_"," "), out group);
+					}
+					else
+					{
+						return "<error>arguments: no group key</error>";
+					}					
+					
+					// to-do: avatars can be invited to multiple roles.
+					if ( Parameters.ContainsKey("role") )
+					{
+						if (! UUID.TryParse(Parameters["role"].ToString().Replace("_"," "), out role) )
+						{
+							// just a warning, role is optional
+							DebugUtilities.WriteDebug(session + " " + MethodName + " no role found, but that's ok");
+						}
+						roles.Add(role);
+					}
+					else
+					{
+						roles.Add(UUID.Zero); // no roles to add
+					}
+				}
+				else
+				{
+					return "<error>parsekey</error>";
+				}
+				
+				
+				
+				DebugUtilities.WriteDebug(session + " " + MethodName + " Group UUID: " + group + " Avatar UUID to join group: " + avatar + " Role UUID for avatar to join: " + roles.ToString() + " (NULL_KEY is fine)");
+
+				b.Client.Groups.Invite(group, roles, avatar);
+					
+				return "<invitation>invited " + avatar + " to " + group + "</invitation>\n";
+			}
+			catch ( Exception e )
+			{
+				DebugUtilities.WriteError(e.Message);
+				return "<error>loads of errors</error>";
+			}
+			
+		}
+	}
+	
+	// Send group notice
+	//	No working example to copy from!
+	//  Requires group UUID, subject, message, attachment UUID
+	
+	public class SendGroupNoticePlugin : StatefulPlugin
+	{
+		//protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
+		private UUID session;
+		
+		public SendGroupNoticePlugin()
+		{
+			MethodName = "group_notice"; // parameters are key (Group UUID) and message
+		}
+		
+		public override void Initialize(RestBot bot)
+		{
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+		}
+		
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		{	
+			string message;
+			string subject;
+			UUID groupUUID = UUID.Zero;
+			UUID attachmentUUID = UUID.Zero;
+			GroupNotice notice;
+		
+			try
+			{
+				if ( Parameters.ContainsKey("subject") )
+				{
+					subject = Parameters["subject"].ToString().Replace("%20"," ").Replace("+"," ");
+				}
+				else
+				{
+					return "<error>No notice subject</error>";
+				}
+					
+				if ( Parameters.ContainsKey("message") )
+				{
+					message = Parameters["message"].ToString().Replace("%20"," ").Replace("+"," ");
+				}
+				else
+				{
+					return "<error>No notice message</error>";
+				}				
+			
+				if ( Parameters.ContainsKey("group") )
+				{
+					if (! UUID.TryParse(Parameters["group"].ToString().Replace("_"," "), out groupUUID) )
+					{
+						return "<error>parsekey group</error>";
+					}				
+				}
+				else
+				{
+					return "<error>arguments: no group key</error>";
+				}
+				
+				if ( Parameters.ContainsKey("attachment") )
+				{
+					if (!  UUID.TryParse(Parameters["attachment"].ToString().Replace("_"," "), out attachmentUUID) )
+					{
+						return "<error>parsekey attachment</error>";
+					}					
+				}
+				else
+				{
+					// just a warning, attachment can be empty
+					DebugUtilities.WriteWarning(session + " " + MethodName + " Notice has no attachment (no problem)");
+				}
+				
+				DebugUtilities.WriteDebug(session + " " + MethodName + " Attempting to create a notice");
+				
+				notice = new GroupNotice();
+				
+				notice.Subject = subject;
+				notice.Message = message;
+				notice.AttachmentID = attachmentUUID;
+				notice.OwnerID = b.Client.Self.AgentID;
+				
+				b.Client.Groups.SendGroupNotice(groupUUID, notice);
+				
+				DebugUtilities.WriteDebug(session + " " + MethodName + " Sent Notice to group: " + groupUUID.ToString() + " subject: " + subject + " message: " + message + " Optional attachment: " + attachmentUUID.ToString());
+					
+				return "<notice>sent</notice>\n";
+			}
+			catch ( Exception e )
+			{
+				DebugUtilities.WriteError(e.Message);
+				return "<error>loads of errors</error>";
+			}		
+		}
+	}
 }

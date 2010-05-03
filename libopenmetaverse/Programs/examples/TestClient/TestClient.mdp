@@ -1,0 +1,155 @@
+<Project name="TestClient" description="" standardNamespace="TestClient" newfilesearch="None" enableviewstate="True" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+  <Configurations active="Debug">
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="./../../../bin/" assembly="TestClient" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Exe" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="False" optimize="True" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Exe" definesymbols="TRACE" generatexmldocumentation="False" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="./../../../bin/" assembly="TestClient" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Exe" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="True" optimize="False" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Exe" definesymbols="TRACE;DEBUG" generatexmldocumentation="False" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <DeploymentInformation target="" script="" strategy="File">
+    <excludeFiles />
+  </DeploymentInformation>
+  <Contents>
+    <File name="./Arguments.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./ClientManager.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Command.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Parsing.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Program.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./TestClient.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Agent/BotsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Agent/CloneProfileCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Agent/PlayAnimationCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Agent/TouchCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Agent/WhoCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Appearance/AppearanceCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Appearance/AttachmentsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Appearance/AvatarInfoCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Appearance/CloneCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Appearance/WearCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Communication/EchoMasterCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Communication/IMCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Communication/IMGroupCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Communication/SayCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Communication/ShoutCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Communication/WhisperCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/Key2NameCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/SearchClassifiedsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/SearchEventsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/SearchGroupsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/SearchLandCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/SearchPeopleCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/SearchPlacesCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Directory/ShowEventDetailsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Estate/DownloadTerrainCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Estate/UploadRawTerrainCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Friends/FriendsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Friends/MapFriendCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Groups/ActivateGroupCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Groups/GroupMembersCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Groups/GroupRolesCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Groups/GroupsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Groups/InviteGroupCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Groups/JoinGroupCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Groups/LeaveGroupCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/BackupCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/BalanceCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/ChangeDirectoryCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/CreateNotecardCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/DeleteFolderCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/DownloadCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/DumpOutfitCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/EmptyLostAndFound.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/EmptyTrashCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/GiveAllCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/GiveItemCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/InventoryCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/ListContentsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/ObjectInventoryCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/ScriptCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/TaskRunningCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/TreeCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/UploadImageCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/UploadScriptCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/ViewNotecardCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Inventory/XferCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/AgentLocationsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/FindSimCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/GridLayerCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/GridMapCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/ParcelDetailsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/ParcelInfoCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/ParcelPrimOwnersCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/ParcelSelectObjectsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Land/WindCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/BackCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/CrouchCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/FlyCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/FlyToCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/FollowCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/ForwardCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/GoHome.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/GotoCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/GotoLandmark.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/JumpCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/LeftCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/LocationCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/MoveToCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/RightCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/SetHome.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/SitCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/SitOnCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/StandCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Movement/TurnToCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/ChangePermsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/DeRezObjectCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/DownloadTextureCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/ExportCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/ExportParticlesCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/FindObjectsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/FindTextureCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/ImportCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/PrimCountCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/PrimInfoCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/PrimRegexCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Prims/TexturesCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Stats/DilationCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Stats/NetstatsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Stats/RegionInfoCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Stats/StatsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Stats/UptimeCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/AtCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/DebugCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/HelpCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/LoadCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/LoginCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/LogoutCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/MD5Command.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/PacketLogCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/QuitCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/SetMasterCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/SetMasterKeyCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/ShowEffectsCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/SleepCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/System/WaitForLoginCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Voice/ParcelVoiceInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Commands/Voice/VoiceAcountCommand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./Properties/AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <ProjectReference type="Gac" localcopy="False" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="False" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="False" refto="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <ProjectReference type="Gac" localcopy="False" refto="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <ProjectReference type="Project" localcopy="False" refto="OpenMetaverse" />
+    <ProjectReference type="Project" localcopy="False" refto="OpenMetaverseTypes" />
+    <ProjectReference type="Project" localcopy="False" refto="OpenMetaverse.Utilities" />
+    <ProjectReference type="Project" localcopy="False" refto="OpenMetaverse.StructuredData" />
+  </References>
+</Project>

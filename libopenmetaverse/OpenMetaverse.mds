@@ -1,0 +1,120 @@
+<Combine name="OpenMetaverse" fileversion="2.0" description="">
+  <Configurations active="Release">
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry configuration="Release" build="True" name="Dashboard" />
+      <Entry configuration="Release" build="True" name="GridAccountant" />
+      <Entry configuration="Release" build="True" name="WinGridProxy" />
+      <Entry configuration="Release" build="True" name="groupmanager" />
+      <Entry configuration="Release" build="True" name="Heightmap" />
+      <Entry configuration="Release" build="True" name="CSJ2K" />
+      <Entry configuration="Release" build="True" name="OpenMetaverse.Utilities" />
+      <Entry configuration="Release" build="True" name="AvatarPreview" />
+      <Entry configuration="Release" build="True" name="VisualParamGenerator" />
+      <Entry configuration="Release" build="True" name="Baker" />
+      <Entry configuration="Release" build="True" name="GridImageUpload" />
+      <Entry configuration="Release" build="True" name="TestClient" />
+      <Entry configuration="Release" build="True" name="OpenMetaverseTypes" />
+      <Entry configuration="Release" build="True" name="OpenMetaverse.GUI" />
+      <Entry configuration="Release" build="True" name="IRCGateway" />
+      <Entry configuration="Release" build="True" name="OpenMetaverse.Rendering.Meshmerizer" />
+      <Entry configuration="Release" build="True" name="PacketDump" />
+      <Entry configuration="Release" build="True" name="GridProxy" />
+      <Entry configuration="Release" build="True" name="OpenMetaverse" />
+      <Entry configuration="Release" build="True" name="OpenMetaverse.Tests" />
+      <Entry configuration="Release" build="True" name="PrimWorkshop" />
+      <Entry configuration="Release" build="True" name="OpenMetaverse.StructuredData" />
+      <Entry configuration="Release" build="True" name="mapgenerator" />
+      <Entry configuration="Release" build="True" name="GridProxyApp" />
+      <Entry configuration="Release" build="True" name="VoiceTest" />
+      <Entry configuration="Release" build="True" name="OpenMetaverse.Rendering.Simple" />
+      <Entry configuration="Release" build="True" name="importprimscript" />
+    </Configuration>
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry configuration="Debug" build="True" name="Dashboard" />
+      <Entry configuration="Debug" build="True" name="GridAccountant" />
+      <Entry configuration="Debug" build="True" name="WinGridProxy" />
+      <Entry configuration="Debug" build="True" name="groupmanager" />
+      <Entry configuration="Debug" build="True" name="Heightmap" />
+      <Entry configuration="Debug" build="True" name="CSJ2K" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverse.Utilities" />
+      <Entry configuration="Debug" build="True" name="AvatarPreview" />
+      <Entry configuration="Debug" build="True" name="VisualParamGenerator" />
+      <Entry configuration="Debug" build="True" name="Baker" />
+      <Entry configuration="Debug" build="True" name="GridImageUpload" />
+      <Entry configuration="Debug" build="True" name="TestClient" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverseTypes" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverse.GUI" />
+      <Entry configuration="Debug" build="True" name="IRCGateway" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverse.Rendering.Meshmerizer" />
+      <Entry configuration="Debug" build="True" name="PacketDump" />
+      <Entry configuration="Debug" build="True" name="GridProxy" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverse" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverse.Tests" />
+      <Entry configuration="Debug" build="True" name="PrimWorkshop" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverse.StructuredData" />
+      <Entry configuration="Debug" build="True" name="mapgenerator" />
+      <Entry configuration="Debug" build="True" name="GridProxyApp" />
+      <Entry configuration="Debug" build="True" name="VoiceTest" />
+      <Entry configuration="Debug" build="True" name="OpenMetaverse.Rendering.Simple" />
+      <Entry configuration="Debug" build="True" name="importprimscript" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="Dashboard" single="True">
+    <Execute type="None" entry="Dashboard" />
+    <Execute type="None" entry="GridAccountant" />
+    <Execute type="None" entry="WinGridProxy" />
+    <Execute type="None" entry="groupmanager" />
+    <Execute type="None" entry="Heightmap" />
+    <Execute type="None" entry="CSJ2K" />
+    <Execute type="None" entry="OpenMetaverse.Utilities" />
+    <Execute type="None" entry="AvatarPreview" />
+    <Execute type="None" entry="VisualParamGenerator" />
+    <Execute type="None" entry="Baker" />
+    <Execute type="None" entry="GridImageUpload" />
+    <Execute type="None" entry="TestClient" />
+    <Execute type="None" entry="OpenMetaverseTypes" />
+    <Execute type="None" entry="OpenMetaverse.GUI" />
+    <Execute type="None" entry="IRCGateway" />
+    <Execute type="None" entry="OpenMetaverse.Rendering.Meshmerizer" />
+    <Execute type="None" entry="PacketDump" />
+    <Execute type="None" entry="GridProxy" />
+    <Execute type="None" entry="OpenMetaverse" />
+    <Execute type="None" entry="OpenMetaverse.Tests" />
+    <Execute type="None" entry="PrimWorkshop" />
+    <Execute type="None" entry="OpenMetaverse.StructuredData" />
+    <Execute type="None" entry="mapgenerator" />
+    <Execute type="None" entry="GridProxyApp" />
+    <Execute type="None" entry="VoiceTest" />
+    <Execute type="None" entry="OpenMetaverse.Rendering.Simple" />
+    <Execute type="None" entry="importprimscript" />
+  </StartMode>
+  <Entries>
+    <Entry filename="../libopenmetaverse/Programs/examples/Dashboard/Dashboard.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/examples/GridAccountant/GridAccountant.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/WinGridProxy/WinGridProxy.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/examples/groupmanager/groupmanager.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/examples/Heightmap/Heightmap.mdp" />
+    <Entry filename="../libopenmetaverse/CSJ2K/CSJ2K.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverse.Utilities/OpenMetaverse.Utilities.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/AvatarPreview/AvatarPreview.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/VisualParamGenerator/VisualParamGenerator.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/Baker/Baker.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/GridImageUpload/GridImageUpload.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/examples/TestClient/TestClient.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverseTypes/OpenMetaverseTypes.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverse.GUI/OpenMetaverse.GUI.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/examples/IRCGateway/IRCGateway.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverse.Rendering.Meshmerizer/OpenMetaverse.Rendering.Meshmerizer.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/examples/PacketDump/PacketDump.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/GridProxy/GridProxy.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverse/OpenMetaverse.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverse.Tests/OpenMetaverse.Tests.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/PrimWorkshop/PrimWorkshop.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverse.StructuredData/OpenMetaverse.StructuredData.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/mapgenerator/mapgenerator.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/GridProxy/GridProxyApp.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/VoiceTest/VoiceTest.mdp" />
+    <Entry filename="../libopenmetaverse/OpenMetaverse.Rendering.Simple/OpenMetaverse.Rendering.Simple.mdp" />
+    <Entry filename="../libopenmetaverse/Programs/importprimscript/importprimscript.mdp" />
+  </Entries>
+</Combine>
