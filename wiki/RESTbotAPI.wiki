@@ -248,3 +248,17 @@ Returns:
 <restbot><active>Beta Technologies (Beta Technologies)</active>
 </restbot>
 }}}
+
+== group_im ==
+
+Sends messages in Group IM Chat (on any group the 'bot has joined). Returns just if the message was sent or not.
+
+Parameters are the UUID key for the group and a text message (urlencoded)
+
+{{{ curl http://localhost:9080/group_im/<session_id> -d key=<group UUID> -d message="This%20is%20a%20test" }}}
+
+Returns:
+
+{{{
+<restbot><message>message sent</message></restbot>
+}}}
