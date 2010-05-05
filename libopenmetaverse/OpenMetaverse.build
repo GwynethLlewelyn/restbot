@@ -1,0 +1,155 @@
+<?xml version="1.0" ?>
+<project name="OpenMetaverse" default="build">
+	  <echo message="Using '${nant.settings.currentframework}' Framework"/>
+
+	  <property name="bin.dir" value="bin" />
+	  <property name="obj.dir" value="obj" />
+	  <property name="doc.dir" value="doc" />
+	  <property name="project.main.dir" value="${project::get-base-directory()}" />
+	  <property name="project.config" value="Release" />
+
+	  <target name="Release" description="">
+		  <property name="project.config" value="Release" />
+		  <property name="build.debug" value="false" />
+	  </target>
+
+
+	  <target name="Debug" description="">
+		  <property name="project.config" value="Debug" />
+		  <property name="build.debug" value="true" />
+	  </target>
+
+	  <target name="net-1.1" description="Sets framework to .NET 1.1">
+		  <property name="nant.settings.currentframework" value="net-1.1" />
+	  </target>
+
+	  <target name="net-2.0" description="Sets framework to .NET 2.0">
+		  <property name="nant.settings.currentframework" value="net-2.0" />
+	  </target>
+
+	  <target name="net-3.5" description="Sets framework to .NET 3.5">
+		  <property name="nant.settings.currentframework" value="net-3.5" />
+	  </target>
+
+	  <target name="mono-1.0" description="Sets framework to mono 1.0">
+		  <property name="nant.settings.currentframework" value="mono-1.0" />
+	  </target>
+
+	  <target name="mono-2.0" description="Sets framework to mono 2.0">
+		  <property name="nant.settings.currentframework" value="mono-2.0" />
+	  </target>
+
+	  <target name="mono-3.5" description="Sets framework to mono 3.5">
+        <property name="nant.settings.currentframework" value="mono-3.5" />
+    </target>
+
+    <target name="init" description="">
+        <call target="${project.config}" />
+        <property name="sys.os.platform"
+                  value="${platform::get-name()}"
+                  />
+        <echo message="Platform ${sys.os.platform}" />
+        <property name="build.dir" value="${project::get-base-directory()}/${bin.dir}" />
+    </target>
+
+    <target name="clean" description="">
+        <echo message="Deleting all builds from all configurations" />
+        <delete dir="${bin.dir}" failonerror="false" />
+        <delete dir="${obj.dir}" failonerror="false" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/Dashboard/Dashboard.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/GridAccountant/GridAccountant.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/WinGridProxy/WinGridProxy.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/groupmanager/groupmanager.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/Heightmap/Heightmap.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/CSJ2K/CSJ2K.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Utilities/OpenMetaverse.Utilities.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/AvatarPreview/AvatarPreview.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/VisualParamGenerator/VisualParamGenerator.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/Baker/Baker.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/GridImageUpload/GridImageUpload.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/TestClient/TestClient.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverseTypes/OpenMetaverseTypes.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.GUI/OpenMetaverse.GUI.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/IRCGateway/IRCGateway.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Rendering.Meshmerizer/OpenMetaverse.Rendering.Meshmerizer.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/PacketDump/PacketDump.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/GridProxy/GridProxy.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse/OpenMetaverse.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Tests/OpenMetaverse.Tests.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/PrimWorkshop/PrimWorkshop.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.StructuredData/OpenMetaverse.StructuredData.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/mapgenerator/mapgenerator.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/GridProxy/GridProxyApp.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/VoiceTest/VoiceTest.exe.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Rendering.Simple/OpenMetaverse.Rendering.Simple.dll.build" target="clean" />
+        <nant buildfile="../libopenmetaverse/Programs/importprimscript/importprimscript.exe.build" target="clean" />
+    </target>
+
+    <target name="build" depends="init" description="">
+        <nant buildfile="../libopenmetaverse/CSJ2K/CSJ2K.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverseTypes/OpenMetaverseTypes.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.StructuredData/OpenMetaverse.StructuredData.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse/OpenMetaverse.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Utilities/OpenMetaverse.Utilities.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Tests/OpenMetaverse.Tests.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/GridProxy/GridProxy.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Rendering.Simple/OpenMetaverse.Rendering.Simple.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Rendering.Meshmerizer/OpenMetaverse.Rendering.Meshmerizer.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.GUI/OpenMetaverse.GUI.dll.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/AvatarPreview/AvatarPreview.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/Baker/Baker.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/importprimscript/importprimscript.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/mapgenerator/mapgenerator.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/IRCGateway/IRCGateway.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/Dashboard/Dashboard.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/PrimWorkshop/PrimWorkshop.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/GridImageUpload/GridImageUpload.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/GridProxy/GridProxyApp.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/WinGridProxy/WinGridProxy.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/VisualParamGenerator/VisualParamGenerator.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/VoiceTest/VoiceTest.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/groupmanager/groupmanager.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/Heightmap/Heightmap.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/GridAccountant/GridAccountant.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/PacketDump/PacketDump.exe.build" target="build" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/TestClient/TestClient.exe.build" target="build" />
+    </target>
+
+    <target name="build-release" depends="Release, init, build" description="Builds in Release mode" />
+
+    <target name="build-debug" depends="Debug, init, build" description="Builds in Debug mode" />
+
+    <target name="package" depends="clean, doc" description="Builds all" />
+
+    <target name="doc" depends="build-release">
+        <echo message="Generating all documentation from all builds" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/Dashboard/Dashboard.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/GridAccountant/GridAccountant.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/WinGridProxy/WinGridProxy.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/groupmanager/groupmanager.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/Heightmap/Heightmap.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/CSJ2K/CSJ2K.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Utilities/OpenMetaverse.Utilities.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/AvatarPreview/AvatarPreview.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/VisualParamGenerator/VisualParamGenerator.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/Baker/Baker.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/GridImageUpload/GridImageUpload.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/TestClient/TestClient.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverseTypes/OpenMetaverseTypes.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.GUI/OpenMetaverse.GUI.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/IRCGateway/IRCGateway.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Rendering.Meshmerizer/OpenMetaverse.Rendering.Meshmerizer.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/examples/PacketDump/PacketDump.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/GridProxy/GridProxy.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse/OpenMetaverse.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Tests/OpenMetaverse.Tests.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/PrimWorkshop/PrimWorkshop.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.StructuredData/OpenMetaverse.StructuredData.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/mapgenerator/mapgenerator.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/GridProxy/GridProxyApp.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/VoiceTest/VoiceTest.exe.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/OpenMetaverse.Rendering.Simple/OpenMetaverse.Rendering.Simple.dll.build" target="doc" />
+        <nant buildfile="../libopenmetaverse/Programs/importprimscript/importprimscript.exe.build" target="doc" />
+    </target>
+
+</project>
