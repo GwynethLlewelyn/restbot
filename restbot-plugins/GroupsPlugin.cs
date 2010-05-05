@@ -434,8 +434,7 @@ namespace RESTBot
 	}
 	
 	// Send group notice
-	//	No working example to copy from!
-	//  Requires group UUID, subject, message, attachment UUID
+	//  Requires group UUID, subject, message, attachment item UUID (not asset UUID)
 	
 	public class SendGroupNoticePlugin : StatefulPlugin
 	{
@@ -508,16 +507,24 @@ namespace RESTBot
 				
 				DebugUtilities.WriteDebug(session + " " + MethodName + " Attempting to create a notice");
 				
+				/* This doesn't work as it should!
+				if (! b.Client.Inventory.Store.Contains(attachmentUUID))
+				{
+					DebugUtilities.WriteWarning(session + " " + MethodName + " Item UUID " + attachmentUUID.ToString() + " not found on inventory (are you using an Asset UUID by mistake?)");
+					attachmentUUID = UUID.Zero;
+				}
+				*/
+								
 				notice = new GroupNotice();
 				
 				notice.Subject = subject;
 				notice.Message = message;
-				notice.AttachmentID = attachmentUUID;
+				notice.AttachmentID = attachmentUUID; // this is the inventory UUID, not the asset UUID
 				notice.OwnerID = b.Client.Self.AgentID;
 				
 				b.Client.Groups.SendGroupNotice(groupUUID, notice);
 				
-				DebugUtilities.WriteDebug(session + " " + MethodName + " Sent Notice to group: " + groupUUID.ToString() + " subject: " + subject + " message: " + message + " Optional attachment: " + attachmentUUID.ToString());
+				DebugUtilities.WriteDebug(session + " " + MethodName + " Sent Notice from avatar " + notice.OwnerID.ToString() + " to group: " + groupUUID.ToString() + " subject: '" + notice.Subject.ToString() + "' message: '" + notice.Message.ToString() + "' Optional attachment: " + notice.AttachmentID.ToString() + " Serialisation: " + Utils.BytesToString(notice.SerializeAttachment()));
 					
 				return "<notice>sent</notice>\n";
 			}

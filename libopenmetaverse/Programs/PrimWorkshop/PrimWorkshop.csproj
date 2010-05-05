@@ -3,7 +3,7 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{07E9A874-7815-4F61-9169-48B160B0BD0A}</ProjectGuid>
+    <ProjectGuid>{641BD959-75A4-42A0-88E1-109A68AE5005}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon></ApplicationIcon>
@@ -96,17 +96,17 @@
   <ItemGroup>
     <ProjectReference Include="../../OpenMetaverse/OpenMetaverse.csproj">
       <Name>OpenMetaverse</Name>
-      <Project>{E0CA2519-B533-4658-BCC4-095D450CA1D6}</Project>
+      <Project>{DE571A9C-8821-447B-8432-26A69B31FC35}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="../../OpenMetaverseTypes/OpenMetaverseTypes.csproj">
       <Name>OpenMetaverseTypes</Name>
-      <Project>{2DBB326B-DB43-4083-B3CB-929AF1A8E943}</Project>
+      <Project>{864264DB-F2AA-446C-A569-1900EE06CBF3}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="../../OpenMetaverse.StructuredData/OpenMetaverse.StructuredData.csproj">
       <Name>OpenMetaverse.StructuredData</Name>
-      <Project>{61DBB583-ECC9-44E8-89CA-652319CE5EB6}</Project>
+      <Project>{28A9CBAB-D308-4193-9B07-6A9E69829D77}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
   </ItemGroup>
