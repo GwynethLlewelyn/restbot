@@ -1,0 +1,39 @@
+<Project name="OpenMetaverse.StructuredData" description="" standardNamespace="OpenMetaverse.StructuredData" newfilesearch="None" enableviewstate="True" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+  <Configurations active="Debug">
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="./../bin/" assembly="OpenMetaverse.StructuredData" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="False" optimize="True" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="TRACE" generatexmldocumentation="True" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="./../bin/" assembly="OpenMetaverse.StructuredData" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Csc" warninglevel="4" nowarn="1591,1574,0419,0618" includedebuginformation="True" optimize="False" unsafecodeallowed="True" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="TRACE;DEBUG" generatexmldocumentation="False" win32Icon="" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <DeploymentInformation target="" script="" strategy="File">
+    <excludeFiles />
+  </DeploymentInformation>
+  <Contents>
+    <File name="./StructuredData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/IJsonWrapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/JsonData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/JsonException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/JsonMapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/JsonReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/JsonWriter.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/Lexer.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/OSDJson.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./JSON/ParserToken.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./LLSD/BinaryLLSD.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./LLSD/NotationLLSD.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="./LLSD/XmlLLSD.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <ProjectReference type="Gac" localcopy="False" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="False" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Project" localcopy="False" refto="OpenMetaverseTypes" />
+  </References>
+</Project>
