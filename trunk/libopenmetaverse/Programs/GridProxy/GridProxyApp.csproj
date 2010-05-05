@@ -3,7 +3,7 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3785ABCE-CEED-44CA-9E44-4DBAA6D12BF8}</ProjectGuid>
+    <ProjectGuid>{AE6DC230-5590-4D29-85B3-B47944DFA383}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon></ApplicationIcon>
@@ -71,12 +71,12 @@
   <ItemGroup>
     <ProjectReference Include="../GridProxy/GridProxy.csproj">
       <Name>GridProxy</Name>
-      <Project>{BA1B0344-0A28-4618-9366-58AF1DFEAFE3}</Project>
+      <Project>{98FB32AA-6C0B-4978-87FA-7DB82066BE6E}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="../../OpenMetaverseTypes/OpenMetaverseTypes.csproj">
       <Name>OpenMetaverseTypes</Name>
-      <Project>{2DBB326B-DB43-4083-B3CB-929AF1A8E943}</Project>
+      <Project>{864264DB-F2AA-446C-A569-1900EE06CBF3}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
   </ItemGroup>
