@@ -262,3 +262,21 @@ Returns:
 {{{
 <restbot><message>message sent</message></restbot>
 }}}
+
+= Inventory Plugin =
+
+== list_inventory ==
+
+Returns the whole inventory of this avatar, starting from the root folder.
+
+_To-do: List just a folder and everything beneath it_
+
+Parameters: none
+
+{{{ curl http://localhost:9080/list_inventory/<session_id> }}}
+
+Returns:
+
+{{{
+<restbot><inventory><item><name>...</name><itemid>...</itemid></item>...</inventory></restbot>
+}}}
