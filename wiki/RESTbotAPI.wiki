@@ -267,13 +267,11 @@ Returns:
 
 == list_inventory ==
 
-Returns the whole inventory of this avatar, starting from the root folder.
+Returns the whole inventory of this avatar. With an empty key, it starts from the root folder; add a folder key to just list that folder instead
 
-_To-do: List just a folder and everything beneath it_
+Parameters: key <folder UUID> for the folder where it should start
 
-Parameters: none
-
-{{{ curl http://localhost:9080/list_inventory/<session_id> }}}
+{{{ curl http://localhost:9080/list_inventory/<session_id> -d key=<folder UUID>}}}
 
 Returns:
 
