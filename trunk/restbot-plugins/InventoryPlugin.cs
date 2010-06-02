@@ -51,20 +51,48 @@ namespace RESTBot
 		
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
-			DebugUtilities.WriteDebug("List Inventory - Entering loop");
+			UUID folderID;
+			DebugUtilities.WriteDebug("LI - Entering folder key parser");
 			try
 			{
-				Manager = b.Client.Inventory;
-				Inventory = Manager.Store;
+				bool check = false;
+				if (Parameters.ContainsKey("key"))
+				{
+					DebugUtilities.WriteDebug("LI - Attempting to parse from POST");
+					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out folderID);
+					DebugUtilities.WriteDebug("LI - Succesfully parsed POST");
+				}
+				else
+				{
+					folderID = UUID.Zero; // start with root folder
+					check = true;
+				}
 
-				StringBuilder response = new StringBuilder();
+				if (check)	// means that we have a correctly parsed key OR no key
+							//  which is fine too (attempts root folder)
+				{
+					DebugUtilities.WriteDebug("List Inventory - Entering loop");
+								
+					Manager = b.Client.Inventory;
+					Inventory = Manager.Store;
+	
+					StringBuilder response = new StringBuilder();
+					
+					InventoryFolder startFolder = new InventoryFolder(folderID);
+					
+					if (folderID == UUID.Zero)
+						startFolder = Inventory.RootFolder;
 
-				InventoryFolder rootFolder = Inventory.RootFolder;
+					PrintFolder(b, startFolder, response);
 				
-				PrintFolder(b, rootFolder, response);
-			
-				DebugUtilities.WriteDebug("List Inventory - Complete");
-				return "<inventory>" + response + "</inventory>\n";
+					DebugUtilities.WriteDebug("List Inventory - Complete");
+					
+					return "<inventory>" + response + "</inventory>\n";
+				}
+				else 
+				{
+					return "<error>parsekey</error>";
+				}
 			}
 			catch ( Exception e )
 			{
