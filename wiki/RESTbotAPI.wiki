@@ -278,3 +278,34 @@ Returns:
 {{{
 <restbot><inventory><item><name>...</name><itemid>...</itemid></item>...</inventory></restbot>
 }}}
+
+== list_item ==
+
+Returns information from a single item in the inventory of this avatar.
+
+Parameters: key <key UUID> for the item ID
+
+{{{ curl http://localhost:9080/list_item/<session_id> -d key=<item ID>}}}
+
+Returns:
+
+{{{
+<restbot><item><AssetUUID>251ff15a-25c5-ebd7-ea13-c45e4e520f23</AssetUUID><PermissionsOwner>---</PermissionsOwner><PermissionsGroup>---</PermissionsGroup><AssetType>Texture</AssetType><InventoryType>Texture</InventoryType><CreatorID>d2cdf457-5027-4887-abd8-573c62a85226</CreatorID><Description>(No Description)</Description><GroupID>00000000-0000-0000-0000-000000000000</GroupID><GroupOwned>False</GroupOwned><SalePrice>10</SalePrice><SaleType>Not</SaleType><Flags>0</Flags><CreationDate>19-06-2009 18:20:35</CreationDate><LastOwnerID>00000000-0000-0000-0000-000000000000</LastOwnerID></item>
+}}}
+
+== give_item ==
+
+Transfers a single item from the inventory of this avatar to another avatar.
+
+Parameters: itemID <key UUID> for the item ID to give
+
+avatarKey <avatar UUID> for the recipient's avatar UIID
+
+{{{ curl http://localhost:9080/list_item/<session_id> -d itemID=<item ID> -d avatarKey=<avatar UUID>}}}
+
+Returns:
+
+{{{
+<restbot><item><name>BetaTech_OV_RGB</name><assetType>Texture</assetType><itemID>6e89002b-6788-ecc5-c314-95f795b08cd8</itemID><avatarKey>d2cdf457-5027-4887-abd8-573c62a85226</avatarKey></item>
+</restbot>
+}}}
