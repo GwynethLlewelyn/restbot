@@ -37,14 +37,16 @@
   </Target>
   -->
   <ItemGroup>
-    <ProjectReference Include="libsl\libsecondlife\libsecondlife.csproj">
+    <ProjectReference Include="libopenmetaverse\OpenMetaverse\OpenMetaverse.csproj">
       <Project>{D9CDEDFB-8169-4B03-B57F-0DF638F044EC}</Project>
-      <Name>libsecondlife</Name>
+      <Name>libopenmetaverse</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="restbot-plugins\AvatarsPlugin.cs" />
-    <Compile Include="restbot-plugins\ReaperPlugin.cs" />
+    <Compile Include="restbot-plugins\GroupsPlugin.cs" />
+    <Compile Include="restbot-plugins\GroupsPlugin.cs" />
+    <Compile Include="restbot-plugins\InventoryPlugin.cs" />
     <Compile Include="restbot-plugins\StatsPlugin.cs" />
     <Compile Include="restbot-src\Configuration.cs" />
     <Compile Include="restbot-src\DebugUtilities.cs" />

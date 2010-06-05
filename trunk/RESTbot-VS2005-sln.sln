@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual C# Express 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libsecondlife", "libsl\libsecondlife\libsecondlife.csproj", "{D9CDEDFB-8169-4B03-B57F-0DF638F044EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libopenmetaverse", "libopenmetaverse\OpenMetaverse\OpenMetaverse.csproj", "{D9CDEDFB-8169-4B03-B57F-0DF638F044EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTbot-VS2005-csproj", "RESTbot-VS2005-csproj.csproj", "{AA108657-E674-4E2C-A062-BBF04BFEA0A6}"
 EndProject

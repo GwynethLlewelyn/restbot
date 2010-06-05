@@ -1,6 +1,6 @@
 README File - RESTBot
 Written August 9, 2007 -  Pleiades Consulting, Inc
-Revised ? - Nobody
+Revised June 5, 2010 - Gwyneth Llewelyn (notes on compilation)
 
 +-------------------------+
 |        OVERVIEW         |
@@ -38,6 +38,8 @@ On the status bar (the text at the bottom of the window of VS) - you should see
 "Build succeeded", which means that the compilation was complete. You can now
 skip to the CONFIGURATION section of this readme file.
 
+Note: this version was NOT tested under Windows. Caveat utilitor.
+
 +-------------------------+
 |    COMPILING - LINUX    |
 +-------------------------+
@@ -53,6 +55,8 @@ Once all of that is installed, cd to the main directory of your copy of restbot
 and run "nant" in the command line. A lot of gibberish will run across the 
 screen. This usually takes about 20 seconds or so.. and hopefully you will see 
 "BUILD SUCCEEDED" when it is done. Yay! Go on to the CONFIGURATION section.
+
+Note: if the compilation fails, try the following. First go to the ./libopenmetaverse folder. Run ./runprebuild.sh and do a nant clean followed by nant. This should compile libopenmetaverse cleanly. Go back to the root directory and run nant again. This time it should work properly.
 
 +-------------------------+
 |      CONFIGURATION      |
