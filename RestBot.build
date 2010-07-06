@@ -23,7 +23,8 @@
 				below lines and change the file name -->
 				<include name="./restbot-plugins/AvatarsPlugin.cs" />
 				<include name="./restbot-plugins/GroupsPlugin.cs" />
-				<include name="./restbot-plugins/InventoryPlugin.cs" />								<include name="./restbot-plugins/ReaperPlugin.cs" />
+				<include name="./restbot-plugins/InventoryPlugin.cs" />								<include name="./restbot-plugins/MovementPlugin.cs" />
+				<include name="./restbot-plugins/ReaperPlugin.cs" />
 				<include name="./restbot-plugins/StatsPlugin.cs" />
 			</sources>
 			<references>
