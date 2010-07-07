@@ -309,3 +309,53 @@ Returns:
 <restbot><item><name>BetaTech_OV_RGB</name><assetType>Texture</assetType><itemID>6e89002b-6788-ecc5-c314-95f795b08cd8</itemID><avatarKey>d2cdf457-5027-4887-abd8-573c62a85226</avatarKey></item>
 </restbot>
 }}}
+
+== create_notecard ==
+
+Creates a notecard on the 'bot's inventory with name, text, and optionally an attachment (for some reasons the attachment seems to be broken)
+
+Parameters: name (name for the notecard; if empty, a default name will be selected)
+
+notecard (text for the notecard's content; not tested with UTF-8 and special formatting yet)
+
+key (itemID for the attachment)
+
+{{{ curl http://localhost:9080/create_notecard/<session_id> -d name=<string> -d notecard=<string> -d key=<item UUID> }}}
+
+Returns:
+
+{{{
+<restbot><notecard><ItemID>f2890f40-44ba-d123-0709-ec73ca42f237</ItemID><AssetID>093dea8c-8231-8515-decc-0f13ee0abada</AssetID><name>Notecard name</name></notecard></restbot>
+}}}
+
+= Movement Plugin =
+
+== location ==
+
+Shows the current simulator name and actual position of the 'bot.
+
+Parameters: none
+
+{{{ curl http://localhost:9080/location/<session_id> }}}
+
+Returns:
+
+{{{
+<restbot><location><CurrentSim>Beta Technologies (216.82.45.92:13000)</CurrentSim><Position><103.0242, 211.2815, 30.03234></Position></restbot>
+}}}
+
+== goto ==
+
+Teleports 'bot to a specific simulator and a position (x,y,z) inside that sim. Position coordinates are floats.
+
+Parameters: sim <a text string> for the simulator name (spaces should work fine if properly quoted)
+
+x, y, z <each is a float> Position inside the simulator to teleport to
+
+{{{ curl http://localhost:9080/goto/<session_id> -d sim=<string> -d x=<float> -d y=<float> -d z=<float> }}}
+
+Returns:
+
+{{{
+<restbot><teleport>Beta Technologies</teleport></restbot>
+}}}
