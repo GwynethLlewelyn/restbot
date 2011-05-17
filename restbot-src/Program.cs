@@ -37,7 +37,7 @@ namespace RESTBot
 {
     public class Session
     {
-        public UUID ID;
+        public UUID ID = UUID.Zero;
         public string Hostname;
         public int Permissions;
         public RestBot Bot;
@@ -65,6 +65,9 @@ namespace RESTBot
 
         static void Main(string[] args)
         {
+            DebugUtilities.WriteInfo("Reading config file");
+            config = XMLConfig.Configuration.LoadConfiguration(configFile);
+
             DebugUtilities.WriteInfo("Restbot startup");
             Sessions = new Dictionary<UUID, Session>();
 
@@ -73,8 +76,6 @@ namespace RESTBot
             DebugUtilities.WriteDebug("Loading stateful plugins");
             RegisterAllStatefulPlugins(Assembly.GetExecutingAssembly());
 
-            DebugUtilities.WriteInfo("Reading config file");
-            config = XMLConfig.Configuration.LoadConfiguration(configFile);
             DebugUtilities.WriteInfo("Listening on port " + config.networking.port.ToString());
             //Set up the listener / router
             Listener = new RESTBot.Server.Router(IPAddress.Parse(config.networking.ip), config.networking.port);
@@ -160,10 +161,12 @@ namespace RESTBot
             DebugUtilities.WriteDebug("Parameters - " + debugparams);
             if (Method == "establish_session")
             {
+                DebugUtilities.WriteDebug("We have an establish_session method.");
                 //Alright, we're going to try to establish a session
                 if (parts.Length >= 2 && parts[1] == Program.config.security.serverPass
                     && Parameters.ContainsKey("first") && Parameters.ContainsKey("last") && Parameters.ContainsKey("pass"))
                 {
+                    DebugUtilities.WriteDebug("Found required parameters for establish_session");
                     foreach (KeyValuePair<UUID, Session> ss in Sessions)
                     {
                         DebugUtilities.WriteSpecial("Avatar check: [" + ss.Value.Bot.First.ToLower() + "/" + ss.Value.Bot.Last.ToLower() + "] = [" + Parameters["first"].ToLower() + "/" + Parameters["last"].ToLower() + "]");
@@ -204,7 +207,24 @@ namespace RESTBot
                 }
                 else
                 {
-                    return ("<error>arguments</error>");
+                    String result = null;
+                    if (parts.Length < 2)
+                    {
+                        result = "Missing a part.";
+                    }
+                    if (!Parameters.ContainsKey("first"))
+                    {
+                        result = result + " Missing 'first' arg.";
+                    }
+                    if (!Parameters.ContainsKey("last"))
+                    {
+                        result = result + " Missing 'last' arg.";
+                    }
+                    if (!Parameters.ContainsKey("pass"))
+                    {
+                        result = result + " Missing 'last' arg.";
+                    }
+                    return ("<error>arguments: "+result+"</error>");
                 }
             }
             else if (Method == "server_quit")
