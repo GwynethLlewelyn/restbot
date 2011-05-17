@@ -74,5 +74,13 @@ namespace RESTBot
         /// <param name="Paramaters">QueryString and POST parameters</param>
         /// <returns>XML output</returns>
         public abstract string Process(RestBot b, Dictionary<string, string> Paramaters);
+
+        // Indicates that the current plugin is actively running.
+        public bool Active;
+
+        // Implement to perform actions that require updates over time.
+        public virtual void Think() {
+        }
+
     }
 }
