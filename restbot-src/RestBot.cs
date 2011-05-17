@@ -48,8 +48,10 @@ namespace RESTBot
         static List<Type> StatefulPluginDefinitions = new List<Type>();
         public static void AddStatefulPluginDefinition(Type defn)
         {
+            
             lock (StatefulPluginDefinitions)
             {
+                DebugUtilities.WriteDebug("Plugin Def: " + defn.FullName);
                 if (defn.IsSubclassOf(typeof(StatefulPlugin)))
                     StatefulPluginDefinitions.Add(defn);
             }
@@ -138,6 +140,8 @@ namespace RESTBot
 			UnknownError
 		}
 
+        const string VERSION = "1.0.0";
+
         public string First;
         public string Last;
         public string MD5Password;
@@ -153,7 +157,9 @@ namespace RESTBot
         private System.Timers.Timer ReloginTimer;
 		public delegate void BotStatusCallback(UUID Session, Status status);
 		public event BotStatusCallback OnBotStatus;
-		
+
+        private System.Timers.Timer updateTimer;
+
         public RestBot(UUID session, string f, string l, string p)
         {
             //setting up some class variables
@@ -170,7 +176,10 @@ namespace RESTBot
 			DebugUtilities.WriteDebug(session.ToString() + " Initializing callbacks");
             // Client.Network.OnDisconnected += new NetworkManager.DisconnectedCallback(Network_OnDisconnected);
             Client.Network.Disconnected += Network_OnDisconnected; // new syntax
-            
+
+            // Timer used to update an active plugin.
+            updateTimer = new System.Timers.Timer(500);
+            updateTimer.Elapsed += new System.Timers.ElapsedEventHandler(updateTimer_Elapsed);
 
             //Initialize StatefulPlugins
 			DebugUtilities.WriteDebug(session.ToString() + " Initializing plugins");
@@ -185,6 +194,7 @@ namespace RESTBot
                 //Initialize all the handlers, etc
                 sp.Initialize(this);
             }
+            updateTimer.Start();
         }
 
         void ReloginTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -194,7 +204,18 @@ namespace RESTBot
             Login();
             //This is where we can handle relogin failures, too.
         }
-        
+
+        private void updateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            foreach (StatefulPlugin sp in StatefulPlugins.Values)
+            {
+                if (sp.Active)
+                {
+                    sp.Think();
+                }
+            }
+        }
+
         // rewrote to show message
         void Network_OnDisconnected(object sender, DisconnectedEventArgs e)
         {
@@ -214,6 +235,88 @@ namespace RESTBot
         }
 
         public LoginReply Login()
+        {
+            LoginReply response = new LoginReply();
+
+            DebugUtilities.WriteSpecial("Login block was called");
+            if (Client.Network.Connected)
+            {
+                DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
+                return new LoginReply();
+            }
+
+            //Client.Network.LoginProgress +=
+            //    delegate(object sender, LoginProgressEventArgs e)
+            //    {
+            //        DebugUtilities.WriteDebug(String.Format("Login {0}: {1}", e.Status, e.Message));
+
+            //        if (e.Status == LoginStatus.Success)
+            //        {
+            //            DebugUtilities.WriteSpecial("Logged in successfully");
+            //            myStatus = Status.Connected;
+            //            response.wasFatal = false;
+            //            response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";                        
+            //        }
+            //        else if (e.Status == LoginStatus.Failed)
+            //        {
+            //            DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
+            //            response.wasFatal = true;
+            //            response.xmlReply = "<error></error>";
+            //        }
+            //    };
+
+            // Optimize the throttle
+            Client.Throttle.Wind = 0;
+            Client.Throttle.Cloud = 0;
+            Client.Throttle.Land = 1000000;
+            Client.Throttle.Task = 1000000;
+
+            LoginParams loginParams = Client.Network.DefaultLoginParams(
+                    First, Last, MD5Password, "RestBot", VERSION);
+
+            if (Client.Network.Login(loginParams))
+            {
+                DebugUtilities.WriteSpecial("Logged in successfully");
+                myStatus = Status.Connected;
+                response.wasFatal = false;
+                response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
+            }
+            else
+            {
+                DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
+                switch (Client.Network.LoginErrorKey)
+                {
+                    case "connect":
+                    case "key":
+                    case "disabled":
+                        response.wasFatal = true;
+                        response.xmlReply = "<error fatal=\"true\">" + Client.Network.LoginMessage + "</error>";
+                        break;
+                    case "presence":
+                    case "timed out":
+                    case "god":
+                        DebugUtilities.WriteWarning("Nonfatal error while logging in.. this may be normal");
+                        response.wasFatal = false;
+                        response.xmlReply = "<error fatal=\"false\">" + Client.Network.LoginMessage + "</error><retry>10</retry>\n<session_id>" + sessionid + "</session_id>";
+
+                        DebugUtilities.WriteSpecial("Relogin attempt will be made in 10 minutes");
+                        ReloginTimer.Interval = 10 * 60 * 1000; //10 minutes
+                        ReloginTimer.Start();
+                        break;
+                    default:
+                        DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN");
+                        response.wasFatal = true;
+                        response.xmlReply = "<error fatal=\"true\">Unknown error has occurred.</error>";
+                        break;
+                }
+
+                if (response.wasFatal == false) myStatus = Status.Reconnecting;
+            }
+            //Client.Network.BeginLogin(loginParams);
+            return response;
+        }
+
+        public LoginReply LoginOLD()
         {
             DebugUtilities.WriteSpecial("Login block was called");
             if (Client.Network.Connected)
@@ -237,6 +340,7 @@ namespace RESTBot
             string start = "";
             if (Program.config.location.startSim.Trim() != "") start = OpenMetaverse.NetworkManager.StartLocation(Program.config.location.startSim, Program.config.location.x, Program.config.location.y, Program.config.location.z);
             else start = "last";
+
             if (Client.Network.Login(First, Last, MD5Password, "RESTBot", start, "Jesse Malthus / Pleiades Consulting"))
             {
                 DebugUtilities.WriteSpecial("Logged in successfully");
@@ -261,7 +365,7 @@ namespace RESTBot
                         DebugUtilities.WriteWarning("Nonfatal error while logging in.. this may be normal");
                         response.wasFatal = false;
                         response.xmlReply = "<error fatal=\"false\">" + Client.Network.LoginMessage + "</error><retry>10</retry>\n<session_id>" + sessionid + "</session_id>";
-                        
+
                         DebugUtilities.WriteSpecial("Relogin attempt will be made in 10 minutes");
                         ReloginTimer.Interval = 10 * 60 * 1000; //10 minutes
                         ReloginTimer.Start();
@@ -273,7 +377,7 @@ namespace RESTBot
                         break;
                 }
 
-                if(response.wasFatal == false) myStatus = Status.Reconnecting;
+                if (response.wasFatal == false) myStatus = Status.Reconnecting;
             }
           
             //yay return
@@ -283,11 +387,11 @@ namespace RESTBot
         public string DoProcessing(Dictionary<string,string> Parameters, string[] parts)
         {
             string Method = parts[0];
-				string debugparams = null;
-				foreach (KeyValuePair<string, string> kvp in Parameters) {
-					debugparams = debugparams + "[ " + kvp.Key + "=" + kvp.Value + "] ";
-				}
-				DebugUtilities.WriteDebug(sessionid + " Parameters - " + debugparams);
+			string debugparams = null;
+			foreach (KeyValuePair<string, string> kvp in Parameters) {
+				debugparams = debugparams + "[ " + kvp.Key + "=" + kvp.Value + "] ";
+			}
+			DebugUtilities.WriteDebug(sessionid + "Method - " + Method + " Parameters - " + debugparams);
             //Actual processing
             if (Plugins.ContainsKey(Method))
             {
