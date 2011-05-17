@@ -599,4 +599,102 @@ namespace RESTBot
 		}
 
 	}
+
+    // avatar position; parameters are first, last
+    public class AvatarPositionPlugin : StatefulPlugin
+    {
+        private UUID session;
+
+        public AvatarPositionPlugin()
+        {
+            MethodName = "avatar_position";
+        }
+
+        public override void Initialize(RestBot bot)
+        {
+            session = bot.sessionid;
+            DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+        }
+
+        public override string Process(RestBot b, Dictionary<string, string> Parameters)
+        {
+            try
+            {
+                string name = "";
+                bool check = true;
+
+                if (Parameters.ContainsKey("target"))
+                {
+                    name = Parameters["target"].ToString().Replace("+", " ");
+                }
+                else check = false;
+
+                if (!check)
+                {
+                    return "<error>parameters have to be target name</error>";
+                }
+
+                lock (b.Client.Network.Simulators)
+                {
+                    for (int i = 0; i < b.Client.Network.Simulators.Count; i++)
+                    {
+                        DebugUtilities.WriteDebug("Found Avatars: " + b.Client.Network.Simulators[i].ObjectsAvatars.Count);
+                        Avatar target = b.Client.Network.Simulators[i].ObjectsAvatars.Find(
+                            delegate(Avatar avatar)
+                            {
+                                DebugUtilities.WriteDebug("Found avatar: " + avatar.Name);
+                                return avatar.Name == name;
+                            }
+                        );
+
+                        if (target != null)
+                        {                            
+                            return String.Format("<goal_position>{0},{1},{2}</goal_position><curr_position>{3},{4},{5}</curr_position>",
+                                target.Position.X, target.Position.Y, target.Position.Z, b.Client.Self.SimPosition.X, b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
+                        }
+                        else
+                        {
+                            DebugUtilities.WriteError("Error obtaining the avatar: " + name);
+                        }
+                    }
+                }
+                return "<error>avatar_position failed.</error>";
+            }
+            catch (Exception e)
+            {
+                DebugUtilities.WriteError(e.Message);
+                return "<error>" + e.Message + "</error>";
+            }
+        }
+    } // end avatar_position
+
+    // avatar position; parameters are first, last
+    public class MyPositionPlugin : StatefulPlugin
+    {
+        private UUID session;
+
+        public MyPositionPlugin()
+        {
+            MethodName = "my_position";
+        }
+
+        public override void Initialize(RestBot bot)
+        {
+            session = bot.sessionid;
+            DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+        }
+
+        public override string Process(RestBot b, Dictionary<string, string> Parameters)
+        {
+            try
+            {
+                return String.Format("<position>{0},{1},{2}</error>", b.Client.Self.SimPosition.X, b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
+            }
+            catch (Exception e)
+            {
+                DebugUtilities.WriteError(e.Message);
+                return "<error>" + e.Message + "</error>";
+            }
+        }
+    } // end avatar_position
 }
