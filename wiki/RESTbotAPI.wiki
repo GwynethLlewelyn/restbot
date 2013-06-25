@@ -359,3 +359,27 @@ Returns:
 {{{
 <restbot><teleport>Beta Technologies</teleport></restbot>
 }}}
+
+= Prims Plugin =
+
+Contributed by jonafree
+
+== nearby_prims ==
+
+Gets a list of primitives in the neighbourhood of the 'bot, in a certain radius.
+
+Parameters: type (libopenmv type of prim)
+
+radius (in meters around the avatar)
+
+{{{ curl http://localhost:9080/nearby_prims/<session_id> -d type=<string> -d radius=<float> }}}
+
+Returns:
+
+{{{
+<restbot>
+  <nearby_prims>
+    <prim><name>{0}</name><pos>{1},{2},{3}</pos></prim>
+  <nearby_prims>
+</restbot>
+}}}
