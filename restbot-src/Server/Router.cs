@@ -92,7 +92,13 @@ namespace RESTBot.Server
             do
             {
                 _proccessed_connection.Reset();
-                _listener.BeginAcceptTcpClient(new AsyncCallback(AcceptClientThread), _listener); // in server_thread.cs
+                try {
+                	_listener.BeginAcceptTcpClient(new AsyncCallback(AcceptClientThread), _listener); // in server_thread.cs
+                }
+                catch (Exception e)
+                {
+                	DebugUtilities.WriteError("Failed to listen to client thread: " + e.Message);
+                }
                 _proccessed_connection.WaitOne();
             } while (StillRunning);
             _listener.Stop();

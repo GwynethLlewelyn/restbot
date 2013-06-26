@@ -140,7 +140,7 @@ namespace RESTBot
 			UnknownError
 		}
 
-        const string VERSION = "1.0.0";
+        const string VERSION = "1.2.0";
 
         public string First;
         public string Last;
@@ -238,7 +238,7 @@ namespace RESTBot
         {
             LoginReply response = new LoginReply();
 
-            DebugUtilities.WriteSpecial("Login block was called");
+            DebugUtilities.WriteSpecial("Login block was called in Login()");
             if (Client.Network.Connected)
             {
                 DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
@@ -270,6 +270,9 @@ namespace RESTBot
             Client.Throttle.Cloud = 0;
             Client.Throttle.Land = 1000000;
             Client.Throttle.Task = 1000000;
+            Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
+            
+            DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
 
             LoginParams loginParams = Client.Network.DefaultLoginParams(
                     First, Last, MD5Password, "RestBot", VERSION);
@@ -335,6 +338,8 @@ namespace RESTBot
             Client.Settings.SEND_PINGS = true;
             Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
             Client.Throttle.Total = Program.config.networking.throttle;
+
+			DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
 
             LoginReply response = new LoginReply();
             string start = "";
