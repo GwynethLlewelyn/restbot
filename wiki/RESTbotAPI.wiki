@@ -368,7 +368,7 @@ Contributed by jonafree
 
 Gets a list of primitives in the neighbourhood of the 'bot, in a certain radius.
 
-Parameters: type (libopenmv type of prim)
+Parameters: type (it will do a partial search on the prim name; leave empty to retrieve all prims; it's case-sensitive)
 
 radius (in meters around the avatar)
 
