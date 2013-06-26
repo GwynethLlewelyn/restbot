@@ -19,7 +19,7 @@
 //     RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
 //--------------------------------------------------------------------------------
 
-string API = "http://racketberries.pleiades.ca:9080/restbot/util.php?psk=lolwhut";
+string API = "http://localhost:9080/restbot/util.php?psk=lolwhut";
 
 key nameLookupID = NULL_KEY;
 

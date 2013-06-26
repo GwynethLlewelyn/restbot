@@ -105,7 +105,7 @@ namespace RESTBot.Server
             string[] split = entire_line.Trim().Split(' ');
             if (split.Length != 3)
             {
-                //this is more serious than a header line, this is the request line biatch!
+                //this is more serious than a header line, this is the request line batch!
                 DebugUtilities.WriteError("Could not parse request line");
                 throw new Exception("Could not parse request line", new Exception("Line has " + (split.Length - 1) + " spaces instead of 2 [requestline]"));
             }

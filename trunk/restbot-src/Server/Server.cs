@@ -72,8 +72,9 @@ namespace RESTBot.Server
             {                
                 DebugUtilities.WriteWarning("Could not parse ip address to get the hostname (ipv6?) -  hostname is set as 'unknown'");
             }
-
+	
             RequestHeaders x = new RequestHeaders(split[0], hostname);
+
             string body = "";
 
 	        bool foundExpectContinue = false;

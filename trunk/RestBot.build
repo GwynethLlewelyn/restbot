@@ -11,7 +11,10 @@
 		<nant buildfile="./libopenmetaverse/OpenMetaverse.build" target="build" />
 		<copy file="./libopenmetaverse/bin/OpenMetaverse.dll" tofile="./restbot-bin/OpenMetaverse.dll" overwrite="true" />
 		<copy file="./libopenmetaverse/bin/OpenMetaverseTypes.dll" tofile="./restbot-bin/OpenMetaverseTypes.dll" overwrite="true" />
-		<copy file="./libopenmetaverse/bin/OpenMetaverse.StructuredData.dll" tofile="./restbot-bin/OpenMetaverse.StructuredData.dll" overwrite="true" />		<copy file="./libopenmetaverse/bin/XMLRPC.dll" tofile="./restbot-bin/XMLRPC.dll" overwrite="true" />
+		<copy file="./libopenmetaverse/bin/OpenMetaverse.StructuredData.dll" tofile="./restbot-bin/OpenMetaverse.StructuredData.dll" overwrite="true" />
+		<copy file="./libopenmetaverse/bin/XMLRPC.dll" tofile="./restbot-bin/XMLRPC.dll" overwrite="true" />
+		<copy file="./libopenmetaverse/bin/openjpeg-dotnet.dll" tofile="./restbot-bin/openjpeg-dotnet.dll" overwrite="true" />
+		<copy file="./libopenmetaverse/bin/openjpeg-dotnet-x86_64.dll" tofile="./restbot-bin/openjpeg-dotnet-x86_64.dll" overwrite="true" />
 	</target>
 	<target name="build" description="compiles the source code" depends="build-libopenmetaverse">
 		<csc target="exe" output="./restbot-bin/restbot.exe" debug="${debug}">
@@ -23,7 +26,8 @@
 				below lines and change the file name -->
 				<include name="./restbot-plugins/AvatarsPlugin.cs" />
 				<include name="./restbot-plugins/GroupsPlugin.cs" />
-				<include name="./restbot-plugins/InventoryPlugin.cs" />								<include name="./restbot-plugins/MovementPlugin.cs" />
+				<include name="./restbot-plugins/InventoryPlugin.cs" />								
+				<include name="./restbot-plugins/MovementPlugin.cs" />
 				<include name="./restbot-plugins/ReaperPlugin.cs" />
 				<include name="./restbot-plugins/StatsPlugin.cs" />
 			</sources>
@@ -32,6 +36,7 @@
 				<include name="./restbot-bin/OpenMetaverseTypes.dll" />
 				<include name="./restbot-bin/OpenMetaverse.StructuredData.dll" />
 				<include name="./restbot-bin/log4net.dll" />
+				<include name="./restbot-bin/openjpeg-dotnet-x86_64.dll" />	<!-- For 32bit versions, include openjpeg-dotnet.dll instead -->
 			</references>
 		</csc>
 	</target>
