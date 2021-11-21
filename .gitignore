@@ -1,0 +1,74 @@
+~*
+# Stupid macOS temporary files
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+Icon?
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Stuff from the Nova editor
+.nova
+node_modules
+package.json
+package-lock.json
+.eslintrc.yml
+
+# Our stuff that we want to exclude
+*.ini
+plic.service
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Logging files
+logs/*
+
+*.test
+*.prof
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+*.def
+*.exp
+
+# Shared objects (inc. Windows DLLs)
+#*.dll
+#*.so
+#*.so.*
+#*.dylib
+
+# Executables
+#*.exe
+#*.out
+#*.app
+#*.i*86
+#*.x86_64
+#*.hex
