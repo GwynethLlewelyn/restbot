@@ -2,5 +2,5 @@
 	path = libremetaverse
 	url = https://github.com/cinderblocks/libremetaverse
 [submodule "libopenmetaverse"]
-	path = libopemmetaverse
+	path = libopenmetaverse
 	url = https://github.com/openmetaversefoundation/libopenmetaverse
