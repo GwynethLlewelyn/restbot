@@ -119,18 +119,19 @@ Note: if the compilation fails, try the following. First go to the `./libopenmet
 Configuration is simple with our XML compatibility in RESTBot. Configuration
 is read at startup of the RESTbot server, so you have to have the configuration
 file along with the `restbot.exe` binary. The default configuration file is
-`configuration.xml` located in `./restbot-bin.` The configuration file is very
-flexible... if a configuration element is not defined in the file, it will revert
+`configuration.xml` located in `./restbot-bin`; we've provided a `configuration.xml.sample`, make sure you copy this file to `configuration.xml` and change it to reflect your (real) data.
+
+The configuration file is very flexible... if a configuration element is not defined in the file, it will revert
 to its default instead of stopping... so a custom configuration file can either
 define every single variable, or only contain one variable definition. If you
 want to go ahead and play with a RESTbot server now, you can go ahead and skip
-ahead to RUNNING (by default, the server listens to `localhost` connections on
+ahead to [Running](#running-windows) (by default, the server listens to `localhost` connections on
 port 9080).
 
 You can play around with the settings in `configuration.xml` at any time, you just
 have to restart the server in order for any changes to take effect. The options
 are fairly self explanatory, but if you need help you can always refer to the
-wiki (see [LINKS](LINKS.md)).
+[wiki](https://github.com/GwynethLlewelyn/restbot/wiki) (see [LINKS](LINKS.md)).
 
 # Running - Windows
 

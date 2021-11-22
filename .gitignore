@@ -39,8 +39,7 @@ package-lock.json
 .eslintrc.yml
 
 # Our stuff that we want to exclude
-*.ini
-plic.service
+restbot-bin/configuration.xml
 
 # Dependency directories (remove the comment below to include it)
 # vendor/

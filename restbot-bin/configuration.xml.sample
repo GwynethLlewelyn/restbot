@@ -1,0 +1,25 @@
+<restbot>
+	<networking>
+		<!-- IPv4 address of the machine running RESTbot; leave 127.0.0.1 for running it on yur own laptop/desktop -->
+		<ip>127.0.0.1</ip>
+		<port>9080</port>
+		<!-- Login URI for your grid -->
+		<loginuri>http://your.server.address:8002/</loginuri>
+	</networking>
+	<security>
+		<hostnamelock>false</hostnamelock>
+		<serverpassword>pass</serverpassword>
+	</security>
+	<location>
+		<!-- initial region for the RESTbot to jump to -->
+		<sim>One Region</sim>
+		<x>127</x>
+		<y>127</y>
+		<z>22</z>
+	</location>
+	<debug>
+		<!-- this will add extra debugging data to the log -->
+		<libsl>true</libsl>
+		<restbot>true</restbot>
+	</debug>
+</restbot>
