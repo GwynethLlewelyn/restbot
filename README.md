@@ -7,7 +7,7 @@
 - Revised June 5, 2010 - Gwyneth Llewelyn (notes on compilation)
 - Revised November 21, 2021 - Gwyneth Llewelyn (updates for a lot of things)
 
-# OVERVIEW
+# Overview
 
 RESTBot is a C# webserver that uses [RESTful transactions](https://en.wikipedia.org/wiki/Representational_state_transfer) to interact with a
 _bot_ in [Second Life](https://secondlife.com) or [OpenSimulator](http://opensimulator.org). This bot (or a collection of bots) is started through a REST command and can be stopped the same way. The software is extremely
@@ -15,11 +15,14 @@ modular, and is designed to easily accept plugins that developers can write
 (in C#) to add more complex interaction between a web application and a
 Second Life Bot. More information about Plugins is on the wiki. (See [LINKS](LINKS.md).)
 
-# COMPILING - WINDOWS
+# Legacy Instructions
+
+The instructions below were originally written by an anonymous collaborator at Pleiades, and have been only marginally changed from the original document (written circa 2007). They have merely historical interest, and are kept here mainly because the licensing terms are a bit obscure about what to do with existing _documentation_ (as opposed to code), so you can simply skip to the [Configuration](#configuration) section.
+
+## Compiling - Windows
 
 Compiling RESTBot is very easy on a Windows machine. First, you
-need Visual Studio 2007 or later (Express Edition is perfect.) The great thing about
-this IDE, is that you can download the Express edition for FREE! (See [LINKS](LINKS.md))
+need [Visual Studio](https://visualstudio.microsoft.com/) 2007 or later (Express Edition is perfect.) The great thing about this IDE, is that you can download the Express edition for FREE! (See [LINKS](LINKS.md))
 We used Visual Studio C# Express, and we will use this IDE for any Windows-based instructions.
 
 To compile under windows, open up VS and open the RESTBOT-VS2005-sln.sln file
@@ -39,7 +42,7 @@ skip to the CONFIGURATION section of this readme file.
 
 _Note:_ the current version was **NOT** tested under Windows. _Caveat utilitor_.
 
-# COMPILING - LINUX
+## Compiling - Linux
 
 In order to compile on a Linux machine, you need at least the following
 applications installed on your system:
@@ -55,7 +58,7 @@ screen. This usually takes about 20 seconds or so... and hopefully you will see
 
 Note: if the compilation fails, try the following. First go to the `./libopenmetaverse` folder. Run `./runprebuild.sh` and do a `nant clean` followed by `nant`. This should compile the `libopenmetaverse` library cleanly. Go back to the root directory and run nant again. This time it should work properly.
 
-## Notes
+### Notes
 
 1. _The above is being revised, as `nant` is, for all purposes, deemed to be a deprecated, legacy tool. We'll be moving to `msbuild` instead._
 
@@ -63,7 +66,9 @@ Note: if the compilation fails, try the following. First go to the `./libopenmet
 
 3. _macOS compilation should be pretty much the same thing; use [Homebrew](https://brew.sh) to install whatever packages you need (gwyneth 20211121)._
 
-# CONFIGURATION
+*** *** ***
+
+# Configuration
 
 Configuration is simple with our XML compatibility in RESTBot. Configuration
 is read at startup of the RESTbot server, so you have to have the configuration
@@ -81,7 +86,7 @@ have to restart the server in order for any changes to take effect. The options
 are fairly self explanatory, but if you need help you can always refer to the
 wiki (see [LINKS](LINKS.md)).
 
-# RUNNING - WINDOWS
+# Running - Windows
 
 Running on Windows is very easy. Just navigate to the restbot-bin folder and
 then execute the restbot.exe file. This runs in the command line, so you will
@@ -91,7 +96,7 @@ will appear in white. If you see blue text, that is OK too — it just means one
 of our developers was lazy and didn't remove his debug from his code. :)
 To stop, you can just exit out of the console and the server will shutdown.
 
-# RUNNING - LINUX
+# Running - Linux
 
 Running on Linux is easy, once you get it working the first time. `cd` to the
 restbot-bin directory and run `mono restbot.exe` - if you get any problems,
@@ -102,7 +107,7 @@ for a solution or find contact information for professional help.
 
 _Note: At present, it's hard to figure out if Pleiades is still around or not (gwyneth 20211121)._
 
-# BASIC COMMANDS
+# Basic Commands
 
 Once RESTBot is running, you can connect to it via HTTP REST commands. For now,
 I will use `curl` on Linux to demonstrate basic commands you need to know to get
