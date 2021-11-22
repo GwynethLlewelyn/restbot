@@ -44,10 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="restbot-plugins\AvatarsPlugin.cs" />
-    <Compile Include="restbot-plugins\GroupsPlugin.cs" />
+    <Compile Include="restbot-plugins\ChatPlugin.cs" />
     <Compile Include="restbot-plugins\GroupsPlugin.cs" />
     <Compile Include="restbot-plugins\InventoryPlugin.cs" />
-    <Compile Include="restbot-plugins\StatsPlugin.cs" />
+	<Compile Include="restbot-plugins\MovementPlugin.cs" />
+	<Compile Include="restbot-plugins\PrimsPlugin.cs" />
+    <Compile Include="restbot-plugins\ReaperPlugin.cs" />
+	<Compile Include="restbot-plugins\StatsPlugin.cs" />
     <Compile Include="restbot-src\Configuration.cs" />
     <Compile Include="restbot-src\DebugUtilities.cs" />
     <Compile Include="restbot-src\Program.cs" />
