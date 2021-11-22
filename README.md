@@ -15,6 +15,52 @@ modular, and is designed to easily accept plugins that developers can write
 (in C#) to add more complex interaction between a web application and a
 Second Life Bot. More information about Plugins is on the wiki. (See [LINKS](LINKS.md).)
 
+## Preparing the compilation environment
+
+### Under Windows (not tested)
+
+Probably you only need to get the Community version of [Visual Studio](https://visualstudio.microsoft.com/), which should install everything you need.
+
+### Under macOS:
+
+First, get the free [Microsoft .NET environment](https://dotnet.microsoft.com/download/dotnet/scripts). `libremetaverse` needs at least version 4.8
+
+or you can simply go to the root of this project and run:
+
+```bash
+wget https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --os osx
+```
+
+**Note:** This script requires a working installation of `curl`; it is supposed to come by default on macOS, but if doesn't, you might need to install it.
+
+Also, this script is _not_ included in RESTbot, since it's unclear what license has been attached to it by Microsoft (allegedly it's MIT); you'll have to retrieve all Microsoft-related things by yourself.
+
+Also note that Microsoft designed that script to use `bash`. These days, Apple 'decided' that macOS ought to have `zsh` as the default shell. If the script doesn't run on your system, you'll need to get `bash`.
+
+Once that step is finished, you should have a working installation of the whole .NET package under `/Users/<your username>/.dotnet`. You can also deploy it to a different directory, if you wish.
+
+This should be enough to be able to run:
+
+```bash
+~/.dotnet/dotnet msbuild RestBot.libremetaverse.build
+```
+
+For more performance during compilation, you can run `msbuild` with the `-m` flag, which will use all available CPUs on your system (as opposed to just one).
+
+Install `mono`. To save time (in fixing dependencies...) just use [Homebrew](https://brew.sh):
+
+```bash
+brew install mono
+```
+
+### Under Linux:
+
+It's basically the same as under macOS. These days, Homebrew also works under Linux, so the instructions would be the same; but possibly you will prefer to run your 'native' package manager, be it `apt` (Debian/Linux) or `yum` (Fedora, CentOS, RedHat) or whatever is fashionable these days. You'll have to check what versions of Mono are available; remember that you'll need a 'developer' edition, and don't forget to double-check that `msbuild` comes as part of the package as well.
+
+`dotnet-install.sh` is a bit better at detecting Linux variants, but if it gets it wrong, you can use the same approach as above; run `./dotnet-install.sh --help` to see what variants are currently supported.
+
 # Legacy Instructions
 
 The instructions below were originally written by an anonymous collaborator at Pleiades, and have been only marginally changed from the original document (written circa 2007). They have merely historical interest, and are kept here mainly because the licensing terms are a bit obscure about what to do with existing _documentation_ (as opposed to code), so you can simply skip to the [Configuration](#configuration) section.
