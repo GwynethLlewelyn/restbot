@@ -64,6 +64,7 @@ logs/*
 #*.so
 #*.so.*
 #*.dylib
+obj/
 
 # Executables
 #*.exe
@@ -72,3 +73,6 @@ logs/*
 #*.i*86
 #*.x86_64
 #*.hex
+
+# Mono/.NET things that I'm not sure if we're allowed to distribute or not
+dotnet-install.sh
