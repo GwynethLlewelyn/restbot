@@ -3,8 +3,8 @@
 		<!-- IPv4 address of the machine running RESTbot; leave 127.0.0.1 for running it on yur own laptop/desktop -->
 		<ip>127.0.0.1</ip>
 		<port>9080</port>
-		<!-- Login URI for your grid -->
-		<loginuri>http://your.server.address:8002/</loginuri>
+		<!-- Login URI for your grid; default is Linden Lab's main grid -->
+		<loginuri>https://login.agni.lindenlab.com/cgi-bin/login.cgi</loginuri>
 	</networking>
 	<security>
 		<hostnamelock>false</hostnamelock>
