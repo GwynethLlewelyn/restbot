@@ -75,3 +75,6 @@ obj/
 
 # Mono/.NET things that I'm not sure if we're allowed to distribute or not
 dotnet-install.sh
+
+# From Visual Studio
+.vs
