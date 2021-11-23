@@ -1,0 +1,503 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenJpegDotNet</name>
+    </assembly>
+    <members>
+        <member name="T:OpenJpegDotNet.Codec">
+            <summary>
+            JPEG 2000 のコーデック V2 を定義します。このクラスは継承できません。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.Codec.DisposeUnmanaged">
+            <summary>
+            アンマネージ リソースを解放します。
+            </summary>
+        </member>
+        <member name="T:OpenJpegDotNet.CodecFormat">
+            <summary>
+            サポートするコーデック指定します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.CodecFormat.Unknown">
+            <summary>
+            プレースホルダーを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.CodecFormat.J2k">
+            <summary>
+            JPEG 2000 のコードストリームを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.CodecFormat.Jpt">
+            <summary>
+            JPT-2000 (JPEG 2000、JPIP) を示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.CodecFormat.Jp2">
+            <summary>
+            JP2 ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.CodecFormat.Jpp">
+            <summary>
+            JPP ストリーム (JPEG 2000、JPIP) を示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.CodecFormat.Jpx">
+            <summary>
+            JPX ファイルフォーマット (JPEG 2000 Part-2) を示します。
+            </summary>
+        </member>
+        <member name="T:OpenJpegDotNet.ColorSpace">
+            <summary>
+            サポートする画像の色空間を指定します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.ColorSpace.Unknown">
+            <summary> 
+            ライブラリによってサポートされていないことを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.ColorSpace.Unspecified">
+            <summary>
+            コードストリームで指定されていないことを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.ColorSpace.Srgb">
+            <summary>
+            sRGB を示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.ColorSpace.Gray">
+            <summary>
+            グレースケールを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.ColorSpace.Sycc">
+            <summary>
+            sYCC を示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.ColorSpace.Eycc">
+            <summary>
+            e-YCC を示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.ColorSpace.Cmyk">
+            <summary>
+            CMYK を示します。
+            </summary>
+        </member>
+        <member name="T:OpenJpegDotNet.DecompressionParameters">
+            <summary>
+            展開パラメータを定義します。このクラスは継承できません。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.DecompressionParameters.#ctor">
+            <summary>
+            <see cref="T:OpenJpegDotNet.DecompressionParameters"/> クラスの新しいインスタンスを初期化します。
+            </summary>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.CodingFormat">
+            <summary>
+            出力ファイルフォーマットを設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.CodingParameterLayer">
+            <summary>
+            デコードするクオリティ レイヤーの最大数を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.CodingParameterReduce">
+            <summary>
+            廃棄する最高解像度レベルの数を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.DecodingFormat">
+            <summary>
+            入力ファイルフォーマットを設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.DecodingAreaX0">
+            <summary>
+            デコード領域の左境界を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.DecodingAreaX1">
+            <summary>
+            デコード領域の右境界を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.DecodingAreaY0">
+            <summary>
+            デコード領域の上境界を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.DecodingAreaY1">
+            <summary>
+            デコード領域の下境界を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.Flags">
+            <summary>
+            フラグを設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.JpwlCorrect">
+            <summary>
+            JPWL (ワイヤレス アプリケーション) に対する、JPWL の誤り訂正能力を有効にするかどうかを設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.JpwlExpectedComponents">
+            <summary>
+            JPWL (ワイヤレス アプリケーション) に対する、期待されるコンポーネントの数を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.JpwlMaxTiles">
+            <summary>
+            JPWL (ワイヤレス アプリケーション) に対する、タイルの最大数を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.NumberBlockTileToDecide">
+            <summary>
+            デコードするタイルのブロック数を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.TileIndex">
+            <summary>
+            デコードされたタイルのタイル番号を設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.DecompressionParameters.VerboseMode">
+            <summary>
+            詳細モードを有効にするかどうかを設定または取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.DecompressionParameters.DisposeUnmanaged">
+            <summary>
+            アンマネージ リソースを解放します。
+            </summary>
+        </member>
+        <member name="T:OpenJpegDotNet.FileFormat">
+            <summary>
+            サポート コーデックを指定します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.Unknown">
+            <summary>
+            プレースホルダーを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.J2kCompressedFormat">
+            <summary>
+            JPEG 2000 のコードストリームを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.Jp2CompressedFormat">
+            <summary>
+            JP2 ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.JptCompressedFormat">
+            <summary>
+            JPT-2000 (JPEG 2000、JPIP) を示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.PxmDecompressedFormat">
+            <summary>
+            Pixelmator ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.PgxDecompressedFormat">
+            <summary>
+            PGX (JPEG 2000) ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.BmpDecompressedFormat">
+            <summary>
+            ビットマップ ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.YuvDecompressedFormat">
+            <summary>
+            YUV ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.TifDecompressedFormat">
+            <summary>
+            TIF ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.RawDecompressedFormat">
+            <summary>
+            Raw (ビッグエンディアン) 画像ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.TgaDecompressedFormat">
+            <summary>
+            Truevision Graphics Adapter ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.PngDecompressedFormat">
+            <summary>
+            PNG ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="F:OpenJpegDotNet.FileFormat.RawLDecompressedFormat">
+            <summary>
+            Raw (リトルエンディアン) 画像ファイルフォーマットを示します。
+            </summary>
+        </member>
+        <member name="T:OpenJpegDotNet.Image">
+            <summary>
+            画像のデータと特性を定義します。このクラスは継承できません。
+            </summary>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.X0">
+            <summary>
+            参照グリッドの原点から画像領域の左端までの水平方向のオフセットを取得または設定します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.X1">
+            <summary>
+            参照グリッドの幅を取得または設定します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.Y0">
+            <summary>
+            参照グリッドの原点から画像領域の上端までの垂直方向のオフセットを取得または設定します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.Y1">
+            <summary>
+            参照グリッドの高さを取得または設定します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.NumberOfComponents">
+            <summary>
+            画像内のコンポーネントの数を取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.ColorSpace">
+            <summary>
+            色空間数を取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.Components">
+            <summary>
+            画像のコンポーネントを取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="P:OpenJpegDotNet.Image.IccProfile">
+            <summary>
+            制限された ICC プロファイルを取得します。
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.Image.ToBitmap">
+            <summary>
+            この <see cref="T:OpenJpegDotNet.Image"/> を GDI+ の <see cref="T:System.Drawing.Bitmap"/> に変換します。
+            </summary>
+            <returns>変換された <see cref="T:OpenJpegDotNet.Image"/> を表す <see cref="T:System.Drawing.Bitmap"/>。</returns>
+            <exception cref="T:System.ObjectDisposedException">このオブジェクトは破棄されています。</exception>
+            <exception cref="T:System.NotSupportedException">このオブジェクトはサポートされていません。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.Image.DisposeUnmanaged">
+            <summary>
+            アンマネージ リソースを解放します。
+            </summary>
+        </member>
+        <member name="T:OpenJpegDotNet.OpenJpeg">
+            <summary>
+            OpenJpeg のメソッドを提供します。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.GetVersion">
+            <summary>
+            OpenJpeg のバージョンを表現する文字列を取得します。
+            </summary>
+            <returns>OpenJpeg のバージョンを表現する文字列。</returns>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.StreamCreateDefaultFileStream(System.String,System.Boolean)">
+            <summary>
+            ファイル名で特定されるファイルから、既定のパラメータでストリームを作成します。
+            </summary>
+            <param name="filepath">ストリームへ入力するファイルのファイル名。</param>
+            <param name="isReadStream">ストリームが読み取りストリームかどうかを示す値。</param>
+            <returns><see cref="T:OpenJpegDotNet.Stream"/>。</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="filepath"/> が null です。</exception>
+            <exception cref="T:System.IO.FileNotFoundException">指定したパスは存在しません。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.CreateDecompress(OpenJpegDotNet.CodecFormat)">
+            <summary>
+            J2K/JP2 を展開する構造体を作成します。
+            </summary>
+            <param name="format">作成するコーデックのフォーマット。</param>
+            <returns><see cref="T:OpenJpegDotNet.Codec"/>。</returns>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.Decode(OpenJpegDotNet.Codec,OpenJpegDotNet.Stream,OpenJpegDotNet.Image)">
+            <summary>
+            JPEG 2000 のコードストリームから画像をデコードします。
+            </summary>
+            <param name="codec">読み込みに使用する Jpeg 2000 のコーデック。</param>
+            <param name="stream">Jpeg 2000 のストリーム。</param>
+            <param name="image">デコードされたデータを受け取る画像。</param>
+            <returns>成功した場合は <code>true</code>。それ以外の場合は <code>false</code>。</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="codec"/>、<paramref name="stream"/> または <paramref name="image"/> が null です。</exception>
+            <exception cref="T:System.ObjectDisposedException"><paramref name="codec"/>、<paramref name="stream"/> または <paramref name="image"/> は破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.EndDecompress(OpenJpegDotNet.Codec,OpenJpegDotNet.Stream)">
+            <summary>
+            コードストリームの後に必要に応じて、読み込みを行います。
+            </summary>
+            <param name="codec">読み込みに使用する Jpeg 2000 のコーデック。</param>
+            <param name="stream">Jpeg 2000 のストリーム。</param>
+            <returns>成功した場合は <code>true</code>。それ以外の場合は <code>false</code>。</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="codec"/> または <paramref name="stream"/> が null です。</exception>
+            <exception cref="T:System.ObjectDisposedException"><paramref name="codec"/> または <paramref name="stream"/> は破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.ReadHeader(OpenJpegDotNet.Stream,OpenJpegDotNet.Codec,OpenJpegDotNet.Image@)">
+            <summary>
+            画像ヘッダーをデコードします。
+            </summary>
+            <param name="stream">Jpeg 2000 のストリーム。</param>
+            <param name="codec">読み込みに使用する Jpeg 2000 のコーデック。</param>
+            <param name="image">このメソッドから制御が戻るときに、ストリームから読み込まれた <see cref="T:OpenJpegDotNet.Image"/> が格納されます。このパラメーターは初期化せずに渡されます。</param>
+            <returns>コードストリームのメイン ヘッダーと JP2 ヘッダーが正しく読み込まれた場合は <code>true</code>。それ以外の場合は <code>false</code>。</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="stream"/> または <paramref name="codec"/> が null です。</exception>
+            <exception cref="T:System.ObjectDisposedException"><paramref name="stream"/> または <paramref name="codec"/> は破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.SetDecodeArea(OpenJpegDotNet.Codec,OpenJpegDotNet.Image,System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            デコードする領域を指定します。
+            </summary>
+            <param name="codec">Jpeg 2000 のコーデック。</param>
+            <param name="image"><see cref="M:OpenJpegDotNet.OpenJpeg.ReadHeader(OpenJpegDotNet.Stream,OpenJpegDotNet.Codec,OpenJpegDotNet.Image@)"/> によって、以前デコードされた <see cref="T:OpenJpegDotNet.Image"/>。</param>
+            <param name="left">画像内でデコードする矩形の左端の位置。</param>
+            <param name="top">画像内でデコードする矩形の上端の位置。</param>
+            <param name="right">画像内でデコードする矩形の右端の位置。</param>
+            <param name="bottom">画像内でデコードする矩形の下端の位置。</param>
+            <returns>領域が正しく設定された場合は <code>true</code>。それ以外の場合は <code>false</code>。</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="codec"/> または <paramref name="image"/> が null です。</exception>
+            <exception cref="T:System.ObjectDisposedException"><paramref name="codec"/> または <paramref name="image"/> は破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.SetDefaultDecoderParameters(OpenJpegDotNet.DecompressionParameters)">
+            <summary>
+            デコード パラメータに規定値を設定します。
+            </summary>
+            <param name="parameters">画像を展開する <see cref="T:OpenJpegDotNet.DecompressionParameters"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="parameters"/> が null です。</exception>
+            <exception cref="T:System.ObjectDisposedException"><paramref name="parameters"/> は破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.SetupDecoder(OpenJpegDotNet.Codec,OpenJpegDotNet.DecompressionParameters)">
+            <summary>
+            ユーザによって提供される展開パラメータとメッセージ ハンドラーでデコーダーをセットアップします。
+            </summary>
+            <param name="codec">画像を展開する <see cref="T:OpenJpegDotNet.Codec"/>。</param>
+            <param name="parameters">画像を展開する <see cref="T:OpenJpegDotNet.DecompressionParameters"/>。</param>
+            <returns>デコーダーが正しく設定された場合は <code>true</code>。それ以外の場合は <code>false</code>。</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="codec"/> または <paramref name="parameters"/> が null です。</exception>
+            <exception cref="T:System.ObjectDisposedException"><paramref name="codec"/> または <paramref name="parameters"/> は破棄されています。</exception>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.CreateCompress(OpenJpegDotNet.CodecFormat)">
+            <summary>
+            J2K/JP2 を圧縮する構造体を作成します。
+            </summary>
+            <param name="format">作成するコーデックのフォーマット。</param>
+            <returns><see cref="T:OpenJpegDotNet.Codec"/>。</returns>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpeg.GetNativeVersion">
+            <summary>
+            OpenJpeg のラッパーライブラリのバージョンを表現する文字列を取得します。
+            </summary>
+            <returns>OpenJpeg のラッパーライブラリのバージョンを表現する文字列。</returns>
+        </member>
+        <member name="T:OpenJpegDotNet.OpenJpegObject">
+            <summary>
+            ネイティブな構造体のポインターを所持するクラスです。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpegObject.#ctor(System.Boolean)">
+            <summary>
+            インスタンスが破棄できるかどうかを指定して、<see cref="T:OpenJpegDotNet.OpenJpegObject"/> クラスの新しいインスタンスを初期化します。
+            </summary>
+            <param name="isEnabledDispose">インスタンスが破棄できる場合は true。それ以外の場合は false。</param>
+        </member>
+        <member name="P:OpenJpegDotNet.OpenJpegObject.IsDisposed">
+            <summary>
+            インスタンスが破棄されているかどうかを示す値を取得します。
+            </summary>
+            <returns>インスタンスが破棄されている場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="P:OpenJpegDotNet.OpenJpegObject.IsEnableDispose">
+            <summary>
+            このインスタンスが破棄できるかどうかを示す値を取得します。
+            </summary>
+            <returns>インスタンスが破棄できる場合は true。それ以外の場合は false。</returns>
+        </member>
+        <member name="P:OpenJpegDotNet.OpenJpegObject.NativePtr">
+            <summary>
+            ネイティブな構造体のポインターを取得します。
+            </summary>>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpegObject.ThrowIfDisposed">
+            <summary>
+            オブジェクトが破棄されている場合、<see cref="T:System.ObjectDisposedException"/> がスローされます。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpegObject.DisposeManaged">
+            <summary>
+            マネージ リソースを解放します。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpegObject.DisposeUnmanaged">
+            <summary>
+            アンマネージ リソースを解放します。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpegObject.Dispose">
+            <summary>
+            <see cref="T:OpenJpegDotNet.OpenJpegObject"/> によって使用されている全てのリソースを解放します。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.OpenJpegObject.Dispose(System.Boolean)">
+            <summary>
+            <see cref="T:OpenJpegDotNet.OpenJpegObject"/> によって使用されている全てのリソースを解放します。
+            </summary>
+            <param name="disposing"><see cref="M:System.IDisposable.Dispose"/> メソッドが呼ばれたかどうかを示す値。</param>
+        </member>
+        <member name="T:OpenJpegDotNet.Stream">
+            <summary>
+            JPEG 2000 を表現するストリーム。このクラスは継承できません。
+            </summary>
+        </member>
+        <member name="M:OpenJpegDotNet.Stream.DisposeUnmanaged">
+            <summary>
+            アンマネージ リソースを解放します。
+            </summary>
+        </member>
+    </members>
+</doc>

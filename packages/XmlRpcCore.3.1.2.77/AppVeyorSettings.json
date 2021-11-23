@@ -1,0 +1,405 @@
+{
+  "project": {
+    "projectId": 297595,
+    "accountId": 59287,
+    "accountName": "cinderblocks57647",
+    "builds": [],
+    "name": "XmlRpcCore",
+    "slug": "xmlrpccore",
+    "repositoryType": "gitHub",
+    "repositoryScm": "git",
+    "repositoryName": "cinderblocks/XmlRpcCore",
+    "isPrivate": false,
+    "isGitHubApp": false,
+    "skipBranchesWithoutAppveyorYml": false,
+    "enableSecureVariablesInPullRequests": false,
+    "enableSecureVariablesInPullRequestsFromSameRepo": false,
+    "enableDeploymentInPullRequests": false,
+    "saveBuildCacheInPullRequests": false,
+    "rollingBuilds": false,
+    "rollingBuildsDoNotCancelRunningBuilds": false,
+    "rollingBuildsOnlyForPullRequests": false,
+    "alwaysBuildClosedPullRequests": false,
+    "tags": "",
+    "securityDescriptor": {
+      "accessRightDefinitions": [
+        {
+          "name": "View",
+          "description": "View"
+        },
+        {
+          "name": "RunBuild",
+          "description": "Run build"
+        },
+        {
+          "name": "Update",
+          "description": "Update settings"
+        },
+        {
+          "name": "Delete",
+          "description": "Delete project"
+        }
+      ],
+      "roleAces": [
+        {
+          "roleId": 106596,
+          "name": "Administrator",
+          "isAdmin": true,
+          "accessRights": [
+            {
+              "name": "View",
+              "allowed": true
+            },
+            {
+              "name": "RunBuild",
+              "allowed": true
+            },
+            {
+              "name": "Update",
+              "allowed": true
+            },
+            {
+              "name": "Delete",
+              "allowed": true
+            }
+          ]
+        },
+        {
+          "roleId": 106597,
+          "name": "User",
+          "isAdmin": false,
+          "accessRights": [
+            {
+              "name": "View"
+            },
+            {
+              "name": "RunBuild"
+            },
+            {
+              "name": "Update"
+            },
+            {
+              "name": "Delete"
+            }
+          ]
+        }
+      ]
+    },
+    "disablePushWebhooks": false,
+    "disablePullRequestWebhooks": false,
+    "created": "2017-03-19T22:32:05.2145473+00:00",
+    "updated": "2019-11-11T22:38:27.240948+00:00"
+  },
+  "settings": {
+    "projectId": 297595,
+    "accountId": 59287,
+    "accountName": "cinderblocks57647",
+    "builds": [],
+    "name": "XmlRpcCore",
+    "slug": "xmlrpccore",
+    "versionFormat": "1.0.{build}",
+    "nextBuildNumber": 78,
+    "repositoryType": "gitHub",
+    "repositoryScm": "git",
+    "repositoryName": "cinderblocks/XmlRpcCore",
+    "repositoryBranch": "master",
+    "webhookId": "1mw8qwd83q1u7l5d",
+    "webhookUrl": "https://ci.appveyor.com/api/github/webhook?id=1mw8qwd83q1u7l5d",
+    "statusBadgeId": "1mw8qwd83q1u7l5d",
+    "isPrivate": false,
+    "isGitHubApp": true,
+    "ignoreAppveyorYml": false,
+    "skipBranchesWithoutAppveyorYml": false,
+    "enableSecureVariablesInPullRequests": false,
+    "enableSecureVariablesInPullRequestsFromSameRepo": false,
+    "enableDeploymentInPullRequests": false,
+    "saveBuildCacheInPullRequests": false,
+    "rollingBuilds": false,
+    "rollingBuildsDoNotCancelRunningBuilds": false,
+    "rollingBuildsOnlyForPullRequests": false,
+    "alwaysBuildClosedPullRequests": false,
+    "configuration": {
+      "isBaseConfig": false,
+      "doNotIncrementBuildNumberOnPullRequests": false,
+      "hotFixScripts": [],
+      "initScripts": [],
+      "includeBranches": [],
+      "excludeBranches": [],
+      "skipTags": false,
+      "skipNonTags": false,
+      "skipBranchWithPullRequests": false,
+      "skipCommitsFiles": [],
+      "onlyCommitsFiles": [],
+      "cloneScripts": [],
+      "onBuildSuccessScripts": [],
+      "onBuildErrorScripts": [],
+      "onBuildFinishScripts": [],
+      "patchAssemblyInfo": false,
+      "assemblyInfoFile": "**\\AssemblyInfo.*",
+      "assemblyVersionFormat": "{version}",
+      "assemblyFileVersionFormat": "{version}",
+      "assemblyInformationalVersionFormat": "{version}",
+      "patchDotnetCsproj": false,
+      "dotnetCsprojFile": "**\\*.csproj",
+      "dotnetCsprojVersionFormat": "{version}",
+      "dotnetCsprojVersionPrefixFormat": "{version}",
+      "dotnetCsprojPackageVersionFormat": "{version}",
+      "dotnetCsprojAssemblyVersionFormat": "{version}",
+      "dotnetCsprojFileVersionFormat": "{version}",
+      "dotnetCsprojInformationalVersionFormat": "{version}",
+      "buildCloud": [],
+      "operatingSystem": [],
+      "services": [],
+      "stacks": [],
+      "shallowClone": false,
+      "forceHttpsClone": false,
+      "environmentVariables": [],
+      "environmentVariablesMatrix": [],
+      "installScripts": [],
+      "hostsEntries": [],
+      "cacheEntries": [],
+      "configureNuGetProjectSource": false,
+      "configureNuGetAccountSource": false,
+      "disableNuGetPublishOnPullRequests": false,
+      "disableNuGetPublishForOctopusPackages": false,
+      "buildMode": "msbuild",
+      "platform": [],
+      "configuration": [],
+      "packageWebApplicationProjects": false,
+      "packageWebApplicationProjectsXCopy": false,
+      "packageWebApplicationProjectsBeanstalk": false,
+      "packageWebApplicationProjectsOctopus": false,
+      "packageAzureWebJobProjects": false,
+      "packageAzureCloudServiceProjects": false,
+      "packageNuGetProjects": false,
+      "packageNuGetSymbols": false,
+      "useSnupkgFormat": false,
+      "packageAspNetCoreProjects": false,
+      "packageDotnetConsoleProjects": false,
+      "includeNuGetReferences": false,
+      "msBuildInParallel": false,
+      "msBuildVerbosity": "minimal",
+      "buildScripts": [],
+      "beforeBuildScripts": [],
+      "beforePackageScripts": [],
+      "afterBuildScripts": [],
+      "testMode": "auto",
+      "testAssemblies": [],
+      "testCategories": [],
+      "testCategoriesMatrix": [],
+      "testScripts": [],
+      "beforeTestScripts": [],
+      "afterTestScripts": [],
+      "deployMode": "providers",
+      "deployments": [],
+      "deployScripts": [],
+      "beforeDeployScripts": [],
+      "afterDeployScripts": [],
+      "onImageBakeScripts": [],
+      "xamarinRegisterAndroidProduct": false,
+      "xamarinRegisterIosProduct": false,
+      "matrixFastFinish": false,
+      "matrixAllowFailures": [],
+      "matrixExclude": [],
+      "matrixOnly": [],
+      "matrixExcept": [],
+      "artifacts": [],
+      "notifications": []
+    },
+    "tags": "",
+    "nuGetFeed": {
+      "nuGetFeedId": 304608,
+      "id": "xmlrpccs-v2shh83ys377",
+      "name": "Project XmlRpcCS",
+      "accountId": 59287,
+      "projectId": 297595,
+      "isPrivateProject": false,
+      "publishingEnabled": false,
+      "created": "2017-03-19T22:32:07.4811651+00:00"
+    },
+    "securityDescriptor": {
+      "accessRightDefinitions": [
+        {
+          "name": "View",
+          "description": "View"
+        },
+        {
+          "name": "RunBuild",
+          "description": "Run build"
+        },
+        {
+          "name": "Update",
+          "description": "Update settings"
+        },
+        {
+          "name": "Delete",
+          "description": "Delete project"
+        }
+      ],
+      "roleAces": [
+        {
+          "roleId": 106596,
+          "name": "Administrator",
+          "isAdmin": true,
+          "accessRights": [
+            {
+              "name": "View",
+              "allowed": true
+            },
+            {
+              "name": "RunBuild",
+              "allowed": true
+            },
+            {
+              "name": "Update",
+              "allowed": true
+            },
+            {
+              "name": "Delete",
+              "allowed": true
+            }
+          ]
+        },
+        {
+          "roleId": 106597,
+          "name": "User",
+          "isAdmin": false,
+          "accessRights": [
+            {
+              "name": "View"
+            },
+            {
+              "name": "RunBuild"
+            },
+            {
+              "name": "Update"
+            },
+            {
+              "name": "Delete"
+            }
+          ]
+        }
+      ]
+    },
+    "disablePushWebhooks": false,
+    "disablePullRequestWebhooks": false,
+    "created": "2017-03-19T22:32:05.2145473+00:00",
+    "updated": "2019-11-11T22:38:27.240948+00:00"
+  },
+  "images": [
+    {
+      "buildWorkerImageId": 886,
+      "name": "Visual Studio 2019",
+      "buildCloudName": "pro-vs2019;pro-ubuntu;azure-westus",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 362,
+      "name": "Visual Studio 2017",
+      "buildCloudName": "pro-vs2017",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 34,
+      "name": "Visual Studio 2015",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 38,
+      "name": "Visual Studio 2013",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 964,
+      "name": "Previous Visual Studio 2019",
+      "buildCloudName": "pro-vs2019",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 368,
+      "name": "Previous Visual Studio 2017",
+      "buildCloudName": "pro-vs2017",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 36,
+      "name": "Previous Visual Studio 2015",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 39,
+      "name": "Previous Visual Studio 2013",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 639,
+      "name": "Ubuntu",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Ubuntu"
+    },
+    {
+      "buildWorkerImageId": 649,
+      "name": "Ubuntu1804",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Ubuntu"
+    },
+    {
+      "buildWorkerImageId": 650,
+      "name": "Ubuntu1604",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Ubuntu"
+    },
+    {
+      "buildWorkerImageId": 640,
+      "name": "Previous Ubuntu",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Ubuntu"
+    },
+    {
+      "buildWorkerImageId": 674,
+      "name": "Previous Ubuntu1804",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Ubuntu"
+    },
+    {
+      "buildWorkerImageId": 673,
+      "name": "Previous Ubuntu1604",
+      "buildCloudName": "pro-ubuntu",
+      "osType": "Ubuntu"
+    },
+    {
+      "buildWorkerImageId": 1217,
+      "name": "macOS",
+      "buildCloudName": "macos-pro",
+      "osType": "MacOS"
+    },
+    {
+      "buildWorkerImageId": 1218,
+      "name": "macOS-Mojave",
+      "buildCloudName": "macos-pro",
+      "osType": "MacOS"
+    },
+    {
+      "buildWorkerImageId": 735,
+      "name": "Visual Studio 2019 Preview",
+      "buildCloudName": "azure-westus",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 382,
+      "name": "Visual Studio 2017 Preview",
+      "buildCloudName": "gce",
+      "osType": "Windows"
+    },
+    {
+      "buildWorkerImageId": 40,
+      "name": "WMF 5",
+      "buildCloudName": "gce",
+      "osType": "Windows"
+    }
+  ],
+  "buildClouds": [],
+  "defaultImageName": "Visual Studio 2015"
+}

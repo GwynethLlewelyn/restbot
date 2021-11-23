@@ -23,7 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenMetaverse;
+using LibreMetaverse; // instead of OpenMetaverse
 using OpenMetaverse.Assets;
 using OpenMetaverse.Packets;
 using System.Xml;

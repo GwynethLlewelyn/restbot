@@ -5,27 +5,27 @@
 
  LICENSE:
      This file is part of the RESTBot Project.
- 
+
      RESTbot is free software; you can redistribute it and/or modify it under
      the terms of the Affero General Public License Version 1 (March 2002)
- 
+
      RESTBot is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
      Affero General Public License for more details.
 
      You should have received a copy of the Affero General Public License
-     along with this program (see ./LICENSING) If this is missing, please 
-     contact alpha.zaius[at]gmail[dot]com and refer to 
+     along with this program (see ./LICENSING) If this is missing, please
+     contact alpha.zaius[at]gmail[dot]com and refer to
      <http://www.gnu.org/licenses/agpl.html> for now.
 
- COPYRIGHT: 
+ COPYRIGHT:
      RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenMetaverse;
+using LibreMetaverse; // instead of using OpenMetaverse;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -48,7 +48,7 @@ namespace RESTBot
         static List<Type> StatefulPluginDefinitions = new List<Type>();
         public static void AddStatefulPluginDefinition(Type defn)
         {
-            
+
             lock (StatefulPluginDefinitions)
             {
                 DebugUtilities.WriteDebug("Plugin Def: " + defn.FullName);
@@ -140,7 +140,7 @@ namespace RESTBot
 			UnknownError
 		}
 
-        const string VERSION = "1.2.0";
+        const string VERSION = "8.3.1";
 
         public string First;
         public string Last;
@@ -149,13 +149,13 @@ namespace RESTBot
         public GridClient Client;
         public Status myStatus;
         public UUID sessionid;
-		
+
 		private DateTime uptime = new DateTime();
-		
+
         private Dictionary<string, StatefulPlugin> StatefulPlugins;
 
         private System.Timers.Timer ReloginTimer;
-		public delegate void BotStatusCallback(UUID Session, Status status);
+		public delegate void BotStatusCallback(OpenMetaverse.UUID Session, Status status);
 		public event BotStatusCallback OnBotStatus;
 
         private System.Timers.Timer updateTimer;
@@ -184,7 +184,7 @@ namespace RESTBot
             //Initialize StatefulPlugins
 			DebugUtilities.WriteDebug(session.ToString() + " Initializing plugins");
             StatefulPlugins = new Dictionary<string, StatefulPlugin>();
-            foreach (Type t in RestBot.StatefulPluginDefinitions) 
+            foreach (Type t in RestBot.StatefulPluginDefinitions)
             {
                 ConstructorInfo info = t.GetConstructor(Type.EmptyTypes);
                 StatefulPlugin sp = (StatefulPlugin)info.Invoke(new object[0]);
@@ -255,7 +255,7 @@ namespace RESTBot
             //            DebugUtilities.WriteSpecial("Logged in successfully");
             //            myStatus = Status.Connected;
             //            response.wasFatal = false;
-            //            response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";                        
+            //            response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
             //        }
             //        else if (e.Status == LoginStatus.Failed)
             //        {
@@ -271,7 +271,7 @@ namespace RESTBot
             Client.Throttle.Land = 1000000;
             Client.Throttle.Task = 1000000;
             Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
-            
+
             DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
 
             LoginParams loginParams = Client.Network.DefaultLoginParams(
@@ -327,7 +327,7 @@ namespace RESTBot
                 DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
                 return new LoginReply();
             }
-            
+
             ReloginTimer.Stop(); //to stop any relogin timers
 
             myStatus = Status.LoggingIn;
@@ -384,10 +384,10 @@ namespace RESTBot
 
                 if (response.wasFatal == false) myStatus = Status.Reconnecting;
             }
-          
+
             //yay return
             return response;
-        } 
+        }
 
         public string DoProcessing(Dictionary<string,string> Parameters, string[] parts)
         {
@@ -416,7 +416,7 @@ namespace RESTBot
 			else if ( Method == "status" )
 			{
 				return("<status>" + myStatus.ToString() + "</status>");
-			} 
+			}
             return ("<error>novalidplugin</error>");
         }
 	}

@@ -1,4 +1,4 @@
-﻿/*--------------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------
  LICENSE:
          This file is part of the RESTBot Project.
  
@@ -23,7 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenMetaverse;
+using LibreMetaverse; // instead of OpenMetaverse
 using System.Threading;
 
 namespace RESTBot

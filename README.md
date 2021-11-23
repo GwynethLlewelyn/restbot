@@ -23,7 +23,31 @@ Probably you only need to get the Community version of [Visual Studio](https://v
 
 ### Under macOS:
 
-First, get the free [Microsoft .NET environment](https://dotnet.microsoft.com/download/dotnet/scripts). `libremetaverse` needs at least version 4.8
+#### Get Mono
+
+Install Mono. To save time (in fixing dependencies...) just use [Homebrew](https://brew.sh):
+
+```bash
+brew install mono
+export MONO_GAC_PREFIX="/usr/local"
+```
+
+You may wish to add the latter to your `~/.bashrc` or equivalent.
+
+And to build everything:
+
+```bash
+cd /path/where/you/downloaded/restbot
+msbuild
+```
+
+`msbuild` (as well as all other Microsoft tools) ought to have been symlinked from '/usr/local/bin'; if not, do a `brew reinstall mono`.
+
+#### Add the .NET environment
+
+_**Note to self:** This might not be needed at all, Mono might have everything it needs._
+
+Next, get the free [Microsoft .NET environment](https://dotnet.microsoft.com/download/dotnet/scripts). `libremetaverse` needs at least version 4.8.
 
 or you can simply go to the root of this project and run:
 
@@ -37,27 +61,21 @@ chmod +x dotnet-install.sh
 
 Also, this script is _not_ included in RESTbot, since it's unclear what license has been attached to it by Microsoft (allegedly it's MIT); you'll have to retrieve all Microsoft-related things by yourself.
 
-Also note that Microsoft designed that script to use `bash`. These days, Apple 'decided' that macOS ought to have `zsh` as the default shell. If the script doesn't run on your system, you'll need to get `bash`.
+Take into account that Microsoft designed that script to use `bash`. These days, Apple 'decided' that macOS ought to have `zsh` as the default shell. If the script doesn't run on your system, you'll need to get `bash`.
 
 Once that step is finished, you should have a working installation of the whole .NET package under `/Users/<your username>/.dotnet`. You can also deploy it to a different directory, if you wish.
 
 This should be enough to be able to run:
 
 ```bash
-~/.dotnet/dotnet msbuild RestBot.libremetaverse.build
+~/.dotnet/dotnet msbuild RestBot.csproj
 ```
 
 For more performance during compilation, you can run `msbuild` with the `-m` flag, which will use all available CPUs on your system (as opposed to just one).
 
-Install `mono`. To save time (in fixing dependencies...) just use [Homebrew](https://brew.sh):
-
-```bash
-brew install mono
-```
-
 ### Under Linux:
 
-It's basically the same as under macOS. These days, Homebrew also works under Linux, so the instructions would be the same; but possibly you will prefer to run your 'native' package manager, be it `apt` (Debian/Linux) or `yum` (Fedora, CentOS, RedHat) or whatever is fashionable these days. You'll have to check what versions of Mono are available; remember that you'll need a 'developer' edition, and don't forget to double-check that `msbuild` comes as part of the package as well.
+It's basically the same as under macOS. These days, Homebrew also works under Linux, so the instructions would be the same; but possibly you will prefer to run your 'native' package manager, be it `apt` (Debian/Linux) or `yum` (Fedora, CentOS, RedHat) or whatever is fashionable these days. You'll have to check what versions of Mono are available; remember that you'll need a 'developer' edition, and don't forget to double-check that `msbuild` and `csc` (the Microsoft Roslyn C# compiler) comes as part of the package as well.
 
 `dotnet-install.sh` is a bit better at detecting Linux variants, but if it gets it wrong, you can use the same approach as above; run `./dotnet-install.sh --help` to see what variants are currently supported.
 

@@ -1,4 +1,4 @@
-/*--------------------------------------------------------------------------------
+﻿/*--------------------------------------------------------------------------------
  FILE INFORMATION:
      Name: Program.cs [./restbot-src/Program.cs]
      Description: This file is the "central hub" of all of the programs resources
@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
-using OpenMetaverse;
+using LibreMetaverse; // instead of OpenMetaverse
 using System.Threading;
 using System.Reflection;
 using System.IO;

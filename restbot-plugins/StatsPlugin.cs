@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenMetaverse;
+using LibreMetaverse; // instead of OpenMetaverse
 using System.Net;
 using System.Threading;
 
