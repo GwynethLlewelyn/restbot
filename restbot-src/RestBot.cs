@@ -25,7 +25,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using LibreMetaverse; // instead of using OpenMetaverse;
+using OpenMetaverse;
+using OpenMetaverse.Utilities;
 using System.Net;
 using System.Reflection;
 using System.Threading;
@@ -152,10 +153,10 @@ namespace RESTBot
 
 		private DateTime uptime = new DateTime();
 
-        private Dictionary<string, StatefulPlugin> StatefulPlugins;
+		private readonly Dictionary<string, StatefulPlugin> StatefulPlugins;
 
-        private System.Timers.Timer ReloginTimer;
-		public delegate void BotStatusCallback(OpenMetaverse.UUID Session, Status status);
+		private readonly System.Timers.Timer ReloginTimer;
+		public delegate void BotStatusCallback(UUID Session, Status status);
 		public event BotStatusCallback OnBotStatus;
 
         private System.Timers.Timer updateTimer;

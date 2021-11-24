@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AA108657-E674-4E2C-A062-BBF04BFEA0A6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RESTBot</RootNamespace>
+    <AssemblyName>RESTBot</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>restbot-bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>restbot-bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <ProjectReference Include="libopenmetaverse\OpenMetaverse\OpenMetaverse.csproj">
+      <Project>{D9CDEDFB-8169-4B03-B57F-0DF638F044EC}</Project>
+      <Name>libopenmetaverse</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="restbot-plugins\AvatarsPlugin.cs" />
+    <Compile Include="restbot-plugins\GroupsPlugin.cs" />
+    <Compile Include="restbot-plugins\GroupsPlugin.cs" />
+    <Compile Include="restbot-plugins\InventoryPlugin.cs" />
+    <Compile Include="restbot-plugins\StatsPlugin.cs" />
+    <Compile Include="restbot-src\Configuration.cs" />
+    <Compile Include="restbot-src\DebugUtilities.cs" />
+    <Compile Include="restbot-src\Program.cs" />
+    <Compile Include="restbot-src\RestBot.cs" />
+    <Compile Include="restbot-src\RestPlugin.cs" />
+    <Compile Include="restbot-src\Server\HeaderConstructor.cs" />
+    <Compile Include="restbot-src\Server\HeaderLines.cs" />
+    <Compile Include="restbot-src\Server\HeaderParser.cs" />
+    <Compile Include="restbot-src\Server\Router.cs" />
+    <Compile Include="restbot-src\Server\Server.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=ffe11b8eea7f77ed, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+</Project>

@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using LibreMetaverse; // instead of OpenMetaverse
+using OpenMetaverse;
 
 namespace RESTBot.restbot_plugins
 {

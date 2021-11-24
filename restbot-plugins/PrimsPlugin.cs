@@ -23,7 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using LibreMetaverse; // instead of OpenMetaverse
+using OpenMetaverse;
 using System.Threading;
 
 namespace RESTBot

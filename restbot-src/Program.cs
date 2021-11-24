@@ -5,28 +5,28 @@
 
  LICENSE:
      This file is part of the RESTBot Project.
- 
+
      RESTbot is free software; you can redistribute it and/or modify it under
      the terms of the Affero General Public License Version 1 (March 2002)
- 
+
      RESTBot is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
      Affero General Public License for more details.
 
      You should have received a copy of the Affero General Public License
-     along with this program (see ./LICENSING) If this is missing, please 
-     contact alpha.zaius[at]gmail[dot]com and refer to 
+     along with this program (see ./LICENSING) If this is missing, please
+     contact alpha.zaius[at]gmail[dot]com and refer to
      <http://www.gnu.org/licenses/agpl.html> for now.
 
- COPYRIGHT: 
+ COPYRIGHT:
      RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
-using LibreMetaverse; // instead of OpenMetaverse
+using OpenMetaverse;
 using System.Threading;
 using System.Reflection;
 using System.IO;
@@ -60,7 +60,7 @@ namespace RESTBot
         public static XMLConfig.Configuration config;
 
         //We need to move this to the security configuration block
-        
+
         private static DateTime uptime = new DateTime();
 
         static void Main(string[] args)
@@ -136,7 +136,7 @@ namespace RESTBot
         public static string DoProcessing(RequestHeaders headers, string body)
         {
             //Setup variables
-            
+
 
             DebugUtilities.WriteDebug("New request - " + headers.RequestLine.Path);
             //Split the URL
@@ -187,7 +187,7 @@ namespace RESTBot
                     //Needs the $1$ for the md5 on the login for libsl
                     if (!Parameters["pass"].StartsWith("$1$")) Parameters["pass"] = "$1$" + Parameters["pass"];
                     s.Bot = new RestBot(s.ID, Parameters["first"], Parameters["last"], Parameters["pass"]);
-                    
+
                     lock (Sessions)
                     {
                         Sessions.Add(id, s);
@@ -276,7 +276,7 @@ namespace RESTBot
             //Last accessed for plugins
             Sessions[sess].LastAccessed = DateTime.Now;
             //Pre-error checking
-            if (r.myStatus != RestBot.Status.Connected) //Still logging in? 
+            if (r.myStatus != RestBot.Status.Connected) //Still logging in?
             {
                 return ("<error>" + r.myStatus.ToString() + "</error>");
 
@@ -308,7 +308,7 @@ namespace RESTBot
             return Sessions.ContainsKey(key) && (!config.security.hostnameLock || Sessions[key].Hostname == hostname);
         }
 
-        
+
         public static void DisposeSession(UUID key)
         {
             DebugUtilities.WriteDebug("Disposing of session " + key.ToString());

@@ -30,13 +30,11 @@ using System.Text;
 using System.IO;
 using log4net;
 
-[assembly: log4net.Config.XmlConfigurator(Watch=true)]
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace RESTBot
 {
     public static class DebugUtilities
-    {
-
-		
+	{
 		//Define a new logger for RestBot
 		private static readonly ILog restbotLog = LogManager.GetLogger(typeof(RestBot));
 
