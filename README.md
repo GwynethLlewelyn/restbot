@@ -6,14 +6,14 @@
 - Written August 9, 2007 -  Pleiades Consulting, Inc
 - Revised June 5, 2010 - Gwyneth Llewelyn (notes on compilation)
 - Revised November 21, 2021 - Gwyneth Llewelyn (updates for a lot of things)
+- Dramatic changes made on November 23, 2021 - Gwyneth Llewelyn
 
 # Overview
 
-RESTBot is a C# webserver that uses [RESTful transactions](https://en.wikipedia.org/wiki/Representational_state_transfer) to interact with a
-_bot_ in [Second Life](https://secondlife.com) or [OpenSimulator](http://opensimulator.org). This bot (or a collection of bots) is started through a REST command and can be stopped the same way. The software is extremely
-modular, and is designed to easily accept plugins that developers can write
-(in C#) to add more complex interaction between a web application and a
-Second Life Bot. More information about Plugins is on the wiki. (See [LINKS](LINKS.md).)
+RESTBot is a C# webserver that uses [RESTful transactions](https://en.wikipedia.org/wiki/Representational_state_transfer) to interact with a _bot_ in [Second Life](https://secondlife.com) or [OpenSimulator](http://opensimulator.org). This bot (or a collection of bots) is started through a REST command and can be stopped the same way. The software is extremely modular, and is designed to easily accept plugins that developers can write (in C#) to add more complex interaction between a web application and a
+Second Life® bot (a non-human-controlled avatar). More information about Plugins is on the [wiki](https://github.com/GwynethLlewelyn/restbot/wiki).
+
+_**Note:** Wiki is still under reformulation and may not correctly represent the state-of-the-art of RESTbot (gwyneth 20211123)_
 
 ## Preparing the compilation environment
 
@@ -225,3 +225,4 @@ with it to play around with commands... or check out the wiki for more
 information (see [LINKS](LINKS.md)).
 
 _Original documentation written by an anonymous collaborator at Pleiades; several changes were been made by Gwyneth Llewelyn, but trying to keep the original, light-hearted style of explaining things (gwyneth 20211121)._
+  
