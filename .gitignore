@@ -64,6 +64,7 @@ logs/*
 #*.so.*
 #*.dylib
 obj/
+packages/
 
 # Executables
 #*.exe
