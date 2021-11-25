@@ -25,15 +25,13 @@
 #define STARTUP_DEBUG //turn this on if you want any debug messages to be outputted before the configuration file is set
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using log4net;
+using log4net.Config;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace RESTBot
 {
-    public static class DebugUtilities
+	public static class DebugUtilities
 	{
 		//Define a new logger for RestBot
 		private static readonly ILog restbotLog = LogManager.GetLogger(typeof(RestBot));

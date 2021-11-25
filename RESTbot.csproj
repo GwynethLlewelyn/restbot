@@ -6,16 +6,33 @@
     <ProductVersion>8.1.3</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{69F6D94E-70AB-481A-8610-B37DCDE23AE9}</ProjectGuid>
-	<AssemblyName>RESTbot</AssemblyName>
-	<OutputPath>restbot-bin\</OutputPath>
+    <AssemblyName>RESTbot</AssemblyName>
+    <OutputPath>restbot-bin\</OutputPath>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RESTBot</RootNamespace>
     <AssemblyName>RESTBot</AssemblyName>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Version>8.1.3</Version>
+    <PackageVersion>8.1.3</PackageVersion>
     <ReleaseVersion>8.1.3</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <ApplicationIcon>assets\images\RESTbot-logo.png</ApplicationIcon>
+    <PackageId>RESTbot</PackageId>
+    <Authors>Gwyneth Llewelyn, Pleiades, others</Authors>
+    <Copyright>Copyright © Pleiades 2007. Copyright © Gwyneth Llewelyn 2010,2021. Some rights reserved</Copyright>
+    <PackageIconUrl>https://github.com/GwynethLlewelyn/restbot/raw/master/assets/images/RESTbot-logo.png</PackageIconUrl>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageLicenseUrl>https://github.com/GwynethLlewelyn/restbot/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/GwynethLlewelyn/restbot</PackageProjectUrl>
+    <Owners>Gwyneth Llewelyn</Owners>
+    <PackageTags>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</PackageTags>
+    <RepositoryUrl>https://github.com/GwynethLlewelyn/restbot</RepositoryUrl>
+    <Title>RESTbot</Title>
+    <Summary>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Summary>
+    <Description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,23 +54,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <ItemGroup>
     <Compile Include="restbot-plugins\AvatarsPlugin.cs" />
     <Compile Include="restbot-plugins\ChatPlugin.cs" />
     <Compile Include="restbot-plugins\GroupsPlugin.cs" />
     <Compile Include="restbot-plugins\InventoryPlugin.cs" />
-	<Compile Include="restbot-plugins\MovementPlugin.cs" />
-	<Compile Include="restbot-plugins\PrimsPlugin.cs" />
+    <Compile Include="restbot-plugins\MovementPlugin.cs" />
+    <Compile Include="restbot-plugins\PrimsPlugin.cs" />
     <Compile Include="restbot-plugins\ReaperPlugin.cs" />
-	<Compile Include="restbot-plugins\StatsPlugin.cs" />
+    <Compile Include="restbot-plugins\StatsPlugin.cs" />
     <Compile Include="restbot-src\Configuration.cs" />
     <Compile Include="restbot-src\DebugUtilities.cs" />
     <Compile Include="restbot-src\Program.cs" />
@@ -66,21 +75,23 @@
     <Compile Include="restbot-src\Server\Server.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.XML" />
-    <Reference Include="Microsoft.Experimental.Collections">
-      <HintPath>packages\Microsoft.Experimental.Collections.1.0.6-e190117-3\lib\netstandard2.0\Microsoft.Experimental.Collections.dll</HintPath>
-    </Reference>
+    <None Include="packages.config" />
+    <None Include="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  <!--
+  <Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe" />
+  -->
+  <ItemGroup>
     <Reference Include="log4net">
       <HintPath>packages\log4net.2.0.13\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web" />
-    <Reference Include="LibreMetaverse.Types">
-      <HintPath>packages\LibreMetaverse.Types.1.9.4.297\lib\netstandard2.0\LibreMetaverse.Types.dll</HintPath>
-    </Reference>
-    <Reference Include="LibreMetaverse.StructuredData">
-      <HintPath>packages\LibreMetaverse.StructuredData.1.9.4.297\lib\netstandard2.0\LibreMetaverse.StructuredData.dll</HintPath>
+    <Reference Include="Microsoft.Experimental.Collections">
+      <HintPath>packages\Microsoft.Experimental.Collections.1.0.6-e190117-3\lib\netstandard2.0\Microsoft.Experimental.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.ObjectPool">
       <HintPath>packages\Microsoft.Extensions.ObjectPool.6.0.0\lib\net461\Microsoft.Extensions.ObjectPool.dll</HintPath>
@@ -89,6 +100,20 @@
       <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="OggVorbisEncoder">
+      <HintPath>packages\OggVorbisEncoder.1.2.0\lib\net461\OggVorbisEncoder.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing.Common">
       <HintPath>packages\System.Drawing.Common.6.0.0\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
@@ -99,27 +124,11 @@
     <Reference Include="System.IO">
       <HintPath>packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.NameResolution">
-      <HintPath>packages\System.Net.NameResolution.4.3.0\lib\net46\System.Net.NameResolution.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics.Vectors">
-      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime">
-      <HintPath>packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
+      <HintPath>packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="OggVorbisEncoder">
-      <HintPath>packages\OggVorbisEncoder.1.2.0\lib\net461\OggVorbisEncoder.dll</HintPath>
-    </Reference>
     <Reference Include="System.Security.Cryptography.Encoding">
       <HintPath>packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
     </Reference>
@@ -127,13 +136,16 @@
       <HintPath>packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Security.Cryptography.Algorithms">
-      <HintPath>packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <HintPath>packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
     </Reference>
     <Reference Include="System.Security.Cryptography.X509Certificates">
-      <HintPath>packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <HintPath>packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <HintPath>packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.NameResolution">
+      <HintPath>packages\System.Net.NameResolution.4.3.0\lib\net46\System.Net.NameResolution.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading.Tasks.Extensions">
       <HintPath>packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
@@ -147,19 +159,16 @@
     <Reference Include="zlib.net">
       <HintPath>packages\zlib.net-mutliplatform.1.0.5\lib\net48\zlib.net.dll</HintPath>
     </Reference>
+    <Reference Include="LibreMetaverse.Types">
+      <HintPath>packages\LibreMetaverse.Types.1.9.4.297\lib\netstandard2.0\LibreMetaverse.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="LibreMetaverse.StructuredData">
+      <HintPath>packages\LibreMetaverse.StructuredData.1.9.4.297\lib\netstandard2.0\LibreMetaverse.StructuredData.dll</HintPath>
+    </Reference>
     <Reference Include="LibreMetaverse">
       <HintPath>packages\LibreMetaverse.1.9.4.297\lib\netstandard2.0\LibreMetaverse.dll</HintPath>
     </Reference>
-    <Reference Include="LibreMetaverse.Utilities">
-      <HintPath>packages\LibreMetaverse.Utilities.1.9.4.297\lib\netstandard2.0\LibreMetaverse.Utilities.dll</HintPath>
-    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <!--
-  <Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe" />
-  -->
   <Target Name="Build">
   	<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPathß)')" />
   	<Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
@@ -168,4 +177,8 @@
   	<Delete Files="$(OutputPath)$(AssemblyName).exe" />
   </Target>
   <Target Name="Rebuild" DependsOnTargets="Clean;Build" />
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
 </Project>

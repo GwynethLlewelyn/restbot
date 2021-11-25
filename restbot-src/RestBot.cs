@@ -35,8 +35,8 @@ namespace RESTBot
 {
     public class RestBot
     {
-        #region Static Junk
-        static Dictionary<string, RestPlugin> Plugins = new Dictionary<string, RestPlugin>();
+		#region Static Junk
+		static Dictionary<string, RestPlugin> Plugins = new Dictionary<string, RestPlugin>();
         public static void AddPlugin(RestPlugin Plugin)
         {
             lock (Plugins)
@@ -141,9 +141,9 @@ namespace RESTBot
 			UnknownError
 		}
 
-        const string VERSION = "8.3.1";
+		private const string VERSION = "8.3.1";
 
-        public string First;
+		public string First;
         public string Last;
         public string MD5Password;
 
