@@ -30,6 +30,7 @@
 		<Title>RESTbot</Title>
 		<Summary>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Summary>
 		<Description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Description>
+		<NuspecFile>$(AssemblyName).nuspec</NuspecFile>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -72,18 +73,12 @@
 		<Compile Include="restbot-src\Server\Server.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="LICENSE.md">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-<!--		<None Include="packages.config" /> -->
-	</ItemGroup>
-	<!--
-	<Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe" />
-	-->
-	<ItemGroup>
-		<Reference Include="System.Configuration" />
-		<Reference Include="System.Web" />
+		<Reference Include="log4net" />
+		<Reference Include="System" />
+		<Reference Include="System.XML" />
+		<Reference Include="LibreMetaverse" />
+		<Reference Include="LibreMetaverse.Types" />
+		<Reference Include="LibreMetaverse.StructuredData" />
 	</ItemGroup>
 	<Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe">
 	<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
