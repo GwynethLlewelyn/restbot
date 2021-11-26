@@ -1,15 +1,22 @@
 <?xml version="1.0"?>
-<package >
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
 	<id>RESTbot</id>
 	<version>$version$</version>
-	<authors>Pleiades,Gwyneth Llewelyn,others</authors>
-	<owners>Gwyneth Llewelyn</owners>
-	<licenseUrl>https://github.com/GwynethLlewelyn/restbot/blob/master/LICENSE.md</licenseUrl>
-	<projectUrl>https://github.com/GwynethLlewelyn/restbot</projectUrl>
-	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</description>
+	<authors>Pleiades,Gwyneth Llewelyn,others</authors>
+	<projectUrl>https://github.com/GwynethLlewelyn/restbot</projectUrl>
+	<license type="expression">Artistic-2.0</license>
+	<icon>assets\images\RESTbot-logo.png</icon>
+	<readme>README.md</readme>
+	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<copyright>Copyright 2007,2010,2021</copyright>
 	<tags>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</tags>
+	<repository type="git" url="https://github.com/GwynethLlewelyn/restbot.bit" />
+	<title>RESTbot</title>
   </metadata>
+  <files>
+  	<file src="..\RESTbot-logo.png" target="assets\images\" />
+  	<file src="README.md" target="" />
+  </files>
 </package>
