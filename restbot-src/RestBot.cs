@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse;
-using OpenMetaverse.Utilities;
+// using OpenMetaverse.Utilities;
 using System.Net;
 using System.Reflection;
 using System.Threading;

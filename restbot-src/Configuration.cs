@@ -33,12 +33,12 @@ using System.Xml.Serialization;
 
 namespace RESTBot.XMLConfig
 {
-    /// <summary>
-    /// Configuration class designed for the <bots> array found in the xml config file
-    /// </summary>
-    /// <remarks>To find a copy of this class, see the Configuration class</remarks>
+		/// <summary>
+		/// Configuration class designed for the `bots array found in the xml config file
+		/// </summary>
+		/// <remarks>To find a copy of this class, see the Configuration class</remarks>
 
-    [XmlRoot("restbot")]
+		[XmlRoot("restbot")]
     public class Configuration
     {
         [XmlElement("networking")]
@@ -53,8 +53,8 @@ namespace RESTBot.XMLConfig
         public static Configuration LoadConfiguration(string configuration_file)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Configuration));
-            FileStream fileStream = null;
-            try
+						FileStream? fileStream = null;
+						try
             {
                  fileStream = new FileStream(configuration_file, FileMode.Open);
             }

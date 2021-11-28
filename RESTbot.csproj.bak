@@ -1,15 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk.Web" DefaultTargets="Build">
-	<PropertyGroup Label="Globals">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
+		<ProductVersion>8.1.3</ProductVersion>
+		<SchemaVersion>2.0</SchemaVersion>
+		<ProjectGuid>{69F6D94E-70AB-481A-8610-B37DCDE23AE9}</ProjectGuid>
 		<AssemblyName>RESTbot</AssemblyName>
 		<OutputPath>restbot-bin\</OutputPath>
 		<OutputType>Exe</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>RESTBot</RootNamespace>
+		<AssemblyName>RESTBot</AssemblyName>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<Version>8.1.3</Version>
-		<ApplicationIcon>assets\images\RESTbot.ico</ApplicationIcon>
+		<PackageVersion>8.1.3</PackageVersion>
+		<ReleaseVersion>8.1.3</ReleaseVersion>
+		<SynchReleaseVersion>false</SynchReleaseVersion>
+		<ApplicationIcon>assets\images\RESTbot-logo.png</ApplicationIcon>
 		<PackageId>RESTbot</PackageId>
 		<Authors>Gwyneth Llewelyn, Pleiades, others</Authors>
 		<Copyright>Copyright © Pleiades 2007. Copyright © Gwyneth Llewelyn 2010,2021. Some rights reserved</Copyright>
@@ -23,7 +30,8 @@
 		<Title>RESTbot</Title>
 		<Summary>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Summary>
 		<Description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Description>
-		<ProjectGuid>{F6E2EED5-AE02-45D9-A129-7E759F326D4C}</ProjectGuid>
+		<NuspecFile>$(AssemblyName).nuspec</NuspecFile>
+		<TargetFrameworkVersion>net6.0</TargetFrameworkVersion>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -46,18 +54,44 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="LibreMetaverse" Version="1.9.4.297" />
-	  <PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.4.297" />
-	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.4.297" />
-	  <PackageReference Include="log4net" Version="2.0.13" />
+		<Compile Include="restbot-plugins\AvatarsPlugin.cs" />
+		<Compile Include="restbot-plugins\ChatPlugin.cs" />
+		<Compile Include="restbot-plugins\GroupsPlugin.cs" />
+		<Compile Include="restbot-plugins\InventoryPlugin.cs" />
+		<Compile Include="restbot-plugins\MovementPlugin.cs" />
+		<Compile Include="restbot-plugins\PrimsPlugin.cs" />
+		<Compile Include="restbot-plugins\ReaperPlugin.cs" />
+		<Compile Include="restbot-plugins\StatsPlugin.cs" />
+		<Compile Include="restbot-src\Configuration.cs" />
+		<Compile Include="restbot-src\DebugUtilities.cs" />
+		<Compile Include="restbot-src\Program.cs" />
+		<Compile Include="restbot-src\RestBot.cs" />
+		<Compile Include="restbot-src\RestPlugin.cs" />
+		<Compile Include="restbot-src\Server\HeaderConstructor.cs" />
+		<Compile Include="restbot-src\Server\HeaderLines.cs" />
+		<Compile Include="restbot-src\Server\HeaderParser.cs" />
+		<Compile Include="restbot-src\Server\Router.cs" />
+		<Compile Include="restbot-src\Server\Server.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Remove="assets\*" />
-	  <None Remove="restbot-tools\*" />
+		<Reference Include="System" />
+		<Reference Include="System.XML" />
+		<Reference Include="LibreMetaverse" />
+		<Reference Include="LibreMetaverse.Types" />
+		<Reference Include="LibreMetaverse.StructuredData" />
+		<Reference Include="System.Configuration" />
+		<Reference Include="System.Web" />
+		<Reference Include="log4net">
+		  <HintPath>packages\log4net.2.0.13\lib\net45\log4net.dll</HintPath>
+		  <Private>False</Private>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="packages.config" />
 	</ItemGroup>
 	<Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe">
-		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />		
-		<Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
+	<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+	<Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
 	</Target>
 	<Target Name="Clean">
 		<Delete Files="$(OutputPath)$(AssemblyName).exe" />
@@ -66,7 +100,5 @@
 	<Target Name="BeforeBuild">
 	</Target>
 	<Target Name="AfterBuild">
-		<Copy SourceFiles="assets\configuration\configuration.xml" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
-		<Copy SourceFiles="assets\configuration\restbot.exe.config" DestinationFolder="$(OutputPath)$(AssemblyName).config" ContinueOnError="true" />
 	</Target>
 </Project>

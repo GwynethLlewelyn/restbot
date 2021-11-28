@@ -486,7 +486,7 @@ namespace RESTBot
 			AutoResetEvent fetchItemEvent = new AutoResetEvent(false);
 
 			EventHandler<ItemReceivedEventArgs> itemReceivedCallback =
-				delegate(object sender, ItemReceivedEventArgs e)
+				delegate (object sender, ItemReceivedEventArgs e)
 				{
 					if (e.Item.UUID == itemID)
 					{
@@ -512,15 +512,20 @@ namespace RESTBot
 			byte[] notecardData = null;
 			string error = "Timeout";
 
-			b.Client.Assets.RequestInventoryAsset(assetID, itemID, UUID.Zero, b.Client.Self.AgentID, AssetType.Notecard, true,
-								delegate(AssetDownload transfer, Asset asset)
-								{
-									if (transfer.Success)
-										notecardData = transfer.AssetData;
-									else
-										error = transfer.Status.ToString();
-									assetDownloadEvent.Set();
-								}
+			b.Client.Assets.RequestInventoryAsset(assetID, itemID, UUID.Zero, b.Client.Self.AgentID, AssetType.Notecard, true, UUID.Zero,
+				delegate (AssetDownload transfer, Asset asset)
+				{
+					if (transfer.Success)
+					{
+						notecardData = transfer.AssetData;
+					}
+					else
+					{
+						error = transfer.Status.ToString();
+					}
+
+					assetDownloadEvent.Set();
+				}
 			);
 
 			assetDownloadEvent.WaitOne(NOTECARD_FETCH_TIMEOUT, false);

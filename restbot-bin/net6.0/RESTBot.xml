@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RESTbot</name>
+    </assembly>
+    <members>
+        <member name="M:RESTBot.ListItemPlugin.PermMaskString(OpenMetaverse.PermissionMask)">
+            <summary>
+            Returns a 3-character summary of the PermissionMask
+            CMT if the mask allows copy, mod and transfer
+            -MT if it disallows copy
+            --T if it only allows transfer
+            --- if it disallows everything
+            </summary>
+            <param name="mask"></param>
+            <returns></returns>
+        </member>
+        <member name="F:RESTBot.Reaper.SESSION_TIMEOUT">
+            <summary>
+            Session timeout timespan
+            </summary>
+        </member>
+        <member name="F:RESTBot.Reaper.REAPER_INTERVAL">
+            <summary>
+            interval between reaper sweeps in ms
+            </summary>
+        </member>
+        <member name="T:RESTBot.XMLConfig.Configuration">
+            <summary>
+            Configuration class designed for the `bots array found in the xml config file
+            </summary>
+            <remarks>To find a copy of this class, see the Configuration class</remarks>
+        </member>
+        <member name="M:RESTBot.DebugUtilities.WriteInfo(System.String)">
+            <summary>
+            Outputs text in the normal white color.
+            </summary>
+            <param name="message">What to be outputted to console</param>
+            <example>DebugUtilities.WriteInfo("Listening on 127.0.0.1 on port 80");</example>
+            <remarks>This only outputs colored version on console! Will prepend "[INFO] " to message</remarks>
+        </member>
+        <member name="M:RESTBot.DebugUtilities.WriteDebug(System.String)">
+            <summary>
+            Outputs text in a gray color.
+            </summary>
+            <param name="message">What to be outputted to console</param>
+            <example>DebugUtilities.WriteDebug("Request recieved - 2048 bytes in buffer");</example>
+            <remarks>This only outputs colored version on console! Will prepend "[DEBUG] " to message</remarks>
+        </member>
+        <member name="M:RESTBot.DebugUtilities.WriteWarning(System.String)">
+            <summary>
+            Outputs text in a yellow color.
+            </summary>
+            <param name="message">What to be outputted to console</param>
+            <example>DebugUtilities.WriteWarning("Could not find custom configuration file, using default");</example>
+            <remarks>This only outputs colored version on console! Will prepend "[WARN] " to message</remarks>
+        </member>
+        <member name="M:RESTBot.DebugUtilities.WriteError(System.String)">
+            <summary>
+            Outputs text in a red color.
+            </summary>
+            <param name="message">What to be outputted to console</param>
+            <example>DebugUtilities.WriteError("Socket could not be established, quitting");</example>
+            <remarks>This only outputs colored version on console! Will prepend "[ERROR] " to message</remarks>
+        </member>
+        <member name="M:RESTBot.DebugUtilities.WriteSpecial(System.String)">
+            <summary>
+            Outputs text in a blue color. Well, it would if log4net had extra logging levels.
+            </summary>
+            <param name="message">What to be outputted to console</param>
+            <example>DebugUtilities.WriteSpecial("Starting login method!");</example>
+            <remarks>This only outputs colored version on console! Will prepend "[SPEC] " to message. This type of method should be used temporarly when developing specific blogs of code</remarks>
+        </member>
+        <member name="M:RESTBot.Program.RegisterAllCommands(System.Reflection.Assembly)">
+            <summary>
+            Register all RestPlugins to the RestBot static plugin dictionary
+            </summary>
+            <param name="assembly"></param>
+        </member>
+        <member name="M:RESTBot.Program.RegisterAllStatefulPlugins(System.Reflection.Assembly)">
+            <summary>
+            Grab all the subclass type definitions of StatefulPlugin out of an assembly
+            </summary>
+            <param name="assembly">Given assembly to search</param>
+        </member>
+        <member name="T:RESTBot.RestPlugin">
+            <summary>
+            A base class for REST plugins
+            </summary>
+        </member>
+        <member name="F:RESTBot.RestPlugin.MethodName">
+            <summary>
+            The name of the method. Should be set in the constructor.
+            </summary>
+        </member>
+        <member name="M:RESTBot.RestPlugin.Process(RESTBot.RestBot,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Process the request through this method
+            </summary>
+            <param name="b">The RestBot that is doing the processing</param>
+            <param name="Paramaters">QueryString and POST parameters</param>
+            <returns>XML output</returns>
+        </member>
+        <member name="T:RESTBot.StatefulPlugin">
+            <summary>
+            A base class for stateful plugins, ie those requiring actions on events from a specific instance of libsecondlife
+            or RestBot
+            </summary>
+        </member>
+        <member name="F:RESTBot.StatefulPlugin.MethodName">
+            <summary>
+            The name of the method. Should be set in the constructor.
+            </summary>
+        </member>
+        <member name="M:RESTBot.StatefulPlugin.Initialize(RESTBot.RestBot)">
+            <summary>
+            An optionally overridable method for setting up events and callbacks from a RestBot
+            </summary>
+            <param name="bot"></param>
+        </member>
+        <member name="M:RESTBot.StatefulPlugin.Process(RESTBot.RestBot,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Process the request through this method
+            </summary>
+            <param name="b">The RestBot that is doing the processing</param>
+            <param name="Paramaters">QueryString and POST parameters</param>
+            <returns>XML output</returns>
+        </member>
+    </members>
+</doc>
