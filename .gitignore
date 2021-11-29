@@ -39,7 +39,7 @@ package-lock.json
 .eslintrc.yml
 
 # Our stuff that we want to exclude
-restbot-bin/configuration.xml
+assets/configuration/configuration.xml
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
