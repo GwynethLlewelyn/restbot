@@ -10,8 +10,7 @@
 
 # Overview
 
-RESTBot is a C# webserver that uses [RESTful transactions](https://en.wikipedia.org/wiki/Representational_state_transfer) to interact with a _bot_ in [Second Life](https://secondlife.com) or [OpenSimulator](http://opensimulator.org). This bot (or a collection of bots) is started through a REST command and can be stopped the same way. The software is extremely modular, and is designed to easily accept plugins that developers can write (in C#) to add more complex interaction between a web application and a
-Second Life® bot (a non-human-controlled avatar). More information about Plugins is on the [wiki](https://github.com/GwynethLlewelyn/restbot/wiki).
+RESTBot is a C# webserver that uses [RESTful transactions](https://en.wikipedia.org/wiki/Representational_state_transfer) to interact with a _bot_ in [Second Life](https://secondlife.com) or [OpenSimulator](http://opensimulator.org). This bot (or a collection of bots) is started through a REST command and can be stopped the same way. The software is extremely modular, and is designed to easily accept plugins that developers can write (in C#) to add more complex interaction between a web application and a Second Life® bot (a non-human-controlled avatar). More information about Plugins is on the [wiki](https://github.com/GwynethLlewelyn/restbot/wiki).
 
 _**Note:** The wiki is still under reformulation and may not correctly represent the state-of-the-art of RESTbot (gwyneth 20211123)_
 
@@ -82,13 +81,9 @@ Sadly, at the time of writing, there is no Visual Studio desktop IDE for Linux. 
 
 # Configuration
 
-Configuration is simple with our XML compatibility in RESTBot. Configuration
-is read at startup of the RESTbot server, so you have to have the configuration
-file along with the `restbot.exe` binary. The default configuration file is
-`configuration.xml`and should be located in the same directory as the `RESTbot` executable; under `assets/configuration`, we've provided a `configuration.xml.sample` — make sure you copy this file to `configuration.xml` and change it to reflect your (real) data.
+The default configuration file is called `configuration.xml`and should be located in the same directory as the `RESTbot` executable; under `assets/configuration`, we've provided a `configuration.xml.sample` — make sure you copy this file to `configuration.xml` and change it to reflect your (real) data.
 
-The configuration file is very flexible... if a configuration element is not defined in the file, it will revert to its default instead of stopping... so a custom configuration file can either define every single variable, or only contain one variable definition. If you
-want to go ahead and play with a RESTbot server now, you can go ahead and skip ahead to [Running](#running-windows) (by default, the server listens to `localhost` connections on port 9080).
+The configuration file is very flexible... if a configuration element is not defined in the file, it will revert to its default instead of stopping... so a custom configuration file can either define every single variable, or only contain one variable definition. If you want to go ahead and play with a RESTbot server now, you can go ahead and skip ahead to [Running](#running-windows) (by default, the server listens to `localhost` connections on port 9080).
 
 You can play around with the settings in `configuration.xml` at any time, you just have to restart the server in order for any changes to take effect. The options are fairly self explanatory, but if you need help you can always refer to the [wiki](https://github.com/GwynethLlewelyn/restbot/wiki) (see [LINKS](LINKS.md)).
 
@@ -96,8 +91,7 @@ You can play around with the settings in `configuration.xml` at any time, you ju
 
 Once RESTBot is running, you can connect to it via HTTP REST commands. For now, I will use `curl` on Linux to demonstrate basic commands you need to know to get running with RESTbot.
 
-First, I am running RESTbot on a Ubuntu Linux machine. It uses the default
-network settings (`localhost` on port 9080).
+First, I am running RESTbot on a Ubuntu Linux machine. It uses the default network settings (`localhost` on port 9080).
 
 A note on how commands are passed to RESTbot for processing: server commands require a password, which is set in the security block of the configuration file. The default password is (yes, I know) `pass`.
 
@@ -110,35 +104,26 @@ _Note: There are plenty more commands these days that are also fully functional 
 
 Server commands are defined in the URL and arguments are passed through POST.
 
-The most important command you will use is `establish_session` so I will first
-introduce you to its parameters.
+The most important command you will use is `establish_session` so I will first introduce you to its parameters.
 
-Lets say we have a hypothetical bot account whose name is `Restbot Zaius` and uses the password `omgrestbot` to login. To log into this bot, we would issue this command in curl:
+Lets say we have a hypothetical bot account whose name is `Restbot Resident` and uses the password `omgrestbot` to login. To log into this bot, we would issue this command in curl:
 ```bash
-curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Zaius -d pass=77e854984fd6a73ece3aedab7ee9e21c
+curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Resident -d pass=77e854984fd6a73ece3aedab7ee9e21c
 ```
 
-Some things to note in this command... everything after `-d` is a **post field**. In
-reality, _all_ of the post fields are spliced together as a single string separated by &'s. Also, the password *must* be `md5`'d. Lastly, notice how the `establish_session` URL is formatted. http://localhost:9080 is the RESTbot
-server address (`localhost` on port 9080) and that is followed by a forward
-slash, the word `establish_session` (the command name), and the password
-(which is `pass` by default). If this is not formatted correctly, an argument
+Some things to note in this command... everything after `-d` is a **post field**. In reality, _all_ of the post fields are spliced together as a single string separated by &'s. Also, the password *must* be `md5`'d. Lastly, notice how the `establish_session` URL is formatted. http://localhost:9080 is the RESTbot server address (`localhost` on port 9080) and that is followed by a forward slash, the word `establish_session` (the command name), and the password (which is `pass` by default). If this is not formatted correctly, an argument
 error usually is returned.
 
-`establish_session` takes a bit of time to process, as it makes sure the bot
-has been able to log in before it returns a session identification key. When
-it does, store this key somewhere. You use this session id as an argument for
-any bot-specific methods (defined in plugins.)
+`establish_session` takes a bit of time to process, as it makes sure the bot has been able to log in before it returns a session identification key. When it does, store this key somewhere. You use this session id as an argument for any bot-specific methods (defined in plugins.)
 
-Exit runs the same, but takes `session` as an argument with the session_id
-as the value of the argument. This will return a success/failure response.
+`exit` runs the same, but takes `session` as an argument with the session_id as the value of the argument. This will return a success/failure response.
 
-Explore the source code of the framework and the example plugins that come
-with it to play around with commands... or check out the wiki for more
-information (see [LINKS](LINKS.md)).
+Explore the source code of the framework and the example plugins that come with it to play around with commands... or check out the wiki for more information (see [LINKS](LINKS.md)).
 
 # The Magic Behind Everything
 
+At the root of RESTbot lies a community-managed project, originally known as *libSL*, later renamed to *libopenmetaverse* (because of trademark issues), and currently published via Microsoft's NuGet package repository under the name *LibreMetaverse*. This is an open-source (originally reverse-engineered) library of Linden Lab's communication protocol between a SL viewer and their grid, written in C#.
 
+You can read more about the history of *LibreMetaverse* on this project's [wiki](https://github.com/GwynethLlewelyn/restbot/wiki/History) (a work in progress...)
 
 _Original documentation written by an anonymous collaborator at Pleiades; several changes were been made by Gwyneth Llewelyn, but trying to keep the original, light-hearted style of explaining things (gwyneth 20211121)._
