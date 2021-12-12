@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<ProductVersion>8.1.3</ProductVersion>
+		<ProductVersion>8.1.4</ProductVersion>
 		<SchemaVersion>2.0</SchemaVersion>
 		<ProjectGuid>{69F6D94E-70AB-481A-8610-B37DCDE23AE9}</ProjectGuid>
 		<AssemblyName>RESTbot</AssemblyName>
@@ -12,9 +12,9 @@
 		<RootNamespace>RESTBot</RootNamespace>
 		<AssemblyName>RESTBot</AssemblyName>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<Version>8.1.3</Version>
-		<PackageVersion>8.1.3</PackageVersion>
-		<ReleaseVersion>8.1.3</ReleaseVersion>
+		<Version>8.1.4</Version>
+		<PackageVersion>8.1.4</PackageVersion>
+		<ReleaseVersion>8.1.4</ReleaseVersion>
 		<SynchReleaseVersion>false</SynchReleaseVersion>
 		<ApplicationIcon>assets\images\RESTbot-logo.png</ApplicationIcon>
 		<PackageId>RESTbot</PackageId>

@@ -71,9 +71,9 @@ namespace RESTBot
             }
             if (content_type == "text/xml" || content_type == "xml")
             {
-                //make it a string
+                // make it a string
                 System.IO.MemoryStream ms = new System.IO.MemoryStream(Encoding.UTF8.GetBytes(body));
-                //Woot, XML parsing
+                // Woot, XML parsing
                 System.Xml.XmlReader r = System.Xml.XmlReader.Create(ms);
                 r.Read(); // read the restbotmessage node
                 r.Read(); // Advance to the next node
@@ -94,7 +94,7 @@ namespace RESTBot
             {
 
                 //Then do the split
-				//Program.debug("Post - " + body);
+								//Program.debug("Post - " + body);
                 string[] ampsplit = body.Split("&".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 //There's no body? Return.
                 if (ampsplit.Length == 0)
@@ -130,7 +130,7 @@ namespace RESTBot
         }
         #endregion
 
-        public enum Status
+    public enum Status
 		{
 			Offline,
 			Connected,
@@ -143,12 +143,12 @@ namespace RESTBot
 		private const string VERSION = "8.3.1";
 
 		public string First;
-        public string Last;
-        public string MD5Password;
+    public string Last;
+    public string MD5Password;
 
-        public GridClient Client;
-        public Status myStatus;
-        public UUID sessionid;
+    public GridClient Client;
+    public Status myStatus;
+    public UUID sessionid;
 
 		private DateTime uptime = new DateTime();
 
@@ -164,16 +164,16 @@ namespace RESTBot
         {
             //setting up some class variables
             sessionid = session;
-			myStatus = Status.Offline;
+						myStatus = Status.Offline;
             Client = new GridClient();
             First = f;
             Last = l;
             MD5Password = p;
-			uptime = DateTime.Now;
+						uptime = DateTime.Now;
             ReloginTimer = new System.Timers.Timer();
             ReloginTimer.Elapsed += new ElapsedEventHandler(ReloginTimer_Elapsed);
             //Some callbacks..
-			DebugUtilities.WriteDebug(session.ToString() + " Initializing callbacks");
+						DebugUtilities.WriteDebug(session.ToString() + " Initializing callbacks");
             // Client.Network.OnDisconnected += new NetworkManager.DisconnectedCallback(Network_OnDisconnected);
             Client.Network.Disconnected += Network_OnDisconnected; // new syntax
 
@@ -182,7 +182,7 @@ namespace RESTBot
             updateTimer.Elapsed += new System.Timers.ElapsedEventHandler(updateTimer_Elapsed);
 
             //Initialize StatefulPlugins
-			DebugUtilities.WriteDebug(session.ToString() + " Initializing plugins");
+						DebugUtilities.WriteDebug(session.ToString() + " Initializing plugins");
             StatefulPlugins = new Dictionary<string, StatefulPlugin>();
             foreach (Type t in RestBot.StatefulPluginDefinitions)
             {
@@ -190,7 +190,7 @@ namespace RESTBot
                 StatefulPlugin sp = (StatefulPlugin)info.Invoke(new object[0]);
                 //Add it to the dictionary
                 RegisterStatefulPlugin(sp.MethodName, sp);
-				DebugUtilities.WriteDebug(session.ToString() + " * added " + sp.MethodName);
+								DebugUtilities.WriteDebug(session.ToString() + " * added " + sp.MethodName);
                 //Initialize all the handlers, etc
                 sp.Initialize(this);
             }

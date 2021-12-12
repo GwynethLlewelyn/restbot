@@ -63,6 +63,8 @@ logs/*
 #*.so
 #*.so.*
 #*.dylib
+# Other Microsoft Roslyn temporary files
+*.pdb
 obj/
 packages/
 # This will be overwritten by a successful compilation anyway (gwyneth 20211129)

@@ -1,24 +1,23 @@
 /*--------------------------------------------------------------------------------
- LICENSE:
-         This file is part of the RESTBot Project.
- 
-         RESTbot is free software; you can redistribute it and/or modify it under
-         the terms of the Affero General Public License Version 1 (March 2002)
- 
-         RESTBot is distributed in the hope that it will be useful,
-         but WITHOUT ANY WARRANTY; without even the implied warranty of
-         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-         Affero General Public License for more details.
+	LICENSE:
+		This file is part of the RESTBot Project.
 
-         You should have received a copy of the Affero General Public License
-         along with this program (see ./LICENSING) If this is missing, please 
-         contact alpha.zaius[at]gmail[dot]com and refer to 
-         <http://www.gnu.org/licenses/agpl.html> for now.
-         
-         Author: Brian Krisler bkrisler@gmail.com
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC
 
- COPYRIGHT: 
-         RESTBot Codebase (c) 2010-2011 Raytheon BBN Technologies
+		This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU Affero General Public License as
+		published by the Free Software Foundation, either version 3 of the
+		License, or (at your option) any later version.
+
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU Affero General Public License for more details.
+
+		You should have received a copy of the GNU Affero General Public License
+		along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+  Author: Brian Krisler bkrisler@gmail.com
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
@@ -182,8 +181,8 @@ namespace RESTBot
                 Vector3 location = b.Client.Self.SimPosition;
 
                 Primitive found = b.Client.Network.CurrentSim.ObjectsPrimitives.Find(
-                    delegate(Primitive prim) { 
-                        return prim.Properties.Name == type; 
+                    delegate(Primitive prim) {
+                        return prim.Properties.Name == type;
                     });
 
 

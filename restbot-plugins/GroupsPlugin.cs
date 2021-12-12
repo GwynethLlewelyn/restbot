@@ -1,24 +1,23 @@
 /*--------------------------------------------------------------------------------
- LICENSE:
-	 This file is part of the RESTBot Project.
- 
-	 RESTbot is free software; you can redistribute it and/or modify it under
-	 the terms of the Affero General Public License Version 1 (March 2002)
- 
-	 RESTBot is distributed in the hope that it will be useful,
-	 but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-	 Affero General Public License for more details.
+	LICENSE:
+		This file is part of the RESTBot Project.
 
-	 You should have received a copy of the Affero General Public License
-	 along with this program (see ./LICENSING) If this is missing, please 
-	 contact alpha.zaius[at]gmail[dot]com and refer to 
-	 <http://www.gnu.org/licenses/agpl.html> for now.
-	 
-	 Further changes by Gwyneth Llewelyn
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC
 
- COPYRIGHT: 
-	 RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
+		This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU Affero General Public License as
+		published by the Free Software Foundation, either version 3 of the
+		License, or (at your option) any later version.
+
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU Affero General Public License for more details.
+
+		You should have received a copy of the GNU Affero General Public License
+		along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+	Further changes by Gwyneth Llewelyn
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
@@ -35,15 +34,15 @@ namespace RESTBot
 	public class ActivateGroupKeyPlugin : StatefulPlugin
 	{
 		protected ManualResetEvent GroupsEvent = new ManualResetEvent(false);
-				
+
 		private UUID session;
 		private string activeGroup;
-		
+
 		public ActivateGroupKeyPlugin()
 		{
 			MethodName = "group_key_activate";
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -77,30 +76,30 @@ namespace RESTBot
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-			
+
 		}
-		
+
 		private string activateGroup(RestBot b, UUID groupUUID)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Activating group " + groupUUID.ToString());
 			EventHandler<PacketReceivedEventArgs> pcallback = AgentDataUpdateHandler;
 			b.Client.Network.RegisterCallback(PacketType.AgentDataUpdate, pcallback);
 			b.Client.Groups.ActivateGroup(groupUUID);
-			
+
 			if ( ! GroupsEvent.WaitOne(15000, true) ) {
 				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on setting active group");
 			}
 
 			// ignore everything and just reset the event
 			b.Client.Network.UnregisterCallback(PacketType.AgentDataUpdate, pcallback);
-			GroupsEvent.Reset();			
+			GroupsEvent.Reset();
 
 			if (String.IsNullOrEmpty(activeGroup))
 				  	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
 
 			return activeGroup;
 		}
-		
+
 		private void AgentDataUpdateHandler(object sender, PacketReceivedEventArgs e)
 		{
 			AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
@@ -109,9 +108,9 @@ namespace RESTBot
 				activeGroup = Utils.BytesToString(p.AgentData.GroupName) + " (" + Utils.BytesToString(p.AgentData.GroupTitle) + ")";
 				GroupsEvent.Set();
 			//}
-		}	
+		}
 	}
-	
+
 	// Set active group, using group Name
 	public class ActivateGroupNamePlugin : StatefulPlugin
 	{
@@ -119,12 +118,12 @@ namespace RESTBot
 		public Dictionary<UUID, Group> GroupsCache = null;
 		private UUID session;
 		private string activeGroup;
-		
+
 		public ActivateGroupNamePlugin()
 		{
 			MethodName = "group_name_activate";
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -143,7 +142,7 @@ namespace RESTBot
 					return "<error>arguments</error>";
 				}
 				DebugUtilities.WriteDebug("TR - Activating group");
-					
+
 				groupUUID = GroupName2UUID(b, groupName);
 				if (UUID.Zero != groupUUID)
 				{
@@ -162,12 +161,12 @@ namespace RESTBot
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-			
+
 		}
-		
+
 		public void ReloadGroupsCache(RestBot b)
 		{
-			b.Client.Groups.CurrentGroups += Groups_CurrentGroups;			  
+			b.Client.Groups.CurrentGroups += Groups_CurrentGroups;
 			b.Client.Groups.RequestCurrentGroups();
 			GroupsEvent.WaitOne(10000, false);
 			b.Client.Groups.CurrentGroups -= Groups_CurrentGroups;
@@ -202,28 +201,28 @@ namespace RESTBot
 			}
 			return UUID.Zero;
 		}
-		
+
 		private string activateGroup(RestBot b, UUID groupUUID)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Activating group " + groupUUID.ToString());
 			EventHandler<PacketReceivedEventArgs> pcallback = AgentDataUpdateHandler;
 			b.Client.Network.RegisterCallback(PacketType.AgentDataUpdate, pcallback);
 			b.Client.Groups.ActivateGroup(groupUUID);
-			
+
 			if ( ! GroupsEvent.WaitOne(15000, true) ) {
 				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on setting active group");
 			}
 
 			// ignore everything and just reset the event
 			b.Client.Network.UnregisterCallback(PacketType.AgentDataUpdate, pcallback);
-			GroupsEvent.Reset();			
+			GroupsEvent.Reset();
 
 			if (String.IsNullOrEmpty(activeGroup))
 				  	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
 
 			return activeGroup;
 		}
-		
+
 		private void AgentDataUpdateHandler(object sender, PacketReceivedEventArgs e)
 		{
 			AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
@@ -232,7 +231,7 @@ namespace RESTBot
 				activeGroup = Utils.BytesToString(p.AgentData.GroupName) + " (" + Utils.BytesToString(p.AgentData.GroupTitle) + ")";
 				GroupsEvent.Set();
 			//}
-		}	
+		}
 	}
 
 	// Send Group Instant Message (Group Chat)
@@ -240,23 +239,23 @@ namespace RESTBot
 	{
 		protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
 		private UUID session;
-		
+
 		public GroupIMPlugin()
 		{
 			MethodName = "group_im"; // parameters are key (Group UUID) and message
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
-		
+
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID groupUUID;
 			string message;
-			
+
 			try
 			{
 				bool check = false;
@@ -268,7 +267,7 @@ namespace RESTBot
 				{
 					return "<error>arguments: no key</error>";
 				}
-				if ( check ) 
+				if ( check )
 				{
 					if ( Parameters.ContainsKey("message") )
 					{
@@ -278,7 +277,7 @@ namespace RESTBot
 					{
 						return "<error>arguments: no message</error>";
 					}
-					
+
 				}
 				else
 				{
@@ -293,7 +292,7 @@ namespace RESTBot
 				}
 
 				string response = sendIMGroup(b, groupUUID, message);
-					
+
 				return "<message>" + response.Trim() + "</message>\n";
 			}
 			catch ( Exception e )
@@ -301,14 +300,14 @@ namespace RESTBot
 				DebugUtilities.WriteError(e.Message);
 				return "<error>loads of errors</error>";
 			}
-			
+
 		}
-				
+
 		private string sendIMGroup(RestBot b, UUID groupUUID, string message)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Sending message '" + message + "' to group UUID " + groupUUID.ToString());
 			b.Client.Self.GroupChatJoined += Self_GroupChatJoined;
-			
+
 			if (!b.Client.Self.GroupChatSessions.ContainsKey(groupUUID))
 			{
 				WaitForSessionStart.Reset();
@@ -318,7 +317,7 @@ namespace RESTBot
 			{
 				WaitForSessionStart.Set();
 			}
-			
+
 			if (WaitForSessionStart.WaitOne(20000, false))
 			{
 				b.Client.Self.InstantMessageGroup(groupUUID, message);
@@ -331,10 +330,10 @@ namespace RESTBot
 
 			b.Client.Self.GroupChatJoined -= Self_GroupChatJoined;
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Instant Messaged group " + groupUUID.ToString() + " with message: " + message);
-			
+
 			return "message sent";
 		}
-		
+
 		void Self_GroupChatJoined(object sender, GroupChatJoinedEventArgs e)
 		{
 			if (e.Success)
@@ -348,32 +347,32 @@ namespace RESTBot
 			}
 		}
 	}
-	
+
 	// Invite avatar to join a group
 	//	 Syntax similar to TestClient, e.g. avatar UUID, Group UUID, Role UUID
 	public class InviteGroupPlugin : StatefulPlugin
 	{
 		// protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
 		private UUID session;
-		
+
 		public InviteGroupPlugin()
 		{
 			MethodName = "group_invite"; // parameters are key (Group UUID) and message
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
-		
+
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID avatar = UUID.Zero;
 			UUID group = UUID.Zero;
 			UUID role = UUID.Zero;
 			List<UUID> roles = new List<UUID>();
-			
+
 			try
 			{
 				bool check = false;
@@ -385,7 +384,7 @@ namespace RESTBot
 				{
 					return "<error>arguments: no avatar key</error>";
 				}
-				if ( check ) 
+				if ( check )
 				{
 					if ( Parameters.ContainsKey("group") )
 					{
@@ -394,8 +393,8 @@ namespace RESTBot
 					else
 					{
 						return "<error>arguments: no group key</error>";
-					}					
-					
+					}
+
 					// to-do: avatars can be invited to multiple roles.
 					if ( Parameters.ContainsKey("role") )
 					{
@@ -415,13 +414,13 @@ namespace RESTBot
 				{
 					return "<error>parsekey</error>";
 				}
-				
-				
-				
+
+
+
 				DebugUtilities.WriteDebug(session + " " + MethodName + " Group UUID: " + group + " Avatar UUID to join group: " + avatar + " Role UUID for avatar to join: " + roles.ToString() + " (NULL_KEY is fine)");
 
 				b.Client.Groups.Invite(group, roles, avatar);
-					
+
 				return "<invitation>invited " + avatar + " to " + group + "</invitation>\n";
 			}
 			catch ( Exception e )
@@ -429,37 +428,37 @@ namespace RESTBot
 				DebugUtilities.WriteError(e.Message);
 				return "<error>loads of errors</error>";
 			}
-			
+
 		}
 	}
-	
+
 	// Send group notice
 	//  Requires group UUID, subject, message, attachment item UUID (not asset UUID)
-	
+
 	public class SendGroupNoticePlugin : StatefulPlugin
 	{
 		//protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
 		private UUID session;
-		
+
 		public SendGroupNoticePlugin()
 		{
 			MethodName = "group_notice"; // parameters are key (Group UUID) and message
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
-		
+
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
-		{	
+		{
 			string message;
 			string subject;
 			UUID groupUUID = UUID.Zero;
 			UUID attachmentUUID = UUID.Zero;
 			GroupNotice notice;
-		
+
 			try
 			{
 				if ( Parameters.ContainsKey("subject") )
@@ -470,7 +469,7 @@ namespace RESTBot
 				{
 					return "<error>No notice subject</error>";
 				}
-					
+
 				if ( Parameters.ContainsKey("message") )
 				{
 					message = Parameters["message"].ToString().Replace("%20"," ").Replace("+"," ");
@@ -478,35 +477,35 @@ namespace RESTBot
 				else
 				{
 					return "<error>No notice message</error>";
-				}				
-			
+				}
+
 				if ( Parameters.ContainsKey("group") )
 				{
 					if (! UUID.TryParse(Parameters["group"].ToString().Replace("_"," "), out groupUUID) )
 					{
 						return "<error>parsekey group</error>";
-					}				
+					}
 				}
 				else
 				{
 					return "<error>arguments: no group key</error>";
 				}
-				
+
 				if ( Parameters.ContainsKey("attachment") )
 				{
 					if (!  UUID.TryParse(Parameters["attachment"].ToString().Replace("_"," "), out attachmentUUID) )
 					{
 						return "<error>parsekey attachment</error>";
-					}					
+					}
 				}
 				else
 				{
 					// just a warning, attachment can be empty
 					DebugUtilities.WriteWarning(session + " " + MethodName + " Notice has no attachment (no problem)");
 				}
-				
+
 				DebugUtilities.WriteDebug(session + " " + MethodName + " Attempting to create a notice");
-				
+
 				/* This doesn't work as it should!
 				if (! b.Client.Inventory.Store.Contains(attachmentUUID))
 				{
@@ -514,25 +513,25 @@ namespace RESTBot
 					attachmentUUID = UUID.Zero;
 				}
 				*/
-								
+
 				notice = new GroupNotice();
-				
+
 				notice.Subject = subject;
 				notice.Message = message;
 				notice.AttachmentID = attachmentUUID; // this is the inventory UUID, not the asset UUID
 				notice.OwnerID = b.Client.Self.AgentID;
-				
+
 				b.Client.Groups.SendGroupNotice(groupUUID, notice);
-				
+
 				DebugUtilities.WriteDebug(session + " " + MethodName + " Sent Notice from avatar " + notice.OwnerID.ToString() + " to group: " + groupUUID.ToString() + " subject: '" + notice.Subject.ToString() + "' message: '" + notice.Message.ToString() + "' Optional attachment: " + notice.AttachmentID.ToString() + " Serialisation: " + Utils.BytesToString(notice.SerializeAttachment()));
-					
+
 				return "<notice>sent</notice>\n";
 			}
 			catch ( Exception e )
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>loads of errors</error>";
-			}		
+			}
 		}
 	}
 }

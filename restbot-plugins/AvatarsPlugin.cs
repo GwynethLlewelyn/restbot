@@ -1,22 +1,21 @@
 /*--------------------------------------------------------------------------------
- LICENSE:
-	 This file is part of the RESTBot Project.
- 
-	 RESTbot is free software; you can redistribute it and/or modify it under
-	 the terms of the Affero General Public License Version 1 (March 2002)
- 
-	 RESTBot is distributed in the hope that it will be useful,
-	 but WITHOUT ANY WARRANTY; without even the implied warranty of
-	 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-	 Affero General Public License for more details.
+	LICENSE:
+		This file is part of the RESTBot Project.
 
-	 You should have received a copy of the Affero General Public License
-	 along with this program (see ./LICENSING) If this is missing, please 
-	 contact alpha.zaius[at]gmail[dot]com and refer to 
-	 <http://www.gnu.org/licenses/agpl.html> for now.
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC
 
- COPYRIGHT: 
-	 RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
+		This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU Affero General Public License as
+		published by the Free Software Foundation, either version 3 of the
+		License, or (at your option) any later version.
+
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU Affero General Public License for more details.
+
+		You should have received a copy of the GNU Affero General Public License
+		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
@@ -31,17 +30,17 @@ namespace RESTBot
 {
 	public class AvatarNameLookupPlugin : StatefulPlugin
 	{
-	
+
 		protected Dictionary<UUID, AutoResetEvent> NameLookupEvents = new Dictionary<UUID, AutoResetEvent>();
 		protected Dictionary<UUID, String> avatarNames = new Dictionary<UUID, String>();
-		
+
 		private UUID session;
-		
+
 		public AvatarNameLookupPlugin()
 		{
 			MethodName = "avatar_name";
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -79,18 +78,18 @@ namespace RESTBot
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-			
+
 		}
-		
+
 		private string getName(RestBot b, UUID id)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Looking up name for " + id.ToString());
 			lock (NameLookupEvents) {
 				NameLookupEvents.Add(id, new AutoResetEvent(false));
 			}
-			
+
 			b.Client.Avatars.RequestAvatarName(id);
-			
+
 			if ( ! NameLookupEvents[id].WaitOne(15000, true) ) {
 				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on avatar name lookup");
 			}
@@ -108,8 +107,8 @@ namespace RESTBot
 			}
 			return response;
 		}
-		
-		// obsolete syntax changed	 
+
+		// obsolete syntax changed
 		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " Processing " + e.Names.Count.ToString() + " AvatarNames replies");
@@ -129,21 +128,21 @@ namespace RESTBot
 			}
 		}
 	}
-	
-	
+
+
 	public class AvatarKeyLookupPlugin : StatefulPlugin
 	{
-	
+
 		protected Dictionary<String, AutoResetEvent> KeyLookupEvents = new Dictionary<String, AutoResetEvent>();
 		protected Dictionary<String, UUID> avatarKeys = new Dictionary<String, UUID>();
-		
+
 		private UUID session;
-		
+
 		public AvatarKeyLookupPlugin()
 		{
 			MethodName = "avatar_key";
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -164,10 +163,10 @@ namespace RESTBot
 				return "<key>" + response + "</key>\n";
 			} else {
 				return "<error>nokey</error>";
-			} 
-			
+			}
+
 		}
-		
+
 		public UUID getKey(RestBot b, String name)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up key for " + name);
@@ -186,7 +185,7 @@ namespace RESTBot
 			find.QueryData.QueryText = Utils.StringToBytes(name);
 			find.QueryData.QueryID = new UUID("00000000000000000000000000000001");
 			find.QueryData.QueryStart = 0;
-			
+
 			b.Client.Network.SendPacket((Packet) find);
 			DebugUtilities.WriteDebug("Packet sent - KLE has " + KeyLookupEvents.Count.ToString() + " entries.. now waiting");
 			KeyLookupEvents[name].WaitOne(15000,true);
@@ -204,7 +203,7 @@ namespace RESTBot
 			}
 			return response;
 		}
-		
+
 		/*
 		// obsoleted packet call
 		public void Avatars_OnDirPeopleReply(Packet packet, Simulator simulator)
@@ -220,7 +219,7 @@ namespace RESTBot
 					string avatarName = Utils.BytesToString(reply.QueryReplies[i].FirstName) + " " + Utils.BytesToString(reply.QueryReplies[i].LastName);
 					UUID avatarKey = reply.QueryReplies[i].AgentID;
 					DebugUtilities.WriteDebug(session + " " + MethodName + " Reply " + (i + 1).ToString() + " of " + replyCount.ToString() + " Key : " + avatarKey.ToString() + " Name : " + avatarName);
-					
+
 					if ( !avatarKeys.ContainsKey(avatarName) ) // || avatarKeys[avatarName] == null ) { // apparently dictionary entries cannot be null
 						lock ( avatarKeys ) {
 							avatarKeys[avatarName.ToLower()] = avatarKey;
@@ -235,9 +234,9 @@ namespace RESTBot
 						 }
 					}
 				}
-			} 
+			}
 		} */
-		
+
 		// using new Directory functionality
 		public void Avatars_OnDirPeopleReply(object sender, DirPeopleReplyEventArgs e)
 		{
@@ -248,14 +247,14 @@ namespace RESTBot
 			else
 			{
 				int replyCount = e.MatchedPeople.Count;
-				
+
 				DebugUtilities.WriteInfo(session + " " + MethodName + " Proccesing " + replyCount.ToString() + " DirPeople replies");
-				for ( int i = 0 ; i <  replyCount ; i++ ) 
+				for ( int i = 0 ; i <  replyCount ; i++ )
 				{
 					string avatarName = e.MatchedPeople[i].FirstName + " " + e.MatchedPeople[i].LastName;
 					UUID avatarKey = e.MatchedPeople[i].AgentID;
 					DebugUtilities.WriteDebug(session + " " + MethodName + " Reply " + (i + 1).ToString() + " of " + replyCount.ToString() + " Key : " + avatarKey.ToString() + " Name : " + avatarName);
-					
+
 					if ( !avatarKeys.ContainsKey(avatarName) ) { /* || avatarKeys[avatarName] == null )	 // apparently dictionary entries cannot be null */
 						lock ( avatarKeys )
 						{
@@ -265,7 +264,7 @@ namespace RESTBot
 
 					lock(KeyLookupEvents)
 					{
-						 if ( KeyLookupEvents.ContainsKey(avatarName.ToLower())) 
+						 if ( KeyLookupEvents.ContainsKey(avatarName.ToLower()))
 						 {
 								 KeyLookupEvents[avatarName.ToLower()].Set();
 							DebugUtilities.WriteDebug(avatarName.ToLower() + " KLE set!");
@@ -277,18 +276,18 @@ namespace RESTBot
 	}
 	public class AvatarOnlineLookupPlugin : StatefulPlugin
 	{
-	
+
 		protected Dictionary<UUID, AutoResetEvent> OnlineLookupEvents = new Dictionary<UUID, AutoResetEvent>();
 		protected Dictionary<UUID, bool> avatarOnline = new Dictionary<UUID, bool>();
 
-		
+
 		private UUID session;
-		
+
 		public AvatarOnlineLookupPlugin()
 		{
 			MethodName = "avatar_online";
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -313,37 +312,37 @@ namespace RESTBot
 				} else {
 					return "<error>unknown</error>";
 				}
-				
+
 			}
 			catch ( Exception e )
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-			
+
 		}
-		
+
 		public bool getOnline(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up online status for " + key.ToString());
-			
+
 			lock ( OnlineLookupEvents ) {
 				OnlineLookupEvents.Add(key, new AutoResetEvent(false) );
 			}
-			
+
 			// obsolete
 			/*
 			AvatarPropertiesRequestPacket p = new AvatarPropertiesRequestPacket();
 			p.AgentData.AgentID = b.Client.Network.AgentID;
 			p.AgentData.SessionID = b.Client.Network.SessionID;
 			p.AgentData.AvatarID = key;
-			
+
 			b.Client.Network.SendPacket( (Packet) p);
 			*/
 			b.Client.Avatars.RequestAvatarProperties(key);
-			
+
 			OnlineLookupEvents[key].WaitOne(15000, true);
-			
+
 			lock ( OnlineLookupEvents ) {
 				OnlineLookupEvents.Remove(key);
 			}
@@ -366,10 +365,10 @@ namespace RESTBot
 				status = false;
 			}
 			*/
-			
+
 			Avatar.AvatarProperties Properties = new Avatar.AvatarProperties();
 			Properties = e.Properties;
-			
+
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Processing AvatarPropertiesReply for " + e.AvatarID.ToString() + " is " + Properties.Online.ToString());
 			lock ( avatarOnline ) {
 				avatarOnline[e.AvatarID] = Properties.Online;
@@ -379,19 +378,19 @@ namespace RESTBot
 			}
 		}
 	}
-	
-	
+
+
 	public class AvatarProfileLookupPlugin : StatefulPlugin
 	{
 		private UUID session;
 		protected Dictionary<UUID, AutoResetEvent> ProfileLookupEvents = new Dictionary<UUID, AutoResetEvent>();
 		protected Dictionary<UUID, Avatar.AvatarProperties> avatarProfile = new Dictionary<UUID, Avatar.AvatarProperties>();
-		
+
 		public AvatarProfileLookupPlugin()
 		{
 			MethodName = "avatar_profile";
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -420,27 +419,27 @@ namespace RESTBot
 				} else {
 					return "<error>unknown</error>";
 				}
-				
+
 			}
 			catch ( Exception e )
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-			
+
 		}
 
 		public string getProfile(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up profile for " + key.ToString());
-			
+
 			lock ( ProfileLookupEvents ) {
 				ProfileLookupEvents.Add(key, new AutoResetEvent(false) );
 			}
 			b.Client.Avatars.RequestAvatarProperties(key);
-			
+
 			ProfileLookupEvents[key].WaitOne(15000, true);
-			
+
 			lock ( ProfileLookupEvents ) {
 				ProfileLookupEvents.Remove(key);
 			}
@@ -470,7 +469,7 @@ namespace RESTBot
 				return null;
 			}
 		}
-		
+
 		// changed to deal with new replies
 		public void Avatars_OnAvatarProperties(object sender, AvatarPropertiesReplyEventArgs e)
 		{
@@ -480,22 +479,22 @@ namespace RESTBot
 			if ( ProfileLookupEvents.ContainsKey(e.AvatarID) ) {
 				ProfileLookupEvents[e.AvatarID].Set();
 			}
-			
+
 		}
 	}
-	
+
 	public class AvatarGroupsLookupPlugin : StatefulPlugin
 	{
 		private UUID session;
 		protected Dictionary<UUID, AutoResetEvent> GroupsLookupEvents = new Dictionary<UUID, AutoResetEvent>();
 		// protected Dictionary<UUID, AvatarGroupsReplyPacket.GroupDataBlock[] > avatarGroups = new Dictionary<UUID, AvatarGroupsReplyPacket.GroupDataBlock[]>(); // too cumbersome and now obsolete
 		protected Dictionary<UUID, List<AvatarGroup>> avatarGroups = new Dictionary<UUID, List<AvatarGroup>>();
-				
+
 		public AvatarGroupsLookupPlugin()
 		{
 			MethodName = "avatar_groups";
 		}
-		
+
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -525,31 +524,31 @@ namespace RESTBot
 				} else {
 					return "<error>unknown</error>";
 				}
-				
+
 			}
 			catch ( Exception e )
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-			
+
 		}
 
 		public string getGroups(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up groups for " + key.ToString());
-			
+
 			lock ( GroupsLookupEvents ) {
 				GroupsLookupEvents.Add(key, new AutoResetEvent(false) );
 			}
 			b.Client.Avatars.RequestAvatarProperties(key);
-			
+
 			GroupsLookupEvents[key].WaitOne(15000, true);
-			
+
 			lock ( GroupsLookupEvents ) {
 				GroupsLookupEvents.Remove(key);
 			}
-			
+
 			if (null == avatarGroups)
 			{
 				DebugUtilities.WriteInfo(session + " " + MethodName + " Groups cache failed.");
@@ -562,7 +561,7 @@ namespace RESTBot
 			}
 			if ( avatarGroups.ContainsKey(key) ) {
 				string response = "<groups>\n";
-			
+
 				foreach (AvatarGroup g in avatarGroups[key])
 				{
 					response += "<group>\n";
@@ -575,7 +574,7 @@ namespace RESTBot
 					response += "</group>\n";
 				}
 				response += "</groups>\n";
-	
+
 				lock ( avatarGroups ) {
 					avatarGroups.Remove(key);
 				}
@@ -585,14 +584,14 @@ namespace RESTBot
 			}
 
 		}
-		
+
 		public void Avatar_OnAvatarGroups(object sender, AvatarGroupsReplyEventArgs e)
 		{
 			lock (avatarGroups)
-			{ 
-				avatarGroups[e.AvatarID] = e.Groups; 
+			{
+				avatarGroups[e.AvatarID] = e.Groups;
 			}
-			if ( GroupsLookupEvents.ContainsKey(e.AvatarID) ) 
+			if ( GroupsLookupEvents.ContainsKey(e.AvatarID) )
 			{
 				GroupsLookupEvents[e.AvatarID].Set();
 			}
@@ -648,7 +647,7 @@ namespace RESTBot
                         );
 
                         if (target != null)
-                        {                            
+                        {
                             return String.Format("<goal_position>{0},{1},{2}</goal_position><curr_position>{3},{4},{5}</curr_position>",
                                 target.Position.X, target.Position.Y, target.Position.Z, b.Client.Self.SimPosition.X, b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
                         }

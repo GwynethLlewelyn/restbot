@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------------------------
- FILE INFORMATION:
-     Name: DebugUtilities.cs [./restbot-src/DebugUtilities.cs]
-     Description: This file contains methods for any type of debug outputs
+	FILE INFORMATION:
+    Name: DebugUtilities.cs [./restbot-src/DebugUtilities.cs]
+    Description: This file contains methods for any type of debug outputs
 
 	LICENSE:
 		This file is part of the RESTBot Project.

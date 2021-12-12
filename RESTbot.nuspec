@@ -6,7 +6,7 @@
 	<description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</description>
 	<authors>Pleiades,Gwyneth Llewelyn,others</authors>
 	<projectUrl>https://github.com/GwynethLlewelyn/restbot</projectUrl>
-	<license type="expression">Artistic-2.0</license>
+	<license type="expression">AGPL-3.0-or-later</license>
 	<icon>assets\images\RESTbot-logo.png</icon>
 	<readme>README.md</readme>
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>

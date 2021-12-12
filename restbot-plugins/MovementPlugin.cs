@@ -1,24 +1,23 @@
 /*--------------------------------------------------------------------------------
- LICENSE:
-         This file is part of the RESTBot Project.
- 
-         RESTbot is free software; you can redistribute it and/or modify it under
-         the terms of the Affero General Public License Version 1 (March 2002)
- 
-         RESTBot is distributed in the hope that it will be useful,
-         but WITHOUT ANY WARRANTY; without even the implied warranty of
-         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-         Affero General Public License for more details.
+	LICENSE:
+		This file is part of the RESTBot Project.
 
-         You should have received a copy of the Affero General Public License
-         along with this program (see ./LICENSING) If this is missing, please 
-         contact alpha.zaius[at]gmail[dot]com and refer to 
-         <http://www.gnu.org/licenses/agpl.html> for now.
-         
-         Further changes by Gwyneth Llewelyn
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC
 
- COPYRIGHT: 
-         RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
+		This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU Affero General Public License as
+		published by the Free Software Foundation, either version 3 of the
+		License, or (at your option) any later version.
+
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU Affero General Public License for more details.
+
+		You should have received a copy of the GNU Affero General Public License
+		along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+  Further changes by Gwyneth Llewelyn
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
@@ -54,8 +53,8 @@ namespace RESTBot
         {
             try
             {
-                return String.Format("<location><CurrentSim>{0}</CurrentSim><Position>{1},{2},{3}</Position></location>", 
-                    b.Client.Network.CurrentSim.ToString(), b.Client.Self.SimPosition.X, 
+                return String.Format("<location><CurrentSim>{0}</CurrentSim><Position>{1},{2},{3}</Position></location>",
+                    b.Client.Network.CurrentSim.ToString(), b.Client.Self.SimPosition.X,
                     b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
             }
             catch (Exception e)
@@ -231,7 +230,7 @@ namespace RESTBot
                 b.Client.Self.Movement.TurnToward(goalPos);
                 b.Client.Self.Movement.SendUpdate(false);
 
-                prevDistance = Vector3.Distance(goalPos, me.Client.Self.SimPosition); 
+                prevDistance = Vector3.Distance(goalPos, me.Client.Self.SimPosition);
                 // Convert the local coordinates to global ones by adding the region handle parts to x and y
                 b.Client.Self.AutoPilot(goalPos.X + regionX, goalPos.Y + regionY, goalPos.Z);
                 Active = true;
@@ -306,7 +305,7 @@ namespace RESTBot
 
         public override string Process(RestBot b, Dictionary<string, string> Parameters)
         {
-            
+
             Utils.LongToUInts(b.Client.Network.CurrentSim.Handle, out regionX, out regionY);
 
             try
@@ -361,7 +360,7 @@ namespace RESTBot
                         }
                     }
                 }
-                                                
+
                 goalPos = new Vector3((float)x, (float)y, (float)z);
                 b.Client.Self.Movement.TurnToward(goalPos);
                 b.Client.Self.Movement.SendUpdate(false);
@@ -394,7 +393,7 @@ namespace RESTBot
         }
     } // end movetoavatar
 
-    // follow an avatar; parameters are: 
+    // follow an avatar; parameters are:
     public class FollowPlugin : StatefulPlugin
     {
         private UUID session;

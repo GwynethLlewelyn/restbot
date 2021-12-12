@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------------
- FILE INFORMATION:
+	FILE INFORMATION:
      Name: Configuration.cs [./restbot-src/Configuration.cs]
      Description: This file contains classes used by the .net's internal xml parser
                   to define configuration options as seen in configuration.xml.
