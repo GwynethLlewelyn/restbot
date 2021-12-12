@@ -1,27 +1,26 @@
 /*--------------------------------------------------------------------------------
- FILE INFORMATION:
-     Name: Program.cs [./restbot-src/Server/Server.cs]
-     Description: This class handles an individual http request, passes it on to a restbot
-                  (if applicable) and responds with a response in xml form.
+	FILE INFORMATION:
+    Name: Program.cs [./restbot-src/Server/Server.cs]
+    Description: This class handles an individual http request, passes it on to a restbot
+                 (if applicable) and responds with a response in xml form.
 
- LICENSE:
-     This file is part of the RESTBot Project.
- 
-     RESTbot is free software; you can redistribute it and/or modify it under
-     the terms of the Affero General Public License Version 1 (March 2002)
- 
-     RESTBot is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     Affero General Public License for more details.
+	LICENSE:
+		This file is part of the RESTBot Project.
 
-     You should have received a copy of the Affero General Public License
-     along with this program (see ./LICENSING) If this is missing, please 
-     contact alpha.zaius[at]gmail[dot]com and refer to 
-     <http://www.gnu.org/licenses/agpl.html> for now.
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC
 
- COPYRIGHT: 
-     RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
+		This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU Affero General Public License as
+		published by the Free Software Foundation, either version 3 of the
+		License, or (at your option) any later version.
+
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU Affero General Public License for more details.
+
+		You should have received a copy of the GNU Affero General Public License
+		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
@@ -33,7 +32,7 @@ namespace RESTBot.Server
 {
     public partial class Router
     {
-        
+
         private void AcceptClientThread(IAsyncResult result)
         {
             TcpClient client = _listener.EndAcceptTcpClient(result);
@@ -48,11 +47,11 @@ namespace RESTBot.Server
             int i = 0;
             do
             {
-		
+
                 i = stream.Read(buffer, 0, buffer.Length); //add the next set of data into the buffer..
                 DebugUtilities.WriteSpecial("Read chunk from the stream");
 	       request += Encoding.UTF8.GetString(buffer, 0, i); //append it to the overall request
-            } 
+            }
             while (stream.DataAvailable); //and repeat :)
 
             DebugUtilities.WriteInfo("Got request, totalling " + request.Length + " characters");
@@ -69,10 +68,10 @@ namespace RESTBot.Server
                 DebugUtilities.WriteDebug("ENDPOINT HOSTNAME: " + hostname);
             }
             catch
-            {                
+            {
                 DebugUtilities.WriteWarning("Could not parse ip address to get the hostname (ipv6?) -  hostname is set as 'unknown'");
             }
-	
+
             RequestHeaders x = new RequestHeaders(split[0], hostname);
 
             string body = "";
@@ -86,19 +85,19 @@ namespace RESTBot.Server
                     DebugUtilities.WriteSpecial("Found 100 continue!");
 		        }
 	        }
-    	    
+
 	        if(foundExpectContinue)
 	        {
 	    	    try
 		        {
 			        ResponseHeaders continue_response = new ResponseHeaders(100, "Continue");
 			        byte[] byte_continue_response = System.Text.Encoding.UTF8.GetBytes(continue_response.ToString());
-        			
+
 			        //send the 100 continue message and then go back to the above.
 			        DebugUtilities.WriteSpecial("Writing 100 continue response");
 			        stream.Write(byte_continue_response,0,byte_continue_response.Length);
 			        DebugUtilities.WriteSpecial("Finished writing - " + byte_continue_response.Length + " bytes total sent");
-                    
+
                     request = "";
                     buffer = new byte[512];
                     i = 0;

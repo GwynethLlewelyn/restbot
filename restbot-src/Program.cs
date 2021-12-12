@@ -1,26 +1,25 @@
 ﻿/*--------------------------------------------------------------------------------
- FILE INFORMATION:
-     Name: Program.cs [./restbot-src/Program.cs]
-     Description: This file is the "central hub" of all of the programs resources
+	FILE INFORMATION:
+    Name: Program.cs [./restbot-src/Program.cs]
+    Description: This file is the "central hub" of all of the programs resources
 
- LICENSE:
-     This file is part of the RESTBot Project.
+	LICENSE:
+		This file is part of the RESTBot Project.
 
-     RESTbot is free software; you can redistribute it and/or modify it under
-     the terms of the Affero General Public License Version 1 (March 2002)
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC
 
-     RESTBot is distributed in the hope that it will be useful,
-     but WITHOUT ANY WARRANTY; without even the implied warranty of
-     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     Affero General Public License for more details.
+		This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU Affero General Public License as
+		published by the Free Software Foundation, either version 3 of the
+		License, or (at your option) any later version.
 
-     You should have received a copy of the Affero General Public License
-     along with this program (see ./LICENSING) If this is missing, please
-     contact alpha.zaius[at]gmail[dot]com and refer to
-     <http://www.gnu.org/licenses/agpl.html> for now.
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU Affero General Public License for more details.
 
- COPYRIGHT:
-     RESTBot Codebase (c) 2007-2008 PLEIADES CONSULTING, INC
+		You should have received a copy of the GNU Affero General Public License
+		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
