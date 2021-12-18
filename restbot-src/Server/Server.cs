@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------
 	FILE INFORMATION:
-    Name: Program.cs [./restbot-src/Server/Server.cs]
+    Name: Server.cs [./restbot-src/Server/Server.cs]
     Description: This class handles an individual http request, passes it on to a restbot
                  (if applicable) and responds with a response in xml form.
 
@@ -32,7 +32,6 @@ namespace RESTBot.Server
 {
     public partial class Router
     {
-
         private void AcceptClientThread(IAsyncResult result)
         {
             TcpClient client = _listener.EndAcceptTcpClient(result);
@@ -47,10 +46,9 @@ namespace RESTBot.Server
             int i = 0;
             do
             {
-
                 i = stream.Read(buffer, 0, buffer.Length); //add the next set of data into the buffer..
                 DebugUtilities.WriteSpecial("Read chunk from the stream");
-	       request += Encoding.UTF8.GetString(buffer, 0, i); //append it to the overall request
+	      				request += Encoding.UTF8.GetString(buffer, 0, i); //append it to the overall request
             }
             while (stream.DataAvailable); //and repeat :)
 
@@ -77,16 +75,16 @@ namespace RESTBot.Server
             string body = "";
 
 	        bool foundExpectContinue = false;
-	        foreach(HeaderLine line in x.HeaderLines)
+	        foreach (HeaderLine line in x.HeaderLines)
 	        {
-	    	    if(line.ToString() == "Expect: 100-continue")
+	    	    if (line.ToString() == "Expect: 100-continue")
 		        {
 			        foundExpectContinue = true;
                     DebugUtilities.WriteSpecial("Found 100 continue!");
 		        }
 	        }
 
-	        if(foundExpectContinue)
+	        if (foundExpectContinue)
 	        {
 	    	    try
 		        {

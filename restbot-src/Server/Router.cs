@@ -102,6 +102,5 @@ namespace RESTBot.Server
             } while (StillRunning);
             _listener.Stop();
         }
-
     }
 }

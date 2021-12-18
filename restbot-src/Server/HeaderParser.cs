@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------
 	FILE INFORMATION:
-    Name: Program.cs [./restbot-src/Server/HeaderParser.cs]
+    Name: HeaderParser.cs [./restbot-src/Server/HeaderParser.cs]
     Description: Handles entire header sections of a HTTP request for processing
                  into individual HeaderLines
 
