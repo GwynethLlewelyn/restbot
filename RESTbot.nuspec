@@ -12,7 +12,7 @@
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<copyright>Copyright 2007,2010,2021</copyright>
 	<tags>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</tags>
-	<repository type="git" url="https://github.com/GwynethLlewelyn/restbot.bit" />
+	<repository type="git" url="https://github.com/GwynethLlewelyn/restbot.git" />
 	<title>RESTbot</title>
   </metadata>
   <files>

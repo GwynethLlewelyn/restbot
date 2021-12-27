@@ -15,6 +15,15 @@
             <param name="mask"></param>
             <returns></returns>
         </member>
+        <member name="T:RESTBot.CreateNotecardPlugin">
+            <summary>
+            Class to create notecards; params are notecard name, notecard (textual data) and optionally a key (item UUID) to embed an item inside the notecard
+            </summary>
+            <param name="name"></param>
+            <param name="notecard"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
         <member name="F:RESTBot.Reaper.SESSION_TIMEOUT">
             <summary>
             Session timeout timespan
