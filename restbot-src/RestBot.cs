@@ -36,6 +36,10 @@ namespace RESTBot
     {
 				#region Static Junk
 				static Dictionary<string, RestPlugin> Plugins = new Dictionary<string, RestPlugin>();
+				/// <summary>
+				/// Add a new plugin to the system
+				/// </summary>
+				/// <param name="Plugin">Plugin name</param>
         public static void AddPlugin(RestPlugin Plugin)
         {
             lock (Plugins)
@@ -44,7 +48,10 @@ namespace RESTBot
                     Plugins.Add(Plugin.MethodName, Plugin);
             }
         }
-        //StatefulPlugins stuff
+				/// <summary>
+				/// StatefulPlugins stuff
+				/// </summary>
+				/// <param name="defn">List of plugin definitions</param>
         static List<Type> StatefulPluginDefinitions = new List<Type>();
         public static void AddStatefulPluginDefinition(Type defn)
         {
@@ -55,10 +62,13 @@ namespace RESTBot
                     StatefulPluginDefinitions.Add(defn);
             }
         }
-
+				/// <summary>
+				/// Get the data from the request and parse it
+				/// </summary>
+				/// <param name="request">Request HTTP headers</param>
+				/// <param name="body">Request HTTP body</param>
         public static Dictionary<string, string> HandleDataFromRequest(RESTBot.Server.RequestHeaders request, string body)
         {
-
             Dictionary<string, string> ret = new Dictionary<string, string>();
             string content_type = "";
             foreach (Server.HeaderLine line in request.HeaderLines)
@@ -158,6 +168,13 @@ namespace RESTBot
 
     private System.Timers.Timer updateTimer;
 
+		/// <summary>
+		/// Main entry point for logging in with a bot
+		/// </summary>
+		/// <param name="session">Current session UUID</param>
+		/// <param name="f">Login first name</param>
+		/// <param name="l">Login last name</param>
+		/// <param name="p">MD5-encoded password</param>
     public RestBot(UUID session, string f, string l, string p)
     {
         //setting up some class variables
