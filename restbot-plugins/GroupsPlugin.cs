@@ -36,7 +36,7 @@ namespace RESTBot
 		protected ManualResetEvent GroupsEvent = new ManualResetEvent(false);
 
 		private UUID session;
-		private string activeGroup;
+		private string? activeGroup;	// possibly null if this avatar does not belong to any group
 
 		public ActivateGroupKeyPlugin()
 		{
@@ -115,9 +115,9 @@ namespace RESTBot
 	public class ActivateGroupNamePlugin : StatefulPlugin
 	{
 		protected ManualResetEvent GroupsEvent = new ManualResetEvent(false);
-		public Dictionary<UUID, Group> GroupsCache = null;
+		public Dictionary<UUID, Group>? GroupsCache = null;	// should *not* be set to null!
 		private UUID session;
-		private string activeGroup;
+		private string? activeGroup;	// may be null if avatar has no groups
 
 		public ActivateGroupNamePlugin()
 		{

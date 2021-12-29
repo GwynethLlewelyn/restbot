@@ -42,7 +42,7 @@ namespace RESTBot
 
         private static bool hasAlreadyStarted = false;
 
-        public static System.Timers.Timer ReaperTimer;
+        public static System.Timers.Timer? ReaperTimer;	// weirdly, this can be null?...
 
         public static void Init()
         {

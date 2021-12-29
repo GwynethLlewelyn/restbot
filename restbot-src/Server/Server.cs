@@ -37,7 +37,7 @@ namespace RESTBot.Server
             TcpClient client = _listener.EndAcceptTcpClient(result);
             _proccessed_connection.Set();
 
-            DebugUtilities.WriteInfo("Processing Connection from " + client.Client.RemoteEndPoint.ToString() + "!");
+            DebugUtilities.WriteInfo("Processing Connection from " + (client.Client.RemoteEndPoint.ToString() ?? "(unknown)") + "!");
             NetworkStream stream = client.GetStream();
 
             DebugUtilities.WriteSpecial("Reading Stream");
@@ -60,7 +60,7 @@ namespace RESTBot.Server
             {
                 EndPoint endpoint = client.Client.RemoteEndPoint;
                 DebugUtilities.WriteDebug("ip: " + endpoint.ToString());
-                string ip = (endpoint.ToString().Split(':'))[0];
+                string ip = (endpoint != null) ? (endpoint.ToString().Split(':'))[0] : String.Empty;
                 IPHostEntry host = Dns.GetHostEntry(IPAddress.Parse(ip));
                 hostname = host.HostName;
                 DebugUtilities.WriteDebug("ENDPOINT HOSTNAME: " + hostname);

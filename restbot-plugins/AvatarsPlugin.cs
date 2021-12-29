@@ -81,6 +81,12 @@ namespace RESTBot
 
 		}
 
+		/// <summary>
+		/// key2name (given an avatar UUID, returns the avatar name, if it exists)
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="key">UUID of avatar to check</param>
+		/// <returns>Name of the avatar if it exists; String.Empty if not</returns>
 		private string getName(RestBot b, UUID id)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Looking up name for " + id.ToString());
@@ -96,7 +102,8 @@ namespace RESTBot
 			lock (NameLookupEvents) {
 				NameLookupEvents.Remove(id);
 			}
-			string response = null;
+			/// <remark>C# 8+ is stricter with null assignments</remark>
+			string? response = null;	// technically this cannot ever be null, so it doesn't make sense...
 			if ( avatarNames.ContainsKey(id) ) {
 				response = avatarNames[id]; // .Name removed
 				lock ( avatarNames ) {
@@ -152,7 +159,7 @@ namespace RESTBot
 		}
 		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
 		{
-			string avname = null;
+			string? avname = null;	// C# is stricter about setting things to null
 			if ( Paramaters.ContainsKey("name") ) {
 				avname = Paramaters["name"].ToString().Replace("%20"," ").Replace("+"," ");
 			} else {
@@ -167,6 +174,12 @@ namespace RESTBot
 
 		}
 
+		/// <summary>
+		/// name2key (avatar name to UUID)
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="name">Name of avatar to check</param>
+		/// <returns>UUID of corresponding avatar, if it exists</returns>
 		public UUID getKey(RestBot b, String name)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up key for " + name);
@@ -322,6 +335,12 @@ namespace RESTBot
 
 		}
 
+		/// <summary>
+		/// Get online status of an avatar
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="key">UUID of avatar to check</param>
+		/// <returns>true or false, if the avatar is or isn't online</returns>
 		public bool getOnline(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up online status for " + key.ToString());
@@ -410,7 +429,7 @@ namespace RESTBot
 					return "<error>arguments</error>";
 				}
 				if ( check ) {
-					string response = getProfile(b, agentKey);
+					string? response = getProfile(b, agentKey);	// profile can be null
 					if ( response == null ) {
 						return "<error>not found</error>";
 					} else {
@@ -429,7 +448,14 @@ namespace RESTBot
 
 		}
 
-		public string getProfile(RestBot b, UUID key)
+		/// <summary>
+		/// Look up the profile for a UUID
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="key">UUID of avatar to check</param>
+		/// <returns>Full profile as a string, or null if profile is empty/does not exist</returns>
+		/// <remark>C# 8+ is stricter when returning nulls, thus the <c>string?</c> method type.</remark>
+		public string? getProfile(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up profile for " + key.ToString());
 
@@ -515,7 +541,7 @@ namespace RESTBot
 					return "<error>arguments</error>";
 				}
 				if ( check ) {
-					string response = getGroups(b, agentKey);
+					string? response = getGroups(b, agentKey);	// string can be null
 					if ( response == null ) {
 						return "<error>not found</error>";
 					} else {
@@ -534,7 +560,17 @@ namespace RESTBot
 
 		}
 
-		public string getGroups(RestBot b, UUID key)
+		/// <summary>
+		/// Returns all groups that an avatar is in, or null if none
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="key">UUID of avatar to check</param>
+		/// <returns>List of groups as a XML-formatted string, or null if the avatar does not belong to any group</returns>
+		/// <remark>
+		///   <para>C# 8+ is stricter when returning nulls, thus the <c>string?</c> method type.</para>
+		///		<para>Note(gwyneth): Instead of returning null, it would make more sense to return an empty XML!</para>
+		/// </remark>
+		public string? getGroups(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up groups for " + key.ToString());
 

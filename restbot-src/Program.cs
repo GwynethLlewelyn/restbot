@@ -132,11 +132,14 @@ namespace RESTBot
             }
         }
 
+				/// <summary>
+				/// Process a request (assuming it exists)
+				/// </summary>
+				/// <param name="headers">Request headers (including path, etc.)</param>
+				/// <param name="body">Request body (will usually have all parameters from POST)</param>
         public static string DoProcessing(RequestHeaders headers, string body)
         {
             //Setup variables
-
-
             DebugUtilities.WriteDebug("New request - " + headers.RequestLine.Path);
             //Split the URL
             string[] parts = headers.RequestLine.Path.Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -221,7 +224,7 @@ namespace RESTBot
                     }
                     if (!Parameters.ContainsKey("pass"))
                     {
-                        result = result + " Missing 'last' arg.";
+                        result = result + " Missing 'pass' arg.";
                     }
                     return ("<error>arguments: "+result+"</error>");
                 }

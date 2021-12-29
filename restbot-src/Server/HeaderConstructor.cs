@@ -90,8 +90,9 @@ namespace RESTBot.Server
     }
     public class ResponseHeaders
     {
-        public HeaderResponseLine ResponseLine;
-        public List<HeaderLine> HeaderLines;
+				/// The following _may_ be null...
+        public HeaderResponseLine? ResponseLine;
+        public List<HeaderLine>? HeaderLines;
 
         private void CreateResponseHeaders(int status, string status_response, string content_type)
         {

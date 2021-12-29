@@ -30,7 +30,7 @@ namespace RESTBot
     public class NearbyPrimsPlugin : StatefulPlugin
     {
         private UUID session;
-        private RestBot me;
+        private RestBot? me;	// may be null...
 
         Dictionary<UUID, Primitive> PrimsWaiting = new Dictionary<UUID, Primitive>();
         AutoResetEvent AllPropertiesReceived = new AutoResetEvent(false);

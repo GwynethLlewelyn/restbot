@@ -131,13 +131,13 @@ namespace RESTBot
         }
     } // end goto
 
-    // move to location; parameters are sim, x, y, z
+    /// <summary>move to location; parameters are sim, x, y, z</summary>
     public class MoveToPlugin : StatefulPlugin
     {
         private UUID session;
         private Vector3 goalPos;
         const float DISTANCE_BUFFER = 7.0f;
-        private RestBot me;
+        private RestBot? me;	// may be null, who knows why...
         private float prevDistance;
 
         public MoveToPlugin()
@@ -250,15 +250,15 @@ namespace RESTBot
         }
     } // end moveto
 
-    // move to avatar location; parameters are sim, avatar
+    /// <summary>move to avatar location; parameters are sim, avatar</summary>
     public class MoveToAvatarPlugin : StatefulPlugin
     {
         private UUID session;
         private Vector3 goalPos;
         const float DISTANCE_BUFFER = 7.0f;
-        private RestBot me;
+        private RestBot? me;	// may be null...
         private float prevDistance;
-        private Avatar target;
+        private Avatar? target;	// may be null...
         private uint regionX, regionY;
 
         public MoveToAvatarPlugin()
@@ -305,7 +305,6 @@ namespace RESTBot
 
         public override string Process(RestBot b, Dictionary<string, string> Parameters)
         {
-
             Utils.LongToUInts(b.Client.Network.CurrentSim.Handle, out regionX, out regionY);
 
             try

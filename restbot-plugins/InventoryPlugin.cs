@@ -38,8 +38,8 @@ namespace RESTBot
 	public class ListInventoryPlugin : StatefulPlugin
 	{
 		private UUID session;
-		private Inventory Inventory;
-		private InventoryManager Manager;
+		private Inventory? Inventory;				// may be null if avatar has no inventory
+		private InventoryManager? Manager;	// may be null as well...
 
 		public ListInventoryPlugin()
 		{
@@ -484,7 +484,14 @@ namespace RESTBot
 
 		// Accessory functions
 
-		private InventoryItem FetchItem(RestBot b, UUID itemID)
+	/// <summary>
+	/// Fetch an inventory item
+	/// </summary>
+	/// <param name="b">RESTbot object</param>
+	/// <param name="itemID">UUID of inventory item to fetch</param>
+	/// <returns>An InventoryItem object if it exists, null if not</returns>
+	/// <remark>C# 8+ is stricter when returning nulls, thus the <c>InventoryItem?</c> method type.</remark>
+		private InventoryItem? FetchItem(RestBot b, UUID itemID)
 		{
 			InventoryItem fetchItem = null;
 			AutoResetEvent fetchItemEvent = new AutoResetEvent(false);

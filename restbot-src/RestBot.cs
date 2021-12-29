@@ -78,6 +78,7 @@ namespace RESTBot
                     content_type = line.Value.ToLower();
                 }
             }
+						DebugUtilities.WriteDebug("HandleDataFromRequest; body is: '" + body + "'");
             if (content_type == "text/xml" || content_type == "xml")
             {
                 // make it a string
@@ -128,7 +129,7 @@ namespace RESTBot
             }
             return ret;
         }
-        #endregion
+        #endregion // Static Junk
 
         #region SomeNewLoginCode
         public struct LoginReply
@@ -136,7 +137,7 @@ namespace RESTBot
             public bool wasFatal;
             public string xmlReply;
         }
-        #endregion
+        #endregion // SomeNewLoginCode
 
     public enum Status
 		{

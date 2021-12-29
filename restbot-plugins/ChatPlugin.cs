@@ -30,7 +30,7 @@ namespace RESTBot.restbot_plugins
     public class SayPlugin : StatefulPlugin
     {
         private UUID session;
-        private RestBot me;
+        private RestBot? me; // potentially null
 
         public SayPlugin()
         {
