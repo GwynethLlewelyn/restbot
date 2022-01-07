@@ -39,6 +39,12 @@ You may wish to add the latter to your `~/.bashrc` or equivalent.
 
 _**Note:** There is a chance that a working Mono environment is not even needed any more! (gwyneth 20211129)_
 
+If you wish to avoid later errors regarding the lack of `libgdiplus`, you ought to install it as well:
+
+```bash
+brew install mono-libgdiplus
+```
+
 #### Add the .NET environment
 
 ```bash
