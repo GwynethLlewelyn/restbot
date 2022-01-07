@@ -46,10 +46,10 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="LibreMetaverse" Version="1.9.4.297" />
-	  <PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.4.297" />
-	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.4.297" />
-	  <PackageReference Include="log4net" Version="2.0.13" />
+	  <PackageReference Include="LibreMetaverse" Version="1.9.16.420" />
+	  <PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.16.420" />
+	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.16.420" />
+	  <PackageReference Include="log4net" Version="2.0.14" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="assets\*" />

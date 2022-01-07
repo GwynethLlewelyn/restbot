@@ -8,65 +8,65 @@
     ".NETCoreApp,Version=v6.0": {
       "RESTbot/8.1.4": {
         "dependencies": {
-          "LibreMetaverse": "1.9.4.297",
-          "LibreMetaverse.StructuredData": "1.9.4.297",
-          "LibreMetaverse.Types": "1.9.4.297",
-          "log4net": "2.0.13"
+          "LibreMetaverse": "1.9.16.420",
+          "LibreMetaverse.StructuredData": "1.9.16.420",
+          "LibreMetaverse.Types": "1.9.16.420",
+          "log4net": "2.0.14"
         },
         "runtime": {
           "RESTbot.dll": {}
         }
       },
-      "LibreMetaverse/1.9.4.297": {
+      "LibreMetaverse/1.9.16.420": {
         "dependencies": {
-          "LibreMetaverse.StructuredData": "1.9.4.297",
-          "LibreMetaverse.Types": "1.9.4.297",
+          "LibreMetaverse.StructuredData": "1.9.16.420",
+          "LibreMetaverse.Types": "1.9.16.420",
           "Microsoft.Experimental.Collections": "1.0.6-e190117-3",
-          "Microsoft.Extensions.ObjectPool": "5.0.10",
+          "Microsoft.Extensions.ObjectPool": "6.0.1",
           "OggVorbisEncoder": "1.2.0",
           "OpenJpegDotNet-LMV": "2.4.0.5",
           "System.Drawing.Common": "5.0.2",
           "System.Net.Http": "4.3.4",
           "System.Net.NameResolution": "4.3.0",
-          "System.Threading.Channels": "5.0.0",
+          "System.Threading.Channels": "6.0.0",
           "XmlRpcCore": "3.1.2.77",
-          "log4net": "2.0.13",
+          "log4net": "2.0.14",
           "zlib.net-mutliplatform": "1.0.5"
         },
         "runtime": {
           "lib/net5.0/LibreMetaverse.dll": {
-            "assemblyVersion": "1.9.4.297",
-            "fileVersion": "1.9.4.297"
+            "assemblyVersion": "1.9.16.420",
+            "fileVersion": "1.9.16.420"
           }
         }
       },
-      "LibreMetaverse.StructuredData/1.9.4.297": {
+      "LibreMetaverse.StructuredData/1.9.16.420": {
         "dependencies": {
-          "LibreMetaverse.Types": "1.9.4.297"
+          "LibreMetaverse.Types": "1.9.16.420"
         },
         "runtime": {
           "lib/net5.0/LibreMetaverse.StructuredData.dll": {
-            "assemblyVersion": "1.9.4.297",
-            "fileVersion": "1.9.4.297"
+            "assemblyVersion": "1.9.16.420",
+            "fileVersion": "1.9.16.420"
           }
         }
       },
-      "LibreMetaverse.Types/1.9.4.297": {
+      "LibreMetaverse.Types/1.9.16.420": {
         "runtime": {
           "lib/net5.0/LibreMetaverse.Types.dll": {
-            "assemblyVersion": "1.9.4.297",
-            "fileVersion": "1.9.4.297"
+            "assemblyVersion": "1.9.16.420",
+            "fileVersion": "1.9.16.420"
           }
         }
       },
-      "log4net/2.0.13": {
+      "log4net/2.0.14": {
         "dependencies": {
           "System.Configuration.ConfigurationManager": "4.5.0"
         },
         "runtime": {
           "lib/netstandard2.0/log4net.dll": {
-            "assemblyVersion": "2.0.13.0",
-            "fileVersion": "2.0.13.0"
+            "assemblyVersion": "2.0.14.0",
+            "fileVersion": "2.0.14.0"
           }
         }
       },
@@ -78,7 +78,14 @@
           }
         }
       },
-      "Microsoft.Extensions.ObjectPool/5.0.10": {},
+      "Microsoft.Extensions.ObjectPool/6.0.1": {
+        "runtime": {
+          "lib/net6.0/Microsoft.Extensions.ObjectPool.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.121.56714"
+          }
+        }
+      },
       "Microsoft.NETCore.Platforms/5.0.0": {},
       "Microsoft.NETCore.Targets/1.1.0": {},
       "Microsoft.Win32.SystemEvents/5.0.0": {
@@ -621,7 +628,7 @@
           "System.Threading.Tasks": "4.3.0"
         }
       },
-      "System.Threading.Channels/5.0.0": {},
+      "System.Threading.Channels/6.0.0": {},
       "System.Threading.Tasks/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -653,33 +660,33 @@
       "serviceable": false,
       "sha512": ""
     },
-    "LibreMetaverse/1.9.4.297": {
+    "LibreMetaverse/1.9.16.420": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-XxvGW9iiW68mg/6rGNPnhheB8kz29LeulA58/AvUTV1zfUk1SyFaPXXSPK+ax7EJ3X0g83+RQw0wdzHLM/gtqA==",
-      "path": "libremetaverse/1.9.4.297",
-      "hashPath": "libremetaverse.1.9.4.297.nupkg.sha512"
+      "sha512": "sha512-S82sJijR5kW72yNoBVBs7uLxrAT66zwmX3ppkDKPrzqvYPJzbqPceOjc3DtWaNsVb06NvQ6VRG1hWcy6FR+skQ==",
+      "path": "libremetaverse/1.9.16.420",
+      "hashPath": "libremetaverse.1.9.16.420.nupkg.sha512"
     },
-    "LibreMetaverse.StructuredData/1.9.4.297": {
+    "LibreMetaverse.StructuredData/1.9.16.420": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aIFTxocvCUDOrgVdF+wz4emFUetrN9TANIb4gyROYbMpEwmZ+cyCasJS2exK0TH0Yn84P9/PO+1nytBiHdGWEw==",
-      "path": "libremetaverse.structureddata/1.9.4.297",
-      "hashPath": "libremetaverse.structureddata.1.9.4.297.nupkg.sha512"
+      "sha512": "sha512-CeEU8gs3+boUZeRLOrGBECG1C26ZyVxP55NU4ZUIPy2lh2NPnJqcgTAxUyZ0Y9J4XaFK9V6YK1kiEQTu6b5HVw==",
+      "path": "libremetaverse.structureddata/1.9.16.420",
+      "hashPath": "libremetaverse.structureddata.1.9.16.420.nupkg.sha512"
     },
-    "LibreMetaverse.Types/1.9.4.297": {
+    "LibreMetaverse.Types/1.9.16.420": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-uLEZz8WbdAsRXr4cBsQRAAinfiu8j4pPkkvNIxPXbbdXHy/0oP8aktxwKzUyBBctserMfprDbqCoQ4mxiTSWXw==",
-      "path": "libremetaverse.types/1.9.4.297",
-      "hashPath": "libremetaverse.types.1.9.4.297.nupkg.sha512"
+      "sha512": "sha512-YAKx6OGQBN3+JqDNmorU5oXK8hVMDoWBHpdJyxhwh8xihSNws7YGnUVv0GzGssQ/0NbZfODDFp9GcoZkuwnJUQ==",
+      "path": "libremetaverse.types/1.9.16.420",
+      "hashPath": "libremetaverse.types.1.9.16.420.nupkg.sha512"
     },
-    "log4net/2.0.13": {
+    "log4net/2.0.14": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-VUx7nr+IovTkL8ZFeKqGtAGCYmzOk1rCvE8NqH2NucZudVb47i99FhwcpTI4UroOBGuUstXCh5F6Zx3/x1nd2w==",
-      "path": "log4net/2.0.13",
-      "hashPath": "log4net.2.0.13.nupkg.sha512"
+      "sha512": "sha512-KevyXUuhOyhx7l1jWwq6ZGVlRC2Aetg0qDp6rJpfSZGcDPKQDwfOE6yEuVkVf0kEP08NQqBDn/TQ/TJv4wgyhw==",
+      "path": "log4net/2.0.14",
+      "hashPath": "log4net.2.0.14.nupkg.sha512"
     },
     "Microsoft.Experimental.Collections/1.0.6-e190117-3": {
       "type": "package",
@@ -688,12 +695,12 @@
       "path": "microsoft.experimental.collections/1.0.6-e190117-3",
       "hashPath": "microsoft.experimental.collections.1.0.6-e190117-3.nupkg.sha512"
     },
-    "Microsoft.Extensions.ObjectPool/5.0.10": {
+    "Microsoft.Extensions.ObjectPool/6.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-pp9tbGqIhdEXL6Q1yJl+zevAJSq4BsxqhS1GXzBvEsEz9DDNu9GLNzgUy2xyFc4YjB4m4Ff2YEWTnvQvVYdkvQ==",
-      "path": "microsoft.extensions.objectpool/5.0.10",
-      "hashPath": "microsoft.extensions.objectpool.5.0.10.nupkg.sha512"
+      "sha512": "sha512-ZyWqqp7d54J7ej5dVNm8YZ4DydyIlVZqTgmCZFkO7tmZRSWxuFYKZa6z+K2Zla9YCUSuWH5IH6rMeHel9sNiKA==",
+      "path": "microsoft.extensions.objectpool/6.0.1",
+      "hashPath": "microsoft.extensions.objectpool.6.0.1.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/5.0.0": {
       "type": "package",
@@ -1108,12 +1115,12 @@
       "path": "system.threading/4.3.0",
       "hashPath": "system.threading.4.3.0.nupkg.sha512"
     },
-    "System.Threading.Channels/5.0.0": {
+    "System.Threading.Channels/6.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RLBIxntLaG9pRmmuVDwY1kc8Bvp/FQzSxPU+19VekkScKkWtVP9r8bLhm28ama3usc816UBrmkg3vv3jUea/hw==",
-      "path": "system.threading.channels/5.0.0",
-      "hashPath": "system.threading.channels.5.0.0.nupkg.sha512"
+      "sha512": "sha512-TY8/9+tI0mNaUMgntOxxaq2ndTkdXqLSxvPmas7XEqOlv9lQtB7wLjYGd756lOaO7Dvb5r/WXhluM+0Xe87v5Q==",
+      "path": "system.threading.channels/6.0.0",
+      "hashPath": "system.threading.channels.6.0.0.nupkg.sha512"
     },
     "System.Threading.Tasks/4.3.0": {
       "type": "package",
