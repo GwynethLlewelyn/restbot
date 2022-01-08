@@ -5,8 +5,6 @@ VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTbot", "RESTbot.csproj", "{F6E2EED5-AE02-45D9-A129-7E759F326D4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "..\libremetaverse\Programs\examples\TestClient\TestClient.csproj", "{9F71FDB3-0000-0000-0000-000000000000}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
