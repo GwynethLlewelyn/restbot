@@ -57,6 +57,7 @@
 	</ItemGroup>
 	<Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe">
 		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+		<MakeDir Directories="$(OutputPath)openmetaverse_data" Condition="!Exists('$(OutputPath)openmetaverse_data')" />
 		<Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
 	</Target>
 	<Target Name="Clean">
@@ -69,7 +70,7 @@
 	</Target>
 	<Target Name="AfterBuild">
 		<Copy SourceFiles="assets\configuration\configuration.xml" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
-		<Copy SourceFiles="assets\configuration\restbot.exe.config" DestinationFiles="$(OutputPath)$(AssemblyName).config" ContinueOnError="true" />
-		<Copy SourceFiles="assets\openmetaverse_data" DestinationFolder="$(OutputPath)\openmetaverse_data" ContinueOnError="true" />
+		<Copy SourceFiles="assets\configuration\restbot.exe.config" DestinationFiles="$(OutputPath)" ContinueOnError="true" />
+		<Copy SourceFiles="assets\openmetaverse_data" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
 	</Target>
 </Project>

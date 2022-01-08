@@ -102,7 +102,7 @@ namespace RESTBot
 			lock (NameLookupEvents) {
 				NameLookupEvents.Remove(id);
 			}
-			/// <remark>C# 8+ is stricter with null assignments</remark>
+			// C# 8+ is stricter with null assignments.
 			string? response = null;	// technically this cannot ever be null, so it doesn't make sense...
 			if ( avatarNames.ContainsKey(id) ) {
 				response = avatarNames[id]; // .Name removed
@@ -115,7 +115,14 @@ namespace RESTBot
 			return response;
 		}
 
-		// obsolete syntax changed
+		/// <summary>
+		/// Loop through all (pending) replies for UUID/Avatar names
+		/// and process them if they contain any key we're looking for.
+		/// </summary>
+		/// <param name="sender">parameter ignored</param>
+		/// <param name="e">List of UUID/Avatar names</param>
+		/// <returns>void</returns>
+		/// <remark>obsolete syntax changed</remark>
 		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " Processing " + e.Names.Count.ToString() + " AvatarNames replies");
