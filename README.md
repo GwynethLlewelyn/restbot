@@ -75,6 +75,14 @@ Also note that if you managed to install the pre-requisites using Homebrew, you 
 
 Before you launch RESTbot, you'll need to create a `configuration.xml` file with the parameters for your grid, and where the 'bot should start. Go ahead and jump to [the configuration](#configuration) section.
 
+**Note:** To clean up everything and start a compilation from scratch, you can use the following target:
+
+```bash
+dotnet msbuild /t:CleanOutDir
+```
+
+This should be cross-platform-safe (as far as I can test it, of course!).
+
 #### ... or you can just use Visual Studio for Mac!
 
 You wouldn't believe the tools that Microsoft has come up with to persuade non-Windows users to surrender to their integrated environment. These days, you can get [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) — *not* the free and open-source Visual Studio *Code*, which is a humble code editor, albeit one with a megaton of features; but rather Microsoft's own full-blown IDE with all the bells and whistles, and which looks like the Windows equivalent, but with a more Apple-ish look.
