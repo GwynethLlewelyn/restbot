@@ -1,0 +1,228 @@
+{
+	"info": {
+		"_postman_id": "60eb7df8-b2f7-472a-acea-cc89f641e1e7",
+		"name": "RESTbot: API testing scaffolding",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.environment.has(\"sl_password\")) {",
+							"    var sl_password = pm.environment.get(\"sl_password\");",
+							"    var my_sl_password = CryptoJS.MD5(sl_password).toString();",
+							"    ",
+							"    console.log(\"Password: \" + sl_password + \"; MD5'ed: \" + my_sl_password);",
+							"",
+							"    // Inject MD5'ed password into environment.",
+							"    // This avoids losing the initial value of the password (gwyneth 20220107).",
+							"    pm.environment.set(\"sl_md5_password\", my_sl_password);",
+							"} else {",
+							"    console.log(\"sl_password not found...\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Response body was: \", pm.response.text());",
+							"var jsonObject = xml2Json(pm.response.text());",
+							"console.log(\"After converting from XML to JSON:\", jsonObject);",
+							"if (jsonObject.restbot.session_id) {",
+							"    console.log(\"Already logged in; session_id is: '\" + jsonObject.restbot.session_id + \"'\");",
+							"    pm.environment.set(\"session_id\", jsonObject.restbot.session_id);",
+							"} else if (jsonObject.restbot.success.session_id) {",
+							"    console.log(\"Successfully logged in; session_id is: '\" + jsonObject.restbot.success.session_id + \"'\");",
+							"    pm.environment.set(\"session_id\", jsonObject.restbot.success.session_id);",
+							"} else {",
+							"    console.log(\"Either session_id was empty, or we couldn't extract it from XML...\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "first",
+							"value": "MyAvatarFirstName",
+							"description": "Avatar first name",
+							"type": "text"
+						},
+						{
+							"key": "last",
+							"value": "Test",
+							"description": "Avatar last name (or 'Resident' if no last name)",
+							"type": "text"
+						},
+						{
+							"key": "pass",
+							"value": "{{sl_md5_password}}",
+							"description": "Calculated MD5 of password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{protocol}}://{{server}}:9080/establish_session/pass",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{server}}"
+					],
+					"port": "9080",
+					"path": [
+						"establish_session",
+						"pass"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{protocol}}://{{server}}:9080/exit/{{session_id}}",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{server}}"
+					],
+					"port": "9080",
+					"path": [
+						"exit",
+						"{{session_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "avatar_key",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "OneAvatar Resident",
+							"description": "Name of avatar for which we're retrieving its key (UUID).",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{protocol}}://{{server}}:9080/avatar_key/{{session_id}}/",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{server}}"
+					],
+					"port": "9080",
+					"path": [
+						"avatar_key",
+						"{{session_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "location",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{protocol}}://{{server}}:9080/location/{{session_id}}/",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{server}}"
+					],
+					"port": "9080",
+					"path": [
+						"location",
+						"{{session_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
