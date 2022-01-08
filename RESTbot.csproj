@@ -61,12 +61,15 @@
 	</Target>
 	<Target Name="Clean">
 		<Delete Files="$(OutputPath)$(AssemblyName).exe" />
+		<Delete Files="$(OutputPath)$(AssemblyName).dll" />
+		<Delete Files="$(OutputPath)$(AssemblyName)" />
 	</Target>
 	<Target Name="Rebuild" DependsOnTargets="Clean;Build" />
 	<Target Name="BeforeBuild">
 	</Target>
 	<Target Name="AfterBuild">
 		<Copy SourceFiles="assets\configuration\configuration.xml" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
-		<Copy SourceFiles="assets\configuration\restbot.exe.config" DestinationFolder="$(OutputPath)$(AssemblyName).config" ContinueOnError="true" />
+		<Copy SourceFiles="assets\configuration\restbot.exe.config" DestinationFiles="$(OutputPath)$(AssemblyName).config" ContinueOnError="true" />
+		<Copy SourceFiles="assets\openmetaverse_data" DestinationFolder="$(OutputPath)\openmetaverse_data" ContinueOnError="true" />
 	</Target>
 </Project>
