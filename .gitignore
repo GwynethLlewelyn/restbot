@@ -69,8 +69,6 @@ obj/
 packages/
 # This will be overwritten by a successful compilation anyway (gwyneth 20211129)
 restbot-bin/
-!restbot-bin/net6.0/openmetaverse_data/
-restbot-bin/net6.0/openmetaverse_data/cache/
 
 # Executables
 #*.exe
