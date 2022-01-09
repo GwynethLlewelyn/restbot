@@ -34,10 +34,11 @@
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
 		<Optimize>false</Optimize>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<!-- STARTUP_DEBUG moved to here; also, VERBOSE_MESSAGES allows file, line nr. etc. to be written with each and every console output message (gwyneth 20220109) -->
+		<DefineConstants>DEBUG;TRACE;STARTUP_DEBUG;VERBOSE_MESSAGES</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
-		<DocumentationFile>restbot-bin\$(AssemblyName).xml</DocumentationFile>
+		<!--<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>-->
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DebugType>pdbonly</DebugType>
@@ -52,10 +53,10 @@
 	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.16.420" />
 	  <PackageReference Include="log4net" Version="2.0.14" />
 	</ItemGroup>
-	<ItemGroup>
+	<!-- <ItemGroup>
 	  <None Remove="assets\*" />
 	  <None Remove="restbot-tools\*" />
-	</ItemGroup>
+	</ItemGroup> -->
 	<Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe">
 		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
 		<Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />

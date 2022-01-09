@@ -323,7 +323,7 @@ namespace RESTBot
                     ReloginTimer.Start();
                     break;
                 default:
-                    DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN");
+                    DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN: " + Client.Network.LoginErrorKey);
                     response.wasFatal = true;
                     response.xmlReply = "<error fatal=\"true\">Unknown error has occurred.</error>";
                     break;
@@ -355,7 +355,7 @@ namespace RESTBot
         Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
         Client.Throttle.Total = Program.config.networking.throttle;
 
-				DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
+				DebugUtilities.WriteDebug("Login URI: <" + Client.Settings.LOGIN_SERVER +">");
 
         LoginReply response = new LoginReply();
         string start = "";
@@ -392,7 +392,7 @@ namespace RESTBot
                     ReloginTimer.Start();
                     break;
                 default:
-                    DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN");
+                    DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN: : " + Client.Network.LoginErrorKey);
                     response.wasFatal = true;
                     response.xmlReply = "<error fatal=\"true\">Unknown error has occurred.</error>";
                     break;

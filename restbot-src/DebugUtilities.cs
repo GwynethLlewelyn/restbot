@@ -21,96 +21,190 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-#define STARTUP_DEBUG //turn this on if you want any debug messages to be outputted before the configuration file is set
+//#define STARTUP_DEBUG //turn this on if you want any debug messages to be outputted before the configuration file is set
+//Note: this now gets set on the csproj file using DefineConstants (gwyneth 20220109).
 
 using System;
 using log4net;
 using log4net.Config;
+#if VERBOSE_MESSAGES
+/// <see><href="https://stackoverflow.com/a/12556789/1035977">StackOverflow</see>
+/// <see><href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/caller-information">Microsoft Documentation</see>
+using System.Runtime.CompilerServices;
+using System.IO;	// for Path.GetFileName()
+#endif
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace RESTBot
 {
+	/// <summary>
+	/// Defines a few common (console) logging methods
+	/// </summary>
 	public static class DebugUtilities
 	{
-		//Define a new logger for RestBot
+		/// <summary>
+		/// Define a new logger for RestBot.
+		/// </summary>
 		private static readonly ILog restbotLog = LogManager.GetLogger(typeof(RestBot));
 
-        private static void Output(string message, ConsoleColor color)
-        {
-                Console.ForegroundColor = color;
-                Console.WriteLine(message); //Add any formatting here, in the future
-                Console.ForegroundColor = ConsoleColor.Gray; //revert to the default color
-        }
+		/// <summary>
+		/// Generic outputting method, used internally.
+		/// </summary>
+		/// <param name="message">What to be outputted to console</param>
+		/// <param name="ConsoleColor">Color to use for this message (ConsoleColor.Gray is default)</param>
+		/// <example>DebugUtilities.WriteInfo("Listening on 127.0.0.1 on port 80");</example>
+    private static void Output(string message, ConsoleColor color = ConsoleColor.Gray)
+    {
+      Console.ForegroundColor = color;
+			Console.WriteLine(message); //Add any formatting here, in the future
+      Console.ForegroundColor = ConsoleColor.Gray; //revert to the default color
+    }
 
-        /// <summary>
-        /// Outputs text in the normal white color.
-        /// </summary>
-        /// <param name="message">What to be outputted to console</param>
-        /// <example>DebugUtilities.WriteInfo("Listening on 127.0.0.1 on port 80");</example>
-        /// <remarks>This only outputs colored version on console! Will prepend "[INFO] " to message</remarks>
-        public static void WriteInfo(string message)
-        {
+		// Note: code duplication is unavoidable, since these CompilerServices functions always
+		// refer to the _caller_; if we simply place everything inside Output() (or even a
+		// special function just for that purpose), we'll get the file & line number of *this*
+		// file, which is not what we want! (gwyneth 20220109)
+
+    /// <summary>
+    /// Outputs text in the normal white color.
+    /// </summary>
+    /// <param name="message">What to be outputted to console</param>
+#if VERBOSE_MESSAGES
+		/// <param name="[CallerMemberName]">Calling method</param>
+		/// <param name="[CallerFilePath]">Path for the file calling the method</param>
+		/// <param name="[CallerLineNumber]">Line number of the method calling this</param>
+		/// <remarks>When VERBOSE_MESSAGES is set, we get additional info on who called this function, great to track down messages with the same name called from different places (gwyneth 20220109)</remarks>
+#endif
+    /// <example>DebugUtilities.WriteInfo("Listening on 127.0.0.1 on port 80");</example>
+    /// <remarks>This only outputs colored version on console! Will prepend "[INFO] " to message</remarks>
+    public static void WriteInfo(string message
+#if VERBOSE_MESSAGES
+			, [CallerMemberName] string callingMethod = "",
+			[CallerFilePath] string callingFilePath = "",
+			[CallerLineNumber] int callingFileLineNumber = 0
+#endif
+		)
+    {
+	#if VERBOSE_MESSAGES
+				message = message + "; from " + callingMethod + "(" + Path.GetFileName(callingFilePath) + ":" + callingFileLineNumber + ")";
+	#endif
 			restbotLog.Info(message);
-            Output("[INFO] " + message, ConsoleColor.White);
-        }
-        /// <summary>
-        /// Outputs text in a gray color.
-        /// </summary>
-        /// <param name="message">What to be outputted to console</param>
-        /// <example>DebugUtilities.WriteDebug("Request recieved - 2048 bytes in buffer");</example>
-        /// <remarks>This only outputs colored version on console! Will prepend "[DEBUG] " to message</remarks>
-        public static void WriteDebug(string message)
-        {
-            try
-            {
-                if (Program.config.debug.restbotDebug)
+    	Output("[INFO] " + message, ConsoleColor.White);
+    }
+
+    /// <summary>
+    /// Outputs text in a gray color.
+    /// </summary>
+    /// <param name="message">What to be outputted to console</param>
+#if VERBOSE_MESSAGES
+		/// <param name="[CallerMemberName]">Calling method</param>
+		/// <param name="[CallerFilePath]">Path for the file calling the method</param>
+		/// <param name="[CallerLineNumber]">Line number of the method calling this</param>
+		/// <remarks>When VERBOSE_MESSAGES is set, we get additional info on who called this function, great to track down messages with the same name called from different places (gwyneth 20220109)</remarks>
+#endif
+    /// <example>DebugUtilities.WriteDebug("Request recieved - 2048 bytes in buffer");</example>
+    /// <remarks>This only outputs colored version on console! Will prepend "[DEBUG] " to message</remarks>
+    public static void WriteDebug(string message
+#if VERBOSE_MESSAGES
+			, [CallerMemberName] string callingMethod = "",
+			[CallerFilePath] string callingFilePath = "",
+			[CallerLineNumber] int callingFileLineNumber = 0
+#endif
+		)
+    {
+#if VERBOSE_MESSAGES
+			message = message + "; from " + callingMethod + "(" + Path.GetFileName(callingFilePath) + ":" + callingFileLineNumber + ")";
+#endif
+      try
+      {
+        if (Program.config.debug.restbotDebug)
 					restbotLog.Debug(message);
-                    Output("[DEBUG] " + message, ConsoleColor.Gray);
-            }
-            catch
-            {
-                //well, ok.. the restbotDebug setting wasnt set yet.. lets just do whatever the define tells us to do
+        Output("[DEBUG] " + message, ConsoleColor.Gray);
+      }
+      catch
+      {
+        //well, ok.. the restbotDebug setting wasnt set yet.. lets just do whatever the define tells us to do
+				//Note: STARTUP_DEBUG is now _also_ defined in the csproj! (gwyneth 20220109)
 #if STARTUP_DEBUG
 				restbotLog.Debug(message);
-                Output("[DEBUG] " + message, ConsoleColor.Gray);
+    		Output("[DEBUG] " + message, ConsoleColor.Gray);
 #endif
-            }
-        }
-
-        /// <summary>
-        /// Outputs text in a yellow color.
-        /// </summary>
-        /// <param name="message">What to be outputted to console</param>
-        /// <example>DebugUtilities.WriteWarning("Could not find custom configuration file, using default");</example>
-        /// <remarks>This only outputs colored version on console! Will prepend "[WARN] " to message</remarks>
-        public static void WriteWarning(string message)
-        {
-			restbotLog.Warn(message);
-            Output("[WARN] " + message, ConsoleColor.Yellow);
-        }
-
-        /// <summary>
-        /// Outputs text in a red color.
-        /// </summary>
-        /// <param name="message">What to be outputted to console</param>
-        /// <example>DebugUtilities.WriteError("Socket could not be established, quitting");</example>
-        /// <remarks>This only outputs colored version on console! Will prepend "[ERROR] " to message</remarks>
-        public static void WriteError(string message)
-        {
-			restbotLog.Error(message);
-            Output("[ERROR] " + message, ConsoleColor.Red);
-        }
-
-        /// <summary>
-        /// Outputs text in a blue color. Well, it would if log4net had extra logging levels.
-        /// </summary>
-        /// <param name="message">What to be outputted to console</param>
-        /// <example>DebugUtilities.WriteSpecial("Starting login method!");</example>
-        /// <remarks>This only outputs colored version on console! Will prepend "[SPEC] " to message. This type of method should be used temporarly when developing specific blogs of code</remarks>
-        public static void WriteSpecial(string message)
-        {
-			restbotLog.Info(message);
-            Output("[SPEC] " + message, ConsoleColor.Blue);
-        }
+       }
     }
+
+    /// <summary>
+    /// Outputs text in a yellow color.
+    /// </summary>
+    /// <param name="message">What to be outputted to console</param>
+#if VERBOSE_MESSAGES
+		/// <param name="[CallerMemberName]">Calling method</param>
+		/// <param name="[CallerFilePath]">Path for the file calling the method</param>
+		/// <param name="[CallerLineNumber]">Line number of the method calling this</param>
+		/// <remarks>When VERBOSE_MESSAGES is set, we get additional info on who called this function, great to track down messages with the same name called from different places (gwyneth 20220109)</remarks>
+#endif
+    /// <example>DebugUtilities.WriteWarning("Could not find custom configuration file, using default");</example>
+    /// <remarks>This only outputs colored version on console! Will prepend "[WARN] " to message</remarks>
+    public static void WriteWarning(string message)
+    {
+	#if VERBOSE_MESSAGES
+				message = message + "; from " + callingMethod + "(" + Path.GetFileName(callingFilePath) + ":" + callingFileLineNumber + ")";
+	#endif
+			restbotLog.Warn(message);
+      Output("[WARN] " + message, ConsoleColor.Yellow);
+    }
+
+    /// <summary>
+    /// Outputs text in a red color.
+    /// </summary>
+    /// <param name="message">What to be outputted to console</param>
+#if VERBOSE_MESSAGES
+		/// <param name="[CallerMemberName]">Calling method</param>
+		/// <param name="[CallerFilePath]">Path for the file calling the method</param>
+		/// <param name="[CallerLineNumber]">Line number of the method calling this</param>
+		/// <remarks>When VERBOSE_MESSAGES is set, we get additional info on who called this function, great to track down messages with the same name called from different places (gwyneth 20220109)</remarks>
+#endif
+    /// <example>DebugUtilities.WriteError("Socket could not be established, quitting");</example>
+    /// <remarks>This only outputs colored version on console! Will prepend "[ERROR] " to message</remarks>
+    public static void WriteError(string message
+#if VERBOSE_MESSAGES
+			, [CallerMemberName] string callingMethod = "",
+			[CallerFilePath] string callingFilePath = "",
+			[CallerLineNumber] int callingFileLineNumber = 0
+#endif
+		)
+    {
+#if VERBOSE_MESSAGES
+			message = message + "; from " + callingMethod + "(" + Path.GetFileName(callingFilePath) + ":" + callingFileLineNumber + ")";
+#endif
+			restbotLog.Error(message);
+    	Output("[ERROR] " + message, ConsoleColor.Red);
+  	}
+
+    /// <summary>
+    /// Outputs text in a blue color. Well, it would if log4net had extra logging levels.
+    /// </summary>
+    /// <param name="message">What to be outputted to console</param>
+#if VERBOSE_MESSAGES
+		/// <param name="[CallerMemberName]">Calling method</param>
+		/// <param name="[CallerFilePath]">Path for the file calling the method</param>
+		/// <param name="[CallerLineNumber]">Line number of the method calling this</param>
+		/// <remarks>When VERBOSE_MESSAGES is set, we get additional info on who called this function, great to track down messages with the same name called from different places (gwyneth 20220109)</remarks>
+#endif
+    /// <example>DebugUtilities.WriteSpecial("Starting login method!");</example>
+    /// <remarks>This only outputs colored version on console! Will prepend "[SPEC] " to message. This type of method should be used temporarly when developing specific blogs of code</remarks>
+    public static void WriteSpecial(string message
+#if VERBOSE_MESSAGES
+			, [CallerMemberName] string callingMethod = "",
+			[CallerFilePath] string callingFilePath = "",
+			[CallerLineNumber] int callingFileLineNumber = 0
+#endif
+		)
+    {
+#if VERBOSE_MESSAGES
+			message = message + "; from " + callingMethod + "(" + Path.GetFileName(callingFilePath) + ":" + callingFileLineNumber + ")";
+#endif
+			restbotLog.Info(message);
+      Output("[SPEC] " + message, ConsoleColor.Blue);
+    }
+  }
 }
