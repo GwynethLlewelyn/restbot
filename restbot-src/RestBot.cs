@@ -32,113 +32,122 @@ using System.Threading;
 using System.Timers;
 namespace RESTBot
 {
-    public class RestBot
+	/// <summary>Main class for all RESTbot-related methods</summary>
+  public class RestBot
+  {
+		#region Static Junk
+		/// <summary>List of all plugins we've got</summary>
+		static Dictionary<string, RestPlugin> Plugins = new Dictionary<string, RestPlugin>();
+
+		/// <summary>
+		/// Add a new plugin to the system
+		/// </summary>
+		/// <param name="Plugin">Plugin name</param>
+    public static void AddPlugin(RestPlugin Plugin)
     {
-				#region Static Junk
-				static Dictionary<string, RestPlugin> Plugins = new Dictionary<string, RestPlugin>();
-				/// <summary>
-				/// Add a new plugin to the system
-				/// </summary>
-				/// <param name="Plugin">Plugin name</param>
-        public static void AddPlugin(RestPlugin Plugin)
-        {
-            lock (Plugins)
-            {
-                if (!Plugins.ContainsKey(Plugin.MethodName))
-                    Plugins.Add(Plugin.MethodName, Plugin);
-            }
-        }
-				/// <summary>
-				/// StatefulPlugins stuff
-				/// </summary>
-				/// <param name="defn">List of plugin definitions</param>
-        static List<Type> StatefulPluginDefinitions = new List<Type>();
-        public static void AddStatefulPluginDefinition(Type defn)
-        {
-            lock (StatefulPluginDefinitions)
-            {
-                DebugUtilities.WriteDebug("Plugin Def: " + defn.FullName);
-                if (defn.IsSubclassOf(typeof(StatefulPlugin)))
-                    StatefulPluginDefinitions.Add(defn);
-            }
-        }
-				/// <summary>
-				/// Get the data from the request and parse it
-				/// </summary>
-				/// <param name="request">Request HTTP headers</param>
-				/// <param name="body">Request HTTP body</param>
-        public static Dictionary<string, string> HandleDataFromRequest(RESTBot.Server.RequestHeaders request, string body)
-        {
-            Dictionary<string, string> ret = new Dictionary<string, string>();
-            string content_type = "";
-            foreach (Server.HeaderLine line in request.HeaderLines)
-            {
-                if (line.Key.ToLower() == "content-type")
-                {
-                    content_type = line.Value.ToLower();
-                }
-            }
-						DebugUtilities.WriteDebug("HandleDataFromRequest; body is: '" + body + "'");
-            if (content_type == "text/xml" || content_type == "xml")
-            {
-                // make it a string
-                System.IO.MemoryStream ms = new System.IO.MemoryStream(Encoding.UTF8.GetBytes(body));
-                // Woot, XML parsing
-                System.Xml.XmlReader r = System.Xml.XmlReader.Create(ms);
-                r.Read(); // read the restbotmessage node
-                r.Read(); // Advance to the next node
-                while (!r.EOF)
-                {
-                    string v = r.ReadString();
-                    if (v != "")
-                    {
-                        if (!ret.ContainsKey(r.Name))
-                            ret.Add(r.Name, v);
-                        else
-                            ret[r.Name] = v;
-                    }
-                    r.Read();
-                }
-            }
-            else //Parse it like a normal POST
-            {
-                //Then do the split
-								//Program.debug("Post - " + body);
-                string[] ampsplit = body.Split("&".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                //There's no body? Return.
-                if (ampsplit.Length == 0)
-                    return ret;
-                foreach (string pair in ampsplit)
-                {
-                    string[] eqsplit = pair.Split("=".ToCharArray(), 2);
-                    if (eqsplit.Length == 1)
-                    {
-                        if (ret.ContainsKey(eqsplit[0]))
-                            ret[eqsplit[0]] = "";
-                        else
-                            ret.Add(eqsplit[0], "");
-                    }
-                    else
-                    {
-                        if (ret.ContainsKey(eqsplit[0]))
-                            ret[eqsplit[0]] = eqsplit[1];
-                        else
-                            ret.Add(eqsplit[0], eqsplit[1]);
-                    }
-                }
-            }
-            return ret;
-        }
-        #endregion // Static Junk
+      lock (Plugins)
+      {
+        if (!Plugins.ContainsKey(Plugin.MethodName))
+          Plugins.Add(Plugin.MethodName, Plugin);
+      }
+    }
 
-        #region SomeNewLoginCode
-        public struct LoginReply
-        {
-            public bool wasFatal;
-            public string xmlReply;
-        }
-        #endregion // SomeNewLoginCode
+		/// <summary>List of all possible plugin definitions</summary>
+		static List<Type> StatefulPluginDefinitions = new List<Type>();
 
+		/// <summary>
+		/// StatefulPlugins stuff
+		/// </summary>
+		/// <param name="defn">List of plugin definitions</param>
+    public static void AddStatefulPluginDefinition(Type defn)
+    {
+      lock (StatefulPluginDefinitions)
+      {
+        DebugUtilities.WriteDebug("Plugin Def: " + defn.FullName);
+        if (defn.IsSubclassOf(typeof(StatefulPlugin)))
+          StatefulPluginDefinitions.Add(defn);
+      }
+    }
+
+		/// <summary>
+		/// Get the data from the request and parse it
+		/// </summary>
+		/// <param name="request">Request HTTP headers</param>
+		/// <param name="body">Request HTTP body</param>
+    public static Dictionary<string, string> HandleDataFromRequest(RESTBot.Server.RequestHeaders request, string body)
+    {
+      Dictionary<string, string> ret = new Dictionary<string, string>();
+      string content_type = "";
+      foreach (Server.HeaderLine line in request.HeaderLines)
+      {
+        if (line.Key.ToLower() == "content-type")
+        {
+        	content_type = line.Value.ToLower();
+        }
+      }
+			DebugUtilities.WriteDebug("HandleDataFromRequest; body is: '" + body + "'");
+      if (content_type == "text/xml" || content_type == "xml")
+      {
+        // make it a string
+        System.IO.MemoryStream ms = new System.IO.MemoryStream(Encoding.UTF8.GetBytes(body));
+        // Woot, XML parsing
+        System.Xml.XmlReader r = System.Xml.XmlReader.Create(ms);
+        r.Read(); // read the restbotmessage node
+        r.Read(); // Advance to the next node
+        while (!r.EOF)
+        {
+          string v = r.ReadString();
+          if (v != "")
+          {
+            if (!ret.ContainsKey(r.Name))
+              ret.Add(r.Name, v);
+            else
+              ret[r.Name] = v;
+          }
+          r.Read();
+        }
+      }
+      else // Parse it like a normal POST
+      {
+        // Then do the split
+				// Program.debug("Post - " + body);
+        string[] ampsplit = body.Split("&".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+        // There's no body? Return.
+        if (ampsplit.Length == 0)
+          return ret;
+        foreach (string pair in ampsplit)
+        {
+          string[] eqsplit = pair.Split("=".ToCharArray(), 2);
+          if (eqsplit.Length == 1)
+          {
+            if (ret.ContainsKey(eqsplit[0]))
+              ret[eqsplit[0]] = "";
+            else
+              ret.Add(eqsplit[0], "");
+          }
+          else
+          {
+            if (ret.ContainsKey(eqsplit[0]))
+              ret[eqsplit[0]] = eqsplit[1];
+            else
+              ret.Add(eqsplit[0], eqsplit[1]);
+          }
+        }
+      }
+      return ret;
+    }
+    #endregion // Static Junk
+
+    #region SomeNewLoginCode
+		/// <summary>Reply for the new login code</summary>
+    public struct LoginReply
+    {
+      public bool wasFatal;		/// <summary>set to true if the error was fatal; this is necessary because we may get 'unknown' errors that aren't fatal and thus allows the connection to proceed. </summary>
+      public string xmlReply;	/// <summary>Login reply message from grid, XML-encoded</summary>
+    }
+    #endregion // SomeNewLoginCode
+
+		/// <summary>All possible connection status</summary>
     public enum Status
 		{
 			Offline,
@@ -151,26 +160,26 @@ namespace RESTBot
 
 		private const string VERSION = "8.3.1";
 
-		public string First;
-    public string Last;
-    public string MD5Password;
+		public string First;						/// <summary>Avatar first name</summary>
+    public string Last;							/// <summary>Avatar last name</summary>
+    public string MD5Password;			/// <summary>Avatar password, MD5-encoded</summary>
 
-    public GridClient Client;
-    public Status myStatus;
-    public UUID sessionid;
+    public GridClient Client;				/// <summary>LibreMetaverse grid client, i.e. this app</summary>
+    public Status myStatus;					/// <summary>Current bot's connection status</summary>
+    public UUID sessionid;					/// <summary>Session ID for the current bot (it's an UUID)</summary>
 
 		private DateTime uptime = new DateTime();
 
 		private readonly Dictionary<string, StatefulPlugin> StatefulPlugins;
 
 		private readonly System.Timers.Timer ReloginTimer;
-		public delegate void BotStatusCallback(UUID Session, Status status);
-		public event BotStatusCallback OnBotStatus;
+		public delegate void BotStatusCallback(UUID Session, Status status);	/// <summary>Callback for the bot status</summary>
+		public event BotStatusCallback OnBotStatus;	/// <summary>Event called when requesting the bot status</summary>
 
     private System.Timers.Timer updateTimer;
 
 		/// <summary>
-		/// Main entry point for logging in with a bot
+		/// Main entry point for logging in with a bot.
 		/// </summary>
 		/// <param name="session">Current session UUID</param>
 		/// <param name="f">Login first name</param>
@@ -178,262 +187,288 @@ namespace RESTBot
 		/// <param name="p">MD5-encoded password</param>
     public RestBot(UUID session, string f, string l, string p)
     {
-        //setting up some class variables
-        sessionid = session;
-				myStatus = Status.Offline;
-        Client = new GridClient();
-        First = f;
-        Last = l;
-        MD5Password = p;
-				uptime = DateTime.Now;
-        ReloginTimer = new System.Timers.Timer();
-        ReloginTimer.Elapsed += new ElapsedEventHandler(ReloginTimer_Elapsed);
-        //Some callbacks..
-				DebugUtilities.WriteDebug(session.ToString() + " Initializing callbacks");
-        // Client.Network.OnDisconnected += new NetworkManager.DisconnectedCallback(Network_OnDisconnected);
-        Client.Network.Disconnected += Network_OnDisconnected; // new syntax
+      //setting up some class variables
+      sessionid = session;
+			myStatus = Status.Offline;
+      Client = new GridClient();
+      First = f;
+      Last = l;
+      MD5Password = p;
+			uptime = DateTime.Now;
+      ReloginTimer = new System.Timers.Timer();
+      ReloginTimer.Elapsed += new ElapsedEventHandler(ReloginTimer_Elapsed);
+      // Some callbacks..
+			DebugUtilities.WriteDebug(session.ToString() + " Initializing callbacks");
+      // Client.Network.OnDisconnected += new NetworkManager.DisconnectedCallback(Network_OnDisconnected);
+      Client.Network.Disconnected += Network_OnDisconnected; // new syntax
 
-        // Timer used to update an active plugin.
-        updateTimer = new System.Timers.Timer(500);
-        updateTimer.Elapsed += new System.Timers.ElapsedEventHandler(updateTimer_Elapsed);
+      // Timer used to update an active plugin.
+      updateTimer = new System.Timers.Timer(500);
+      updateTimer.Elapsed += new System.Timers.ElapsedEventHandler(updateTimer_Elapsed);
 
-        //Initialize StatefulPlugins
-				DebugUtilities.WriteDebug(session.ToString() + " Initializing plugins");
-        StatefulPlugins = new Dictionary<string, StatefulPlugin>();
-        foreach (Type t in RestBot.StatefulPluginDefinitions)
-        {
-            ConstructorInfo info = t.GetConstructor(Type.EmptyTypes);
-            StatefulPlugin sp = (StatefulPlugin)info.Invoke(new object[0]);
-            //Add it to the dictionary
-            RegisterStatefulPlugin(sp.MethodName, sp);
-						DebugUtilities.WriteDebug(session.ToString() + " * added " + sp.MethodName);
-            //Initialize all the handlers, etc
-            sp.Initialize(this);
-        }
-        updateTimer.Start();
+      // Initialize StatefulPlugins
+			DebugUtilities.WriteDebug(session.ToString() + " Initializing plugins");
+      StatefulPlugins = new Dictionary<string, StatefulPlugin>();
+      foreach (Type t in RestBot.StatefulPluginDefinitions)
+      {
+        ConstructorInfo info = t.GetConstructor(Type.EmptyTypes);
+        StatefulPlugin sp = (StatefulPlugin)info.Invoke(new object[0]);
+        // Add it to the dictionary
+        RegisterStatefulPlugin(sp.MethodName, sp);
+				DebugUtilities.WriteDebug(session.ToString() + " * added " + sp.MethodName);
+        // Initialize all the handlers, etc
+        sp.Initialize(this);
+      }
+      updateTimer.Start();
     }
 
+		/// <summary>
+		/// Called once the timer for the login reconnect event finishes.
+		/// </summary>
+		/// <param name="sender">Sender object</param>
+		/// <param name="e">Arguments for the elapsed event</param>
     void ReloginTimer_Elapsed(object sender, ElapsedEventArgs e)
     {
         ReloginTimer.Stop();
-        DebugUtilities.WriteInfo(sessionid.ToString() + " relogging..");
+        DebugUtilities.WriteInfo(sessionid.ToString() + " relogging...");
         Login();
         //This is where we can handle relogin failures, too.
     }
 
     private void updateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
-        foreach (StatefulPlugin sp in StatefulPlugins.Values)
+      foreach (StatefulPlugin sp in StatefulPlugins.Values)
+      {
+        if (sp.Active)
         {
-            if (sp.Active)
-            {
-                sp.Think();
-            }
+          sp.Think();
         }
+      }
     }
 
-    // rewrote to show message
+		/// <summary>
+		/// Callback for when this bot gets disconnected, attempting to connect again in 5 minutes.
+		/// </summary>
+		/// <param name="sender">Sender object</param>
+		/// <param name="e">Arguments for the disconnected event</param>
+    /// <remark>rewrote to show message</remark>
     void Network_OnDisconnected(object sender, DisconnectedEventArgs e)
     {
-        if(e.Reason != NetworkManager.DisconnectType.ClientInitiated)
-        {
-            myStatus = Status.Reconnecting;
-            DebugUtilities.WriteWarning(sessionid.ToString() + " was disconnected (" + e.Message.ToString() + "), but I'm logging back in again in 5 minutes.");
-            ReloginTimer.Stop();
-            ReloginTimer.Interval = 5 * 60 * 1000;
-            ReloginTimer.Start();
-        }
+      if(e.Reason != NetworkManager.DisconnectType.ClientInitiated)
+      {
+        myStatus = Status.Reconnecting;
+        DebugUtilities.WriteWarning(sessionid.ToString() + " was disconnected (" + e.Message.ToString() + "), but I'm logging back in again in 5 minutes.");
+        ReloginTimer.Stop();
+        ReloginTimer.Interval = 5 * 60 * 1000;
+        ReloginTimer.Start();
+      }
     }
 
+		/// <summary>
+		/// Register a stateful RESTbot plugin.
+		/// </summary>
+		/// <param="method">Method name to register</param>
+		/// <param="sp">Stateful plugin object</param>
     public void RegisterStatefulPlugin(string method, StatefulPlugin sp)
     {
-        StatefulPlugins.Add(method, sp);
+      StatefulPlugins.Add(method, sp);
     }
 
+		/// <summary>
+		/// Login block
+		/// </summary>
     public LoginReply Login()
     {
-        LoginReply response = new LoginReply();
+      LoginReply response = new LoginReply();
 
-        DebugUtilities.WriteSpecial("Login block was called in Login()");
-        if (Client.Network.Connected)
+      DebugUtilities.WriteSpecial("Login block was called in Login()");
+      if (Client.Network.Connected)
+      {
+        DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
+        return new LoginReply();
+      }
+
+      //Client.Network.LoginProgress +=
+      //    delegate(object sender, LoginProgressEventArgs e)
+      //    {
+      //        DebugUtilities.WriteDebug(String.Format("Login {0}: {1}", e.Status, e.Message));
+
+      //        if (e.Status == LoginStatus.Success)
+      //        {
+      //            DebugUtilities.WriteSpecial("Logged in successfully");
+      //            myStatus = Status.Connected;
+      //            response.wasFatal = false;
+      //            response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
+      //        }
+      //        else if (e.Status == LoginStatus.Failed)
+      //        {
+      //            DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
+      //            response.wasFatal = true;
+      //            response.xmlReply = "<error></error>";
+      //        }
+      //    };
+
+      // Optimize the throttle
+      Client.Throttle.Wind = 0;
+      Client.Throttle.Cloud = 0;
+      Client.Throttle.Land = 1000000;
+      Client.Throttle.Task = 1000000;
+      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
+
+      DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
+
+      LoginParams loginParams = Client.Network.DefaultLoginParams(
+        First, Last, MD5Password, "RestBot", VERSION);
+
+      if (Client.Network.Login(loginParams))
+      {
+        DebugUtilities.WriteSpecial("Logged in successfully");
+        myStatus = Status.Connected;
+        response.wasFatal = false;
+        response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
+  		}
+      else
+      {
+        DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
+        switch (Client.Network.LoginErrorKey)
         {
-            DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
-            return new LoginReply();
-        }
-
-        //Client.Network.LoginProgress +=
-        //    delegate(object sender, LoginProgressEventArgs e)
-        //    {
-        //        DebugUtilities.WriteDebug(String.Format("Login {0}: {1}", e.Status, e.Message));
-
-        //        if (e.Status == LoginStatus.Success)
-        //        {
-        //            DebugUtilities.WriteSpecial("Logged in successfully");
-        //            myStatus = Status.Connected;
-        //            response.wasFatal = false;
-        //            response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
-        //        }
-        //        else if (e.Status == LoginStatus.Failed)
-        //        {
-        //            DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
-        //            response.wasFatal = true;
-        //            response.xmlReply = "<error></error>";
-        //        }
-        //    };
-
-        // Optimize the throttle
-        Client.Throttle.Wind = 0;
-        Client.Throttle.Cloud = 0;
-        Client.Throttle.Land = 1000000;
-        Client.Throttle.Task = 1000000;
-        Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
-
-        DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
-
-        LoginParams loginParams = Client.Network.DefaultLoginParams(
-                First, Last, MD5Password, "RestBot", VERSION);
-
-        if (Client.Network.Login(loginParams))
-        {
-            DebugUtilities.WriteSpecial("Logged in successfully");
-            myStatus = Status.Connected;
+          case "connect":
+          case "key":
+          case "disabled":
+            response.wasFatal = true;
+            response.xmlReply = "<error fatal=\"true\">" + Client.Network.LoginMessage + "</error>";
+            break;
+          case "presence":
+          case "timed out":
+          case "god":
+            DebugUtilities.WriteWarning("Nonfatal error while logging in.. this may be normal");
             response.wasFatal = false;
-            response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
+            response.xmlReply = "<error fatal=\"false\">" + Client.Network.LoginMessage + "</error><retry>10</retry>\n<session_id>" + sessionid + "</session_id>";
+
+            DebugUtilities.WriteSpecial("Relogin attempt will be made in 10 minutes");
+            ReloginTimer.Interval = 10 * 60 * 1000; //10 minutes
+            ReloginTimer.Start();
+            break;
+          default:
+            DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN: " + Client.Network.LoginErrorKey);
+            response.wasFatal = true;
+            response.xmlReply = "<error fatal=\"true\">Unknown error has occurred.</error>";
+            break;
         }
-        else
-        {
-            DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
-            switch (Client.Network.LoginErrorKey)
-            {
-                case "connect":
-                case "key":
-                case "disabled":
-                    response.wasFatal = true;
-                    response.xmlReply = "<error fatal=\"true\">" + Client.Network.LoginMessage + "</error>";
-                    break;
-                case "presence":
-                case "timed out":
-                case "god":
-                    DebugUtilities.WriteWarning("Nonfatal error while logging in.. this may be normal");
-                    response.wasFatal = false;
-                    response.xmlReply = "<error fatal=\"false\">" + Client.Network.LoginMessage + "</error><retry>10</retry>\n<session_id>" + sessionid + "</session_id>";
 
-                    DebugUtilities.WriteSpecial("Relogin attempt will be made in 10 minutes");
-                    ReloginTimer.Interval = 10 * 60 * 1000; //10 minutes
-                    ReloginTimer.Start();
-                    break;
-                default:
-                    DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN: " + Client.Network.LoginErrorKey);
-                    response.wasFatal = true;
-                    response.xmlReply = "<error fatal=\"true\">Unknown error has occurred.</error>";
-                    break;
-            }
+        if (response.wasFatal == false) myStatus = Status.Reconnecting;
+      }
+      //Client.Network.BeginLogin(loginParams);
+      return response;
+	  }
 
-            if (response.wasFatal == false) myStatus = Status.Reconnecting;
-        }
-        //Client.Network.BeginLogin(loginParams);
-        return response;
-    }
-
+		/// <summary>
+		/// Old login block
+		/// </summary>
     public LoginReply LoginOLD()
     {
-        DebugUtilities.WriteSpecial("Login block was called");
-        if (Client.Network.Connected)
+      DebugUtilities.WriteSpecial("(old) Login block was called");
+      if (Client.Network.Connected)
+      {
+        DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
+        return new LoginReply();
+      }
+
+      ReloginTimer.Stop(); //to stop any relogin timers
+
+      myStatus = Status.LoggingIn;
+      //Set up some settings
+      //Client.Settings.DEBUG = Program.config.debug.slDebug; //obsolete setting?
+      Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
+      Client.Settings.MULTIPLE_SIMS = false; //not for now.
+      Client.Settings.SEND_PINGS = true;
+      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
+      Client.Throttle.Total = Program.config.networking.throttle;
+
+			DebugUtilities.WriteDebug("Login URI: <" + Client.Settings.LOGIN_SERVER +">");
+
+      LoginReply response = new LoginReply();
+      string start = "";
+      if (Program.config.location.startSim.Trim() != "") start = OpenMetaverse.NetworkManager.StartLocation(Program.config.location.startSim, Program.config.location.x, Program.config.location.y, Program.config.location.z);
+      else start = "last";
+
+      if (Client.Network.Login(First, Last, MD5Password, "RESTBot", start, "Jesse Malthus / Pleiades Consulting"))
+      {
+        DebugUtilities.WriteSpecial("Logged in successfully");
+        myStatus = Status.Connected;
+        response.wasFatal = false;
+        response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
+      }
+      else
+      {
+        DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
+        switch (Client.Network.LoginErrorKey)
         {
-            DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
-            return new LoginReply();
-        }
-
-        ReloginTimer.Stop(); //to stop any relogin timers
-
-        myStatus = Status.LoggingIn;
-        //Set up some settings
-        //Client.Settings.DEBUG = Program.config.debug.slDebug; //obsolete setting?
-        Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
-        Client.Settings.MULTIPLE_SIMS = false; //not for now.
-        Client.Settings.SEND_PINGS = true;
-        Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
-        Client.Throttle.Total = Program.config.networking.throttle;
-
-				DebugUtilities.WriteDebug("Login URI: <" + Client.Settings.LOGIN_SERVER +">");
-
-        LoginReply response = new LoginReply();
-        string start = "";
-        if (Program.config.location.startSim.Trim() != "") start = OpenMetaverse.NetworkManager.StartLocation(Program.config.location.startSim, Program.config.location.x, Program.config.location.y, Program.config.location.z);
-        else start = "last";
-
-        if (Client.Network.Login(First, Last, MD5Password, "RESTBot", start, "Jesse Malthus / Pleiades Consulting"))
-        {
-            DebugUtilities.WriteSpecial("Logged in successfully");
-            myStatus = Status.Connected;
+          case "connect":
+          case "key":
+          case "disabled":
+            response.wasFatal = true;
+            response.xmlReply = "<error fatal=\"true\">" + Client.Network.LoginMessage + "</error>";
+            break;
+          case "presence":
+          case "timed out":
+          case "god":
+            DebugUtilities.WriteWarning("Nonfatal error while logging in.. this may be normal");
             response.wasFatal = false;
-            response.xmlReply = "<success><session_id>" + sessionid.ToString() + "</session_id></success>";
-        }
-        else
-        {
-            DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
-            switch (Client.Network.LoginErrorKey)
-            {
-                case "connect":
-                case "key":
-                case "disabled":
-                    response.wasFatal = true;
-                    response.xmlReply = "<error fatal=\"true\">" + Client.Network.LoginMessage + "</error>";
-                    break;
-                case "presence":
-                case "timed out":
-                case "god":
-                    DebugUtilities.WriteWarning("Nonfatal error while logging in.. this may be normal");
-                    response.wasFatal = false;
-                    response.xmlReply = "<error fatal=\"false\">" + Client.Network.LoginMessage + "</error><retry>10</retry>\n<session_id>" + sessionid + "</session_id>";
+            response.xmlReply = "<error fatal=\"false\">" + Client.Network.LoginMessage + "</error><retry>10</retry>\n<session_id>" + sessionid + "</session_id>";
 
-                    DebugUtilities.WriteSpecial("Relogin attempt will be made in 10 minutes");
-                    ReloginTimer.Interval = 10 * 60 * 1000; //10 minutes
-                    ReloginTimer.Start();
-                    break;
-                default:
-                    DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN: : " + Client.Network.LoginErrorKey);
-                    response.wasFatal = true;
-                    response.xmlReply = "<error fatal=\"true\">Unknown error has occurred.</error>";
-                    break;
-            }
-
-            if (response.wasFatal == false) myStatus = Status.Reconnecting;
+            DebugUtilities.WriteSpecial("Relogin attempt will be made in 10 minutes");
+            ReloginTimer.Interval = 10 * 60 * 1000; //10 minutes
+            ReloginTimer.Start();
+            break;
+          default:
+            DebugUtilities.WriteError(sessionid.ToString() + " UNKNOWN ERROR ATTEMPTING TO LOGIN: : " + Client.Network.LoginErrorKey);
+            response.wasFatal = true;
+            response.xmlReply = "<error fatal=\"true\">Unknown error has occurred.</error>";
+            break;
         }
 
-        //yay return
-        return response;
+        if (response.wasFatal == false) myStatus = Status.Reconnecting;
+      }
+
+      //yay return
+      return response;
     }
 
+		/// <summary>
+		/// Checks for a method in the list of registered plugins, and, if found, executes it.
+		/// </summary>
+		/// <param name="Parameters"></param>
+		/// <param name="parts"></param>
     public string DoProcessing(Dictionary<string,string> Parameters, string[] parts)
     {
-        string Method = parts[0];
-				string debugparams = null;
-				foreach (KeyValuePair<string, string> kvp in Parameters) {
-					debugparams = debugparams + "[ " + kvp.Key + "=" + kvp.Value + "] ";
-				}
-				DebugUtilities.WriteDebug(sessionid + "Method - " + Method + " Parameters - " + debugparams);
-        //Actual processing
-        if (Plugins.ContainsKey(Method))
-        {
-        	return Plugins[Method].Process(this, Parameters);
-        }
-        //Process the stateful plugins
-        else if (StatefulPlugins.ContainsKey(Method))
-        {
-        	return StatefulPlugins[Method].Process(this, Parameters);
-        }
-				else if ( Method == "stat" )
-				{
-					string response = "<name>" + Client.Self.FirstName + " " + Client.Self.LastName + "</name>\n";
-					response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>\n";
-          return response;
-				}
-				else if ( Method == "status" )
-				{
-					return("<status>" + myStatus.ToString() + "</status>");
-				}
-        return ("<error>novalidplugin</error>");
+      string Method = parts[0];
+			string debugparams? = null;		// must allow null (gwyneth 20220109)
+			foreach (KeyValuePair<string, string> kvp in Parameters) {
+				debugparams = debugparams + "[ " + kvp.Key + "=" + kvp.Value + "] ";
+			}
+			DebugUtilities.WriteDebug(sessionid + "Method - " + Method + " Parameters - " + debugparams);
+      //Actual processing
+      if (Plugins.ContainsKey(Method))
+      {
+      	return Plugins[Method].Process(this, Parameters);
+      }
+      //Process the stateful plugins
+      else if (StatefulPlugins.ContainsKey(Method))
+      {
+      	return StatefulPlugins[Method].Process(this, Parameters);
+      }
+			else if ( Method == "stat" )
+			{
+				string response = "<name>" + Client.Self.FirstName + " " + Client.Self.LastName + "</name>\n";
+				response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>\n";
+        return response;
+			}
+			else if ( Method == "status" )
+			{
+				return("<status>" + myStatus.ToString() + "</status>");
+			}
+      return ("<error>novalidplugin</error>");
     }
 	}
 }
