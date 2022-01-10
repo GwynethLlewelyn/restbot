@@ -32,99 +32,110 @@ using System.Xml.Serialization;
 
 namespace RESTBot.XMLConfig
 {
+	/// <summary>
+	/// Configuration class designed for the `bots array found in the xml config file
+	/// </summary>
+	/// <remarks>To find a copy of this class, see the Configuration class</remarks>
+
+	[XmlRoot("restbot")]
+  public class Configuration
+  {
+    [XmlElement("networking")]
+    public NetworkConfig networking = new NetworkConfig();
+    [XmlElement("debug")]
+    public DebugConfig debug = new DebugConfig();
+    [XmlElement("location")]
+    public StartLocationConfig location = new StartLocationConfig();
+    [XmlElement("security")]
+    public SecurityConfig security = new SecurityConfig();
+
 		/// <summary>
-		/// Configuration class designed for the `bots array found in the xml config file
+		/// Load the configuration file (if it exists).
 		/// </summary>
-		/// <remarks>To find a copy of this class, see the Configuration class</remarks>
-
-		[XmlRoot("restbot")]
-    public class Configuration
+		/// <param name="configuration_file">path to the configuration file</param>
+    public static Configuration? LoadConfiguration(string configuration_file)
     {
-        [XmlElement("networking")]
-        public NetworkConfig networking = new NetworkConfig();
-        [XmlElement("debug")]
-        public DebugConfig debug = new DebugConfig();
-        [XmlElement("location")]
-        public StartLocationConfig location = new StartLocationConfig();
-        [XmlElement("security")]
-        public SecurityConfig security = new SecurityConfig();
-
-        public static Configuration LoadConfiguration(string configuration_file)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Configuration));
-						FileStream? fileStream = null;
-						try
-            {
-                 fileStream = new FileStream(configuration_file, FileMode.Open);
-            }
-            catch(Exception e)
-            {
-                DebugUtilities.WriteError("Could not open configuration file!");
-                DebugUtilities.WriteError("\t" + e.Message);
-                Environment.Exit(1);
-            }
-            try
-            {
-                fileStream.Seek(0, SeekOrigin.Begin);
-                return (Configuration)serializer.Deserialize(fileStream);
-            }
-            catch (Exception e)
-            {
-                DebugUtilities.WriteError("Could not parse XML file!");
-                DebugUtilities.WriteError("\t" + e.Message);
-                Environment.Exit(1);
-            }
-            return null;
-        }
-
+      XmlSerializer? serializer = new XmlSerializer(typeof(Configuration));
+			FileStream? fileStream = null;
+			try
+      {
+        fileStream = new FileStream(configuration_file, FileMode.Open);
+      }
+      catch(Exception e)
+      {
+        DebugUtilities.WriteError("Could not open configuration file!");
+        DebugUtilities.WriteError("\t" + e.Message);
+        Environment.Exit(1);
+      }
+      try
+      {
+        fileStream.Seek(0, SeekOrigin.Begin);
+        return (Configuration)serializer.Deserialize(fileStream);
+      }
+      catch (Exception e)
+      {
+        DebugUtilities.WriteError("Could not parse XML file!");
+        DebugUtilities.WriteError("\t" + e.Message);
+        Environment.Exit(1);
+      }
+      return null;
     }
+  }
 }
 
 namespace RESTBot.XMLConfig
 {
-    public class NetworkConfig
-    {
-        [XmlElement("ip")]
-        public string ip = "0.0.0.0";
-        [XmlElement("port")]
-        public int port = 9080;
-        [XmlElement("loginuri")]
-        public string loginuri = "https://login.agni.lindenlab.com/cgi-bin/login.cgi"; //for special login url. You gotta have a compatible libsl version though!!
-        [XmlElement("throttle")]
-        public float throttle = 1572864.0f;
+	/// <summary>Class to define the network configuration</summary>
+	/// <remark>It sets a few reasonable defaults</remark>
+  public class NetworkConfig
+  {
+    [XmlElement("ip")]
+    public string ip = "0.0.0.0";
+    [XmlElement("port")]
+    public int port = 9080;
+    [XmlElement("loginuri")]
+    public string loginuri = "https://login.agni.lindenlab.com/cgi-bin/login.cgi"; //for special login url. You gotta have a compatible libsl version though!!
+    [XmlElement("throttle")]
+    public float throttle = 1572864.0f;
 		[XmlElement("webapi-url")]
-		public string backendURL = "https://localhost/actorbot/pipe.php";
+		public string backendURL = "https://localhost/actorbot/pipe.php"; // What _is_ this!? It's not included anywhere... (gwyneth 20220109)
 	}
 }
 
+/// <summary>Class to configure the start location</summary>
 public class StartLocationConfig
 {
-    //TODO: Make x,y,z floats but round them off when using them (this is so the parser can read a decimal instead of errroring out)
+  //TODO: Make x,y,z floats but round them off when using them (this is so the parser can read a decimal instead of errroring out)
 
-    [XmlElement("sim")]
-    public string startSim = "strace island";
-    [XmlElement("x")]
-    public int x = 128;
-    [XmlElement("y")]
-    public int y = 128;
-    [XmlElement("z")]
-    public int z = 128;
+  [XmlElement("sim")]
+  public string startSim = "strace island"; // 'Ahern' ought to be a better default... (gwyneth 20220109)
+  [XmlElement("x")]
+  public int x = 128;
+  [XmlElement("y")]
+  public int y = 128;
+  [XmlElement("z")]
+  public int z = 128;	/// 20 or 30 ought to be more reasonable starting points, since that's the level that water is set (gwyneth 20220109)
 }
 
+/// <summary>Class to deal with debugging</summary>
+/// <remark>
+///   <para>[Original comment:] itty bitty file - can be expanded onto later</para>
+///		<para>Note that the DebugUtilities class checks if the <code>restbotDebug</code> variable is set, falling back to hard-coded #defines if not (gwyneth 20220109)</para>
+///  </remark>
 public class DebugConfig
 {
-    //itty bitty file - can be expanded onto later
-
-    [XmlElement("restbot")]
-    public bool restbotDebug = false;
-    [XmlElement("libsl")]
-    public bool slDebug = true;
+  [XmlElement("restbot")]
+  public bool restbotDebug = false;
+  [XmlElement("libsl")]
+  public bool slDebug = true;
 }
 
+/// <summary>Class to deal with security configurations</summary>
+/// <remark>Password MUST be changed when in production! (gwyneth 20220109)</remark>
 public class SecurityConfig
 {
-    [XmlElement("hostnamelock")]
-    public bool hostnameLock = false;
-    [XmlElement("serverpassword")]
-    public string serverPass = "pass";
+  [XmlElement("hostnamelock")]
+  public bool hostnameLock = false;
+  [XmlElement("serverpassword")]
+  public string serverPass = "pass";	// Change me!
 }

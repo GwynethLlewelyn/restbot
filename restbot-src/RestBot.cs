@@ -313,7 +313,7 @@ namespace RESTBot
       Client.Throttle.Cloud = 0;
       Client.Throttle.Land = 1000000;
       Client.Throttle.Task = 1000000;
-      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
+      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri ?? RESTBot.XMLConfig.NetworkConfig.loginuri;
 
       DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
 
@@ -365,6 +365,8 @@ namespace RESTBot
 		/// <summary>
 		/// Old login block
 		/// </summary>
+		/// <remark>Obsolete and superceded by Login()</remark>
+		[Obsolete("Please use Login() instead.")]
     public LoginReply LoginOLD()
     {
       DebugUtilities.WriteSpecial("(old) Login block was called");
@@ -382,7 +384,7 @@ namespace RESTBot
       Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
       Client.Settings.MULTIPLE_SIMS = false; //not for now.
       Client.Settings.SEND_PINGS = true;
-      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;
+      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri ?? RESTBot.XMLConfig.NetworkConfig.loginuri;
       Client.Throttle.Total = Program.config.networking.throttle;
 
 			DebugUtilities.WriteDebug("Login URI: <" + Client.Settings.LOGIN_SERVER +">");
@@ -443,7 +445,7 @@ namespace RESTBot
     public string DoProcessing(Dictionary<string,string> Parameters, string[] parts)
     {
       string Method = parts[0];
-			string debugparams? = null;		// must allow null (gwyneth 20220109)
+			string? debugparams = null;		// must allow null (gwyneth 20220109)
 			foreach (KeyValuePair<string, string> kvp in Parameters) {
 				debugparams = debugparams + "[ " + kvp.Key + "=" + kvp.Value + "] ";
 			}

@@ -117,7 +117,7 @@ namespace RESTBot
 #endif
       try
       {
-        if (Program.config.debug.restbotDebug)
+        if (Program.config.debug.restbotDebug is not null)
 					restbotLog.Debug(message);
         Output("[DEBUG] " + message, ConsoleColor.Gray);
       }
@@ -144,7 +144,13 @@ namespace RESTBot
 #endif
     /// <example>DebugUtilities.WriteWarning("Could not find custom configuration file, using default");</example>
     /// <remarks>This only outputs colored version on console! Will prepend "[WARN] " to message</remarks>
-    public static void WriteWarning(string message)
+    public static void WriteWarning(string message
+#if VERBOSE_MESSAGES
+			, [CallerMemberName] string callingMethod = "",
+			[CallerFilePath] string callingFilePath = "",
+			[CallerLineNumber] int callingFileLineNumber = 0
+#endif
+		)
     {
 	#if VERBOSE_MESSAGES
 				message = message + "; from " + callingMethod + "(" + Path.GetFileName(callingFilePath) + ":" + callingFileLineNumber + ")";

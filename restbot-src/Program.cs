@@ -48,7 +48,7 @@ namespace RESTBot
 		/// <summary>Unknown (gwyneth 20220109)</summary>
     public DateTime LastAccessed;
 		/// <summary>Called when we need this bot's status</summary>
-    public RestBot.BotStatusCallback StatusCallback;
+    public RestBot.BotStatusCallback? StatusCallback;	// possibly nullable (gwyneth 20220109)
 		/// <summary>Thread this bot is running on.</summary>
     public Thread? BotThread;	// possibly nullable (gwyneth 20220109)
   }
@@ -118,7 +118,7 @@ namespace RESTBot
         {
           if (t.IsSubclassOf(typeof(RestPlugin)))
           {
-            ConstructorInfo info? = t.GetConstructor(Type.EmptyTypes);
+            ConstructorInfo? info = t.GetConstructor(Type.EmptyTypes);
 						if (info == null) {
 							DebugUtilities.WriteError("Couldn't get constructor for plugin!");
 						} else {
@@ -167,8 +167,8 @@ namespace RESTBot
       string Method = parts[0];
       /// <summary>Process the request params from POST, URL</summary>
       Dictionary<string, string> Parameters = RestBot.HandleDataFromRequest(headers, body);
-      string debugparams = null;
-      string debugparts = null;
+      string? debugparams = null;
+      string? debugparts = null;
       foreach (KeyValuePair<string, string> kvp in Parameters)
       {
         debugparams = debugparams + "[" + kvp.Key + "=" + kvp.Value + "] ";
@@ -225,7 +225,7 @@ namespace RESTBot
         }
         else
         {
-          String result = null;
+          String? result = null;
           if (parts.Length < 2)
           {
             result = "Missing a part.";
@@ -285,7 +285,7 @@ namespace RESTBot
       }
 
       //YEY PROCESSING
-      RestBot r = Sessions[sess].Bot;
+      RestBot? r = Sessions[sess].Bot;
       //Last accessed for plugins
       Sessions[sess].LastAccessed = DateTime.Now;
       //Pre-error checking
@@ -327,7 +327,9 @@ namespace RESTBot
       if (!Sessions.ContainsKey(key))
         return;
       Session s = Sessions[key];
-      s.Bot.OnBotStatus -= s.StatusCallback;
+			if (s.StatusCallback is not null) {
+      	s.Bot.OnBotStatus -= s.StatusCallback;
+			}
       s.Bot.Client.Network.Logout();
       Sessions.Remove(key);
     }
