@@ -30,6 +30,8 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Timers;
+// using RESTBot.XMLConfig; // should be redundant...
+
 namespace RESTBot
 {
 	/// <summary>Main class for all RESTbot-related methods</summary>
@@ -313,7 +315,7 @@ namespace RESTBot
       Client.Throttle.Cloud = 0;
       Client.Throttle.Land = 1000000;
       Client.Throttle.Task = 1000000;
-      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri ?? RESTBot.XMLConfig.NetworkConfig.loginuri;
+			Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri ?? RESTBot.XMLConfig.Configuration.defaultLoginURI;
 
       DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
 
@@ -384,7 +386,7 @@ namespace RESTBot
       Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
       Client.Settings.MULTIPLE_SIMS = false; //not for now.
       Client.Settings.SEND_PINGS = true;
-      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri ?? RESTBot.XMLConfig.NetworkConfig.loginuri;
+      Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri ?? RESTBot.XMLConfig.Configuration.defaultLoginURI;
       Client.Throttle.Total = Program.config.networking.throttle;
 
 			DebugUtilities.WriteDebug("Login URI: <" + Client.Settings.LOGIN_SERVER +">");

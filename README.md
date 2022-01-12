@@ -101,6 +101,10 @@ Note that, as said before, _I_ could not figure out how to pre-generate all proj
 
 It's basically the same as using the command-line tools under macOS; you can follow those instructions if you wish. These days, Homebrew also works under Linux, so the instructions would be the same; but possibly you will prefer to run your 'native' package manager, be it `apt` (Debian/Linux) or `yum` (Fedora, CentOS, RedHat) or whatever is fashionable these days. You'll have to check what versions of Mono are available; remember that you'll need a 'developer' edition, and don't forget to double-check that `msbuild` and `csc` (the Microsoft Roslyn C# compiler) comes as part of the package as well.
 
+Microsoft has excellent resources to help installing `dotnet` under the many Linux distros. For example, Ubuntu's instructions are [here](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu). You have several options available; personally, I've chosen to add the Microsoft repository so I can use `apt`. It works like a charm!
+
+Note that Microsoft does not explicitly tell that you should also get `nuget` using, say, `sudo apt install nuget` (once the Microsoft repository has been added as explained on the previous link). Once installed, just run `nuget restore` on the root directory holding the RESTbot sources, and Bob's your uncle.
+
 Sadly, at the time of writing, there is no Visual Studio desktop IDE for Linux. You can, however, use many of Microsoft's tools being called from the command line and integrate those in Visual Studio *Code*, which *is* available for Linux as well.
 
 Again, like under macOS, Microsoft's Roslyn compiler will generate a Linux-native executable which will be able to launch `RESTbot.dll`, without the need of using Mono (and that executable ought to be distro-agnostic and work under _all_ of them, naturally including Microsoft's own Linux distro). I've tested it within a x86 environment, but allegedly Microsoft also supports ARM. I _do_ have a Linux ARM box to do some testing with it as well, but I haven't gotten the time to do so.

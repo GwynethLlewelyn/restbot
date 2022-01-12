@@ -48,6 +48,7 @@ namespace RESTBot.XMLConfig
     public StartLocationConfig location = new StartLocationConfig();
     [XmlElement("security")]
     public SecurityConfig security = new SecurityConfig();
+		public static string defaultLoginURI = "https://login.agni.lindenlab.com/cgi-bin/login.cgi";
 
 		/// <summary>
 		/// Load the configuration file (if it exists).
@@ -94,7 +95,7 @@ namespace RESTBot.XMLConfig
     [XmlElement("port")]
     public int port = 9080;
     [XmlElement("loginuri")]
-    public string loginuri = "https://login.agni.lindenlab.com/cgi-bin/login.cgi"; //for special login url. You gotta have a compatible libsl version though!!
+    public string loginuri = Configuration.defaultLoginURI; //for special login url. You gotta have a compatible libsl version though!!
     [XmlElement("throttle")]
     public float throttle = 1572864.0f;
 		[XmlElement("webapi-url")]
