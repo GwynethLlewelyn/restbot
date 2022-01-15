@@ -8,7 +8,7 @@
 		<OutputPath>restbot-bin\</OutputPath>
 		<OutputType>Exe</OutputType>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<Version>8.1.4</Version>
+		<Version>8.1.5</Version>
 		<AssetsFolder>assets\</AssetsFolder>
 		<ApplicationIcon>$(AssetsFolder)images\RESTbot.ico</ApplicationIcon>
 		<PackageId>RESTbot</PackageId>
