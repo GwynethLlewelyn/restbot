@@ -25,7 +25,7 @@ using System.Linq;
 using System.Text;
 using OpenMetaverse;
 
-namespace RESTBot.restbot_plugins
+namespace RESTBot
 {
 		/// <summary>
 		/// Class to send messages to a channel in chat
