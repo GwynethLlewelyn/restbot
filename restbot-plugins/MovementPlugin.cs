@@ -30,7 +30,7 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-// movemeny functions; based on TestClient.exe code
+// movement functions; based on TestClient.exe code
 namespace RESTBot
 {
     // show current location
@@ -250,7 +250,11 @@ namespace RESTBot
         }
     } // end moveto
 
-    /// <summary>move to avatar location; parameters are sim, avatar</summary>
+    /// <summary>
+		/// Move to avatar location; parameters are sim, avatar
+		/// </summary>
+		/// <remarks>AvatarPositionPlugin just _returns_ the position of the target avatar,
+		/// but doesn't actually _move_ to it (gwyneth 20220120)</remarks>
     public class MoveToAvatarPlugin : StatefulPlugin
     {
         private UUID session;
@@ -333,7 +337,6 @@ namespace RESTBot
                 {
                     b.Client.Self.Movement.AlwaysRun = false;
                 }
-
 
                 lock (b.Client.Network.Simulators)
                 {

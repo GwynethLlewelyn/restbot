@@ -87,7 +87,7 @@ namespace RESTBot.XMLConfig
 namespace RESTBot.XMLConfig
 {
 	/// <summary>Class to define the network configuration</summary>
-	/// <remark>It sets a few reasonable defaults</remark>
+	/// <remarks>It sets a few reasonable defaults</remarks>
   public class NetworkConfig
   {
     [XmlElement("ip")]
@@ -119,10 +119,10 @@ public class StartLocationConfig
 }
 
 /// <summary>Class to deal with debugging</summary>
-/// <remark>
+/// <remarks>
 ///   <para>[Original comment:] itty bitty file - can be expanded onto later</para>
 ///		<para>Note that the DebugUtilities class checks if the <code>restbotDebug</code> variable is set, falling back to hard-coded #defines if not (gwyneth 20220109)</para>
-///  </remark>
+///  </remarks>
 public class DebugConfig
 {
   [XmlElement("restbot")]
@@ -132,7 +132,7 @@ public class DebugConfig
 }
 
 /// <summary>Class to deal with security configurations</summary>
-/// <remark>Password MUST be changed when in production! (gwyneth 20220109)</remark>
+/// <remarks>Password MUST be changed when in production! (gwyneth 20220109)</remarks>
 public class SecurityConfig
 {
   [XmlElement("hostnamelock")]

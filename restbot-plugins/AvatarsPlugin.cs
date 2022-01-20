@@ -1,4 +1,6 @@
 /*--------------------------------------------------------------------------------
+	Messages related to avatar information.
+
 	LICENSE:
 		This file is part of the RESTBot Project.
 
@@ -25,9 +27,11 @@ using OpenMetaverse.Packets;
 using System.Net;
 using System.Threading;
 
-// avatar info functions
 namespace RESTBot
 {
+	/// <summary>
+	/// Looks up an avatar name, based on its UUID (key2name).
+	/// </summary>
 	public class AvatarNameLookupPlugin : StatefulPlugin
 	{
 
@@ -36,11 +40,19 @@ namespace RESTBot
 
 		private UUID session;
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public AvatarNameLookupPlugin()
 		{
 			MethodName = "avatar_name";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -49,6 +61,13 @@ namespace RESTBot
 			// bot.Client.Avatars.OnAvatarNames += new AvatarManager.AvatarNamesCallback(Avatars_OnAvatarNames); // obsolete
 			bot.Client.Avatars.UUIDNameReply += Avatars_OnAvatarNames;
 		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the avatar key UUID to look up</param>
+		/// <returns>XML-encoded avatar name, if found</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID agentKey;
@@ -56,14 +75,14 @@ namespace RESTBot
 			try
 			{
 				bool check = false;
-				if ( Parameters.ContainsKey("key") ) {
+				if (Parameters.ContainsKey("key")) {
 					DebugUtilities.WriteDebug("TR - Attempting to parse from POST");
 					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out agentKey);
 					DebugUtilities.WriteDebug("TR - Succesfully parsed POST");
 				} else {
 					return "<error>arguments</error>";
 				}
-				if ( check ) {
+				if (check) {
 					DebugUtilities.WriteDebug("TR - Parsing name");
 					string response = getName(b, agentKey);
 					DebugUtilities.WriteDebug("TR - Parsed name");
@@ -73,12 +92,11 @@ namespace RESTBot
 					return "<error>parsekey</error>";
 				}
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-
 		}
 
 		/// <summary>
@@ -122,7 +140,7 @@ namespace RESTBot
 		/// <param name="sender">parameter ignored</param>
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
-		/// <remark>obsolete syntax changed</remark>
+		/// <remarks>obsolete syntax changed</remarks>
 		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " Processing " + e.Names.Count.ToString() + " AvatarNames replies");
@@ -143,7 +161,9 @@ namespace RESTBot
 		}
 	}
 
-
+	/// <summary>
+	/// Looks up an avatar UUID, based on its name (name2key).
+	/// </summary>
 	public class AvatarKeyLookupPlugin : StatefulPlugin
 	{
 
@@ -152,11 +172,19 @@ namespace RESTBot
 
 		private UUID session;
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public AvatarKeyLookupPlugin()
 		{
 			MethodName = "avatar_key";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -164,6 +192,13 @@ namespace RESTBot
 			// bot.Client.Network.RegisterCallback(PacketType.DirPeopleReply, new NetworkManager.PacketCallback(Avatars_OnDirPeopleReply)); // obsolete, now uses DirectoryManager
 			bot.Client.Directory.DirPeopleReply += Avatars_OnDirPeopleReply;
 		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the avatar name to look up</param>
+		/// <returns>XML-encoded avatar key UUID, if found</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
 		{
 			string? avname = null;	// C# is stricter about setting things to null
@@ -257,7 +292,14 @@ namespace RESTBot
 			}
 		} */
 
-		// using new Directory functionality
+		/// <summary>
+		/// Loop through all (pending) replies for UUID/Avatar names
+		/// and process them if they contain any key we're looking for.
+		/// </summary>
+		/// <param name="sender">parameter ignored</param>
+		/// <param name="e">List of UUID/Avatar names</param>
+		/// <returns>void</returns>
+		/// <remarks>using new Directory functionality</remarks>
 		public void Avatars_OnDirPeopleReply(object sender, DirPeopleReplyEventArgs e)
 		{
 			if (e.MatchedPeople.Count < 1)
@@ -268,15 +310,15 @@ namespace RESTBot
 			{
 				int replyCount = e.MatchedPeople.Count;
 
-				DebugUtilities.WriteInfo(session + " " + MethodName + " Proccesing " + replyCount.ToString() + " DirPeople replies");
-				for ( int i = 0 ; i <  replyCount ; i++ )
+				DebugUtilities.WriteInfo(session + " " + MethodName + " Processing " + replyCount.ToString() + " DirPeople replies");
+				for (int i = 0 ; i <  replyCount ; i++)
 				{
 					string avatarName = e.MatchedPeople[i].FirstName + " " + e.MatchedPeople[i].LastName;
 					UUID avatarKey = e.MatchedPeople[i].AgentID;
 					DebugUtilities.WriteDebug(session + " " + MethodName + " Reply " + (i + 1).ToString() + " of " + replyCount.ToString() + " Key : " + avatarKey.ToString() + " Name : " + avatarName);
 
-					if ( !avatarKeys.ContainsKey(avatarName) ) { /* || avatarKeys[avatarName] == null )	 // apparently dictionary entries cannot be null */
-						lock ( avatarKeys )
+					if (!avatarKeys.ContainsKey(avatarName)) { /* || avatarKeys[avatarName] == null )	 // apparently dictionary entries cannot be null */
+						lock (avatarKeys)
 						{
 							avatarKeys[avatarName.ToLower()] = avatarKey;
 						}
@@ -284,30 +326,40 @@ namespace RESTBot
 
 					lock(KeyLookupEvents)
 					{
-						 if ( KeyLookupEvents.ContainsKey(avatarName.ToLower()))
+						 if (KeyLookupEvents.ContainsKey(avatarName.ToLower()))
 						 {
 								 KeyLookupEvents[avatarName.ToLower()].Set();
-							DebugUtilities.WriteDebug(avatarName.ToLower() + " KLE set!");
+								 DebugUtilities.WriteDebug(avatarName.ToLower() + " KLE set!");
 						 }
 					}
 				}
 			}
 		}
 	}
+	/// <summary>
+	/// Checks if an avatar is online.
+	/// </summary>
 	public class AvatarOnlineLookupPlugin : StatefulPlugin
 	{
 
 		protected Dictionary<UUID, AutoResetEvent> OnlineLookupEvents = new Dictionary<UUID, AutoResetEvent>();
 		protected Dictionary<UUID, bool> avatarOnline = new Dictionary<UUID, bool>();
 
-
 		private UUID session;
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public AvatarOnlineLookupPlugin()
 		{
 			MethodName = "avatar_online";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -315,6 +367,13 @@ namespace RESTBot
 			// bot.Client.Network.RegisterCallback(PacketType.AvatarPropertiesReply, new NetworkManager.PacketCallback(AvatarPropertiesReply)); // obsolete
 			bot.Client.Avatars.AvatarPropertiesReply += AvatarPropertiesReply;
 		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the avatar key UUID to check for online status/param>
+		/// <returns>XML-encoded online status report (or unknown if request failed)</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
 		{
 			UUID agentKey;
@@ -379,7 +438,14 @@ namespace RESTBot
 			return response;
 		}
 
-		// updated for new callbacks
+		/// <summary>
+		/// Loop through all (pending) replies for avatar properties
+		/// and do something as yet unknown to me (gwyneth 20220120)
+		/// </summary>
+		/// <param name="sender">parameter ignored</param>
+		/// <param name="e">List of avatar properties</param>
+		/// <returns>void</returns>
+		/// <remarks>updated for new callbacks</remarks>
 		public void AvatarPropertiesReply(object sender, AvatarPropertiesReplyEventArgs e)
 		{
 			/*
@@ -396,27 +462,37 @@ namespace RESTBot
 			Properties = e.Properties;
 
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Processing AvatarPropertiesReply for " + e.AvatarID.ToString() + " is " + Properties.Online.ToString());
-			lock ( avatarOnline ) {
+			lock (avatarOnline) {
 				avatarOnline[e.AvatarID] = Properties.Online;
 			}
-			if ( OnlineLookupEvents.ContainsKey(e.AvatarID) ) {
+			if (OnlineLookupEvents.ContainsKey(e.AvatarID)) {
 				OnlineLookupEvents[e.AvatarID].Set();
 			}
 		}
 	}
 
-
+	/// <summary>
+	/// Gets the profile for a given avatar.
+	/// </summary>
 	public class AvatarProfileLookupPlugin : StatefulPlugin
 	{
 		private UUID session;
 		protected Dictionary<UUID, AutoResetEvent> ProfileLookupEvents = new Dictionary<UUID, AutoResetEvent>();
 		protected Dictionary<UUID, Avatar.AvatarProperties> avatarProfile = new Dictionary<UUID, Avatar.AvatarProperties>();
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public AvatarProfileLookupPlugin()
 		{
 			MethodName = "avatar_profile";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -424,6 +500,13 @@ namespace RESTBot
 			// bot.Client.Avatars.OnAvatarProperties += new AvatarManager.AvatarPropertiesCallback(Avatars_OnAvatarProperties); // obsolete
 			bot.Client.Avatars.AvatarPropertiesReply += Avatars_OnAvatarProperties;
 		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the avatar UUID(s) to get the profile for</param>
+		/// <returns>XML-encoded profile name, if found</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
 		{
 			UUID agentKey;
@@ -435,9 +518,9 @@ namespace RESTBot
 				} else {
 					return "<error>arguments</error>";
 				}
-				if ( check ) {
+				if (check) {
 					string? response = getProfile(b, agentKey);	// profile can be null
-					if ( response == null ) {
+					if (response == null) {
 						return "<error>not found</error>";
 					} else {
 						return response;
@@ -445,56 +528,54 @@ namespace RESTBot
 				} else {
 					return "<error>unknown</error>";
 				}
-
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-
 		}
 
 		/// <summary>
 		/// Look up the profile for a UUID
 		/// </summary>
 		/// <param name="b">RESTbot object</param>
-		/// <param name="key">UUID of avatar to check</param>
+		/// <param name="key">UUID of avatar to retrieve profile</param>
 		/// <returns>Full profile as a string, or null if profile is empty/does not exist</returns>
-		/// <remark>C# 8+ is stricter when returning nulls, thus the <c>string?</c> method type.</remark>
+		/// <remarks>C# 8+ is stricter when returning nulls, thus the <c>string?</c> method type.</remarks>
 		public string? getProfile(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up profile for " + key.ToString());
 
-			lock ( ProfileLookupEvents ) {
+			lock (ProfileLookupEvents) {
 				ProfileLookupEvents.Add(key, new AutoResetEvent(false) );
 			}
 			b.Client.Avatars.RequestAvatarProperties(key);
 
 			ProfileLookupEvents[key].WaitOne(15000, true);
 
-			lock ( ProfileLookupEvents ) {
+			lock (ProfileLookupEvents) {
 				ProfileLookupEvents.Remove(key);
 			}
-			if ( avatarProfile.ContainsKey(key) ) {
+			if (avatarProfile.ContainsKey(key)) {
 				Avatar.AvatarProperties p = avatarProfile[key];
-				string response = "<profile>\n";
-				response += "<publish>" + p.AllowPublish.ToString() + "</publish>\n";
-				response += "<firstlife>\n";
-				response += "<text>" + p.FirstLifeText.Replace(">", "%3C").Replace("<", "%3E") + "</text>\n";
-				response += "<image>" + p.FirstLifeImage.ToString() + "</image>\n";
-				response += "</firstlife>\n";
-				response += "<partner>" + p.Partner.ToString() + "</partner>\n";
-				response += "<born>" + p.BornOn + "</born>\n";
-				response += "<about>" + p.AboutText.Replace(">", "%3C").Replace("<", "%3E") + "</about>\n";
-				response += "<charter>" + p.CharterMember + "</charter>\n";
-				response += "<profileimage>" + p.ProfileImage.ToString() + "</profileimage>\n";
-				response += "<mature>" + p.MaturePublish.ToString() + "</mature>\n";
-				response += "<identified>" + p.Identified.ToString() + "</identified>\n";
-				response += "<transacted>" + p.Transacted.ToString() + "</transacted>\n";
-				response += "<url>" + p.ProfileURL + "</url>\n";
+				string response = "\t<profile>\n";
+				response += "\t<publish>" + p.AllowPublish.ToString() + "</publish>\n";
+				response += "\t<firstlife>\n";
+				response += "\t\t<text>" + p.FirstLifeText.Replace(">", "%3C").Replace("<", "%3E") + "</text>\n";
+				response += "\t\t<image>" + p.FirstLifeImage.ToString() + "</image>\n";
+				response += "\t</firstlife>\n";
+				response += "\t<partner>" + p.Partner.ToString() + "</partner>\n";
+				response += "\t<born>" + p.BornOn + "</born>\n";
+				response += "\t<about>" + p.AboutText.Replace(">", "%3C").Replace("<", "%3E") + "</about>\n";
+				response += "\t<charter>" + p.CharterMember + "</charter>\n";
+				response += "\t<profileimage>" + p.ProfileImage.ToString() + "</profileimage>\n";
+				response += "\t<mature>" + p.MaturePublish.ToString() + "</mature>\n";
+				response += "\t<identified>" + p.Identified.ToString() + "</identified>\n";
+				response += "\t<transacted>" + p.Transacted.ToString() + "</transacted>\n";
+				response += "\t<url>" + p.ProfileURL + "</url>\n";
 				response += "</profile>\n";
-				lock ( avatarProfile ) {
+				lock (avatarProfile) {
 					avatarProfile.Remove(key);
 				}
 				return response;
@@ -503,7 +584,14 @@ namespace RESTBot
 			}
 		}
 
-		// changed to deal with new replies
+		/// <summary>
+		/// Loop through all (pending) replies for avatar profiles
+		/// and process them if they contain any key for the avatar we're looking up.
+		/// </summary>
+		/// <param name="sender">parameter ignored</param>
+		/// <param name="e">List of UUID/Avatar names</param>
+		/// <returns>void</returns>
+		/// <remarks>changed to deal with new replies</remarks>
 		public void Avatars_OnAvatarProperties(object sender, AvatarPropertiesReplyEventArgs e)
 		{
 			lock (avatarProfile) {
@@ -516,6 +604,9 @@ namespace RESTBot
 		}
 	}
 
+	/// <summary>
+	/// Retrieves all the groups that an avatar belongs to.
+	/// </summary>
 	public class AvatarGroupsLookupPlugin : StatefulPlugin
 	{
 		private UUID session;
@@ -523,11 +614,19 @@ namespace RESTBot
 		// protected Dictionary<UUID, AvatarGroupsReplyPacket.GroupDataBlock[] > avatarGroups = new Dictionary<UUID, AvatarGroupsReplyPacket.GroupDataBlock[]>(); // too cumbersome and now obsolete
 		protected Dictionary<UUID, List<AvatarGroup>> avatarGroups = new Dictionary<UUID, List<AvatarGroup>>();
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public AvatarGroupsLookupPlugin()
 		{
 			MethodName = "avatar_groups";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
@@ -536,6 +635,13 @@ namespace RESTBot
 			// bot.Client.Avatars.OnAvatarGroups += new AvatarManager.AvatarGroupsCallback(Avatar_OnAvatarGroups);
 			bot.Client.Avatars.AvatarGroupsReply += Avatar_OnAvatarGroups;
 		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the avatar key for which we're trying to get the groups</param>
+		/// <returns>XML-encoded avatar name, if found</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID agentKey;
@@ -547,9 +653,9 @@ namespace RESTBot
 				} else {
 					return "<error>arguments</error>";
 				}
-				if ( check ) {
+				if (check) {
 					string? response = getGroups(b, agentKey);	// string can be null
-					if ( response == null ) {
+					if (response == null) {
 						return "<error>not found</error>";
 					} else {
 						return response;
@@ -557,14 +663,12 @@ namespace RESTBot
 				} else {
 					return "<error>unknown</error>";
 				}
-
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-
 		}
 
 		/// <summary>
@@ -573,10 +677,10 @@ namespace RESTBot
 		/// <param name="b">RESTbot object</param>
 		/// <param name="key">UUID of avatar to check</param>
 		/// <returns>List of groups as a XML-formatted string, or null if the avatar does not belong to any group</returns>
-		/// <remark>
+		/// <remarks>
 		///   <para>C# 8+ is stricter when returning nulls, thus the <c>string?</c> method type.</para>
 		///		<para>Note(gwyneth): Instead of returning null, it would make more sense to return an empty XML!</para>
-		/// </remark>
+		/// </remarks>
 		public string? getGroups(RestBot b, UUID key)
 		{
 			DebugUtilities.WriteInfo(session + " " + MethodName + " Looking up groups for " + key.ToString());
@@ -602,141 +706,185 @@ namespace RESTBot
 				DebugUtilities.WriteInfo(session + " " + MethodName + " No groups");
 				return null;
 			}
-			if ( avatarGroups.ContainsKey(key) ) {
+			if (avatarGroups.ContainsKey(key)) {
 				string response = "<groups>\n";
 
 				foreach (AvatarGroup g in avatarGroups[key])
 				{
-					response += "<group>\n";
-					response += "<name>" + g.GroupName.Replace(">", "%3C").Replace("<", "%3E") + "</name>\n";
-					response += "<key>" + g.GroupID.ToString() + "</key>\n";
-					response += "<title>" + g.GroupTitle.Replace(">", "%3C").Replace("<", "%3E") + "</title>\n";
-					response += "<notices>" + g.AcceptNotices.ToString() + "</notices>\n";
-					response += "<powers>" + g.GroupPowers.ToString() + "</powers>\n";
-					response += "<insignia>" + g.GroupInsigniaID.ToString() + "</insignia>\n";
-					response += "</group>\n";
+					response += "\t<group>\n";
+					response += "\t\t<name>" + g.GroupName.Replace(">", "%3C").Replace("<", "%3E") + "</name>\n";
+					response += "\t\t<key>" + g.GroupID.ToString() + "</key>\n";
+					response += "\t\t<title>" + g.GroupTitle.Replace(">", "%3C").Replace("<", "%3E") + "</title>\n";
+					response += "\t\t<notices>" + g.AcceptNotices.ToString() + "</notices>\n";
+					response += "\t\t<powers>" + g.GroupPowers.ToString() + "</powers>\n";
+					response += "\t\t<insignia>" + g.GroupInsigniaID.ToString() + "</insignia>\n";
+					response += "\t</group>\n";
 				}
 				response += "</groups>\n";
 
-				lock ( avatarGroups ) {
+				lock (avatarGroups) {
 					avatarGroups.Remove(key);
 				}
 				return response;
 			} else {
 				return null;
 			}
-
 		}
 
+		/// <summary>
+		/// Loop through all (pending) replies for groups
+		/// and process them if they contain any avatar key we're looking for.
+		/// </summary>
+		/// <param name="sender">parameter ignored</param>
+		/// <param name="e">List of UUID/Avatar names</param>
+		/// <returns>void</returns>
 		public void Avatar_OnAvatarGroups(object sender, AvatarGroupsReplyEventArgs e)
 		{
 			lock (avatarGroups)
 			{
 				avatarGroups[e.AvatarID] = e.Groups;
 			}
-			if ( GroupsLookupEvents.ContainsKey(e.AvatarID) )
+			if (GroupsLookupEvents.ContainsKey(e.AvatarID))
 			{
 				GroupsLookupEvents[e.AvatarID].Set();
 			}
 		}
-
 	}
 
-    // avatar position; parameters are first, last
-    public class AvatarPositionPlugin : StatefulPlugin
+	// The following two classes were originally undocumented; they appear to have some overlapping
+	// functionality with the Movement Plugin! (gwyneth 20220120)
+
+	/// <summary>
+	/// Tries to figure out the position of another avatar, known by name.
+	/// </summary>
+  /// <remarks><para>This is a less sophisticated version of MoveToAvatarPlugin,
+	/// probably used to draw a line connecting both, figuring out the distance between them, or similar.</para>
+	/// <para>(original comment) avatar position; parameters are first, last</para></remarks>
+  public class AvatarPositionPlugin : StatefulPlugin
+  {
+    private UUID session;
+
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+    public AvatarPositionPlugin()
     {
-        private UUID session;
+			MethodName = "avatar_position";
+    }
 
-        public AvatarPositionPlugin()
-        {
-            MethodName = "avatar_position";
-        }
-
-        public override void Initialize(RestBot bot)
-        {
-            session = bot.sessionid;
-            DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
-        }
-
-        public override string Process(RestBot b, Dictionary<string, string> Parameters)
-        {
-            try
-            {
-                string name = "";
-                bool check = true;
-
-                if (Parameters.ContainsKey("target"))
-                {
-                    name = Parameters["target"].ToString().Replace("+", " ");
-                }
-                else check = false;
-
-                if (!check)
-                {
-                    return "<error>parameters have to be target name</error>";
-                }
-
-                lock (b.Client.Network.Simulators)
-                {
-                    for (int i = 0; i < b.Client.Network.Simulators.Count; i++)
-                    {
-                        DebugUtilities.WriteDebug("Found Avatars: " + b.Client.Network.Simulators[i].ObjectsAvatars.Count);
-                        Avatar target = b.Client.Network.Simulators[i].ObjectsAvatars.Find(
-                            delegate(Avatar avatar)
-                            {
-                                DebugUtilities.WriteDebug("Found avatar: " + avatar.Name);
-                                return avatar.Name == name;
-                            }
-                        );
-
-                        if (target != null)
-                        {
-                            return String.Format("<goal_position>{0},{1},{2}</goal_position><curr_position>{3},{4},{5}</curr_position>",
-                                target.Position.X, target.Position.Y, target.Position.Z, b.Client.Self.SimPosition.X, b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
-                        }
-                        else
-                        {
-                            DebugUtilities.WriteError("Error obtaining the avatar: " + name);
-                        }
-                    }
-                }
-                return "<error>avatar_position failed.</error>";
-            }
-            catch (Exception e)
-            {
-                DebugUtilities.WriteError(e.Message);
-                return "<error>" + e.Message + "</error>";
-            }
-        }
-    } // end avatar_position
-
-    // avatar position; parameters are first, last
-    public class MyPositionPlugin : StatefulPlugin
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
+    public override void Initialize(RestBot bot)
     {
-        private UUID session;
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+    }
 
-        public MyPositionPlugin()
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the avatar name to use as a target</param>
+		/// <returns>XML-encoded information on the goal position (target) and the current position ('bot)</returns>
+    public override string Process(RestBot b, Dictionary<string, string> Parameters)
+    {
+      try
+      {
+        string name = "";
+        bool check = true;
+
+				// "target" is essentially an avatar name (first, last) (gwyneth 20220120)
+        if (Parameters.ContainsKey("target"))
         {
-            MethodName = "my_position";
+          name = Parameters["target"].ToString().Replace("+", " ");
+        }
+        else check = false;
+
+        if (!check)
+        {
+          return "<error>parameters have to be target avatar name (first, last)</error>";
         }
 
-        public override void Initialize(RestBot bot)
+        lock (b.Client.Network.Simulators)
         {
-            session = bot.sessionid;
-            DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
-        }
+          for (int i = 0; i < b.Client.Network.Simulators.Count; i++)
+          {
+            DebugUtilities.WriteDebug("Found Avatars: " + b.Client.Network.Simulators[i].ObjectsAvatars.Count);
+            Avatar? target = b.Client.Network.Simulators[i].ObjectsAvatars.Find(
+              delegate(Avatar avatar)
+              {
+                DebugUtilities.WriteDebug("Found avatar: " + avatar.Name);
+                return avatar.Name == name;
+              }
+  	        );
 
-        public override string Process(RestBot b, Dictionary<string, string> Parameters)
-        {
-            try
+            if (target != null)
             {
-                return String.Format("<position>{0},{1},{2}</error>", b.Client.Self.SimPosition.X, b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
+              return String.Format("<goal_position>{0},{1},{2}</goal_position><curr_position>{3},{4},{5}</curr_position>",
+                  target.Position.X, target.Position.Y, target.Position.Z, b.Client.Self.SimPosition.X, b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
             }
-            catch (Exception e)
+            else
             {
-                DebugUtilities.WriteError(e.Message);
-                return "<error>" + e.Message + "</error>";
+  						DebugUtilities.WriteError("Error obtaining the avatar: " + name);
             }
+          }
         }
-    } // end avatar_position
+        return "<error>avatar_position failed.</error>";
+      }
+      catch (Exception e)
+      {
+        DebugUtilities.WriteError(e.Message);
+        return "<error>" + e.Message + "</error>";
+      }
+    }
+  } // end avatar_position
+
+	/// <summary>
+	/// Returns the position of the 'bot inside the current region.
+	/// </summary>
+  /// <remarks>Very similar to CurrentLocationPlugin, but does not return the region name (gwyneth 20220120).</remarks>
+  public class MyPositionPlugin : StatefulPlugin
+  {
+    private UUID session;
+
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+    public MyPositionPlugin()
+    {
+      MethodName = "my_position";
+    }
+
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
+    public override void Initialize(RestBot bot)
+    {
+      session = bot.sessionid;
+      DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+    }
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">not used</returns>
+    public override string Process(RestBot b, Dictionary<string, string> Parameters)
+    {
+      try
+      {
+        return String.Format("<position>{0},{1},{2}</position>", b.Client.Self.SimPosition.X, b.Client.Self.SimPosition.Y, b.Client.Self.SimPosition.Z);
+      }
+      catch (Exception e)
+      {
+        DebugUtilities.WriteError(e.Message);
+        return "<error>" + e.Message + "</error>";
+      }
+  	}
+  } // end my_position
 }

@@ -490,7 +490,7 @@ namespace RESTBot
 	/// <param name="b">RESTbot object</param>
 	/// <param name="itemID">UUID of inventory item to fetch</param>
 	/// <returns>An InventoryItem object if it exists, null if not</returns>
-	/// <remark>C# 8+ is stricter when returning nulls, thus the <c>InventoryItem?</c> method type.</remark>
+	/// <remarks>C# 8+ is stricter when returning nulls, thus the <c>InventoryItem?</c> method type.</remarks>
 		private InventoryItem? FetchItem(RestBot b, UUID itemID)
 		{
 			InventoryItem fetchItem = null;

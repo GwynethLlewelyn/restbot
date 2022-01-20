@@ -46,6 +46,7 @@ namespace RESTBot.restbot_plugins
 				/// <summary>
 				/// Initialises the plugin.
 				/// </summary>
+				/// <param name="bot">A currently active RestBot</param>
         public override void Initialize(RestBot bot)
         {
             session = bot.sessionid;
@@ -60,7 +61,7 @@ namespace RESTBot.restbot_plugins
 				/// </summary>
 				/// <param name="b">A currently active RestBot</param>
 				/// <param name="Parameters">A dictionary containing the channel, the message, and possibly the chat type</param>
-				/// <remark>channel defaults to 0 (public channel), while chattype defaults to normal chat.</remark>
+				/// <remarks>channel defaults to 0 (public channel), while chattype defaults to normal chat.</remarks>
         public override string Process(RestBot b, Dictionary<string, string> Parameters)
         {
             int channel = 0;

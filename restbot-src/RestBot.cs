@@ -253,7 +253,7 @@ namespace RESTBot
 		/// </summary>
 		/// <param name="sender">Sender object</param>
 		/// <param name="e">Arguments for the disconnected event</param>
-    /// <remark>rewrote to show message</remark>
+    /// <remarks>rewrote to show message</remarks>
     void Network_OnDisconnected(object sender, DisconnectedEventArgs e)
     {
       if(e.Reason != NetworkManager.DisconnectType.ClientInitiated)
@@ -367,7 +367,7 @@ namespace RESTBot
 		/// <summary>
 		/// Old login block
 		/// </summary>
-		/// <remark>Obsolete and superceded by Login()</remark>
+		/// <remarks>Obsolete and superceded by Login()</remarks>
 		[Obsolete("Please use Login() instead.")]
     public LoginReply LoginOLD()
     {

@@ -72,7 +72,7 @@ namespace RESTBot
 				/// </summary>
 				/// <param name="b">A currently active RestBot</param>
 				/// <param name="Parameters">not used</param>
-				/// <remark>This will list statistics only for the simulator where the 'bot currently is.</remark>
+				/// <remarks>This will list statistics only for the simulator where the 'bot currently is.</remarks>
 				public override string Process(RestBot b, Dictionary<string, string> Parameters)
 				{
 						bool check = false;
