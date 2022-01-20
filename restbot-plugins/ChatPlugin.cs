@@ -27,16 +27,27 @@ using OpenMetaverse;
 
 namespace RESTBot.restbot_plugins
 {
+
+		/// <summary>
+		/// Class to send messages to a channel in chat
+		/// </summary>
+		/// <param name="Plugin">Plugin name</param>
     public class SayPlugin : StatefulPlugin
     {
         private UUID session;
         private RestBot? me; // potentially null
 
+				/// <summary>
+				/// Sets the plugin name for the router.
+				/// </summary>
         public SayPlugin()
         {
             MethodName = "say";
         }
 
+				/// <summary>
+				/// Initialises the plugin.
+				/// </summary>
         public override void Initialize(RestBot bot)
         {
             session = bot.sessionid;
@@ -46,29 +57,54 @@ namespace RESTBot.restbot_plugins
             base.Initialize(bot);
         }
 
-        public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+				/// <summary>
+				/// Handler event for this plugin.
+				/// </summary>
+				/// <param name="b">A currently active RestBot</param>
+				/// <param name="Parameters">A dictionary containing the channel, the message, and possibly the chat type</param>
+				/// <remark>channel defaults to 0 (public channel), while chattype defaults to normal chat.</remark>
+        public override string Process(RestBot b, Dictionary<string, string> Parameters)
         {
             int channel = 0;
             bool check = true;
             string message = String.Empty;
+						ChatType chattype = ChatType.Normal;
 
-            if (Paramaters.ContainsKey("channel"))
+            if (Parameters.ContainsKey("channel"))
             {
-                check &= int.TryParse(Paramaters["channel"], out channel);
+                check &= int.TryParse(Parameters["channel"], out channel);
             }
 
-            if (Paramaters.ContainsKey("message"))
+            if (Parameters.ContainsKey("message"))
             {
-                message = Paramaters["message"].ToString().Replace("+", " ");
+                message = Parameters["message"].ToString().Replace("+", " ");
             }
             else check = false;
+
+						if (Parameters.ContainsKey("chattype"))
+						{
+								string strChatType = Parameters["chattype"].ToString().Replace("+", " ");
+
+								switch(strChatType) {
+										case "shout":
+												chattype = ChatType.Shout;
+												break;
+										case "whisper":
+												chattype = ChatType.Whisper;
+												break;
+										default:
+												chattype = ChatType.Normal;
+												break;
+								}
+						}
+
 
             // Make sure we are not in autopilot.
             b.Client.Self.AutoPilotCancel();
 
-            b.Client.Self.Chat(message, channel, ChatType.Normal);
+            b.Client.Self.Chat(message, channel, chattype);
 
-            return "<say><channel>" +channel+"</channel><message>"+ message.ToString() + "</message></say>";
+            return "<say><channel>" + channel + "</channel><message>" + message.ToString() + "</message><chattype>" + chattype.ToString() + "</chattype></say>";
         }
     }
 }
