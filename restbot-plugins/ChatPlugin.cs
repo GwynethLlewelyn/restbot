@@ -27,11 +27,9 @@ using OpenMetaverse;
 
 namespace RESTBot.restbot_plugins
 {
-
 		/// <summary>
 		/// Class to send messages to a channel in chat
 		/// </summary>
-		/// <param name="Plugin">Plugin name</param>
     public class SayPlugin : StatefulPlugin
     {
         private UUID session;
@@ -97,7 +95,6 @@ namespace RESTBot.restbot_plugins
 												break;
 								}
 						}
-
 
             // Make sure we are not in autopilot.
             b.Client.Self.AutoPilotCancel();
