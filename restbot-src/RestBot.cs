@@ -130,9 +130,9 @@ namespace RESTBot
           else
           {
             if (ret.ContainsKey(eqsplit[0]))
-              ret[eqsplit[0]] = eqsplit[1];
+              ret[eqsplit[0]] = WebUtility.UrlDecode(eqsplit[1]);
             else
-              ret.Add(eqsplit[0], eqsplit[1]);
+              ret.Add(eqsplit[0], WebUtility.UrlDecode(eqsplit[1]));
           }
         }
       }
