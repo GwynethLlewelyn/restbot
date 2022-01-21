@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenMetaverse;
+using OpenMetaverse.Utilities;
 
 namespace RESTBot
 {
@@ -98,9 +99,16 @@ namespace RESTBot
 						}
 
             // Make sure we are not in autopilot.
+						// Note: Why not? (gwyneth 20220121)
             b.Client.Self.AutoPilotCancel();
 
-            b.Client.Self.Chat(message, channel, chattype);
+						// Note: when channel is zero, we'll attempt to use Realism.Chat instead, because it looks cooler! (gwyneth 20220121)
+						/// <summary><c>Realism</c> is a class in <c>Openmetaverse.Utilities</c>.</summary>
+						if (channel != 0) {
+							b.Client.Self.Chat(message, channel, chattype);
+						} else {
+							Realism.Chat(b.Client, message, chattype, 3);	// 3 means typing 3 characters per second (gwyneth 20220121)
+						}
 
             return "<say><channel>" + channel + "</channel><message>" + message.ToString() + "</message><chattype>" + chattype.ToString() + "</chattype></say>";
         }
