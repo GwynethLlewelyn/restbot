@@ -20,11 +20,14 @@
 		<PackageProjectUrl>https://github.com/GwynethLlewelyn/restbot</PackageProjectUrl>
 		<Owners>Gwyneth Llewelyn</Owners>
 		<PackageTags>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</PackageTags>
+		<PackageDescription>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</PackageDescription>
 		<RepositoryUrl>https://github.com/GwynethLlewelyn/restbot</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 		<Title>RESTbot</Title>
 		<Summary>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Summary>
 		<Description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Description>
 		<ProjectGuid>{F6E2EED5-AE02-45D9-A129-7E759F326D4C}</ProjectGuid>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
