@@ -72,7 +72,7 @@ namespace RESTBot
 				}
 
 				if (check)	// means that we have a correctly parsed key OR no key
-							//  which is fine too (attempts root folder)
+										//  which is fine too (attempts root folder)
 				{
 					DebugUtilities.WriteDebug("List Inventory - Entering loop");
 
@@ -122,10 +122,11 @@ namespace RESTBot
 				}
 			}
 		}
-
 	}
 
-	// List inventory item; params are (inventory) item ID
+	/// <summary>
+	/// List inventory item; params are (inventory) item ID
+	/// </summary>
 	public class ListItemPlugin : StatefulPlugin
 	{
 		private UUID session;
@@ -233,70 +234,70 @@ namespace RESTBot
 
 	public class GiveItemPlugin : StatefulPlugin
 	{
-	private UUID session;
+		private UUID session;
 
-	public GiveItemPlugin()
-	{
-		MethodName = "give_item";
-	}
-
-	public override void Initialize(RestBot bot)
-	{
-		session = bot.sessionid;
-		DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
-	}
-
-	public override string Process(RestBot b, Dictionary<string, string> Parameters)
-	{
-		UUID itemID, avatarKey;
-		InventoryManager Manager;
-
-		DebugUtilities.WriteDebug("Give Item - Entering key parser");
-		try
+		public GiveItemPlugin()
 		{
-			bool check = false;
-			if (Parameters.ContainsKey("itemID"))
-			{
-				DebugUtilities.WriteDebug("GI - Attempting to parse from POST");
-				check = UUID.TryParse(Parameters["itemID"].ToString().Replace("_"," "), out itemID);
+			MethodName = "give_item";
+		}
 
-				if (check)
+		public override void Initialize(RestBot bot)
+		{
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+		}
+
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			UUID itemID, avatarKey;
+			InventoryManager Manager;
+
+			DebugUtilities.WriteDebug("Give Item - Entering key parser");
+			try
+			{
+				bool check = false;
+				if (Parameters.ContainsKey("itemID"))
 				{
-					check = UUID.TryParse(Parameters["avatarKey"].ToString().Replace("_"," "), out avatarKey);
-					DebugUtilities.WriteDebug("GI - Succesfully parsed POST");
+					DebugUtilities.WriteDebug("GI - Attempting to parse from POST");
+					check = UUID.TryParse(Parameters["itemID"].ToString().Replace("_"," "), out itemID);
+
+					if (check)
+					{
+						check = UUID.TryParse(Parameters["avatarKey"].ToString().Replace("_"," "), out avatarKey);
+						DebugUtilities.WriteDebug("GI - Succesfully parsed POST");
+					}
+					else
+					{
+						return "<error>parsekey itemID</error>";
+					}
 				}
 				else
 				{
-					return "<error>parsekey itemID</error>";
+					return "<error>parsekey</error>";
 				}
-			}
-			else
-			{
-				return "<error>parsekey</error>";
-			}
 
-			if (check)	// means that we have a correctly parsed key
-			{
-				DebugUtilities.WriteDebug("Give Item " + itemID.ToString() + " to avatar" + avatarKey.ToString());
-
-				// Extract item information from inventory
-				InventoryItem oneItem;
-
-				oneItem = b.Client.Inventory.FetchItem(itemID, b.Client.Self.AgentID, 5000);
-				// to-do: catch timeout explicitly
-
-				if (oneItem == null)
+				if (check)	// means that we have a correctly parsed key
 				{
-					return "<error>item " + itemID.ToString() + " not found</error>\n";
-				}
+					DebugUtilities.WriteDebug("Give Item " + itemID.ToString() + " to avatar" + avatarKey.ToString());
 
-				// attempt to send it to the avatar
+					// Extract item information from inventory
+					InventoryItem oneItem;
 
-				Manager = b.Client.Inventory;
+					oneItem = b.Client.Inventory.FetchItem(itemID, b.Client.Self.AgentID, 5000);
+					// to-do: catch timeout explicitly
 
-				Manager.GiveItem(oneItem.UUID, oneItem.Name, oneItem.AssetType, avatarKey, false);
+					if (oneItem == null)
+					{
+						return "<error>item " + itemID.ToString() + " not found</error>\n";
+					}
 
-				return "<item><name>" + oneItem.Name + "</name><assetType>" + oneItem.AssetType + "</assetType><itemID>" + itemID.ToString() + "</itemID><avatarKey>" + avatarKey.ToString() + "</avatarKey></item>\n";
+					// attempt to send it to the avatar
+
+					Manager = b.Client.Inventory;
+
+					Manager.GiveItem(oneItem.UUID, oneItem.Name, oneItem.AssetType, avatarKey, false);
+
+					return "<item><name>" + oneItem.Name + "</name><assetType>" + oneItem.AssetType + "</assetType><itemID>" + itemID.ToString() + "</itemID><avatarKey>" + avatarKey.ToString() + "</avatarKey></item>\n";
 				}
 				else
 				{
@@ -484,16 +485,16 @@ namespace RESTBot
 
 		// Accessory functions
 
-	/// <summary>
-	/// Fetch an inventory item
-	/// </summary>
-	/// <param name="b">RESTbot object</param>
-	/// <param name="itemID">UUID of inventory item to fetch</param>
-	/// <returns>An InventoryItem object if it exists, null if not</returns>
-	/// <remarks>C# 8+ is stricter when returning nulls, thus the <c>InventoryItem?</c> method type.</remarks>
+		/// <summary>
+		/// Fetch an inventory item
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="itemID">UUID of inventory item to fetch</param>
+		/// <returns>An InventoryItem object if it exists, null if not</returns>
+		/// <remarks>C# 8+ is stricter when returning nulls, thus the <c>InventoryItem?</c> method type.</remarks>
 		private InventoryItem? FetchItem(RestBot b, UUID itemID)
 		{
-			InventoryItem fetchItem = null;
+			InventoryItem? fetchItem = null;
 			AutoResetEvent fetchItemEvent = new AutoResetEvent(false);
 
 			EventHandler<ItemReceivedEventArgs> itemReceivedCallback =
@@ -517,10 +518,16 @@ namespace RESTBot
 			return fetchItem;
 		}
 
+		/// <summary>
+		/// Download a notecard.
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="itemID">ID of the notecard in inventory</param>
+		/// <param name="assetID">Asset ID of the notecard</param>
 		private string DownloadNotecard(RestBot b, UUID itemID, UUID assetID)
 		{
 			AutoResetEvent assetDownloadEvent = new AutoResetEvent(false);
-			byte[] notecardData = null;
+			byte[]? notecardData = null;
 			string error = "Timeout";
 
 			b.Client.Assets.RequestInventoryAsset(assetID, itemID, UUID.Zero, b.Client.Self.AgentID, AssetType.Notecard, true, UUID.Zero,
@@ -546,7 +553,5 @@ namespace RESTBot
 			else
 				return "Error downloading notecard asset: " + error;
 		}
-
 	} // end create notecard
-
 } // end namespace
