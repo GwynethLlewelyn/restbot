@@ -75,20 +75,26 @@ namespace RESTBot
 			try
 			{
 				bool check = false;
-				if (Parameters.ContainsKey("key")) {
+				if (Parameters.ContainsKey("key"))
+				{
 					DebugUtilities.WriteDebug("TR - Attempting to parse from POST");
 					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out agentKey);
 					DebugUtilities.WriteDebug("TR - Succesfully parsed POST");
-				} else {
+				}
+				else
+				{
 					return "<error>arguments</error>";
 				}
-				if (check) {
+				if (check)
+				{
 					DebugUtilities.WriteDebug("TR - Parsing name");
 					string response = getName(b, agentKey);
 					DebugUtilities.WriteDebug("TR - Parsed name");
 					DebugUtilities.WriteDebug("TR - Complete");
 					return "<name>" + response.Trim() + "</name>\n";
-				} else {
+				}
+				else
+				{
 					return "<error>parsekey</error>";
 				}
 			}
@@ -108,26 +114,33 @@ namespace RESTBot
 		private string getName(RestBot b, UUID id)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Looking up name for " + id.ToString());
-			lock (NameLookupEvents) {
+			lock (NameLookupEvents)
+			{
 				NameLookupEvents.Add(id, new AutoResetEvent(false));
 			}
 
 			b.Client.Avatars.RequestAvatarName(id);
 
-			if ( ! NameLookupEvents[id].WaitOne(15000, true) ) {
+			if (!NameLookupEvents[id].WaitOne(15000, true))
+			{
 				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on avatar name lookup");
 			}
-			lock (NameLookupEvents) {
+			lock (NameLookupEvents)
+			{
 				NameLookupEvents.Remove(id);
 			}
 			// C# 8+ is stricter with null assignments.
 			string? response = null;	// technically this cannot ever be null, so it doesn't make sense...
-			if ( avatarNames.ContainsKey(id) ) {
+			if (avatarNames.ContainsKey(id))
+			{
 				response = avatarNames[id]; // .Name removed
-				lock ( avatarNames ) {
+				lock (avatarNames)
+				{
 					avatarNames.Remove(id);
 				}
-			} else {
+			}
+			else
+			{
 				response = String.Empty;
 			}
 			return response;
@@ -144,16 +157,20 @@ namespace RESTBot
 		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " Processing " + e.Names.Count.ToString() + " AvatarNames replies");
-			foreach (KeyValuePair<UUID, string> kvp in e.Names) {
-				if (!avatarNames.ContainsKey(kvp.Key) || avatarNames[kvp.Key] == null) {
+			foreach (KeyValuePair<UUID, string> kvp in e.Names)
+			{
+				if (!avatarNames.ContainsKey(kvp.Key) || avatarNames[kvp.Key] == null)
+				{
 					DebugUtilities.WriteInfo(session.ToString() + " Reply Name: " + kvp.Value + " Key : " + kvp.Key.ToString());
-					lock (avatarNames) {
+					lock (avatarNames)
+					{
 						// avatarNames[kvp.Key] = new Avatar(); // why all this trouble?
 						// FIXME: Change this to .name when we move inside libsecondlife
 						// avatarNames[kvp.Key].Name = kvp.Value; // protected
 						avatarNames[kvp.Key] = kvp.Value;
 					}
-					if (NameLookupEvents.ContainsKey(kvp.Key)) {
+					if (NameLookupEvents.ContainsKey(kvp.Key))
+					{
 						NameLookupEvents[kvp.Key].Set();
 					}
 				}
@@ -202,18 +219,23 @@ namespace RESTBot
 		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
 		{
 			string? avname = null;	// C# is stricter about setting things to null
-			if ( Paramaters.ContainsKey("name") ) {
+			if (Paramaters.ContainsKey("name"))
+			{
 				avname = Paramaters["name"].ToString().Replace("%20"," ").Replace("+"," ");
-			} else {
+			}
+			else
+			{
 				return "<error>arguments</error>";
 			}
-			if ( avname != null ) {
-				string response = getKey(b,avname).ToString();
+			if (avname != null)
+			{
+				string response = getKey(b, avname).ToString();
 				return "<key>" + response + "</key>\n";
-			} else {
+			}
+			else
+			{
 				return "<error>nokey</error>";
 			}
-
 		}
 
 		/// <summary>
@@ -228,7 +250,8 @@ namespace RESTBot
 			name = name.ToLower();
 			DebugUtilities.WriteDebug("Looking up: " + name);
 			DebugUtilities.WriteDebug("Key not in cache, requesting directory lookup");
-			lock ( KeyLookupEvents) {
+			lock (KeyLookupEvents)
+			{
 				KeyLookupEvents.Add(name, new AutoResetEvent(false));
 			}
 			DebugUtilities.WriteDebug("Lookup Event added, KeyLookupEvents now has a total of " + KeyLookupEvents.Count.ToString() + " entries");
@@ -245,18 +268,34 @@ namespace RESTBot
 			DebugUtilities.WriteDebug("Packet sent - KLE has " + KeyLookupEvents.Count.ToString() + " entries.. now waiting");
 			KeyLookupEvents[name].WaitOne(15000,true);
 			DebugUtilities.WriteDebug("Waiting done!");
-			lock (KeyLookupEvents) {
+			lock (KeyLookupEvents)
+			{
 				KeyLookupEvents.Remove(name);
 			}
 			DebugUtilities.WriteDebug("Done with KLE, now has " + KeyLookupEvents.Count.ToString() + " entries");
 			UUID response = new UUID();
-			if ( avatarKeys.ContainsKey(name) ) {
+			if (avatarKeys.ContainsKey(name))
+			{
 				response = avatarKeys[name];
-				lock ( avatarKeys ) {
+				lock (avatarKeys)
+				{
 					avatarKeys.Remove(name);
 				}
 			}
 			return response;
+		}
+
+		/// <summary>
+		/// Overloaded getKey() function, using first name and last name as parameters
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="avatarFirstName">First name of avatar to check</param>
+		/// <param name="avatarLastName">Last name of avatar to check</param>
+		/// <returns>UUID of corresponding avatar, if it exists</returns>
+		public UUID getKey(RestBot b, String avatarFirstName, String avatarLastName)
+		{
+			String avatarFullName = avatarFirstName.ToString() + " " + avatarLastName.ToString();
+			return getKey(b, avatarFullName.ToLower());
 		}
 
 		/*
