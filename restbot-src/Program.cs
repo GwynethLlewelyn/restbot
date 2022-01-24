@@ -119,9 +119,12 @@ namespace RESTBot
           if (t.IsSubclassOf(typeof(RestPlugin)))
           {
             ConstructorInfo? info = t.GetConstructor(Type.EmptyTypes);
-						if (info == null) {
+						if (info == null)
+						{
 							DebugUtilities.WriteError("Couldn't get constructor for plugin!");
-						} else {
+						}
+						else
+						{
             	RestPlugin plugin = (RestPlugin)info.Invoke(new object[0]);
             	RestBot.AddPlugin(plugin);
 						}
@@ -181,7 +184,7 @@ namespace RESTBot
       if (Method == "establish_session")
       {
         DebugUtilities.WriteDebug("We have an establish_session method.");
-        //Alright, we're going to try to establish a session
+        // Alright, we're going to try to establish a session
         if (parts.Length >= 2 && parts[1] == Program.config.security.serverPass
           && Parameters.ContainsKey("first") && Parameters.ContainsKey("last") && Parameters.ContainsKey("pass"))
         {
@@ -202,8 +205,9 @@ namespace RESTBot
           s.ID = id;
           s.Hostname = headers.Hostname;
           s.LastAccessed = DateTime.Now;
-          //Needs the $1$ for the md5 on the login for libsl
-          if (!Parameters["pass"].StartsWith("$1$")) Parameters["pass"] = "$1$" + Parameters["pass"];
+          // Needs the $1$ for the md5 on the login for libsl
+          if (!Parameters["pass"].StartsWith("$1$"))
+						Parameters["pass"] = "$1$" + Parameters["pass"];
           s.Bot = new RestBot(s.ID, Parameters["first"], Parameters["last"], Parameters["pass"]);
 
           lock (Sessions)
@@ -242,7 +246,7 @@ namespace RESTBot
           {
             result = result + " Missing 'pass' arg.";
           }
-          return ("<error>arguments: "+result+"</error>");
+          return ("<error>arguments: " + result + "</error>");
         }
       }
       else if (Method == "server_quit")
@@ -327,7 +331,8 @@ namespace RESTBot
       if (!Sessions.ContainsKey(key))
         return;
       Session s = Sessions[key];
-			if (s.StatusCallback is not null) {
+			if (s.StatusCallback is not null)
+			{
       	s.Bot.OnBotStatus -= s.StatusCallback;
 			}
       s.Bot.Client.Network.Logout();
