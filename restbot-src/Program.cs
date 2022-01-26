@@ -109,7 +109,7 @@ namespace RESTBot
     /// <summary>
     /// Register all RestPlugins to the RestBot static plugin dictionary
     /// </summary>
-    /// <param name="assembly"></param>
+    /// <param name="assembly">Given assembly to search for</param>
     static void RegisterAllCommands(Assembly assembly)
     {
       foreach (Type t in assembly.GetTypes())
@@ -140,7 +140,7 @@ namespace RESTBot
     /// <summary>
     /// Grab all the subclass type definitions of StatefulPlugin out of an assembly
     /// </summary>
-    /// <param name="assembly">Given assembly to search</param>
+    /// <param name="assembly">Given assembly to search for</param>
     static void RegisterAllStatefulPlugins(Assembly assembly)
     {
       foreach (Type t in assembly.GetTypes())
