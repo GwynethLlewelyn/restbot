@@ -42,9 +42,9 @@ namespace RESTBot
         /// Process the request through this method
         /// </summary>
         /// <param name="b">The RestBot that is doing the processing</param>
-        /// <param name="Paramaters">QueryString and POST parameters</param>
+        /// <param name="Parameters">QueryString and POST parameters</param>
         /// <returns>XML output</returns>
-        public abstract string Process(RestBot b, Dictionary<string, string> Paramaters);
+        public abstract string Process(RestBot b, Dictionary<string, string> Parameters);
     }
 
     /// <summary>
@@ -70,9 +70,9 @@ namespace RESTBot
         /// Process the request through this method
         /// </summary>
         /// <param name="b">The RestBot that is doing the processing</param>
-        /// <param name="Paramaters">QueryString and POST parameters</param>
+        /// <param name="Parameters">QueryString and POST parameters</param>
         /// <returns>XML output</returns>
-        public abstract string Process(RestBot b, Dictionary<string, string> Paramaters);
+        public abstract string Process(RestBot b, Dictionary<string, string> Parameters);
 
         // Indicates that the current plugin is actively running.
         public bool Active;

@@ -49,7 +49,7 @@ namespace RESTBot
             base.Initialize(bot);
         }
 
-        public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+        public override string Process(RestBot b, Dictionary<string, string> Parameters)
         {
             try
             {
@@ -57,15 +57,15 @@ namespace RESTBot
                 bool check = true;
                 float radius = 0.0f;
 
-                if (Paramaters.ContainsKey("type"))
+                if (Parameters.ContainsKey("type"))
                 {
-                    type = Paramaters["type"].ToString().Replace("+", " ");
+                    type = Parameters["type"].ToString().Replace("+", " ");
                 }
                 else check = false;
 
-                if (Paramaters.ContainsKey("radius"))
+                if (Parameters.ContainsKey("radius"))
                 {
-                    check &= float.TryParse(Paramaters["radius"], out radius);
+                    check &= float.TryParse(Parameters["radius"], out radius);
                 }
                 else check = false;
 
@@ -152,7 +152,7 @@ namespace RESTBot
             base.Initialize(bot);
         }
 
-        public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+        public override string Process(RestBot b, Dictionary<string, string> Parameters)
         {
             try
             {
@@ -160,15 +160,15 @@ namespace RESTBot
                 bool check = true;
                 float radius = 0.0f;
 
-                if (Paramaters.ContainsKey("type"))
+                if (Parameters.ContainsKey("type"))
                 {
-                    type = Paramaters["type"].ToString().Replace("+", " ");
+                    type = Parameters["type"].ToString().Replace("+", " ");
                 }
                 else check = false;
 
-                if (Paramaters.ContainsKey("radius"))
+                if (Parameters.ContainsKey("radius"))
                 {
-                    check &= float.TryParse(Paramaters["radius"], out radius);
+                    check &= float.TryParse(Parameters["radius"], out radius);
                 }
                 else check = false;
 

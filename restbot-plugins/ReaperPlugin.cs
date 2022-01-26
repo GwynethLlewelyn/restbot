@@ -108,7 +108,7 @@ namespace RESTBot
     }
 
 		/// <summary>Whatever needs to get processed... apparently. nothing</summary>
-    public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+    public override string Process(RestBot b, Dictionary<string, string> Parameters)
     {
       return "<error>notprocessed</error>";
     }

@@ -216,12 +216,12 @@ namespace RESTBot
 		/// <param name="b">A currently active RestBot</param>
 		/// <param name="Parameters">A dictionary containing the avatar name to look up</param>
 		/// <returns>XML-encoded avatar key UUID, if found</returns>
-		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			string? avname = null;	// C# is stricter about setting things to null
-			if (Paramaters.ContainsKey("name"))
+			if (Parameters.ContainsKey("name"))
 			{
-				avname = Paramaters["name"].ToString().Replace("%20"," ").Replace("+"," ");
+				avname = Parameters["name"].ToString().Replace("%20"," ").Replace("+"," ");
 			}
 			else
 			{
@@ -413,14 +413,14 @@ namespace RESTBot
 		/// <param name="b">A currently active RestBot</param>
 		/// <param name="Parameters">A dictionary containing the avatar key UUID to check for online status/param>
 		/// <returns>XML-encoded online status report (or unknown if request failed)</returns>
-		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID agentKey;
 			try
 			{
 				bool check = false;
-				if (Paramaters.ContainsKey("key")) {
-					check = UUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
+				if (Parameters.ContainsKey("key")) {
+					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out agentKey);
 				} else {
 					return "<error>arguments</error>";
 				}
@@ -546,14 +546,14 @@ namespace RESTBot
 		/// <param name="b">A currently active RestBot</param>
 		/// <param name="Parameters">A dictionary containing the avatar UUID(s) to get the profile for</param>
 		/// <returns>XML-encoded profile name, if found</returns>
-		public override string Process(RestBot b, Dictionary<string, string> Paramaters)
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID agentKey;
 			try
 			{
 				bool check = false;
-				if (Paramaters.ContainsKey("key")) {
-					check = UUID.TryParse(Paramaters["key"].ToString().Replace("_"," "), out agentKey);
+				if (Parameters.ContainsKey("key")) {
+					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out agentKey);
 				} else {
 					return "<error>arguments</error>";
 				}
