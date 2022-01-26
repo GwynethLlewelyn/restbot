@@ -81,7 +81,7 @@ namespace RESTBot.Server
             DebugUtilities.WriteDebug("If you see this message, all was good when initializing the router");
         }
 
-        private void RunListener(object ResetTrigger)
+        private void RunListener(object? ResetTrigger)
         {
             DebugUtilities.WriteDebug("Router thread started successfully");
 

@@ -36,7 +36,7 @@ namespace RESTBot
         /// <summary>
         /// The name of the method. Should be set in the constructor.
         /// </summary>
-        public string MethodName;
+        public string MethodName = "unknown";	// cannot be null! (gwyneth 20220126)
 
         /// <summary>
         /// Process the request through this method
@@ -56,7 +56,7 @@ namespace RESTBot
         /// <summary>
         /// The name of the method. Should be set in the constructor.
         /// </summary>
-        public string MethodName;
+        public string MethodName = "unknown";	// making sure it's never null. (gwyneth 20220126)
 
         /// <summary>
         /// An optionally overridable method for setting up events and callbacks from a RestBot

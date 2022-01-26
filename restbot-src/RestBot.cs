@@ -176,7 +176,10 @@ namespace RESTBot
 
 		private readonly System.Timers.Timer ReloginTimer;
 		public delegate void BotStatusCallback(UUID Session, Status status);	/// <summary>Callback for the bot status</summary>
-		public event BotStatusCallback OnBotStatus;	/// <summary>Event called when requesting the bot status</summary>
+		/// <summary>Event called when requesting the bot status</summary>
+		/// <remarks>It's not used here, but invoked from Program.DisposeSession() (declared on Program.cs)</remarks>
+		// (remarks by gwyneth 20220126)
+		public event BotStatusCallback? OnBotStatus = null;
 
     private System.Timers.Timer updateTimer;
 
@@ -229,7 +232,7 @@ namespace RESTBot
 		/// </summary>
 		/// <param name="sender">Sender object</param>
 		/// <param name="e">Arguments for the elapsed event</param>
-    void ReloginTimer_Elapsed(object sender, ElapsedEventArgs e)
+    void ReloginTimer_Elapsed(object? sender, ElapsedEventArgs e)
     {
         ReloginTimer.Stop();
         DebugUtilities.WriteInfo(sessionid.ToString() + " relogging...");
@@ -237,7 +240,7 @@ namespace RESTBot
         //This is where we can handle relogin failures, too.
     }
 
-    private void updateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void updateTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
       foreach (StatefulPlugin sp in StatefulPlugins.Values)
       {
@@ -254,7 +257,7 @@ namespace RESTBot
 		/// <param name="sender">Sender object</param>
 		/// <param name="e">Arguments for the disconnected event</param>
     /// <remarks>rewrote to show message</remarks>
-    void Network_OnDisconnected(object sender, DisconnectedEventArgs e)
+    void Network_OnDisconnected(object? sender, DisconnectedEventArgs e)
     {
       if(e.Reason != NetworkManager.DisconnectType.ClientInitiated)
       {
@@ -291,7 +294,7 @@ namespace RESTBot
       }
 
       //Client.Network.LoginProgress +=
-      //    delegate(object sender, LoginProgressEventArgs e)
+      //    delegate(object? sender, LoginProgressEventArgs e)
       //    {
       //        DebugUtilities.WriteDebug(String.Format("Login {0}: {1}", e.Status, e.Message));
 

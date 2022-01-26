@@ -93,7 +93,7 @@ namespace RESTBot
 
                 foreach (Primitive p in prims)
                 {
-                    string name = p.Properties != null ? p.Properties.Name : null;
+                    string? name = p.Properties != null ? p.Properties.Name : null;
                     if (String.IsNullOrEmpty(type) || ((name != null) && (name.Contains(type))))
                     {
                         resultSet += String.Format("<prim><name>{0}</name><pos>{1},{2},{3}</pos></prim>", name, p.Position.X, p.Position.Y, p.Position.Z);
@@ -123,6 +123,8 @@ namespace RESTBot
                     PrimsWaiting.Add(objects[i].ID, objects[i]);
                 }
             }
+						if (me == null)	// it _can_ be null these days, so we return false (gwyneth 20220126)
+							return false;
 
             me.Client.Objects.SelectObjects(me.Client.Network.CurrentSim, localids);
 
@@ -133,7 +135,7 @@ namespace RESTBot
     public class NearbyPrimPlugin : StatefulPlugin
     {
         private UUID session;
-        private RestBot me;
+        private RestBot? me;
 
         Dictionary<UUID, Primitive> PrimsWaiting = new Dictionary<UUID, Primitive>();
         AutoResetEvent AllPropertiesReceived = new AutoResetEvent(false);

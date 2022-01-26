@@ -27,24 +27,25 @@
 		Author: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
 --------------------------------------------------------------------------------*/
 using System;
-using System.Collections.Generic;
+// using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
 using System.Net;
 using System.Threading;
 
-namespace RESTbot
+namespace RESTBot
 {
 	/// <summary>All-around utility class</summary>
 	public static class Utilities
 	{
 		#region name2key/key2name
 		/// <summary>Caches for name2key and key2name requests</summary>
-		protected static Dictionary<UUID, AutoResetEvent> NameLookupEvents = new Dictionary<UUID, AutoResetEvent>();
-		protected static Dictionary<UUID, AutoResetEvent> KeyLookupEvents = new Dictionary<UUID, AutoResetEvent>();
-		protected static Dictionary<UUID, String> avatarNames = new Dictionary<UUID, String>();
-		protected static Dictionary<String, UUID> avatarKeys = new Dictionary<String, UUID>();
+		/// <see>AvatarNameLookupPlugin, AvatarKeyLookupPlugin</see>
+		private static Dictionary<UUID, AutoResetEvent> NameLookupEvents = new Dictionary<UUID, AutoResetEvent>();
+		private static Dictionary<UUID, String> avatarNames = new Dictionary<UUID, String>();
+		private static Dictionary<String, AutoResetEvent> KeyLookupEvents = new Dictionary<String, AutoResetEvent>();
+		private static Dictionary<String, UUID> avatarKeys = new Dictionary<String, UUID>();
 
 		/// <summary>
 		/// key2name (given an avatar UUID, returns the avatar name, if it exists)
@@ -95,7 +96,7 @@ namespace RESTbot
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
 		/// <remarks>obsolete syntax changed</remarks>
-		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
+		private static void Avatars_OnAvatarNames(object? sender, UUIDNameReplyEventArgs e)
 		{
 			DebugUtilities.WriteInfo("Avatars_OnAvatarNames(): Processing " + e.Names.Count.ToString() + " AvatarNames replies");
 			foreach (KeyValuePair<UUID, string> kvp in e.Names)

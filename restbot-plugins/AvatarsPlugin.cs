@@ -154,7 +154,7 @@ namespace RESTBot
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
 		/// <remarks>obsolete syntax changed</remarks>
-		private void Avatars_OnAvatarNames(object sender, UUIDNameReplyEventArgs e)
+		private void Avatars_OnAvatarNames(object? sender, UUIDNameReplyEventArgs e)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " Processing " + e.Names.Count.ToString() + " AvatarNames replies");
 			foreach (KeyValuePair<UUID, string> kvp in e.Names)
@@ -339,7 +339,7 @@ namespace RESTBot
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
 		/// <remarks>using new Directory functionality</remarks>
-		public void Avatars_OnDirPeopleReply(object sender, DirPeopleReplyEventArgs e)
+		public void Avatars_OnDirPeopleReply(object? sender, DirPeopleReplyEventArgs e)
 		{
 			if (e.MatchedPeople.Count < 1)
 			{
@@ -485,7 +485,7 @@ namespace RESTBot
 		/// <param name="e">List of avatar properties</param>
 		/// <returns>void</returns>
 		/// <remarks>updated for new callbacks</remarks>
-		public void AvatarPropertiesReply(object sender, AvatarPropertiesReplyEventArgs e)
+		public void AvatarPropertiesReply(object? sender, AvatarPropertiesReplyEventArgs e)
 		{
 			/*
 			AvatarPropertiesReplyPacket reply = (AvatarPropertiesReplyPacket)packet;
@@ -631,7 +631,7 @@ namespace RESTBot
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
 		/// <remarks>changed to deal with new replies</remarks>
-		public void Avatars_OnAvatarProperties(object sender, AvatarPropertiesReplyEventArgs e)
+		public void Avatars_OnAvatarProperties(object? sender, AvatarPropertiesReplyEventArgs e)
 		{
 			lock (avatarProfile) {
 				avatarProfile[e.AvatarID] = e.Properties;
@@ -777,7 +777,7 @@ namespace RESTBot
 		/// <param name="sender">parameter ignored</param>
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
-		public void Avatar_OnAvatarGroups(object sender, AvatarGroupsReplyEventArgs e)
+		public void Avatar_OnAvatarGroups(object? sender, AvatarGroupsReplyEventArgs e)
 		{
 			lock (avatarGroups)
 			{

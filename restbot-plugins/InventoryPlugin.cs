@@ -498,7 +498,7 @@ namespace RESTBot
 			AutoResetEvent fetchItemEvent = new AutoResetEvent(false);
 
 			EventHandler<ItemReceivedEventArgs> itemReceivedCallback =
-				delegate (object sender, ItemReceivedEventArgs e)
+				delegate (object? sender, ItemReceivedEventArgs e)
 				{
 					if (e.Item.UUID == itemID)
 					{

@@ -100,7 +100,7 @@ namespace RESTBot
 			return activeGroup;
 		}
 
-		private void AgentDataUpdateHandler(object sender, PacketReceivedEventArgs e)
+		private void AgentDataUpdateHandler(object? sender, PacketReceivedEventArgs e)
 		{
 			AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
 			//if (p.AgentData.AgentID == Client.Self.AgentID)
@@ -173,7 +173,7 @@ namespace RESTBot
 			GroupsEvent.Reset();
 		}
 
-		void Groups_CurrentGroups(object sender, CurrentGroupsEventArgs e)
+		void Groups_CurrentGroups(object? sender, CurrentGroupsEventArgs e)
 		{
 			if (null == GroupsCache)
 				GroupsCache = e.Groups;
@@ -223,7 +223,7 @@ namespace RESTBot
 			return activeGroup;
 		}
 
-		private void AgentDataUpdateHandler(object sender, PacketReceivedEventArgs e)
+		private void AgentDataUpdateHandler(object? sender, PacketReceivedEventArgs e)
 		{
 			AgentDataUpdatePacket p = (AgentDataUpdatePacket)e.Packet;
 			//if (p.AgentData.AgentID == Client.Self.AgentID)
@@ -334,7 +334,7 @@ namespace RESTBot
 			return "message sent";
 		}
 
-		void Self_GroupChatJoined(object sender, GroupChatJoinedEventArgs e)
+		void Self_GroupChatJoined(object? sender, GroupChatJoinedEventArgs e)
 		{
 			if (e.Success)
 			{

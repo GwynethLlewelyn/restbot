@@ -400,7 +400,7 @@ namespace RESTBot
     {
         private UUID session;
         const float DISTANCE_BUFFER = 3.0f;
-        private RestBot me;
+        private RestBot? me;
         uint targetLocalID = 0;
 
         public FollowPlugin()

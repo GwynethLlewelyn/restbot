@@ -193,7 +193,7 @@ namespace RESTBot
 								// InstantMessage *always* needs an avatar UUID!
 								// We need to look it up; fortunately, there are plenty of options available to get those.
 								String avatarFullName = avatarFirstName.ToString() + " " + avatarLastName.ToString();
-								avatarKey = AvatarKeyLookupPlugin.getKey(b, avatarFullName);	// handles conversion to lowercase.
+								avatarKey = Utilities.getKey(b, avatarFullName);	// handles conversion to lowercase.
 								if (avatarKey == UUID.Zero)
 								{
 										DebugUtilities.WriteWarning("Key not found for unknown avatar '" + avatarFullName + "'");
