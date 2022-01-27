@@ -27,10 +27,14 @@ using OpenMetaverse.Packets;
 using System.Net;
 using System.Threading;
 
-// group functions; based on TestClient.exe code
+/// <summary>
+/// group functions; based on TestClient.exe code
+/// </summary>
 namespace RESTBot
 {
-	// Set active group, using group UUID
+	/// <summary>
+	/// Set active group, using group UUID
+	/// </summary>
 	public class ActivateGroupKeyPlugin : StatefulPlugin
 	{
 		protected ManualResetEvent GroupsEvent = new ManualResetEvent(false);
@@ -38,16 +42,29 @@ namespace RESTBot
 		private UUID session;
 		private string? activeGroup;	// possibly null if this avatar does not belong to any group
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public ActivateGroupKeyPlugin()
 		{
 			MethodName = "group_key_activate";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the group UUID</param>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID groupUUID;
@@ -55,19 +72,25 @@ namespace RESTBot
 			try
 			{
 				bool check = false;
-				if ( Parameters.ContainsKey("key") ) {
+				if (Parameters.ContainsKey("key"))
+				{
 					DebugUtilities.WriteDebug("TR - Attempting to parse from POST");
 					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out groupUUID);
 					DebugUtilities.WriteDebug("TR - Succesfully parsed POST");
-				} else {
+				}
+				else
+				{
 					return "<error>arguments</error>";
 				}
-				if ( check ) {
+				if (check)
+				{
 					DebugUtilities.WriteDebug("TR - Activating group");
 					string response = activateGroup(b, groupUUID);
 					DebugUtilities.WriteDebug("TR - Complete");
 					return "<active>" + response.Trim() + "</active>\n";
-				} else {
+				}
+				else
+				{
 					return "<error>parsekey</error>";
 				}
 			}
@@ -79,6 +102,11 @@ namespace RESTBot
 
 		}
 
+		/// <summary>
+		/// Internal function that wil set the bot's group to a certain group UUID.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the UUID for a group.</param>
 		private string activateGroup(RestBot b, UUID groupUUID)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Activating group " + groupUUID.ToString());
@@ -86,7 +114,8 @@ namespace RESTBot
 			b.Client.Network.RegisterCallback(PacketType.AgentDataUpdate, pcallback);
 			b.Client.Groups.ActivateGroup(groupUUID);
 
-			if ( ! GroupsEvent.WaitOne(15000, true) ) {
+			if (!GroupsEvent.WaitOne(15000, true))
+			{
 				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on setting active group");
 			}
 
@@ -111,24 +140,41 @@ namespace RESTBot
 		}
 	}
 
-	// Set active group, using group Name
+	/// <summary>
+	/// Set active group, using group Name
+	/// </summary>
 	public class ActivateGroupNamePlugin : StatefulPlugin
 	{
 		protected ManualResetEvent GroupsEvent = new ManualResetEvent(false);
 		public Dictionary<UUID, Group>? GroupsCache = null;	// should *not* be set to null!
-		private UUID session;
+		private UUID session = UUID.Zero;	// no nulls here (gwyneth 20220127)
 		private string? activeGroup;	// may be null if avatar has no groups
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public ActivateGroupNamePlugin()
 		{
 			MethodName = "group_name_activate";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <remarks>It sets the UUID for the current but session, if one exists; if not, sessionid should be set
+		/// to UUID.Zero</remarks>
 		public override void Initialize(RestBot bot)
 		{
-			session = bot.sessionid;
+			session = bot.sessionid;	// should never be null; worst-case scenario, it's UUID.Zero (gwyneth 20220127)
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the group name, or UUID</param>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID groupUUID;
@@ -136,9 +182,12 @@ namespace RESTBot
 			DebugUtilities.WriteDebug("TR - Entering group key parser");
 			try
 			{
-				if ( Parameters.ContainsKey("name") ) {
+				if (Parameters.ContainsKey("name"))
+				{
 					groupName = Parameters["name"].ToString().Replace("%20"," ").Replace("+"," ");
-				} else {
+				}
+				else
+				{
 					return "<error>arguments</error>";
 				}
 				DebugUtilities.WriteDebug("TR - Activating group");
@@ -156,12 +205,11 @@ namespace RESTBot
 					return "<error>group name '" + groupName + "' doesn't exist.</error>";
 				}
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>parsekey</error>";
 			}
-
 		}
 
 		public void ReloadGroupsCache(RestBot b)

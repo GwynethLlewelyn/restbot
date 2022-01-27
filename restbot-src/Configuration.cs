@@ -70,19 +70,23 @@ namespace RESTBot.XMLConfig
       }
       try
       {
-        fileStream.Seek(0, SeekOrigin.Begin);
-        return (Configuration)serializer.Deserialize(fileStream);
+				// fileStream is now nullable; return null if that's the case. (gwyneth 20220127)
+				if (fileStream != null)
+				{
+        	fileStream.Seek(0, SeekOrigin.Begin);
+					return (Configuration)serializer.Deserialize(fileStream);
+				}
       }
       catch (Exception e)
       {
         DebugUtilities.WriteError("Could not parse XML file!");
         DebugUtilities.WriteError("\t" + e.Message);
-        Environment.Exit(1);
+        Environment.Exit(1);	// this is overkill... we might be able to deal with most errors using reasonable defaults... (gwyneth 20220127)
       }
       return null;
-    }
-  }
-}
+    } // end constructor
+  } // end class Configuration
+} // end namespace RESTBot.XMLConfig, but, weirdly enough, it continues below...
 
 namespace RESTBot.XMLConfig
 {

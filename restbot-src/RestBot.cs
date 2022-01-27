@@ -216,7 +216,12 @@ namespace RESTBot
       StatefulPlugins = new Dictionary<string, StatefulPlugin>();
       foreach (Type t in RestBot.StatefulPluginDefinitions)
       {
-        ConstructorInfo info = t.GetConstructor(Type.EmptyTypes);
+        ConstructorInfo? info = t.GetConstructor(Type.EmptyTypes);
+				if (info == null)
+				{
+					DebugUtilities.WriteDebug(session.ToString() + " could not get constructor for type " + t.ToString());
+					continue;
+				}
         StatefulPlugin sp = (StatefulPlugin)info.Invoke(new object[0]);
         // Add it to the dictionary
         RegisterStatefulPlugin(sp.MethodName, sp);
@@ -318,7 +323,7 @@ namespace RESTBot
       Client.Throttle.Cloud = 0;
       Client.Throttle.Land = 1000000;
       Client.Throttle.Task = 1000000;
-			Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri ?? RESTBot.XMLConfig.Configuration.defaultLoginURI;
+			Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri; // ?? RESTBot.XMLConfig.Configuration.defaultLoginURI; // not needed, it's now the default anyway!
 
       DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
 
