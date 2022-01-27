@@ -392,7 +392,7 @@ namespace RESTBot
 				if (embedItemID != UUID.Zero)
 				{
 					// Try to fetch the inventory item
-					InventoryItem item = FetchItem(b, embedItemID);
+					InventoryItem? item = FetchItem(b, embedItemID);
 					if (item != null)
 					{
 						notecard.EmbeddedItems = new List<InventoryItem> { item };

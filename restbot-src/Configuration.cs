@@ -36,7 +36,6 @@ namespace RESTBot.XMLConfig
 	/// Configuration class designed for the `bots array found in the xml config file
 	/// </summary>
 	/// <remarks>To find a copy of this class, see the Configuration class</remarks>
-
 	[XmlRoot("restbot")]
   public class Configuration
   {
@@ -105,42 +104,42 @@ namespace RESTBot.XMLConfig
 		[XmlElement("webapi-url")]
 		public string backendURL = "https://localhost/actorbot/pipe.php"; // What _is_ this!? It's not included anywhere... (gwyneth 20220109)
 	}
-}
 
-/// <summary>Class to configure the start location</summary>
-public class StartLocationConfig
-{
-  //TODO: Make x,y,z floats but round them off when using them (this is so the parser can read a decimal instead of errroring out)
+	/// <summary>Class to configure the start location</summary>
+	public class StartLocationConfig
+	{
+  	//TODO: Make x,y,z floats but round them off when using them (this is so the parser can read a decimal instead of errroring out)
 
-  [XmlElement("sim")]
-  public string startSim = "strace island"; // 'Ahern' ought to be a better default... (gwyneth 20220109)
-  [XmlElement("x")]
-  public int x = 128;
-  [XmlElement("y")]
-  public int y = 128;
-  [XmlElement("z")]
-  public int z = 128;	/// 20 or 30 ought to be more reasonable starting points, since that's the level that water is set (gwyneth 20220109)
-}
+  	[XmlElement("sim")]
+  	public string startSim = "strace island"; // 'Ahern' ought to be a better default... (gwyneth 20220109)
+  	[XmlElement("x")]
+  	public int x = 128;
+  	[XmlElement("y")]
+  	public int y = 128;
+  	[XmlElement("z")]
+  	public int z = 128;	/// 20 or 30 ought to be more reasonable starting points, since that's the level that water is set (gwyneth 20220109)
+	}
 
-/// <summary>Class to deal with debugging</summary>
-/// <remarks>
-///   <para>[Original comment:] itty bitty file - can be expanded onto later</para>
-///		<para>Note that the DebugUtilities class checks if the <code>restbotDebug</code> variable is set, falling back to hard-coded #defines if not (gwyneth 20220109)</para>
-///  </remarks>
-public class DebugConfig
-{
-  [XmlElement("restbot")]
-  public bool restbotDebug = false;
-  [XmlElement("libsl")]
-  public bool slDebug = true;
-}
+	/// <summary>Class to deal with debugging</summary>
+	/// <remarks>
+	///   <para>[Original comment:] itty bitty file - can be expanded onto later</para>
+	///		<para>Note that the DebugUtilities class checks if the <code>restbotDebug</code> variable is set, falling back to hard-coded #defines if not (gwyneth 20220109)</para>
+	///  </remarks>
+	public class DebugConfig
+	{
+  	[XmlElement("restbot")]
+  	public bool restbotDebug = false;
+  	[XmlElement("libsl")]
+  	public bool slDebug = true;
+	}
 
-/// <summary>Class to deal with security configurations</summary>
-/// <remarks>Password MUST be changed when in production! (gwyneth 20220109)</remarks>
-public class SecurityConfig
-{
-  [XmlElement("hostnamelock")]
-  public bool hostnameLock = false;
-  [XmlElement("serverpassword")]
-  public string serverPass = "pass";	// Change me!
+	/// <summary>Class to deal with security configurations</summary>
+	/// <remarks>Password MUST be changed when in production! (gwyneth 20220109)</remarks>
+	public class SecurityConfig
+	{
+  	[XmlElement("hostnamelock")]
+  	public bool hostnameLock = false;
+  	[XmlElement("serverpassword")]
+  	public string serverPass = "pass";	// Change me!
+	}
 }

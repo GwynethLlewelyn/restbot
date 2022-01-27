@@ -39,7 +39,7 @@ namespace RESTBot
 	{
 		protected ManualResetEvent GroupsEvent = new ManualResetEvent(false);
 
-		private UUID session;
+		private UUID session = UUID.Zero;	// no nulls here! (gwyneth 20220127)
 		private string? activeGroup;	// possibly null if this avatar does not belong to any group
 
 		/// <summary>
@@ -65,6 +65,8 @@ namespace RESTBot
 		/// </summary>
 		/// <param name="b">A currently active RestBot</param>
 		/// <param name="Parameters">A dictionary containing the group UUID</param>
+		/// <returns>XML with information on the activated group key if successful,
+		/// XML error otherwise</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID groupUUID;
@@ -80,26 +82,28 @@ namespace RESTBot
 				}
 				else
 				{
-					return "<error>arguments</error>";
+					return "<error>invalid arguments</error>\n";
 				}
 				if (check)
 				{
 					DebugUtilities.WriteDebug("TR - Activating group");
-					string response = activateGroup(b, groupUUID);
+					string? response = activateGroup(b, groupUUID);
 					DebugUtilities.WriteDebug("TR - Complete");
-					return "<active>" + response.Trim() + "</active>\n";
+					if (response != null)
+						return "<active>" + response.Trim() + "</active>\n";
+					else
+						return "<error>group could not be activated</error>\n";
 				}
 				else
 				{
-					return "<error>parsekey</error>";
+					return "<error>parsekey</error>\n";
 				}
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>parsekey</error>";
+				return "<error>parsekey</error>\n";
 			}
-
 		}
 
 		/// <summary>
@@ -107,7 +111,8 @@ namespace RESTBot
 		/// </summary>
 		/// <param name="b">A currently active RestBot</param>
 		/// <param name="Parameters">A dictionary containing the UUID for a group.</param>
-		private string activateGroup(RestBot b, UUID groupUUID)
+		/// <returns>String with the group name, or null if group not found</returns>
+		private string? activateGroup(RestBot b, UUID groupUUID)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Activating group " + groupUUID.ToString());
 			EventHandler<PacketReceivedEventArgs> pcallback = AgentDataUpdateHandler;
@@ -175,6 +180,7 @@ namespace RESTBot
 		/// </summary>
 		/// <param name="b">A currently active RestBot</param>
 		/// <param name="Parameters">A dictionary containing the group name, or UUID</param>
+		/// <returns>XML containing the group name that was activated, if successful; XML error otherwise.</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID groupUUID;
@@ -197,7 +203,10 @@ namespace RESTBot
 				{
 					string response = activateGroup(b, groupUUID);
 					DebugUtilities.WriteDebug("TR - Complete");
-					return "<active>" + response.Trim() + "</active>\n";
+					if (response != null)
+						return "<active>" + response.Trim() + "</active>\n";
+					else
+						return "<error>group could not be activated</error>\n";
 				}
 				else
 				{
@@ -212,6 +221,12 @@ namespace RESTBot
 			}
 		}
 
+		/// <summary>
+		/// Clears the group cache for this 'bot, and reloads it with all
+		/// the current groups that this 'bot is in.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public void ReloadGroupsCache(RestBot b)
 		{
 			b.Client.Groups.CurrentGroups += Groups_CurrentGroups;
@@ -221,6 +236,12 @@ namespace RESTBot
 			GroupsEvent.Reset();
 		}
 
+		/// <summary>
+		/// Notification event with the list of groups belonging to an avatar
+		/// </summary>
+		/// <param name="sender">Event owner</param>
+		/// <param name="e">Arguments for event</param>
+		/// <returns>void</returns>
 		void Groups_CurrentGroups(object? sender, CurrentGroupsEventArgs e)
 		{
 			if (null == GroupsCache)
@@ -230,6 +251,12 @@ namespace RESTBot
 			GroupsEvent.Set();
 		}
 
+		/// <summary>
+		/// Returns the UUID of a group, given its name
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="groupName">Group name to search for</param>
+		/// <returns>UUID for the group name, if it exists; UUID.Zero otherwise</returns>
 		public UUID GroupName2UUID(RestBot b, String groupName)
 		{
 			UUID tryUUID;
@@ -250,6 +277,12 @@ namespace RESTBot
 			return UUID.Zero;
 		}
 
+		/// <summary>
+		/// Activates a group for a 'bot, given the group key.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="groupUUID">UUID of the group to activate</param>
+		/// <returns>Activated group name, or empty if activation failed</returns>
 		private string activateGroup(RestBot b, UUID groupUUID)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Activating group " + groupUUID.ToString());
@@ -257,7 +290,7 @@ namespace RESTBot
 			b.Client.Network.RegisterCallback(PacketType.AgentDataUpdate, pcallback);
 			b.Client.Groups.ActivateGroup(groupUUID);
 
-			if ( ! GroupsEvent.WaitOne(15000, true) ) {
+			if (!GroupsEvent.WaitOne(15000, true)) {
 				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on setting active group");
 			}
 
@@ -266,9 +299,11 @@ namespace RESTBot
 			GroupsEvent.Reset();
 
 			if (String.IsNullOrEmpty(activeGroup))
-				  	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
-
-			return activeGroup;
+			{
+				DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
+				return "";	// maybe we ought to return something else? (gwyneth 20220127)
+			}
+			return activeGroup;	// guaranteed *not* to be null, nor empty! (gwyneth 20220127)
 		}
 
 		private void AgentDataUpdateHandler(object? sender, PacketReceivedEventArgs e)
@@ -282,23 +317,37 @@ namespace RESTBot
 		}
 	}
 
-	// Send Group Instant Message (Group Chat)
+	/// <summary>Send Group Instant Message (Group Chat)</summary>
 	public class GroupIMPlugin : StatefulPlugin
 	{
 		protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
-		private UUID session;
+		private UUID session = UUID.Zero;	// no nulls here! (gwyneth 20220127)
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public GroupIMPlugin()
 		{
 			MethodName = "group_im"; // parameters are key (Group UUID) and message
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the group UUID and the message to send to group IM</param>
+		/// <returns>XML with information on the sent group IM message, if successful;
+		/// XML error otherwise</returns>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID groupUUID;
@@ -307,7 +356,7 @@ namespace RESTBot
 			try
 			{
 				bool check = false;
-				if ( Parameters.ContainsKey("key") )
+				if (Parameters.ContainsKey("key"))
 				{
 					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out groupUUID);
 				}
@@ -315,9 +364,9 @@ namespace RESTBot
 				{
 					return "<error>arguments: no key</error>";
 				}
-				if ( check )
+				if (check)
 				{
-					if ( Parameters.ContainsKey("message") )
+					if (Parameters.ContainsKey("message"))
 					{
 						message = Parameters["message"].ToString().Replace("%20"," ").Replace("+"," ");
 					}
@@ -325,7 +374,6 @@ namespace RESTBot
 					{
 						return "<error>arguments: no message</error>";
 					}
-
 				}
 				else
 				{
@@ -341,16 +389,25 @@ namespace RESTBot
 
 				string response = sendIMGroup(b, groupUUID, message);
 
+				if (string.IsNullOrEmpty(response))
+					return "<error>group message not sent, or answer was empty</error>\n";
+
 				return "<message>" + response.Trim() + "</message>\n";
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>loads of errors</error>";
 			}
-
 		}
 
+		/// <summary>
+		/// Internal method to send a message to a group the 'bot is in.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="groupUUID">Group UUID</param>
+		/// <param name="message">Message to send to the group IM</param>
+		/// <returns>String with "message sent", if successful; "timeout" otherwise</returns>
 		private string sendIMGroup(RestBot b, UUID groupUUID, string message)
 		{
 			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Sending message '" + message + "' to group UUID " + groupUUID.ToString());
@@ -396,24 +453,42 @@ namespace RESTBot
 		}
 	}
 
-	// Invite avatar to join a group
-	//	 Syntax similar to TestClient, e.g. avatar UUID, Group UUID, Role UUID
+	/// <summary>
+	/// Invite avatar to join a group
+	///	 Syntax similar to TestClient, e.g. avatar UUID, Group UUID, Role UUID
+	/// </summary>
 	public class InviteGroupPlugin : StatefulPlugin
 	{
 		// protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
-		private UUID session;
+		private UUID session = UUID.Zero;	// no nulls here! (gwyneth 20220127)
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public InviteGroupPlugin()
 		{
 			MethodName = "group_invite"; // parameters are key (Group UUID) and message
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the UUID of the avatar to invite, the UUID of
+		/// the group to invite, and the role UUID to invite the avatar in to</param>
+		/// <returns>XML with information about a successful invite to a group/role; XML error otherwise</returns>
+		/// <remarks><para>Currently, avatars can only be invited to a singke role at the time.</para>
+		/// <para>To-do: work on allowing invitations to multiple roles simultaenously!</para></remarks>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID avatar = UUID.Zero;
@@ -424,7 +499,7 @@ namespace RESTBot
 			try
 			{
 				bool check = false;
-				if ( Parameters.ContainsKey("avatar") )
+				if (Parameters.ContainsKey("avatar"))
 				{
 					check = UUID.TryParse(Parameters["avatar"].ToString().Replace("_"," "), out avatar);
 				}
@@ -432,9 +507,9 @@ namespace RESTBot
 				{
 					return "<error>arguments: no avatar key</error>";
 				}
-				if ( check )
+				if (check)
 				{
-					if ( Parameters.ContainsKey("group") )
+					if (Parameters.ContainsKey("group"))
 					{
 						check = UUID.TryParse(Parameters["group"].ToString().Replace("_"," "), out group);
 					}
@@ -444,9 +519,9 @@ namespace RESTBot
 					}
 
 					// to-do: avatars can be invited to multiple roles.
-					if ( Parameters.ContainsKey("role") )
+					if (Parameters.ContainsKey("role"))
 					{
-						if (! UUID.TryParse(Parameters["role"].ToString().Replace("_"," "), out role) )
+						if (!UUID.TryParse(Parameters["role"].ToString().Replace("_"," "), out role))
 						{
 							// just a warning, role is optional
 							DebugUtilities.WriteDebug(session + " " + MethodName + " no role found, but that's ok");
@@ -463,15 +538,13 @@ namespace RESTBot
 					return "<error>parsekey</error>";
 				}
 
-
-
 				DebugUtilities.WriteDebug(session + " " + MethodName + " Group UUID: " + group + " Avatar UUID to join group: " + avatar + " Role UUID for avatar to join: " + roles.ToString() + " (NULL_KEY is fine)");
 
 				b.Client.Groups.Invite(group, roles, avatar);
 
 				return "<invitation>invited " + avatar + " to " + group + "</invitation>\n";
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>loads of errors</error>";
@@ -480,25 +553,39 @@ namespace RESTBot
 		}
 	}
 
-	// Send group notice
-	//  Requires group UUID, subject, message, attachment item UUID (not asset UUID)
-
+	/// <summary>
+	/// Send group notice
+	///  Requires group UUID, subject, message, attachment item UUID (not asset UUID)
+	/// </summary>
 	public class SendGroupNoticePlugin : StatefulPlugin
 	{
 		//protected ManualResetEvent WaitForSessionStart = new ManualResetEvent(false);
-		private UUID session;
+		private UUID session = UUID.Zero;	// no nulls here! (gwyneth 20220127)
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public SendGroupNoticePlugin()
 		{
 			MethodName = "group_notice"; // parameters are key (Group UUID) and message
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the message </param>
+		/// <returns></returns>
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			string message;
@@ -509,7 +596,7 @@ namespace RESTBot
 
 			try
 			{
-				if ( Parameters.ContainsKey("subject") )
+				if (Parameters.ContainsKey("subject"))
 				{
 					subject = Parameters["subject"].ToString().Replace("%20"," ").Replace("+"," ");
 				}
@@ -518,7 +605,7 @@ namespace RESTBot
 					return "<error>No notice subject</error>";
 				}
 
-				if ( Parameters.ContainsKey("message") )
+				if (Parameters.ContainsKey("message"))
 				{
 					message = Parameters["message"].ToString().Replace("%20"," ").Replace("+"," ");
 				}
@@ -527,9 +614,9 @@ namespace RESTBot
 					return "<error>No notice message</error>";
 				}
 
-				if ( Parameters.ContainsKey("group") )
+				if (Parameters.ContainsKey("group"))
 				{
-					if (! UUID.TryParse(Parameters["group"].ToString().Replace("_"," "), out groupUUID) )
+					if (!UUID.TryParse(Parameters["group"].ToString().Replace("_"," "), out groupUUID))
 					{
 						return "<error>parsekey group</error>";
 					}
@@ -539,9 +626,9 @@ namespace RESTBot
 					return "<error>arguments: no group key</error>";
 				}
 
-				if ( Parameters.ContainsKey("attachment") )
+				if (Parameters.ContainsKey("attachment"))
 				{
-					if (!  UUID.TryParse(Parameters["attachment"].ToString().Replace("_"," "), out attachmentUUID) )
+					if (!UUID.TryParse(Parameters["attachment"].ToString().Replace("_"," "), out attachmentUUID))
 					{
 						return "<error>parsekey attachment</error>";
 					}
@@ -555,7 +642,7 @@ namespace RESTBot
 				DebugUtilities.WriteDebug(session + " " + MethodName + " Attempting to create a notice");
 
 				/* This doesn't work as it should!
-				if (! b.Client.Inventory.Store.Contains(attachmentUUID))
+				if (!b.Client.Inventory.Store.Contains(attachmentUUID))
 				{
 					DebugUtilities.WriteWarning(session + " " + MethodName + " Item UUID " + attachmentUUID.ToString() + " not found on inventory (are you using an Asset UUID by mistake?)");
 					attachmentUUID = UUID.Zero;
@@ -575,7 +662,7 @@ namespace RESTBot
 
 				return "<notice>sent</notice>\n";
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>loads of errors</error>";

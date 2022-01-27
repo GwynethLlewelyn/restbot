@@ -32,6 +32,7 @@ using System.Text;
 
 namespace RESTBot.Server
 {
+		/// <summary>HTTP router for incoming REST requests</summary>
     public partial class Router
     {
         private IPAddress _bounded_ip;
@@ -40,6 +41,8 @@ namespace RESTBot.Server
         private Thread _router_thread;
         private ManualResetEvent _proccessed_connection = new ManualResetEvent(false);
         public bool StillRunning;
+
+				/// <summary>Constructor</summary>
         public Router(IPAddress IP, int Port)
         {
             _bounded_ip = IP;
@@ -47,7 +50,7 @@ namespace RESTBot.Server
 
             try
             {
-                DebugUtilities.WriteInfo("Starting HTTP server..");
+                DebugUtilities.WriteInfo("Starting HTTP server...");
 
                 _listener = new TcpListener(_bounded_ip, _port);
                 _listener.Start();
@@ -83,6 +86,11 @@ namespace RESTBot.Server
 
         private void RunListener(object? ResetTrigger)
         {
+						if (ResetTrigger == null)
+						{
+								DebugUtilities.WriteWarning("RunListener was passed a null ResetTrigger");
+								return;
+						}
             DebugUtilities.WriteDebug("Router thread started successfully");
 
             ManualResetEvent trigger = (ManualResetEvent)ResetTrigger;

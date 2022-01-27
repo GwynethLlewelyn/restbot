@@ -117,7 +117,7 @@ namespace RESTBot
 #endif
       try
       {
-        if (Program.config.debug.restbotDebug != false)
+        if (Program.config != null && Program.config.debug != null && Program.config.debug.restbotDebug != false)
 					restbotLog.Debug(message);
         Output("[DEBUG] " + message, ConsoleColor.Gray);
       }
