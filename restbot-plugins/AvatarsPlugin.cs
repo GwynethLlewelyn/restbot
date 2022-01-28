@@ -130,7 +130,8 @@ namespace RESTBot
 				NameLookupEvents.Remove(id);
 			}
 			// C# 8+ is stricter with null assignments.
-			string? response = null;	// technically this cannot ever be null, so it doesn't make sense...
+			// string? response = null;	// technically this cannot ever be null, so it doesn't make sense...
+			string response = String.Empty;
 			if (avatarNames.ContainsKey(id))
 			{
 				response = avatarNames[id]; // .Name removed
@@ -139,10 +140,10 @@ namespace RESTBot
 					avatarNames.Remove(id);
 				}
 			}
-			else
+/*			else
 			{
 				response = String.Empty;
-			}
+			} */
 			return response;
 		}
 
