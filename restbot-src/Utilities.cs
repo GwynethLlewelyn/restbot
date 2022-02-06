@@ -130,7 +130,7 @@ namespace RESTBot
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
 		/// <remarks>using new Directory functionality</remarks>
-		public void Avatars_OnDirPeopleReply(object? sender, DirPeopleReplyEventArgs e)
+		public static void Avatars_OnDirPeopleReply(object? sender, DirPeopleReplyEventArgs e)
 		{
 			if (e.MatchedPeople.Count < 1)
 			{
