@@ -69,8 +69,7 @@ namespace RESTBot
     /// <summary>configuration object ^-- uses this file --^</summary>
     public static XMLConfig.Configuration? config;
 
-    //We need to move this to the security configuration block
-
+    /// <summary>We need to move this to the security configuration block</summary>
     private static DateTime uptime = new DateTime();
 
 		/// <summary>
@@ -99,9 +98,17 @@ namespace RESTBot
       DebugUtilities.WriteInfo("Startup complete");
       uptime = DateTime.Now;
 
-      while (StillRunning)
+			// let's see if we can figure out how much memory is being wasted
+			int stupidCounter = 0;
+      while (StillRunning) {
         System.Threading.Thread.Sleep(1);
       //TODO: Replace above with a manualresetevent
+
+				if (stupidCounter % 60 == 0) {	// stop every minute and check available memory (gwyneth 20220206)
+					DebugUtilities.WriteInfo("Memory in use: {0}\n", Math.Round(GC.GetTotalMemory(false) / 1024.0 / 1024.0).ToString());
+				}
+				stupidCounter++;
+			}
 
       Listener.StillRunning = false;
     }
@@ -338,5 +345,5 @@ namespace RESTBot
       s.Bot.Client.Network.Logout();
       Sessions.Remove(key);
     }
-  }
-}
+  } // end class Program
+} // end namespace RESTbot
