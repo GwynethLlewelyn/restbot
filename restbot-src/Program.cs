@@ -102,10 +102,12 @@ namespace RESTBot
 			int stupidCounter = 0;
       while (StillRunning) {
         System.Threading.Thread.Sleep(1);
-      //TODO: Replace above with a manualresetevent
+      	//TODO: Replace above with a manualresetevent
 
-				if (stupidCounter % 60 == 0) {	// stop every minute and check available memory (gwyneth 20220206)
-					DebugUtilities.WriteInfo("Memory in use: {0}\n", Math.Round(GC.GetTotalMemory(false) / 1024.0 / 1024.0).ToString());
+				if (stupidCounter % 60000 == 0) {	// stop every minute and check available memory (gwyneth 20220206)
+					DebugUtilities.WriteInfo("Memory in use before GC.Collect: " + Math.Round(GC.GetTotalMemory(false) / 1024.0 / 1024.0).ToString());
+					GC.Collect(); // collect garbage (gwyneth 20220207) and wait for GC to finish.
+					DebugUtilities.WriteInfo("Memory in use after GC.Collect:  " + Math.Round(GC.GetTotalMemory(true) / 1024.0 / 1024.0).ToString());
 				}
 				stupidCounter++;
 			}

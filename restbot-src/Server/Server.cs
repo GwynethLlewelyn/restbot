@@ -30,14 +30,20 @@ using System.Net;
 
 namespace RESTBot.Server
 {
+		/// <summary>Lower-level connections to special scenarios</summary>
     public partial class Router
     {
+				/// <summary>deals with methods of the router class</summary>
         private void AcceptClientThread(IAsyncResult result)
         {
             TcpClient client = _listener.EndAcceptTcpClient(result);
             _proccessed_connection.Set();
 
-            DebugUtilities.WriteInfo("Processing Connection from " + (client.Client.RemoteEndPoint.ToString() ?? "(unknown)") + "!");
+						EndPoint? endpoint = client.Client.RemoteEndPoint;	// we put it right here to make things easier later on (gwyneth 20220107)
+
+						string ip = (endpoint != null) ? (endpoint.ToString().Split(':'))[0] : String.Empty;
+
+            DebugUtilities.WriteInfo("Processing Connection from " + IPAddress.Parse (((IPEndPoint)endpoint).Address.ToString ()) + " (ip: " + ip + ")!"); // new syntax, since this is now nullable (gwyneth 20220207)
             NetworkStream stream = client.GetStream();
 
             DebugUtilities.WriteSpecial("Reading Stream");
@@ -58,9 +64,7 @@ namespace RESTBot.Server
             string hostname = "unknown";
             try
             {
-                EndPoint endpoint = client.Client.RemoteEndPoint;
-                DebugUtilities.WriteDebug("ip: " + endpoint.ToString());
-                string ip = (endpoint != null) ? (endpoint.ToString().Split(':'))[0] : String.Empty;
+                DebugUtilities.WriteDebug("ip: " + ip);
                 IPHostEntry host = Dns.GetHostEntry(IPAddress.Parse(ip));
                 hostname = host.HostName;
                 DebugUtilities.WriteDebug("ENDPOINT HOSTNAME: " + hostname);
