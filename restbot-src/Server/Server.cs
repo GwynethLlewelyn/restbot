@@ -43,7 +43,7 @@ namespace RESTBot.Server
 
 						string ip = (endpoint != null) ? (endpoint.ToString().Split(':'))[0] : String.Empty;
 
-            DebugUtilities.WriteInfo("Processing Connection from " + IPAddress.Parse (((IPEndPoint)endpoint).Address.ToString ()) + " (ip: " + ip + ")!"); // new syntax, since this is now nullable (gwyneth 20220207)
+            DebugUtilities.WriteInfo($"Processing Connection from {IPAddress.Parse(((IPEndPoint)endpoint).Address.ToString())} (ip: {ip})!"); // new syntax, since this is now nullable (gwyneth 20220207)
             NetworkStream stream = client.GetStream();
 
             DebugUtilities.WriteSpecial("Reading Stream");
@@ -58,7 +58,7 @@ namespace RESTBot.Server
             }
             while (stream.DataAvailable); //and repeat :)
 
-            DebugUtilities.WriteInfo("Got request, totalling " + request.Length + " characters");
+            DebugUtilities.WriteInfo($"Got request, totalling {request.Length} characters");
             string[] split = request.Split(new string[] { "\r\n\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             string hostname = "unknown";
@@ -98,7 +98,7 @@ namespace RESTBot.Server
 			        //send the 100 continue message and then go back to the above.
 			        DebugUtilities.WriteSpecial("Writing 100 continue response");
 			        stream.Write(byte_continue_response,0,byte_continue_response.Length);
-			        DebugUtilities.WriteSpecial("Finished writing - " + byte_continue_response.Length + " bytes total sent");
+			        DebugUtilities.WriteSpecial($"Finished writing - {byte_continue_response.Length} bytes total sent");
 
                     request = "";
                     buffer = new byte[512];
@@ -114,7 +114,7 @@ namespace RESTBot.Server
                     }
                     while (stream.DataAvailable); //and repeat :)
 
-                    DebugUtilities.WriteInfo("Got continued request, totalling " + request.Length + " characters");
+                    DebugUtilities.WriteInfo($"Got continued request, totalling {request.Length} characters");
 
                     DebugUtilities.WriteDebug("Heres what I got: " + request);
                     body = request;

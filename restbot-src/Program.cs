@@ -105,9 +105,9 @@ namespace RESTBot
       	//TODO: Replace above with a manualresetevent
 
 				if (stupidCounter % 60000 == 0) {	// stop every minute and check available memory (gwyneth 20220206)
-					DebugUtilities.WriteInfo("Memory in use before GC.Collect: " + Math.Round(GC.GetTotalMemory(false) / 1024.0 / 1024.0).ToString());
+					DebugUtilities.WriteInfo($"Memory in use before GC.Collect: {(GC.GetTotalMemory(false)):N0} bytes");
 					GC.Collect(); // collect garbage (gwyneth 20220207) and wait for GC to finish.
-					DebugUtilities.WriteInfo("Memory in use after GC.Collect:  " + Math.Round(GC.GetTotalMemory(true) / 1024.0 / 1024.0).ToString());
+					DebugUtilities.WriteInfo($"Memory in use after  GC.Collect: {(GC.GetTotalMemory(true)):N0} bytes");
 				}
 				stupidCounter++;
 			}

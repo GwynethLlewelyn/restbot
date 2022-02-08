@@ -147,7 +147,7 @@ namespace RESTBot
 				{
 						session = bot.sessionid;
 						me = bot;
-						DebugUtilities.WriteDebug("IM - " + session + " " + MethodName + " startup");
+						DebugUtilities.WriteDebug($"IM - {session} {MethodName} startup");
 
 						base.Initialize(bot);
 				}
@@ -196,7 +196,7 @@ namespace RESTBot
 								avatarKey = Utilities.getKey(b, avatarFullName);	// handles conversion to lowercase.
 								if (avatarKey == UUID.Zero)
 								{
-										DebugUtilities.WriteWarning("Key not found for unknown avatar '" + avatarFullName + "'");
+										DebugUtilities.WriteWarning("Key not found for unknown avatar '{avatarFullName}'");
 										check = false;
 								}
 						}
