@@ -18,137 +18,176 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-require_once 'db.php';
-require_once 'funktions.php';
+require_once "db.php";
+require_once "funktions.php";
 
-function avatarName($key) {
+function avatarName($key)
+{
 	global $debug;
-	$cached = getFromCache('key2name', $key);
-	if ( $cached['value'] != null ) {
-		logMessage('rest', 3, 'Returning cache entry (' . ( time() - $cached['timestamp']). ')');
-		return $cached['value'];
+	$cached = getFromCache("key2name", $key);
+	if ($cached["value"] != null) {
+		logMessage(
+			"rest",
+			3,
+			"Returning cache entry (" . (time() - $cached["timestamp"]) . ")"
+		);
+		return $cached["value"];
 	} else {
 		$avatarname = getAvatarName($key);
-		if ( $avatarname == null ) {
-			logMessage('rest', 3, 'Response not received.');
-			$cached = getForceFromCache('regionhandle', $sim);
-			if ( $cached != null ) {
-				logMessage('db', 1, 'Returning old cache entry (' . ( time() - $cached['timestamp'])
-				. ')');
-				return $cached['value'];
+		if ($avatarname == null) {
+			logMessage("rest", 3, "Response not received.");
+			$cached = getForceFromCache("regionhandle", $sim);
+			if ($cached != null) {
+				logMessage(
+					"db",
+					1,
+					"Returning old cache entry (" . (time() - $cached["timestamp"]) . ")"
+				);
+				return $cached["value"];
 			} else {
-				logMessage('rest', 1, 'Failed to lookup avatar name for ' . $key);
+				logMessage("rest", 1, "Failed to lookup avatar name for " . $key);
 				return null;
 			}
-		} else if ( $avatarname == "0" ) {
-			logMessage('rest', 3, "Avatar name not found");
+		} elseif ($avatarname == "0") {
+			logMessage("rest", 3, "Avatar name not found");
 			return 0;
 		} else {
-			if ( existsInCache('key2name', $key) ) {
-				updateInCache('key2name', $key, $avatarname);
+			if (existsInCache("key2name", $key)) {
+				updateInCache("key2name", $key, $avatarname);
 			} else {
-				putInCache('key2name', $key, $avatarname);
+				putInCache("key2name", $key, $avatarname);
 			}
 			return $avatarname;
 		}
 	}
 }
-function avatarKey($name) {
+function avatarKey($name)
+{
 	global $debug;
-	$cached = getFromCache('name2key', $name);
-	if ( $cached['value'] != null ) {
-		return $cached['value'];
+	$cached = getFromCache("name2key", $name);
+	if ($cached["value"] != null) {
+		return $cached["value"];
 	} else {
 		$avatarkey = getAvatarKey($name);
-		if ( $avatarkey != null ) {
-			if ( existsInCache('name2key', $name) ) {
-				updateInCache('name2key', $name, $avatarkey);
+		if ($avatarkey != null) {
+			if (existsInCache("name2key", $name)) {
+				updateInCache("name2key", $name, $avatarkey);
 			} else {
-				putInCache('name2key', $name, $avatarkey);
+				putInCache("name2key", $name, $avatarkey);
 			}
 			return $avatarkey;
 		} else {
-			$cached = getForceFromCache('name2key', $name);
-			if ( $cached['value'] == null ) {
-				logMessage('rest', 3, 'Response not received.');
+			$cached = getForceFromCache("name2key", $name);
+			if ($cached["value"] == null) {
+				logMessage("rest", 3, "Response not received.");
 				return null;
-			} else if ( $cached['value'] == 0 ) {
-				logMessage('db', 1, 'Failed to lookup avatar name for ' . $key);
+			} elseif ($cached["value"] == 0) {
+				logMessage("db", 1, "Failed to lookup avatar name for " . $key);
 				return null;
 			} else {
-				logMessage('db', 1, 'Returning old cache entry (' . ( time() - $cached['timestamp']) . ')');
-				return $cached['value'];
+				logMessage(
+					"db",
+					1,
+					"Returning old cache entry (" . (time() - $cached["timestamp"]) . ")"
+				);
+				return $cached["value"];
 			}
 		}
 	}
 }
-function avatarProfilePic($key) {
+function avatarProfilePic($key)
+{
 	$imagekey = getAvatarProfilePic($key);
 	return $imagekey;
 }
 
-function avatarGroupList($key) {
+function avatarGroupList($key)
+{
 	return getAvatarGroupList($key);
 }
 
-function getAvatarName($avkey) {
+function getAvatarName($avkey)
+{
 	$result = rest("avatar_name", "key=$avkey");
-	if ( $result == null ) {
-		logMessage('sl', 0, "Error looking up Avatar Name for $avkey", null, null);
+	if ($result == null) {
+		logMessage("sl", 0, "Error looking up Avatar Name for $avkey", null, null);
 		return null;
 	}
 	$xml = new SimpleXMLElement($result);
 	return $xml->name;
 }
 
-function getAvatarKey($avatarname) {
+function getAvatarKey($avatarname)
+{
 	$result = rest("avatar_key", "name=$avatarname");
-	if ( $result == null ) {
-    logMessage('sl', 0, "Error looking up Avatar Key for $avatarname", null, null);
+	if ($result == null) {
+		logMessage(
+			"sl",
+			0,
+			"Error looking up Avatar Key for $avatarname",
+			null,
+			null
+		);
 		return null;
 	}
 	$xml = new SimpleXMLElement($result);
-	if ( $xml->key != "00000000000000000000000000000000" ) {
+	if ($xml->key != "00000000000000000000000000000000") {
 		return $xml->key;
 	} else {
-		logMessage('sl', 1, "$avatarname does not exist", null, null);
+		logMessage("sl", 1, "$avatarname does not exist", null, null);
 		return "0";
 	}
 }
 
-function getAvatarProfilePic($key) {
+function getAvatarProfilePic($key)
+{
 	$result = rest("avatar_profile", "key=$key");
-	if ( $result == null ) {
-		logMessage('sl', 0, "Error looking up profile for $key", null, null);
+	if ($result == null) {
+		logMessage("sl", 0, "Error looking up profile for $key", null, null);
 		return null;
 	}
 	$xml = new SimpleXMLElement($result);
 	return $xml->profile->profileimage;
 }
 
-function getAvatarGroupList($key) {
+function getAvatarGroupList($key)
+{
 	$result = rest("avatar_groups", "key=$key");
-	if ( $result == null ) {
-		logMessage('sl', 0, "Error looking up profile for $key", null, null);
+	if ($result == null) {
+		logMessage("sl", 0, "Error looking up profile for $key", null, null);
 		return null;
 	}
 	$xml = new SimpleXMLElement($result);
 	$return = "";
-	foreach ( $xml->groups->group as $group) {
-		$return = $return . $group->name . "," . friendlyUUID($group->key) .",";
+	foreach ($xml->groups->group as $group) {
+		$return = $return . $group->name . "," . friendlyUUID($group->key) . ",";
 	}
 	return $return;
 }
-function getAvatarGroupListDetailed($key) {
+function getAvatarGroupListDetailed($key)
+{
 	$result = rest("avatar_groups", "key=$key");
-	if ( $result == null ) {
-		logMessage('sl', 0, "Error looking up profile for $key", null, null);
+	if ($result == null) {
+		logMessage("sl", 0, "Error looking up profile for $key", null, null);
 		return null;
 	}
 	$xml = new SimpleXMLElement($result);
 	$return = "";
-	foreach ( $xml->groups->group as $group) {
-		$return = $return . $group->key . "," . $group->name . "," . $group->title . "," . $group->notices . "," . $group->powers . "," . friendlyUUID($group->insignia) . ",";
+	foreach ($xml->groups->group as $group) {
+		$return =
+			$return .
+			$group->key .
+			"," .
+			$group->name .
+			"," .
+			$group->title .
+			"," .
+			$group->notices .
+			"," .
+			$group->powers .
+			"," .
+			friendlyUUID($group->insignia) .
+			",";
 	}
 	return $return;
 }

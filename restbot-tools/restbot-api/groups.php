@@ -18,35 +18,36 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-require_once 'include/funktions.php';
-require_once 'include/config.php';
+require_once "include/funktions.php";
+require_once "include/config.php";
 
-require_once 'include/groups.php';
-require_once 'include/util.php';
+require_once "include/groups.php";
+require_once "include/util.php";
 
-global $ownername ; global $authuser;
+global $ownername;
+global $authuser;
 if (
-	( $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'] == $ownername ) ||
-	( $_REQUEST['psk'] == $authuser )
-	) {
+	$_SERVER["HTTP_X_SECONDLIFE_OWNER_NAME"] == $ownername ||
+	$_REQUEST["psk"] == $authuser
+) {
 	$authorized = true;
 }
-$command = $_REQUEST['command'];
+$command = $_REQUEST["command"];
 
-if ( $command == "groupinfo" ) {
-	if ( !$authorized ) {
-		genPipeError('auth');
+if ($command == "groupinfo") {
+	if (!$authorized) {
+		genPipeError("auth");
 	}
-	if ( !isset($_REQUEST['group_key']) ) {
-		genPipeError('param');
+	if (!isset($_REQUEST["group_key"])) {
+		genPipeError("param");
 	}
-	$result = groupInfo($_REQUEST['group_key']);
-	if ( $result == null ) {
-		genPipeError('unknown');
+	$result = groupInfo($_REQUEST["group_key"]);
+	if ($result == null) {
+		genPipeError("unknown");
 	} else {
 		genPipeResponse($result);
 	}
-/*} else if ( $command == "getgroups" ) {
+	/*} else if ( $command == "getgroups" ) {
 	if ( !$authorized ) {
 		genPipeError('auth');
 	}
@@ -60,5 +61,5 @@ if ( $command == "groupinfo" ) {
 		genPipeResponse($result);
 	}*/
 } else {
-	genPipeError('param');
+	genPipeError("param");
 }

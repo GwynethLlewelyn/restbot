@@ -29,8 +29,8 @@ $cache_expore = 300;
 
 $use_syslog = false;
 
-$restbots = array(
-	array('first' => '', 'last' => '', 'pass' => '', 'host' => '', 'key' => '' ),
-);
+$restbots = [
+	["first" => "", "last" => "", "pass" => "", "host" => "", "key" => ""],
+];
 
 ?>

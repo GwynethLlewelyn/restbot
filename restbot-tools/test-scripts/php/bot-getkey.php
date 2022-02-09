@@ -18,19 +18,19 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-if ( $argv[1] == null || $argv[2] == null || $argv[3] == null ) {
+if ($argv[1] == null || $argv[2] == null || $argv[3] == null) {
 	print "Usage " . $argv[0] . " session firstname lastname\n";
-	end ;
+	end;
 }
 $url = "http://127.0.0.1:9080/avatar_key/" . $argv[1] . "/";
 $ch = curl_init($url);
 
-curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, "name=" . $argv[2] . " " . $argv[3]);
 $stuff = curl_exec($ch);
 curl_close($ch);
-if ( empty($stuff) ) {
+if (empty($stuff)) {
 	print "Nothing returned from server\n";
 	end;
 }

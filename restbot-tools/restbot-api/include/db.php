@@ -18,66 +18,69 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-require_once 'DB.php';
+require_once "DB.php";
 
-function getConn() {
+function getConn()
+{
 	global $dburi;
-	$conn =& DB::connect($dburi);
-	if ( DB::isError($conn)) {
-		logMessage('db', 0,  $conn->getMessage() , null, null);
-		genPipeError('db');
+	$conn = &DB::connect($dburi);
+	if (DB::isError($conn)) {
+		logMessage("db", 0, $conn->getMessage(), null, null);
+		genPipeError("db");
 	} else {
 		return $conn;
 	}
 }
 
-function getSingle($sql) {
+function getSingle($sql)
+{
 	global $debugdb;
-	if ( $debugdb ) {
-		logMessage('db', 3, "SQL - " . $sql);
+	if ($debugdb) {
+		logMessage("db", 3, "SQL - " . $sql);
 	}
 	$return = 0;
 	$conn = getConn();
 	$result = $conn->query($sql);
-	if ( DB::isError($result)) {
-		logMessage('db', 0, "Query Error " .  $result->getMessage() , null, null);
-		genPipeError('db');
+	if (DB::isError($result)) {
+		logMessage("db", 0, "Query Error " . $result->getMessage(), null, null);
+		genPipeError("db");
 	}
-	if ( $result->numRows() > 1 ) {
+	if ($result->numRows() > 1) {
 		return "MULTIPLE";
 	}
 	$row = $result->fetchRow();
-	if ( count($row) == 1 ) {
+	if (count($row) == 1) {
 		$return = $row[0];
 	}
 	return $return;
 }
 
-function doQuery($sql) {
+function doQuery($sql)
+{
 	global $debugdb;
-	if ( $debugdb ) {
-		logMessage('db', 3, "SQL - " . $sql);
+	if ($debugdb) {
+		logMessage("db", 3, "SQL - " . $sql);
 	}
 	$conn = getConn();
 	$result = $conn->query($sql);
-	if ( DB::isError($result)) {
-		logMessage('db', 0, "Query Error " .  $result->getMessage() , null, null);
-		genPipeError('db');
+	if (DB::isError($result)) {
+		logMessage("db", 0, "Query Error " . $result->getMessage(), null, null);
+		genPipeError("db");
 	}
 	return $result;
 }
 
-function doUpdate($sql) {
+function doUpdate($sql)
+{
 	global $debugdb;
-	if ( $debugdb ) {
-		logMessage('db', 3, "SQL - " . $sql);
+	if ($debugdb) {
+		logMessage("db", 3, "SQL - " . $sql);
 	}
 	$conn = getConn();
 	$result = $conn->query($sql);
-	if ( DB::isError($result)) {
-		logMessage('db', 0, "Query Error " .  $result->getMessage() , null, null);
-		genPipeError('db');
+	if (DB::isError($result)) {
+		logMessage("db", 0, "Query Error " . $result->getMessage(), null, null);
+		genPipeError("db");
 	}
 	return $conn->affectedrows();
 }
-

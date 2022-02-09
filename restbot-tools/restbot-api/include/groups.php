@@ -18,8 +18,8 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-require_once 'db.php';
-require_once 'funktions.php';
+require_once "db.php";
+require_once "funktions.php";
 /*
 function groupList($key) {
 	global $debug;
@@ -36,15 +36,22 @@ function groupList($key) {
 	return $return;
 }*/
 
-function groupInfo($key) {
+function groupInfo($key)
+{
 	global $debug;
 	$result = rest("get_group_profile", "group=$key");
-	if ( $result == null ) {
-		logMessage('sl', 0, "Error retrieving group profile for $key", null, null);
+	if ($result == null) {
+		logMessage("sl", 0, "Error retrieving group profile for $key", null, null);
 		return null;
 	}
 	$xml = new SimpleXMLElement($result);
-	return  $xml->groupprofile->name . "," . $xml->groupprofile->insignia . "," . $xml->groupprofile->maturepublish . "," . $xml->groupprofile->charter;
+	return $xml->groupprofile->name .
+		"," .
+		$xml->groupprofile->insignia .
+		"," .
+		$xml->groupprofile->maturepublish .
+		"," .
+		$xml->groupprofile->charter;
 }
 
 ?>

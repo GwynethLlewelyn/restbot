@@ -18,18 +18,18 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-if ( $argv[1] == null ) {
+if ($argv[1] == null) {
 	print "Usage bot-dilation.php session\n";
-	end ;
+	end;
 }
 $url = "http://lumo.eghetto.ca:9080/dilation/" . $argv[1] . "/";
 $ch = curl_init($url);
 
-curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 $stuff = curl_exec($ch);
 curl_close($ch);
-if ( empty($stuff) ) {
+if (empty($stuff)) {
 	print "Nothing returned from server\n";
 	end;
 }

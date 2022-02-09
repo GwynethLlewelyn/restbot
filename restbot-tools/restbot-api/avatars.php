@@ -18,45 +18,45 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-require_once 'include/funktions.php';
-require_once 'include/config.php';
+require_once "include/funktions.php";
+require_once "include/config.php";
 
-require_once 'include/avatars.php';
-require_once 'include/util.php';
+require_once "include/avatars.php";
+require_once "include/util.php";
 
-global $ownername ; global $authuser;
+global $ownername;
+global $authuser;
 if (
-	( $_SERVER['HTTP_X_SECONDLIFE_OWNER_NAME'] == $ownername ) ||
-	( $_REQUEST['psk'] == $authuser )
-	) {
+	$_SERVER["HTTP_X_SECONDLIFE_OWNER_NAME"] == $ownername ||
+	$_REQUEST["psk"] == $authuser
+) {
 	$authorized = true;
 }
 
-$command = $_REQUEST['command'];
+$command = $_REQUEST["command"];
 
-if ( $command == "profilepic" ) {
-	if ( !$authorized ) {
-		genPipeError('auth');
+if ($command == "profilepic") {
+	if (!$authorized) {
+		genPipeError("auth");
 	}
-	if ( ! isset($_REQUEST['key']) ) {
-		genPipeError('param');
+	if (!isset($_REQUEST["key"])) {
+		genPipeError("param");
 	}
-	$key = avatarProfilePic($_REQUEST['key']);
-	if ( $key == null ) {
-		genPipeError('lookup');
+	$key = avatarProfilePic($_REQUEST["key"]);
+	if ($key == null) {
+		genPipeError("lookup");
 	} else {
 		genPipeResponse(friendlyUUID($key));
 	}
-} else if ( $command == "grouplist" ) {
-	if ( !$authorized ) {
-		genPipeError('auth');
+} elseif ($command == "grouplist") {
+	if (!$authorized) {
+		genPipeError("auth");
 	}
-	if ( ! isset($_REQUEST['key']) ) {
-		genPipeError('param');
+	if (!isset($_REQUEST["key"])) {
+		genPipeError("param");
 	}
-	$list = avatarGroupList($_REQUEST['key']);
+	$list = avatarGroupList($_REQUEST["key"]);
 	genPipeResponse($list);
-
 } else {
- genPipeError('param');
+	genPipeError("param");
 }
