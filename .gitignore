@@ -37,6 +37,7 @@ node_modules
 package.json
 package-lock.json
 .eslintrc.yml
+.prettierrc.json
 
 # Our stuff that we want to exclude
 assets/configuration/configuration.xml
