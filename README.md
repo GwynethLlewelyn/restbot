@@ -3,7 +3,8 @@
 # README File - RESTBot
 
 ## Revisions
-- Written August 9, 2007 -  Pleiades Consulting, Inc
+
+- Written August 9, 2007 - Pleiades Consulting, Inc
 - Revised June 5, 2010 - Gwyneth Llewelyn (notes on compilation)
 - Revised November 21, 2021 - Gwyneth Llewelyn (updates for a lot of things)
 - Dramatic changes made on November 23, 2021 - Gwyneth Llewelyn
@@ -52,7 +53,7 @@ brew install dotnet-sdk-preview
 export DOTNET_ROOT=/usr/local/share/dotnet/
 ```
 
-At the time of writing, you need **.NET** 6.0 (the latest and greatest!). This requires installing the *preview* version from Homebrew; the default long-term service (LTS) version is still 5.X, although Microsoft admits that it will switch to 6.0 as soon as it's feasible. This also means that, once Homebrew catches up with Microsoft, you might need to do a `brew remove dotnet-sdk-preview` and do a `brew install dotnet-sdk` instead.
+At the time of writing, you need **.NET** 6.0 (the latest and greatest!). This requires installing the _preview_ version from Homebrew; the default long-term service (LTS) version is still 5.X, although Microsoft admits that it will switch to 6.0 as soon as it's feasible. This also means that, once Homebrew catches up with Microsoft, you might need to do a `brew remove dotnet-sdk-preview` and do a `brew install dotnet-sdk` instead.
 
 #### Compile it
 
@@ -61,7 +62,7 @@ cd /path/where/you/have/installed/restbot
 dotnet msbuild
 ```
 
-`dotnet` is Microsoft's megatool for managing **.NET** packages and (new) applications; the above command invokes `msbuild`, Microsoft's all-in-one building tool, which, in turn, will handle code dependencies, figure out what to compile, invoke [Microsoft's Roslyn compiler](https://github.com/dotnet/roslyn), and generate an executable that runs *directly* under macOS.
+`dotnet` is Microsoft's megatool for managing **.NET** packages and (new) applications; the above command invokes `msbuild`, Microsoft's all-in-one building tool, which, in turn, will handle code dependencies, figure out what to compile, invoke [Microsoft's Roslyn compiler](https://github.com/dotnet/roslyn), and generate an executable that runs _directly_ under macOS.
 
 Optionally, you may wish to run `dotnet msbuild -m` to get the Microsoft compiler to use several cores in parallel (by default, everything is compiled sequentially).
 
@@ -85,9 +86,9 @@ This should be cross-platform-safe (as far as I can test it, of course!).
 
 #### ... or you can just use Visual Studio for Mac!
 
-You wouldn't believe the tools that Microsoft has come up with to persuade non-Windows users to surrender to their integrated environment. These days, you can get [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) — *not* the free and open-source Visual Studio *Code*, which is a humble code editor, albeit one with a megaton of features; but rather Microsoft's own full-blown IDE with all the bells and whistles, and which looks like the Windows equivalent, but with a more Apple-ish look.
+You wouldn't believe the tools that Microsoft has come up with to persuade non-Windows users to surrender to their integrated environment. These days, you can get [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/) — _not_ the free and open-source Visual Studio _Code_, which is a humble code editor, albeit one with a megaton of features; but rather Microsoft's own full-blown IDE with all the bells and whistles, and which looks like the Windows equivalent, but with a more Apple-ish look.
 
-In theory, all you need is to install it — please make sure you get a version which works with **.NET** _6.0_; currently, this is **Visual Studio 2022 for Mac Preview** but expect Microsoft to move on to a non-preview (i.e. *stable*) version soon. Earlier versions will *not* work.
+In theory, all you need is to install it — please make sure you get a version which works with **.NET** _6.0_; currently, this is **Visual Studio 2022 for Mac Preview** but expect Microsoft to move on to a non-preview (i.e. _stable_) version soon. Earlier versions will _not_ work.
 
 If you want to do actual development, especially starting the project from scratch (to adapt it to different environments, for example, such as virtual machines, Docker containers, Azure or even AWS cloud services, whatever...) then I really recommend using Visual Studio for Mac. In fact, I wasn't able to generate all the required files manually, without recourse to Visual Studio; VS basically 'prepares' everything properly, starting from the included `.csproj` (which gets changed as new references get included and others are removed), to get you a 'working' project. Once that project _is_ generated properly, _then_ you can use the command-line tools.
 
@@ -105,7 +106,7 @@ Microsoft has excellent resources to help installing `dotnet` under the many Lin
 
 Note that Microsoft does not explicitly tell that you should also get `nuget` using, say, `sudo apt install nuget` (once the Microsoft repository has been added as explained on the previous link). Once installed, just run `nuget restore` on the root directory holding the RESTbot sources, and Bob's your uncle.
 
-Sadly, at the time of writing, there is no Visual Studio desktop IDE for Linux. You can, however, use many of Microsoft's tools being called from the command line and integrate those in Visual Studio *Code*, which *is* available for Linux as well.
+Sadly, at the time of writing, there is no Visual Studio desktop IDE for Linux. You can, however, use many of Microsoft's tools being called from the command line and integrate those in Visual Studio _Code_, which _is_ available for Linux as well.
 
 Again, like under macOS, Microsoft's Roslyn compiler will generate a Linux-native executable which will be able to launch `RESTbot.dll`, without the need of using Mono (and that executable ought to be distro-agnostic and work under _all_ of them, naturally including Microsoft's own Linux distro). I've tested it within a x86 environment, but allegedly Microsoft also supports ARM. I _do_ have a Linux ARM box to do some testing with it as well, but I haven't gotten the time to do so.
 
@@ -127,8 +128,8 @@ A note on how commands are passed to RESTbot for processing: server commands req
 
 The following is a list of working server commands:
 
-* `establish_session`: this starts up a RESTbot
-* `exit`: this stops a RESTbot
+- `establish_session`: this starts up a RESTbot
+- `exit`: this stops a RESTbot
 
 _Note: There are plenty more commands these days that are also fully functional (gwyneth 20211121); these are provided by so-called 'RESTbot plugins' and the Wiki holds some documentation on them,_
 
@@ -153,9 +154,9 @@ Explore the source code of the framework and the example plugins that come with 
 
 # The Magic Behind Everything
 
-At the root of RESTbot lies a community-managed project, originally known as *libSL*, later renamed to *libopenmetaverse* (because of trademark issues), and currently published via Microsoft's NuGet package repository under the name *LibreMetaverse*. This is an open-source (originally reverse-engineered) library of Linden Lab's communication protocol between a SL viewer and their grid, written in C#.
+At the root of RESTbot lies a community-managed project, originally known as _libSL_, later renamed to _libopenmetaverse_ (because of trademark issues), and currently published via Microsoft's NuGet package repository under the name _LibreMetaverse_. This is an open-source (originally reverse-engineered) library of Linden Lab's communication protocol between a SL viewer and their grid, written in C#.
 
-You can read more about the history of *LibreMetaverse* on this project's [wiki](https://github.com/GwynethLlewelyn/restbot/wiki/History) (a work in progress...)
+You can read more about the history of _LibreMetaverse_ on this project's [wiki](https://github.com/GwynethLlewelyn/restbot/wiki/History) (a work in progress...)
 
 RESTbot is therefore just 'wrapper' code that launches a mini-webserver and exposes a RESTful API to selected LibreMetaverse commands.
 
