@@ -45,9 +45,7 @@ namespace RESTBot.Server
 				(endpoint != null) ? (endpoint.ToString().Split(':'))[0] : String.Empty;
 
 			DebugUtilities
-				.WriteInfo($"Processing Connection from {
-					IPAddress.Parse(((IPEndPoint) endpoint).Address.ToString())} (ip: {
-					ip})!"); // new syntax, since this is now nullable (gwyneth 20220207)
+				.WriteInfo($"Processing Connection from {IPAddress.Parse(((IPEndPoint) endpoint).Address.ToString())} (ip: {ip})!"); // new syntax, since this is now nullable (gwyneth 20220207)
 			NetworkStream stream = client.GetStream();
 
 			DebugUtilities.WriteSpecial("Reading Stream");
@@ -111,8 +109,7 @@ namespace RESTBot.Server
 					stream
 						.Write(byte_continue_response, 0, byte_continue_response.Length);
 					DebugUtilities
-						.WriteSpecial($"Finished writing - {
-							byte_continue_response.Length} bytes total sent");
+						.WriteSpecial($"Finished writing - {byte_continue_response.Length} bytes total sent");
 
 					request = "";
 					buffer = new byte[512];
@@ -131,8 +128,7 @@ namespace RESTBot.Server
 					while (stream.DataAvailable); //and repeat :)
 
 					DebugUtilities
-						.WriteInfo($"Got continued request, totalling {
-							request.Length} characters");
+						.WriteInfo($"Got continued request, totalling {request.Length} characters");
 
 					DebugUtilities.WriteDebug("Heres what I got: " + request);
 					body = request;
