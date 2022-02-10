@@ -25,96 +25,114 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Web;
 using RESTBot;
 
 namespace RESTBot.Server
 {
-    public class RequestHeaders
-    {
-        public HeaderRequestLine RequestLine;
-        public List<HeaderLine> HeaderLines;
-        public string Hostname = "";
+	public class RequestHeaders
+	{
+		public HeaderRequestLine RequestLine;
 
-        public RequestHeaders(string headers_section, string host_name)
-        {
-            Hostname = host_name;
-            headers_section.Trim();
+		public List<HeaderLine> HeaderLines;
 
-            string[] split_up = headers_section.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-            //first line is the request line
+		public string Hostname = "";
 
-            if (split_up.Length < 1) throw new Exception("Uhm, Theres supposed to be something in the headers");
+		public RequestHeaders(string headers_section, string host_name)
+		{
+			Hostname = host_name;
+			headers_section.Trim();
 
-            string request_line = split_up[0];
-            RequestLine = new HeaderRequestLine(request_line);
+			string[] split_up =
+				headers_section
+					.Split(new string[] { "\r\n" },
+					StringSplitOptions.RemoveEmptyEntries);
 
-            int length = split_up.Length;
-            HeaderLines = new List<HeaderLine>();
-            for (int i = 1; i < length; ++i)
-            {
-                HeaderLines.Add(new HeaderLine(split_up[i]));
-            }
-            DebugUtilities.WriteDebug("HTTP request has " + HeaderLines.Count + " headers");
-        }
-    }
+			//first line is the request line
+			if (split_up.Length < 1)
+				throw new Exception("Uhm, Theres supposed to be something in the headers");
 
-    public class HeaderRequestLine
-    {
-        private string _method = ""; //GET/POST/etc
-        private string _path = ""; //For parsing REST commands
-        private string _http_version = ""; //Something that might be usefull, eg. HTTP/1.1
+			string request_line = split_up[0];
+			RequestLine = new HeaderRequestLine(request_line);
 
-        public string Method
-        {
-            get
-            {
-                return _method;
-            }
-        }
+			int length = split_up.Length;
+			HeaderLines = new List<HeaderLine>();
+			for (int i = 1; i < length; ++i)
+			{
+				HeaderLines.Add(new HeaderLine(split_up[i]));
+			}
+			DebugUtilities
+				.WriteDebug("HTTP request has " + HeaderLines.Count + " headers");
+		}
+	}
 
-        public string Path
-        {
-            get
-            {
-                return _path;
-            }
-        }
+	public class HeaderRequestLine
+	{
+		private string _method = ""; //GET/POST/etc
 
-        public string HttpVersion
-        {
-            get
-            {
-                return _http_version;
-            }
-        }
+		private string _path = ""; //For parsing REST commands
 
-        public HeaderRequestLine(string method, string path, string http_version)
-        {
-            _method = method;
-            _path = path;
-            _http_version = http_version;
-        }
+		private string _http_version = ""; //Something that might be usefull, eg. HTTP/1.1
 
-        public HeaderRequestLine(string entire_line)
-        {
-            string[] split = entire_line.Trim().Split(' ');
-            if (split.Length != 3)
-            {
-                //this is more serious than a header line, this is the request line batch!
-                DebugUtilities.WriteError("Could not parse request line");
-                throw new Exception("Could not parse request line", new Exception("Line has " + (split.Length - 1) + " spaces instead of 2 [requestline]"));
-            }
+		public string Method
+		{
+			get
+			{
+				return _method;
+			}
+		}
 
-            //ok, we got three entries
-            _method = split[0].ToUpper().Trim();
-            _path = split[1];
-            _http_version = split[2].ToUpper().Trim();
+		public string Path
+		{
+			get
+			{
+				return _path;
+			}
+		}
 
-            DebugUtilities.WriteDebug("Request Line Parsed: method=" + _method + "; path=" + _path + "; version=" + _http_version);
-        }
-    }
+		public string HttpVersion
+		{
+			get
+			{
+				return _http_version;
+			}
+		}
+
+		public HeaderRequestLine(string method, string path, string http_version)
+		{
+			_method = method;
+			_path = path;
+			_http_version = http_version;
+		}
+
+		public HeaderRequestLine(string entire_line)
+		{
+			string[] split = entire_line.Trim().Split(' ');
+			if (split.Length != 3)
+			{
+				//this is more serious than a header line, this is the request line batch!
+				DebugUtilities.WriteError("Could not parse request line");
+				throw new Exception("Could not parse request line",
+					new Exception("Line has " +
+						(split.Length - 1) +
+						" spaces instead of 2 [requestline]"));
+			}
+
+			//ok, we got three entries
+			_method = split[0].ToUpper().Trim();
+			_path = split[1];
+			_http_version = split[2].ToUpper().Trim();
+
+			DebugUtilities
+				.WriteDebug("Request Line Parsed: method=" +
+				_method +
+				"; path=" +
+				_path +
+				"; version=" +
+				_http_version);
+		}
+	}
 }

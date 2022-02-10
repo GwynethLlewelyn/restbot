@@ -23,63 +23,65 @@
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net;
+using System.Text;
 
 namespace RESTBot
 {
-    /// <summary>
-    /// A base class for REST plugins
-    /// </summary>
-    public abstract class RestPlugin
-    {
-        /// <summary>
-        /// The name of the method. Should be set in the constructor.
-        /// </summary>
-        public string MethodName = "unknown";	// cannot be null! (gwyneth 20220126)
+	/// <summary>
+	/// A base class for REST plugins
+	/// </summary>
+	public abstract class RestPlugin
+	{
+		/// <summary>
+		/// The name of the method. Should be set in the constructor.
+		/// </summary>
+		public string MethodName = "unknown"; // cannot be null! (gwyneth 20220126)
 
-        /// <summary>
-        /// Process the request through this method
-        /// </summary>
-        /// <param name="b">The RestBot that is doing the processing</param>
-        /// <param name="Parameters">QueryString and POST parameters</param>
-        /// <returns>XML output</returns>
-        public abstract string Process(RestBot b, Dictionary<string, string> Parameters);
-    }
+		/// <summary>
+		/// Process the request through this method
+		/// </summary>
+		/// <param name="b">The RestBot that is doing the processing</param>
+		/// <param name="Parameters">QueryString and POST parameters</param>
+		/// <returns>XML output</returns>
+		public abstract string
+		Process(RestBot b, Dictionary<string, string> Parameters);
+	}
 
-    /// <summary>
-    /// A base class for stateful plugins, ie those requiring actions on events from a specific instance of libsecondlife
-    /// or RestBot
-    /// </summary>
-    public abstract class StatefulPlugin
-    {
-        /// <summary>
-        /// The name of the method. Should be set in the constructor.
-        /// </summary>
-        public string MethodName = "unknown";	// making sure it's never null. (gwyneth 20220126)
+	/// <summary>
+	/// A base class for stateful plugins, ie those requiring actions on events from a specific instance of libsecondlife
+	/// or RestBot
+	/// </summary>
+	public abstract class StatefulPlugin
+	{
+		/// <summary>
+		/// The name of the method. Should be set in the constructor.
+		/// </summary>
+		public string MethodName = "unknown"; // making sure it's never null. (gwyneth 20220126)
 
-        /// <summary>
-        /// An optionally overridable method for setting up events and callbacks from a RestBot
-        /// </summary>
-        /// <param name="bot"></param>
-        public virtual void Initialize(RestBot bot)
-        {
-        }
+		/// <summary>
+		/// An optionally overridable method for setting up events and callbacks from a RestBot
+		/// </summary>
+		/// <param name="bot"></param>
+		public virtual void Initialize(RestBot bot)
+		{
+		}
 
-        /// <summary>
-        /// Process the request through this method
-        /// </summary>
-        /// <param name="b">The RestBot that is doing the processing</param>
-        /// <param name="Parameters">QueryString and POST parameters</param>
-        /// <returns>XML output</returns>
-        public abstract string Process(RestBot b, Dictionary<string, string> Parameters);
+		/// <summary>
+		/// Process the request through this method
+		/// </summary>
+		/// <param name="b">The RestBot that is doing the processing</param>
+		/// <param name="Parameters">QueryString and POST parameters</param>
+		/// <returns>XML output</returns>
+		public abstract string
+		Process(RestBot b, Dictionary<string, string> Parameters);
 
-        // Indicates that the current plugin is actively running.
-        public bool Active;
+		// Indicates that the current plugin is actively running.
+		public bool Active;
 
-        // Implement to perform actions that require updates over time.
-        public virtual void Think() {
-        }
-
-    }
+		// Implement to perform actions that require updates over time.
+		public virtual void Think()
+		{
+		}
+	}
 }

@@ -27,102 +27,124 @@ using System.Text;
 
 namespace RESTBot.Server
 {
+	public class ResponseStatus
+	{
+		public int StatusCode;
 
-    public class ResponseStatus
-    {
-        public int StatusCode;
-        public string StatusReason;
+		public string StatusReason;
 
-        public ResponseStatus(int code, string reason)
-        {
-            StatusCode = code;
-            StatusReason = reason;
-        }
+		public ResponseStatus(int code, string reason)
+		{
+			StatusCode = code;
+			StatusReason = reason;
+		}
 
-        public override string ToString()
-        {
-            return StatusCode + " " + StatusReason;
-        }
-    }
+		public override string ToString()
+		{
+			return StatusCode + " " + StatusReason;
+		}
+	}
 
-    public class HeaderResponseLine
-    {
-        private ResponseStatus _status = new ResponseStatus(200, "OK");
-        private string _http_version = ""; //Something that might be usefull, eg. HTTP/1.1
+	public class HeaderResponseLine
+	{
+		private ResponseStatus _status = new ResponseStatus(200, "OK");
 
-        public ResponseStatus Status
-        {
-            get
-            {
-                return _status;
-            }
-        }
+		private string _http_version = ""; //Something that might be usefull, eg. HTTP/1.1
 
-        public string HttpVersion
-        {
-            get
-            {
-                return _http_version;
-            }
-        }
+		public ResponseStatus Status
+		{
+			get
+			{
+				return _status;
+			}
+		}
 
-        private void CreateHeaderResponseLine(string http_version, ResponseStatus status)
-        {
-            _http_version = http_version;
-            _status = status;
-        }
+		public string HttpVersion
+		{
+			get
+			{
+				return _http_version;
+			}
+		}
 
-        public HeaderResponseLine(string http_version, ResponseStatus status)
-        {
-            CreateHeaderResponseLine(http_version,status);
-        }
+		private void CreateHeaderResponseLine(
+			string http_version,
+			ResponseStatus status
+		)
+		{
+			_http_version = http_version;
+			_status = status;
+		}
 
-        public HeaderResponseLine(string http_version, int status_code, string status_reason)
-        {
-            ResponseStatus status = new ResponseStatus(status_code, status_reason);
-            CreateHeaderResponseLine(http_version, status);
-        }
+		public HeaderResponseLine(string http_version, ResponseStatus status)
+		{
+			CreateHeaderResponseLine (http_version, status);
+		}
 
-        public override string ToString()
-        {
-            return _http_version + " " + _status.ToString();
-        }
-    }
-    public class ResponseHeaders
-    {
-				/// The following _may_ be null...
-        public HeaderResponseLine? ResponseLine;
-        public List<HeaderLine>? HeaderLines;
+		public HeaderResponseLine(
+			string http_version,
+			int status_code,
+			string status_reason
+		)
+		{
+			ResponseStatus status = new ResponseStatus(status_code, status_reason);
+			CreateHeaderResponseLine (http_version, status);
+		}
 
-        private void CreateResponseHeaders(int status, string status_response, string content_type)
-        {
-            ResponseLine = new HeaderResponseLine("HTTP/1.1", new ResponseStatus(status, status_response)); //some defaults
-            HeaderLines = new List<HeaderLine>();
+		public override string ToString()
+		{
+			return _http_version + " " + _status.ToString();
+		}
+	}
 
+	public class ResponseHeaders
+	{
+		/// The following _may_ be null...
+		public HeaderResponseLine? ResponseLine;
 
-            HeaderLines.Add(new HeaderLine("Date", DateTime.Now.ToUniversalTime().ToLongDateString()));
-            HeaderLines.Add(new HeaderLine("Server", "RestBotRV/0.1"));
-            HeaderLines.Add(new HeaderLine("Content-type", content_type));
-        }
+		public List<HeaderLine>? HeaderLines;
 
-        private ResponseHeaders(int status, string status_response, string content_type)
-        {
-            CreateResponseHeaders(status, status_response, content_type);
-        }
-        public ResponseHeaders(int status, string status_response)
-        {
-            CreateResponseHeaders(status, status_response, "text/xml");
-        }
+		private void CreateResponseHeaders(
+			int status,
+			string status_response,
+			string content_type
+		)
+		{
+			ResponseLine =
+				new HeaderResponseLine("HTTP/1.1",
+					new ResponseStatus(status, status_response)); //some defaults
+			HeaderLines = new List<HeaderLine>();
 
-        public override string ToString()
-        {
-            string headers = ResponseLine.ToString() + "\r\n"; //initial header response line
-            foreach(HeaderLine line in HeaderLines)
-            {
-                headers += line.ToString() + "\r\n";
-            }
-            headers += "\r\n"; //finish up the headers.. a \r\n\r\n signifies a change between headers and the body
-            return headers;
-        }
-    }
+			HeaderLines
+				.Add(new HeaderLine("Date",
+					DateTime.Now.ToUniversalTime().ToLongDateString()));
+			HeaderLines.Add(new HeaderLine("Server", "RestBotRV/0.1"));
+			HeaderLines.Add(new HeaderLine("Content-type", content_type));
+		}
+
+		private ResponseHeaders(
+			int status,
+			string status_response,
+			string content_type
+		)
+		{
+			CreateResponseHeaders (status, status_response, content_type);
+		}
+
+		public ResponseHeaders(int status, string status_response)
+		{
+			CreateResponseHeaders(status, status_response, "text/xml");
+		}
+
+		public override string ToString()
+		{
+			string headers = ResponseLine.ToString() + "\r\n"; //initial header response line
+			foreach (HeaderLine line in HeaderLines)
+			{
+				headers += line.ToString() + "\r\n";
+			}
+			headers += "\r\n"; //finish up the headers.. a \r\n\r\n signifies a change between headers and the body
+			return headers;
+		}
+	}
 }

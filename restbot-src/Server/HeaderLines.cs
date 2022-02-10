@@ -28,67 +28,73 @@ using System.Text;
 
 namespace RESTBot.Server
 {
-    public class HeaderLine
-    {
-        private string _key = "";
-        private string _value = "";
+	public class HeaderLine
+	{
+		private string _key = "";
 
-        #region Get/Set Code
-        public string Key
-        {
-            get
-            {
-                return _key;
-            }
-        }
+		private string _value = "";
 
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-        }
-        #endregion
 
-        public override string ToString()
-        {
-            return Key + ": " + Value;
-        }
+#region Get/Set Code
+		public string Key
+		{
+			get
+			{
+				return _key;
+			}
+		}
 
-        //Constructors!
-        public HeaderLine(string key, string value)
-        {
-            _key = key;
-            _value = value;
-        }
+		public string Value
+		{
+			get
+			{
+				return _value;
+			}
+		}
+#endregion
 
-        public HeaderLine(string entire_line)
-        {
-            entire_line = entire_line.Trim();
-            string[] split = entire_line.Split(':');
-            if (split.Length > 2)
-            {
-                string second_part = "";
-                for (int i = 1; i < split.Length; ++i)
-                {
-                    second_part += split[i];
-                }
-                string[] new_split = new string[2];
-                new_split[0] = split[0];
-                new_split[1] = second_part;
-                split = new_split;
-            }
-            else if (split.Length < 2)
-            {
-                DebugUtilities.WriteWarning("Could not parse header line! (" + entire_line + ")");
-                //no exception needed, just a warning
-                return;
-            }
-	    //DebugUtilities.WriteDebug("key=[" + split[0] + "] value=[" + split[1] + "]");
-            _key = split[0].Trim();
-            _value = split[1].Trim();
-	    //DebugUtilities.WriteDebug("[" + _value + "]");
-        }
-    }
+
+		public override string ToString()
+		{
+			return Key + ": " + Value;
+		}
+
+		//Constructors!
+		public HeaderLine(string key, string value)
+		{
+			_key = key;
+			_value = value;
+		}
+
+		public HeaderLine(string entire_line)
+		{
+			entire_line = entire_line.Trim();
+			string[] split = entire_line.Split(':');
+			if (split.Length > 2)
+			{
+				string second_part = "";
+				for (int i = 1; i < split.Length; ++i)
+				{
+					second_part += split[i];
+				}
+				string[] new_split = new string[2];
+				new_split[0] = split[0];
+				new_split[1] = second_part;
+				split = new_split;
+			}
+			else if (split.Length < 2)
+			{
+				DebugUtilities
+					.WriteWarning("Could not parse header line! (" + entire_line + ")");
+
+				//no exception needed, just a warning
+				return;
+			}
+
+			//DebugUtilities.WriteDebug("key=[" + split[0] + "] value=[" + split[1] + "]");
+			_key = split[0].Trim();
+			_value = split[1].Trim();
+			//DebugUtilities.WriteDebug("[" + _value + "]");
+		}
+	}
 }

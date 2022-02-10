@@ -21,15 +21,15 @@
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text;
+using System.Threading;
+using System.Xml;
+using System.Xml.Serialization;
 using OpenMetaverse;
 using OpenMetaverse.Assets;
 using OpenMetaverse.Packets;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Net;
-using System.IO;
-using System.Threading;
 
 // inventory functions; based on TestClient.exe code
 namespace RESTBot
@@ -38,8 +38,10 @@ namespace RESTBot
 	public class ListInventoryPlugin : StatefulPlugin
 	{
 		private UUID session;
-		private Inventory? Inventory;				// may be null if avatar has no inventory
-		private InventoryManager? Manager;	// may be null as well...
+
+		private Inventory? Inventory; // may be null if avatar has no inventory
+
+		private InventoryManager? Manager; // may be null as well...
 
 		public ListInventoryPlugin()
 		{
@@ -52,7 +54,8 @@ namespace RESTBot
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
 
-		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID folderID;
 			DebugUtilities.WriteDebug("LI - Entering folder key parser");
@@ -62,7 +65,10 @@ namespace RESTBot
 				if (Parameters.ContainsKey("key"))
 				{
 					DebugUtilities.WriteDebug("LI - Attempting to parse from POST");
-					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out folderID);
+					check =
+						UUID
+							.TryParse(Parameters["key"].ToString().Replace("_", " "),
+							out folderID);
 					DebugUtilities.WriteDebug("LI - Succesfully parsed POST");
 				}
 				else
@@ -71,8 +77,10 @@ namespace RESTBot
 					check = true;
 				}
 
-				if (check)	// means that we have a correctly parsed key OR no key
-										//  which is fine too (attempts root folder)
+				if (
+					check // means that we have a correctly parsed key OR no key
+				)
+				//  which is fine too (attempts root folder)
 				{
 					DebugUtilities.WriteDebug("List Inventory - Entering loop");
 
@@ -83,10 +91,9 @@ namespace RESTBot
 
 					InventoryFolder startFolder = new InventoryFolder(folderID);
 
-					if (folderID == UUID.Zero)
-						startFolder = Inventory.RootFolder;
+					if (folderID == UUID.Zero) startFolder = Inventory.RootFolder;
 
-					PrintFolder(b, startFolder, response);
+					PrintFolder (b, startFolder, response);
 
 					DebugUtilities.WriteDebug("List Inventory - Complete");
 
@@ -106,18 +113,27 @@ namespace RESTBot
 
 		private void PrintFolder(RestBot b, InventoryFolder f, StringBuilder result)
 		{
-			List<InventoryBase> contents = Manager.FolderContents(f.UUID, b.Client.Self.AgentID,
-				true, true, InventorySortOrder.ByName, 3000);
+			List<InventoryBase> contents =
+				Manager
+					.FolderContents(f.UUID,
+					b.Client.Self.AgentID,
+					true,
+					true,
+					InventorySortOrder.ByName,
+					3000);
 
 			if (contents != null)
 			{
 				foreach (InventoryBase i in contents)
 				{
-					result.AppendFormat("<item><name>{0}</name><itemid>{1}</itemid></item>", i.Name, i.UUID);
+					result
+						.AppendFormat("<item><name>{0}</name><itemid>{1}</itemid></item>",
+						i.Name,
+						i.UUID);
 					if (i is InventoryFolder)
 					{
-						InventoryFolder folder = (InventoryFolder)i;
-						PrintFolder(b, folder, result);
+						InventoryFolder folder = (InventoryFolder) i;
+						PrintFolder (b, folder, result);
 					}
 				}
 			}
@@ -142,7 +158,8 @@ namespace RESTBot
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
 
-		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID itemID;
 			DebugUtilities.WriteDebug("List Item - Entering key parser");
@@ -152,7 +169,10 @@ namespace RESTBot
 				if (Parameters.ContainsKey("key"))
 				{
 					DebugUtilities.WriteDebug("LI - Attempting to parse from POST");
-					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out itemID);
+					check =
+						UUID
+							.TryParse(Parameters["key"].ToString().Replace("_", " "),
+							out itemID);
 					DebugUtilities.WriteDebug("LI - Succesfully parsed POST");
 				}
 				else
@@ -160,15 +180,19 @@ namespace RESTBot
 					return "<error>parsekey</error>";
 				}
 
-				if (check)	// means that we have a correctly parsed key
+				if (
+					check // means that we have a correctly parsed key
+				)
 				{
-					DebugUtilities.WriteDebug("List Item - Fetching " + itemID.ToString());
+					DebugUtilities
+						.WriteDebug("List Item - Fetching " + itemID.ToString());
 
 					InventoryItem oneItem;
 
-					oneItem = b.Client.Inventory.FetchItem(itemID, b.Client.Self.AgentID, 5000);
-					// to-do: catch timeout explicitly
+					oneItem =
+						b.Client.Inventory.FetchItem(itemID, b.Client.Self.AgentID, 5000);
 
+					// to-do: catch timeout explicitly
 					if (oneItem == null)
 					{
 						return "<error>item " + itemID.ToString() + " not found</error>\n";
@@ -176,19 +200,40 @@ namespace RESTBot
 
 					string response;
 
-					response  = "<AssetUUID>" + oneItem.AssetUUID.ToString() + "</AssetUUID>";
-					response += "<PermissionsOwner>" + PermMaskString(oneItem.Permissions.OwnerMask) + "</PermissionsOwner>";
-					response += "<PermissionsGroup>" + PermMaskString(oneItem.Permissions.GroupMask) + "</PermissionsGroup>";					response += "<AssetType>" + oneItem.AssetType.ToString() + "</AssetType>";
-					response += "<InventoryType>" + oneItem.InventoryType.ToString() + "</InventoryType>";
-					response += "<CreatorID>" + oneItem.CreatorID.ToString() + "</CreatorID>";
-					response += "<Description>" + oneItem.Description.ToString() + "</Description>";
+					response =
+						"<AssetUUID>" + oneItem.AssetUUID.ToString() + "</AssetUUID>";
+					response +=
+						"<PermissionsOwner>" +
+						PermMaskString(oneItem.Permissions.OwnerMask) +
+						"</PermissionsOwner>";
+					response +=
+						"<PermissionsGroup>" +
+						PermMaskString(oneItem.Permissions.GroupMask) +
+						"</PermissionsGroup>";
+					response +=
+						"<AssetType>" + oneItem.AssetType.ToString() + "</AssetType>";
+					response +=
+						"<InventoryType>" +
+						oneItem.InventoryType.ToString() +
+						"</InventoryType>";
+					response +=
+						"<CreatorID>" + oneItem.CreatorID.ToString() + "</CreatorID>";
+					response +=
+						"<Description>" + oneItem.Description.ToString() + "</Description>";
 					response += "<GroupID>" + oneItem.GroupID.ToString() + "</GroupID>";
-					response += "<GroupOwned>" + oneItem.GroupOwned.ToString() + "</GroupOwned>";
-					response += "<SalePrice>" + oneItem.SalePrice.ToString() + "</SalePrice>";
-					response += "<SaleType>" + oneItem.SaleType.ToString() + "</SaleType>";
+					response +=
+						"<GroupOwned>" + oneItem.GroupOwned.ToString() + "</GroupOwned>";
+					response +=
+						"<SalePrice>" + oneItem.SalePrice.ToString() + "</SalePrice>";
+					response +=
+						"<SaleType>" + oneItem.SaleType.ToString() + "</SaleType>";
 					response += "<Flags>" + oneItem.Flags.ToString() + "</Flags>";
-					response += "<CreationDate>" + oneItem.CreationDate.ToString() + "</CreationDate>";
-					response += "<LastOwnerID>" + oneItem.LastOwnerID.ToString() + "</LastOwnerID>";
+					response +=
+						"<CreationDate>" +
+						oneItem.CreationDate.ToString() +
+						"</CreationDate>";
+					response +=
+						"<LastOwnerID>" + oneItem.LastOwnerID.ToString() + "</LastOwnerID>";
 
 					return "<item>" + response + "</item>\n";
 				}
@@ -197,7 +242,7 @@ namespace RESTBot
 					return "<error>parsekey</error>";
 				}
 			}
-			catch ( Exception e )
+			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
 				return "<error>" + e.Message + "</error>";
@@ -216,15 +261,23 @@ namespace RESTBot
 		private static string PermMaskString(PermissionMask mask)
 		{
 			string str = "";
-			if (((uint)mask | (uint)PermissionMask.Copy) == (uint)PermissionMask.Copy)
+			if (
+				((uint) mask | (uint) PermissionMask.Copy) == (uint) PermissionMask.Copy
+			)
 				str += "C";
 			else
 				str += "-";
-			if (((uint)mask | (uint)PermissionMask.Modify) == (uint)PermissionMask.Modify)
+			if (
+				((uint) mask | (uint) PermissionMask.Modify) ==
+				(uint) PermissionMask.Modify
+			)
 				str += "M";
 			else
 				str += "-";
-			if (((uint)mask | (uint)PermissionMask.Transfer) == (uint)PermissionMask.Transfer)
+			if (
+				((uint) mask | (uint) PermissionMask.Transfer) ==
+				(uint) PermissionMask.Transfer
+			)
 				str += "T";
 			else
 				str += "-";
@@ -247,9 +300,12 @@ namespace RESTBot
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
 
-		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
-			UUID itemID, avatarKey;
+			UUID
+				itemID,
+				avatarKey;
 			InventoryManager Manager;
 
 			DebugUtilities.WriteDebug("Give Item - Entering key parser");
@@ -259,11 +315,17 @@ namespace RESTBot
 				if (Parameters.ContainsKey("itemID"))
 				{
 					DebugUtilities.WriteDebug("GI - Attempting to parse from POST");
-					check = UUID.TryParse(Parameters["itemID"].ToString().Replace("_"," "), out itemID);
+					check =
+						UUID
+							.TryParse(Parameters["itemID"].ToString().Replace("_", " "),
+							out itemID);
 
 					if (check)
 					{
-						check = UUID.TryParse(Parameters["avatarKey"].ToString().Replace("_"," "), out avatarKey);
+						check =
+							UUID
+								.TryParse(Parameters["avatarKey"].ToString().Replace("_", " "),
+								out avatarKey);
 						DebugUtilities.WriteDebug("GI - Succesfully parsed POST");
 					}
 					else
@@ -276,28 +338,47 @@ namespace RESTBot
 					return "<error>parsekey</error>";
 				}
 
-				if (check)	// means that we have a correctly parsed key
+				if (
+					check // means that we have a correctly parsed key
+				)
 				{
-					DebugUtilities.WriteDebug("Give Item " + itemID.ToString() + " to avatar" + avatarKey.ToString());
+					DebugUtilities
+						.WriteDebug("Give Item " +
+						itemID.ToString() +
+						" to avatar" +
+						avatarKey.ToString());
 
 					// Extract item information from inventory
 					InventoryItem oneItem;
 
-					oneItem = b.Client.Inventory.FetchItem(itemID, b.Client.Self.AgentID, 5000);
-					// to-do: catch timeout explicitly
+					oneItem =
+						b.Client.Inventory.FetchItem(itemID, b.Client.Self.AgentID, 5000);
 
+					// to-do: catch timeout explicitly
 					if (oneItem == null)
 					{
 						return "<error>item " + itemID.ToString() + " not found</error>\n";
 					}
 
 					// attempt to send it to the avatar
-
 					Manager = b.Client.Inventory;
 
-					Manager.GiveItem(oneItem.UUID, oneItem.Name, oneItem.AssetType, avatarKey, false);
+					Manager
+						.GiveItem(oneItem.UUID,
+						oneItem.Name,
+						oneItem.AssetType,
+						avatarKey,
+						false);
 
-					return "<item><name>" + oneItem.Name + "</name><assetType>" + oneItem.AssetType + "</assetType><itemID>" + itemID.ToString() + "</itemID><avatarKey>" + avatarKey.ToString() + "</avatarKey></item>\n";
+					return "<item><name>" +
+					oneItem.Name +
+					"</name><assetType>" +
+					oneItem.AssetType +
+					"</assetType><itemID>" +
+					itemID.ToString() +
+					"</itemID><avatarKey>" +
+					avatarKey.ToString() +
+					"</avatarKey></item>\n";
 				}
 				else
 				{
@@ -322,9 +403,12 @@ namespace RESTBot
 	public class CreateNotecardPlugin : StatefulPlugin
 	{
 		private UUID session;
-    const int NOTECARD_CREATE_TIMEOUT = 1000 * 10;
-    const int NOTECARD_FETCH_TIMEOUT = 1000 * 10;
-    const int INVENTORY_FETCH_TIMEOUT = 1000 * 10;
+
+		const int NOTECARD_CREATE_TIMEOUT = 1000 * 10;
+
+		const int NOTECARD_FETCH_TIMEOUT = 1000 * 10;
+
+		const int INVENTORY_FETCH_TIMEOUT = 1000 * 10;
 
 		public CreateNotecardPlugin()
 		{
@@ -337,10 +421,13 @@ namespace RESTBot
 			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
 		}
 
-		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID embedItemID = UUID.Zero;
-			string notecardName, notecardData;
+			string
+				notecardName,
+				notecardData;
 
 			DebugUtilities.WriteDebug("Create Notecard - Entering key parser");
 			try
@@ -348,13 +435,16 @@ namespace RESTBot
 				// item ID to embed is optional; handle later
 				if (Parameters.ContainsKey("key"))
 				{
-					UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out embedItemID);
+					UUID
+						.TryParse(Parameters["key"].ToString().Replace("_", " "),
+						out embedItemID);
 				}
 
 				// notecard data is required!
 				if (Parameters.ContainsKey("notecard"))
 				{
-					DebugUtilities.WriteDebug("CN - Attempting to parse notecard data from POST");
+					DebugUtilities
+						.WriteDebug("CN - Attempting to parse notecard data from POST");
 					notecardData = Parameters["notecard"];
 				}
 				else
@@ -363,10 +453,10 @@ namespace RESTBot
 				}
 
 				// notecard name is optional, we'll assign a random name
-
 				if (Parameters.ContainsKey("name"))
 				{
-					DebugUtilities.WriteDebug("CN - Attempting to parse notecard name from POST");
+					DebugUtilities
+						.WriteDebug("CN - Attempting to parse notecard name from POST");
 					notecardName = Parameters["name"];
 
 					DebugUtilities.WriteDebug("CN - Succesfully parsed POST");
@@ -376,14 +466,24 @@ namespace RESTBot
 					notecardName = "(no name)";
 				}
 
-				UUID notecardItemID = UUID.Zero, notecardAssetID = UUID.Zero;
-				bool success = false, finalUploadSuccess = false;
+				UUID
+					notecardItemID = UUID.Zero,
+					notecardAssetID = UUID.Zero;
+				bool
+					success = false,
+					finalUploadSuccess = false;
 				string message = String.Empty;
 				AutoResetEvent notecardEvent = new AutoResetEvent(false);
 
-				DebugUtilities.WriteDebug("Notecard data ('" + notecardName + "') found: '" + notecardData + "'");
+				DebugUtilities
+					.WriteDebug("Notecard data ('" +
+					notecardName +
+					"') found: '" +
+					notecardData +
+					"'");
 
-				#region Notecard asset data
+
+#region Notecard asset data
 
 				AssetNotecard notecard = new AssetNotecard();
 				notecard.BodyText = notecardData;
@@ -396,7 +496,7 @@ namespace RESTBot
 					if (item != null)
 					{
 						notecard.EmbeddedItems = new List<InventoryItem> { item };
-						notecard.BodyText += (char)0xdbc0 + (char)0xdc00;
+						notecard.BodyText += (char) 0xdbc0 + (char) 0xdc00;
 					}
 					else
 					{
@@ -406,24 +506,44 @@ namespace RESTBot
 
 				notecard.Encode();
 
-				#endregion Notecard asset data
 
-				b.Client.Inventory.RequestCreateItem(b.Client.Inventory.FindFolderForType(AssetType.Notecard),
-				notecardName, notecardName + " created by LibreMetaverse RESTbot " + DateTime.Now, AssetType.Notecard,
-				UUID.Random(), InventoryType.Notecard, PermissionMask.All,
-					delegate(bool createSuccess, InventoryItem item)
+#endregion Notecard asset data
+
+
+				b
+					.Client
+					.Inventory
+					.RequestCreateItem(b
+						.Client
+						.Inventory
+						.FindFolderForType(AssetType.Notecard),
+					notecardName,
+					notecardName + " created by LibreMetaverse RESTbot " + DateTime.Now,
+					AssetType.Notecard,
+					UUID.Random(),
+					InventoryType.Notecard,
+					PermissionMask.All,
+					delegate (bool createSuccess, InventoryItem item)
 					{
 						if (createSuccess)
 						{
-							#region Upload an empty notecard asset first
+#region Upload an empty notecard asset first
 
 							AutoResetEvent emptyNoteEvent = new AutoResetEvent(false);
 							AssetNotecard empty = new AssetNotecard();
 							empty.BodyText = "\n";
 							empty.Encode();
 
-							b.Client.Inventory.RequestUploadNotecardAsset(empty.AssetData, item.UUID,
-								delegate(bool uploadSuccess, string status, UUID itemID, UUID assetID)
+							b
+								.Client
+								.Inventory
+								.RequestUploadNotecardAsset(empty.AssetData,
+								item.UUID,
+								delegate (
+									bool uploadSuccess,
+									string status,
+									UUID itemID,
+									UUID assetID)
 								{
 									notecardItemID = itemID;
 									notecardAssetID = assetID;
@@ -434,18 +554,29 @@ namespace RESTBot
 
 							emptyNoteEvent.WaitOne(NOTECARD_CREATE_TIMEOUT, false);
 
-							#endregion Upload an empty notecard asset first
+
+#endregion Upload an empty notecard asset first
+
 
 							if (success)
 							{
 								// Upload the actual notecard asset
-								b.Client.Inventory.RequestUploadNotecardAsset(notecard.AssetData, item.UUID,
-									delegate(bool uploadSuccess, string status, UUID itemID, UUID assetID)
+								b
+									.Client
+									.Inventory
+									.RequestUploadNotecardAsset(notecard.AssetData,
+									item.UUID,
+									delegate (
+										bool uploadSuccess,
+										string status,
+										UUID itemID,
+										UUID assetID)
 									{
 										notecardItemID = itemID;
 										notecardAssetID = assetID;
 										finalUploadSuccess = uploadSuccess;
-										message = status ?? "Unknown error uploading notecard asset";
+										message =
+											status ?? "Unknown error uploading notecard asset";
 										notecardEvent.Set();
 									});
 							}
@@ -459,17 +590,28 @@ namespace RESTBot
 							message = "Notecard item creation failed";
 							notecardEvent.Set();
 						}
-					} // end delegate
-				); // end RequestCreateItem
+					}); // end delegate // end RequestCreateItem
 
 				notecardEvent.WaitOne(NOTECARD_CREATE_TIMEOUT, false);
 
 				// DebugUtilities.WriteDebug("Notecard possibly created, ItemID " + notecardItemID + " AssetID " + notecardAssetID + " Content: '" + DownloadNotecard(b, notecardItemID, notecardAssetID) + "'");
-
 				if (finalUploadSuccess)
 				{
-					DebugUtilities.WriteDebug("Notecard successfully created, ItemID " + notecardItemID + " AssetID " + notecardAssetID + " Content: '" + 				DownloadNotecard(b, notecardItemID, notecardAssetID) + "'");
-					return "<notecard><ItemID>" + notecardItemID + "</ItemID><AssetID>" + notecardAssetID + "</AssetID><name>" + notecardName + "</name></notecard>";
+					DebugUtilities
+						.WriteDebug("Notecard successfully created, ItemID " +
+						notecardItemID +
+						" AssetID " +
+						notecardAssetID +
+						" Content: '" +
+						DownloadNotecard(b, notecardItemID, notecardAssetID) +
+						"'");
+					return "<notecard><ItemID>" +
+					notecardItemID +
+					"</ItemID><AssetID>" +
+					notecardAssetID +
+					"</AssetID><name>" +
+					notecardName +
+					"</name></notecard>";
 				}
 				else
 				{
@@ -484,7 +626,6 @@ namespace RESTBot
 		}
 
 		// Accessory functions
-
 		/// <summary>
 		/// Fetch an inventory item
 		/// </summary>
@@ -530,7 +671,16 @@ namespace RESTBot
 			byte[]? notecardData = null;
 			string error = "Timeout";
 
-			b.Client.Assets.RequestInventoryAsset(assetID, itemID, UUID.Zero, b.Client.Self.AgentID, AssetType.Notecard, true, UUID.Zero,
+			b
+				.Client
+				.Assets
+				.RequestInventoryAsset(assetID,
+				itemID,
+				UUID.Zero,
+				b.Client.Self.AgentID,
+				AssetType.Notecard,
+				true,
+				UUID.Zero,
 				delegate (AssetDownload transfer, Asset asset)
 				{
 					if (transfer.Success)
@@ -543,8 +693,7 @@ namespace RESTBot
 					}
 
 					assetDownloadEvent.Set();
-				}
-			);
+				});
 
 			assetDownloadEvent.WaitOne(NOTECARD_FETCH_TIMEOUT, false);
 

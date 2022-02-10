@@ -27,25 +27,32 @@
 		Author: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
 --------------------------------------------------------------------------------*/
 using System;
+using System.Net;
+using System.Threading;
 // using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
-using System.Net;
-using System.Threading;
 
 namespace RESTBot
 {
 	/// <summary>All-around utility class</summary>
 	public static class Utilities
 	{
-		#region name2key/key2name
+#region name2key/key2name
 		/// <summary>Caches for name2key and key2name requests</summary>
 		/// <see>AvatarNameLookupPlugin, AvatarKeyLookupPlugin</see>
-		private static Dictionary<UUID, AutoResetEvent> NameLookupEvents = new Dictionary<UUID, AutoResetEvent>();
-		private static Dictionary<UUID, String> avatarNames = new Dictionary<UUID, String>();
-		private static Dictionary<String, AutoResetEvent> KeyLookupEvents = new Dictionary<String, AutoResetEvent>();
-		private static Dictionary<String, UUID> avatarKeys = new Dictionary<String, UUID>();
+		private static Dictionary<UUID, AutoResetEvent>
+			NameLookupEvents = new Dictionary<UUID, AutoResetEvent>();
+
+		private static Dictionary<UUID, String>
+			avatarNames = new Dictionary<UUID, String>();
+
+		private static Dictionary<String, AutoResetEvent>
+			KeyLookupEvents = new Dictionary<String, AutoResetEvent>();
+
+		private static Dictionary<String, UUID>
+			avatarKeys = new Dictionary<String, UUID>();
 
 		/// <summary>
 		/// Loop through all (pending) replies for UUID/Avatar names
@@ -55,14 +62,24 @@ namespace RESTBot
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
 		/// <remarks>obsolete syntax changed</remarks>
-		private static void Avatars_OnAvatarNames(object? sender, UUIDNameReplyEventArgs e)
+		private static void Avatars_OnAvatarNames(
+			object? sender,
+			UUIDNameReplyEventArgs e
+		)
 		{
-			DebugUtilities.WriteInfo("Avatars_OnAvatarNames(): Processing " + e.Names.Count.ToString() + " AvatarNames replies");
+			DebugUtilities
+				.WriteInfo("Avatars_OnAvatarNames(): Processing " +
+				e.Names.Count.ToString() +
+				" AvatarNames replies");
 			foreach (KeyValuePair<UUID, string> kvp in e.Names)
 			{
 				if (!avatarNames.ContainsKey(kvp.Key) || avatarNames[kvp.Key] == null)
 				{
-					DebugUtilities.WriteInfo("Avatars_OnAvatarNames(): Reply Name: " + kvp.Value + " Key : " + kvp.Key.ToString());
+					DebugUtilities
+						.WriteInfo("Avatars_OnAvatarNames(): Reply Name: " +
+						kvp.Value +
+						" Key : " +
+						kvp.Key.ToString());
 					lock (avatarNames)
 					{
 						// avatarNames[kvp.Key] = new Avatar(); // why all this trouble?
@@ -86,23 +103,26 @@ namespace RESTBot
 		/// <returns>Name of the avatar if it exists; String.Empty if not</returns>
 		public static string getName(RestBot b, UUID id)
 		{
-			DebugUtilities.WriteInfo("getName(): Looking up name for " + id.ToString());
+			DebugUtilities
+				.WriteInfo("getName(): Looking up name for " + id.ToString());
 			b.Client.Avatars.UUIDNameReply += Avatars_OnAvatarNames;
 			lock (NameLookupEvents)
 			{
 				NameLookupEvents.Add(id, new AutoResetEvent(false));
 			}
 
-			b.Client.Avatars.RequestAvatarName(id);
+			b.Client.Avatars.RequestAvatarName (id);
 
 			if (!NameLookupEvents[id].WaitOne(15000, true))
 			{
-				DebugUtilities.WriteWarning("getName(): timed out on avatar name lookup");
+				DebugUtilities
+					.WriteWarning("getName(): timed out on avatar name lookup");
 			}
 			lock (NameLookupEvents)
 			{
-				NameLookupEvents.Remove(id);
+				NameLookupEvents.Remove (id);
 			}
+
 			// C# 8+ is stricter with null assignments.
 			// string? response = null;	// technically this cannot ever be null, so it doesn't make sense...
 			string response = String.Empty;
@@ -111,10 +131,11 @@ namespace RESTBot
 				response = avatarNames[id]; // .Name removed
 				lock (avatarNames)
 				{
-					avatarNames.Remove(id);
+					avatarNames.Remove (id);
 				}
 			}
-/* 			else
+
+			/* 			else
 			{
 				response = String.Empty;
 			} */
@@ -130,37 +151,55 @@ namespace RESTBot
 		/// <param name="e">List of UUID/Avatar names</param>
 		/// <returns>void</returns>
 		/// <remarks>using new Directory functionality</remarks>
-		public static void Avatars_OnDirPeopleReply(object? sender, DirPeopleReplyEventArgs e)
+		public static void Avatars_OnDirPeopleReply(
+			object? sender,
+			DirPeopleReplyEventArgs e
+		)
 		{
 			if (e.MatchedPeople.Count < 1)
 			{
-				DebugUtilities.WriteWarning("Avatars_OnDirPeopleReply() - Error: empty people directory reply");
+				DebugUtilities
+					.WriteWarning("Avatars_OnDirPeopleReply() - Error: empty people directory reply");
 			}
 			else
 			{
 				int replyCount = e.MatchedPeople.Count;
 
-				DebugUtilities.WriteInfo("Avatars_OnDirPeopleReply() - Processing " + replyCount.ToString() + " DirPeople replies");
-				for (int i = 0 ; i <  replyCount ; i++)
+				DebugUtilities
+					.WriteInfo("Avatars_OnDirPeopleReply() - Processing " +
+					replyCount.ToString() +
+					" DirPeople replies");
+				for (int i = 0; i < replyCount; i++)
 				{
-					string avatarName = e.MatchedPeople[i].FirstName + " " + e.MatchedPeople[i].LastName;
+					string avatarName =
+						e.MatchedPeople[i].FirstName + " " + e.MatchedPeople[i].LastName;
 					UUID avatarKey = e.MatchedPeople[i].AgentID;
-					DebugUtilities.WriteDebug("Avatars_OnDirPeopleReply() -  Reply " + (i + 1).ToString() + " of " + replyCount.ToString() + " Key : " + avatarKey.ToString() + " Name : " + avatarName);
+					DebugUtilities
+						.WriteDebug("Avatars_OnDirPeopleReply() -  Reply " +
+						(i + 1).ToString() +
+						" of " +
+						replyCount.ToString() +
+						" Key : " +
+						avatarKey.ToString() +
+						" Name : " +
+						avatarName);
 
-					if (!avatarKeys.ContainsKey(avatarName)) { /* || avatarKeys[avatarName] == null )	 // apparently dictionary entries cannot be null */
+					if (!avatarKeys.ContainsKey(avatarName))
+					{
+						/* || avatarKeys[avatarName] == null )	 // apparently dictionary entries cannot be null */
 						lock (avatarKeys)
 						{
 							avatarKeys[avatarName.ToLower()] = avatarKey;
 						}
 					}
 
-					lock(KeyLookupEvents)
+					lock (KeyLookupEvents)
 					{
-				 		if (KeyLookupEvents.ContainsKey(avatarName.ToLower()))
-				 		{
-						 		KeyLookupEvents[avatarName.ToLower()].Set();
-						 		DebugUtilities.WriteDebug(avatarName.ToLower() + " KLE set!");
-				 		}
+						if (KeyLookupEvents.ContainsKey(avatarName.ToLower()))
+						{
+							KeyLookupEvents[avatarName.ToLower()].Set();
+							DebugUtilities.WriteDebug(avatarName.ToLower() + " KLE set!");
+						}
 					}
 				}
 			}
@@ -178,40 +217,53 @@ namespace RESTBot
 			b.Client.Directory.DirPeopleReply += Avatars_OnDirPeopleReply;
 			name = name.ToLower();
 			DebugUtilities.WriteDebug("getKey(): Looking up: " + name);
-			DebugUtilities.WriteDebug("getKey(): Key not in cache, requesting directory lookup");	// how do you know? (gwyneth 20220128)
+			DebugUtilities
+				.WriteDebug("getKey(): Key not in cache, requesting directory lookup"); // how do you know? (gwyneth 20220128)
 			lock (KeyLookupEvents)
 			{
 				KeyLookupEvents.Add(name, new AutoResetEvent(false));
 			}
-			DebugUtilities.WriteDebug("getKey(): Lookup Event added, KeyLookupEvents now has a total of " + KeyLookupEvents.Count.ToString() + " entries");
+			DebugUtilities
+				.WriteDebug("getKey(): Lookup Event added, KeyLookupEvents now has a total of " +
+				KeyLookupEvents.Count.ToString() +
+				" entries");
 			DirFindQueryPacket find = new DirFindQueryPacket();
-			find.AgentData.AgentID = b.Client.Self.AgentID;	// was Network and not Self
+			find.AgentData.AgentID = b.Client.Self.AgentID; // was Network and not Self
 			find.AgentData.SessionID = b.Client.Self.SessionID;
 			find.QueryData.QueryFlags = 1;
+
 			//find.QueryData.QueryText = Helpers.StringToField(name);
 			find.QueryData.QueryText = Utils.StringToBytes(name);
 			find.QueryData.QueryID = new UUID("00000000000000000000000000000001");
 			find.QueryData.QueryStart = 0;
 
 			b.Client.Network.SendPacket((Packet) find);
-			DebugUtilities.WriteDebug("getKey(): Packet sent - KLE has " + KeyLookupEvents.Count.ToString() + " entries.. now waiting");
+			DebugUtilities
+				.WriteDebug("getKey(): Packet sent - KLE has " +
+				KeyLookupEvents.Count.ToString() +
+				" entries.. now waiting");
 			if (!KeyLookupEvents[name].WaitOne(15000, true))
 			{
-				DebugUtilities.WriteWarning("getKey(): timed out on avatar name lookup for " + name);
+				DebugUtilities
+					.WriteWarning("getKey(): timed out on avatar name lookup for " +
+					name);
 			}
 			DebugUtilities.WriteDebug("getKey(): Waiting done!");
 			lock (KeyLookupEvents)
 			{
-				KeyLookupEvents.Remove(name);
+				KeyLookupEvents.Remove (name);
 			}
-			DebugUtilities.WriteDebug("getKey(): Done with KLE, now has " + KeyLookupEvents.Count.ToString() + " entries");
-			UUID response = new UUID();	// hopefully this sets the response to UUID.Zero first... (gwyneth 20220128)
+			DebugUtilities
+				.WriteDebug("getKey(): Done with KLE, now has " +
+				KeyLookupEvents.Count.ToString() +
+				" entries");
+			UUID response = new UUID(); // hopefully this sets the response to UUID.Zero first... (gwyneth 20220128)
 			if (avatarKeys.ContainsKey(name))
 			{
 				response = avatarKeys[name];
 				lock (avatarKeys)
 				{
-					avatarKeys.Remove(name);
+					avatarKeys.Remove (name);
 				}
 			}
 			b.Client.Directory.DirPeopleReply -= Avatars_OnDirPeopleReply;
@@ -225,11 +277,13 @@ namespace RESTBot
 		/// <param name="avatarFirstName">First name of avatar to check</param>
 		/// <param name="avatarLastName">Last name of avatar to check</param>
 		/// <returns>UUID of corresponding avatar, if it exists</returns>
-		public static UUID getKey(RestBot b, String avatarFirstName, String avatarLastName)
+		public static UUID
+		getKey(RestBot b, String avatarFirstName, String avatarLastName)
 		{
-			String avatarFullName = avatarFirstName.ToString() + " " + avatarLastName.ToString();
-			return getKey(b, avatarFullName);	// it will be set to lowercase by getKey() (gwyneth 20220126).
+			String avatarFullName =
+				avatarFirstName.ToString() + " " + avatarLastName.ToString();
+			return getKey(b, avatarFullName); // it will be set to lowercase by getKey() (gwyneth 20220126).
 		}
-		#endregion name2key/key2name
+#endregion name2key/key2name
 	} // end class
 } // end namespace

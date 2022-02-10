@@ -28,195 +28,219 @@ using OpenMetaverse.Utilities;
 
 namespace RESTBot
 {
-		/// <summary>
-		/// Class to send messages to a channel in chat
-		/// </summary>
-    public class SayPlugin : StatefulPlugin
-    {
-        private UUID session;
-        private RestBot? me; // potentially null
+	/// <summary>
+	/// Class to send messages to a channel in chat
+	/// </summary>
+	public class SayPlugin : StatefulPlugin
+	{
+		private UUID session;
 
-				/// <summary>
-				/// Sets the plugin name for the router.
-				/// </summary>
-        public SayPlugin()
-        {
-            MethodName = "say";
-        }
-
-				/// <summary>
-				/// Initialises the plugin.
-				/// </summary>
-				/// <param name="bot">A currently active RestBot</param>
-        public override void Initialize(RestBot bot)
-        {
-            session = bot.sessionid;
-            me = bot;
-            DebugUtilities.WriteDebug("SP - " + session + " " + MethodName + " startup");
-
-            base.Initialize(bot);
-        }
-
-				/// <summary>
-				/// Handler event for this plugin.
-				/// </summary>
-				/// <param name="b">A currently active RestBot</param>
-				/// <param name="Parameters">A dictionary containing the channel, the message, and possibly the chat type</param>
-				/// <remarks>channel defaults to 0 (public channel), while chattype defaults to normal chat.</remarks>
-        public override string Process(RestBot b, Dictionary<string, string> Parameters)
-        {
-            int channel = 0;
-            bool check = true;
-            string message = String.Empty;
-						ChatType chattype = ChatType.Normal;
-
-            if (Parameters.ContainsKey("channel"))
-            {
-                check &= int.TryParse(Parameters["channel"], out channel);
-            }
-
-            if (Parameters.ContainsKey("message"))
-            {
-                //message = Parameters["message"].ToString().Replace("+", " ");
-								message = Parameters["message"];
-            }
-            else check = false;
-
-						// if chattype is not specified, we use normal chat by default.
-						if (Parameters.ContainsKey("chattype"))
-						{
-								switch(Parameters["chattype"])
-								{
-										case "shout":
-												chattype = ChatType.Shout;
-												break;
-										case "whisper":
-												chattype = ChatType.Whisper;
-												break;
-										default:
-												chattype = ChatType.Normal;
-												break;
-								}
-						}
-
-						if (!check)
-						{
-								return "<error>missing required parameters</error>";
-						}
-
-            // Make sure we are not in autopilot.
-						// Note: Why not? (gwyneth 20220121)
-            b.Client.Self.AutoPilotCancel();
-
-						// Note: when channel is zero, we'll attempt to use Realism.Chat instead, because it looks cooler! (gwyneth 20220121)
-						/// <summary><c>Realism</c> is a class in <c>Openmetaverse.Utilities</c>.</summary>
-						if (channel != 0)
-						{
-								b.Client.Self.Chat(message, channel, chattype);
-						}
-						else
-						{
-								Realism.Chat(b.Client, message, chattype, 3);	// 3 means typing 3 characters per second (gwyneth 20220121)
-						}
-
-            return "<say><channel>" + channel.ToString() + "</channel><message>" + message + "</message><chattype>" + chattype.ToString() + "</chattype></say>";
-        } // end Process
-    } // end SayPlugin
+		private RestBot? me; // potentially null
 
 		/// <summary>
-		/// Class to send instant messages to an avatar (name or UUID).
+		/// Sets the plugin name for the router.
 		/// </summary>
-		public class InstantMessagePlugin : StatefulPlugin
+		public SayPlugin()
 		{
-				private UUID session;
-				private RestBot? me; // potentially null
+			MethodName = "say";
+		}
 
-				/// <summary>
-				/// Sets the plugin name for the router.
-				/// </summary>
-				public InstantMessagePlugin()
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		public override void Initialize(RestBot bot)
+		{
+			session = bot.sessionid;
+			me = bot;
+			DebugUtilities
+				.WriteDebug("SP - " + session + " " + MethodName + " startup");
+
+			base.Initialize(bot);
+		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the channel, the message, and possibly the chat type</param>
+		/// <remarks>channel defaults to 0 (public channel), while chattype defaults to normal chat.</remarks>
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			int channel = 0;
+			bool check = true;
+			string message = String.Empty;
+			ChatType chattype = ChatType.Normal;
+
+			if (Parameters.ContainsKey("channel"))
+			{
+				check &= int.TryParse(Parameters["channel"], out channel);
+			}
+
+			if (Parameters.ContainsKey("message"))
+			{
+				//message = Parameters["message"].ToString().Replace("+", " ");
+				message = Parameters["message"];
+			}
+			else
+				check = false;
+
+			// if chattype is not specified, we use normal chat by default.
+			if (Parameters.ContainsKey("chattype"))
+			{
+				switch (Parameters["chattype"])
 				{
-						MethodName = "instant_message";
+					case "shout":
+						chattype = ChatType.Shout;
+						break;
+					case "whisper":
+						chattype = ChatType.Whisper;
+						break;
+					default:
+						chattype = ChatType.Normal;
+						break;
+				}
+			}
+
+			if (!check)
+			{
+				return "<error>missing required parameters</error>";
+			}
+
+			// Make sure we are not in autopilot.
+			// Note: Why not? (gwyneth 20220121)
+			b.Client.Self.AutoPilotCancel();
+
+			// Note: when channel is zero, we'll attempt to use Realism.Chat instead, because it looks cooler! (gwyneth 20220121)
+			/// <summary><c>Realism</c> is a class in <c>Openmetaverse.Utilities</c>.</summary>
+			if (channel != 0)
+			{
+				b.Client.Self.Chat (message, channel, chattype);
+			}
+			else
+			{
+				Realism.Chat(b.Client, message, chattype, 3); // 3 means typing 3 characters per second (gwyneth 20220121)
+			}
+
+			return "<say><channel>" +
+			channel.ToString() +
+			"</channel><message>" +
+			message +
+			"</message><chattype>" +
+			chattype.ToString() +
+			"</chattype></say>";
+		} // end Process
+	} // end SayPlugin
+
+	/// <summary>
+	/// Class to send instant messages to an avatar (name or UUID).
+	/// </summary>
+	public class InstantMessagePlugin : StatefulPlugin
+	{
+		private UUID session;
+
+		private RestBot? me; // potentially null
+
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+		public InstantMessagePlugin()
+		{
+			MethodName = "instant_message";
+		}
+
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		public override void Initialize(RestBot bot)
+		{
+			session = bot.sessionid;
+			me = bot;
+			DebugUtilities.WriteDebug($"IM - {session} {MethodName} startup");
+
+			base.Initialize(bot);
+		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the message, avatar first and last name, or UUID</param>
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			UUID avatarKey = UUID.Zero;
+			bool check = true;
+			string message = String.Empty;
+			string avatarFirstName = String.Empty;
+			string avatarLastName = String.Empty;
+
+			if (Parameters.ContainsKey("key"))
+			{
+				check =
+					UUID
+						.TryParse(Parameters["key"].ToString().Replace("_", " "),
+						out avatarKey);
+			}
+			else
+			{
+				if (Parameters.ContainsKey("last"))
+				{
+					avatarLastName = Parameters["last"];
 				}
 
-				/// <summary>
-				/// Initialises the plugin.
-				/// </summary>
-				/// <param name="bot">A currently active RestBot</param>
-				public override void Initialize(RestBot bot)
+				if (Parameters.ContainsKey("first"))
 				{
-						session = bot.sessionid;
-						me = bot;
-						DebugUtilities.WriteDebug($"IM - {session} {MethodName} startup");
+					avatarFirstName = Parameters["first"];
+					check = true;
+				}
+				else
+					check = false;
 
-						base.Initialize(bot);
+				// Massage the data we got; we can get away with an empty string for the last name (gwyneth 20220122).
+				if (avatarLastName == String.Empty)
+				{
+					avatarLastName = "Resident";
+					check = true;
 				}
 
-				/// <summary>
-				/// Handler event for this plugin.
-				/// </summary>
-				/// <param name="b">A currently active RestBot</param>
-				/// <param name="Parameters">A dictionary containing the message, avatar first and last name, or UUID</param>
-				public override string Process(RestBot b, Dictionary<string, string> Parameters)
+				// InstantMessage *always* needs an avatar UUID!
+				// We need to look it up; fortunately, there are plenty of options available to get those.
+				String avatarFullName =
+					avatarFirstName.ToString() + " " + avatarLastName.ToString();
+				avatarKey = Utilities.getKey(b, avatarFullName); // handles conversion to lowercase.
+				if (avatarKey == UUID.Zero)
 				{
-						UUID avatarKey = UUID.Zero;
-						bool check = true;
-						string message = String.Empty;
-						string avatarFirstName = String.Empty;
-						string avatarLastName  = String.Empty;
+					DebugUtilities
+						.WriteWarning("Key not found for unknown avatar '{avatarFullName}'");
+					check = false;
+				}
+			}
 
-						if (Parameters.ContainsKey("key"))
-						{
-								check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out avatarKey);
-						}
-						else
-						{
-								if (Parameters.ContainsKey("last"))
-								{
-										avatarLastName = Parameters["last"];
-								}
+			if (Parameters.ContainsKey("message"))
+			{
+				message = Parameters["message"];
+				if (message == String.Empty)
+				{
+					check = false;
+				}
+			}
+			else
+				check = false;
 
-								if (Parameters.ContainsKey("first"))
-								{
-										avatarFirstName = Parameters["first"];
-										check = true;
-								}
-								else check = false;
+			if (!check)
+			{
+				return "<error>wrong parameters passed; IM not sent</error>";
+			}
 
-								// Massage the data we got; we can get away with an empty string for the last name (gwyneth 20220122).
-								if (avatarLastName == String.Empty)
-								{
-										avatarLastName = "Resident";
-										check = true;
-								}
-
-								// InstantMessage *always* needs an avatar UUID!
-								// We need to look it up; fortunately, there are plenty of options available to get those.
-								String avatarFullName = avatarFirstName.ToString() + " " + avatarLastName.ToString();
-								avatarKey = Utilities.getKey(b, avatarFullName);	// handles conversion to lowercase.
-								if (avatarKey == UUID.Zero)
-								{
-										DebugUtilities.WriteWarning("Key not found for unknown avatar '{avatarFullName}'");
-										check = false;
-								}
-						}
-
-						if (Parameters.ContainsKey("message"))
-						{
-								message = Parameters["message"];
-								if (message == String.Empty)
-								{
-										check = false;
-								}
-						}
-						else check = false;
-
-						if (!check) {
-								return "<error>wrong parameters passed; IM not sent</error>";
-						}
-
-						b.Client.Self.InstantMessage(avatarKey, message);
-						return "<instant_message><key>" + avatarKey.ToString() + "</key><message>" + message + "</message></instant_message>";
-				} // end Process
-		} // end InstantMessagePlugin
+			b.Client.Self.InstantMessage (avatarKey, message);
+			return "<instant_message><key>" +
+			avatarKey.ToString() +
+			"</key><message>" +
+			message +
+			"</message></instant_message>";
+		} // end Process
+	} // end InstantMessagePlugin
 } // end namespace
