@@ -104,10 +104,13 @@ namespace RESTBot
         System.Threading.Thread.Sleep(1);
       	//TODO: Replace above with a manualresetevent
 
-				if (stupidCounter % 3600000 == 0) {	// stop every hour and check available memory (gwyneth 202202010)
-					DebugUtilities.WriteInfo($"Memory in use before GC.Collect: {(GC.GetTotalMemory(false)):N0} bytes");
+				if (stupidCounter % 3600000 == 0) {	// stop every hour and check available memory (gwyneth 20220210)
+					DateTime t = DateTime.Now;
+
+					DebugUtilities.WriteInfo($"{t.ToString("yyyy-MM-dd HH:mm:ss")} - Memory in use before GC.Collect: {(GC.GetTotalMemory(false)):N0} bytes");
 					GC.Collect(); // collect garbage (gwyneth 20220207) and wait for GC to finish.
-					DebugUtilities.WriteInfo($"Memory in use after  GC.Collect: {(GC.GetTotalMemory(true)):N0} bytes");
+					t = DateTime.Now;
+					DebugUtilities.WriteInfo($"{t.ToString("yyyy-MM-dd HH:mm:ss")} - Memory in use after  GC.Collect: {(GC.GetTotalMemory(true)):N0} bytes");
 				}
 				stupidCounter++;
 			}
