@@ -111,7 +111,7 @@ namespace RESTBot
 				NameLookupEvents.Add(id, new AutoResetEvent(false));
 			}
 
-			b.Client.Avatars.RequestAvatarName (id);
+			b.Client.Avatars.RequestAvatarName(id);
 
 			if (!NameLookupEvents[id].WaitOne(15000, true))
 			{
@@ -120,7 +120,7 @@ namespace RESTBot
 			}
 			lock (NameLookupEvents)
 			{
-				NameLookupEvents.Remove (id);
+				NameLookupEvents.Remove(id);
 			}
 
 			// C# 8+ is stricter with null assignments.
@@ -131,7 +131,7 @@ namespace RESTBot
 				response = avatarNames[id]; // .Name removed
 				lock (avatarNames)
 				{
-					avatarNames.Remove (id);
+					avatarNames.Remove(id);
 				}
 			}
 
@@ -251,19 +251,17 @@ namespace RESTBot
 			DebugUtilities.WriteDebug("getKey(): Waiting done!");
 			lock (KeyLookupEvents)
 			{
-				KeyLookupEvents.Remove (name);
+				KeyLookupEvents.Remove(name);
 			}
 			DebugUtilities
-				.WriteDebug("getKey(): Done with KLE, now has " +
-				KeyLookupEvents.Count.ToString() +
-				" entries");
+				.WriteDebug($"getKey(): Done with KLE, now has {KeyLookupEvents.Count.ToString()} entries");
 			UUID response = new UUID(); // hopefully this sets the response to UUID.Zero first... (gwyneth 20220128)
 			if (avatarKeys.ContainsKey(name))
 			{
 				response = avatarKeys[name];
 				lock (avatarKeys)
 				{
-					avatarKeys.Remove (name);
+					avatarKeys.Remove(name);
 				}
 			}
 			b.Client.Directory.DirPeopleReply -= Avatars_OnDirPeopleReply;
@@ -285,5 +283,81 @@ namespace RESTBot
 			return getKey(b, avatarFullName); // it will be set to lowercase by getKey() (gwyneth 20220126).
 		}
 #endregion name2key/key2name
+#region new tech
+		/**
+	 	*	Attempt to replace some of those naïve methods with a more straightforward approach,
+	 	*  as used by LibreMetaverse's TestClient. (gwyneth 20220212)
+		**/
+
+		/// <summary>The avatar name is allegedly used by multiple threads? (gwyneth 20220212)</summary>
+		static string ToAvatarName = String.Empty;
+		/// <summary>manual reset events</summary>
+		static ManualResetEvent NameSearchEvent = new ManualResetEvent(false);
+		/// <summary>cache of already existing keys that we looked up in the past</summary>
+		static Dictionary<string, UUID> Name2Key = new Dictionary<string, UUID>();
+
+		/// <summary>
+		/// getKeySimple gets an avatar's UUID key, given its (full) avatar name
+		/// </summary>
+		/// <param name="b">RESTbot object</param>
+		/// <param name="name">Name of avatar to check</param>
+		/// <returns>UUID of corresponding avatar, if it exists</returns>
+		public static UUID getKeySimple(RestBot b, String name)
+		{
+			// add callback to handle reply
+			b.Client.Avatars.AvatarPickerReply += Avatars_AvatarPickerReply;
+
+			name = name.ToLower();
+
+			lock(ToAvatarName)
+			{
+				ToAvatarName = name;
+			}
+
+			// Check if the avatar UUID is already in our cache
+			if (!Name2Key.ContainsKey(name))
+			{
+				// Send the Query, it requires a random session ID (probably for manually killing it)
+				b.Client.Avatars.RequestAvatarNameSearch(name, UUID.Random());
+				// waits a reasonable amount for a reply
+				NameSearchEvent.WaitOne(6000, false);
+			}
+
+			// Now we either have the key, or the avatar doesn't exist, or the network broke.
+			// In all cases, we remove the callback and return whatever we've got.
+			if (Name2Key.ContainsKey(name))
+			{
+				UUID id = Name2Key[name];
+				b.Client.Avatars.AvatarPickerReply -= Avatars_AvatarPickerReply;
+				return id;
+			}
+			else
+			{
+				b.Client.Avatars.AvatarPickerReply -= Avatars_AvatarPickerReply;
+				DebugUtilities.WriteDebug("$Name lookup for {name} failed, NULL_KEY returned");
+				return UUID.Zero;
+			}
+		} // end getKeySimple
+
+		private static void Avatars_AvatarPickerReply(object sender, AvatarPickerReplyEventArgs e)
+		{
+				string lowerName = String.Empty;
+				lock(ToAvatarName)
+				{
+					lowerName = ToAvatarName.ToLower();
+				}
+
+				foreach (KeyValuePair<UUID, string> kvp in e.Avatars)
+				{
+						if (kvp.Value.ToLower() == lowerName)
+						{
+								Name2Key[lowerName] = kvp.Key;
+								NameSearchEvent.Set();
+								return;
+						}
+				}
+		}
+#endregion new tech
 	} // end class
+
 } // end namespace

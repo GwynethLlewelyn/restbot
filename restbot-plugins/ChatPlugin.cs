@@ -116,7 +116,7 @@ namespace RESTBot
 			/// <summary><c>Realism</c> is a class in <c>Openmetaverse.Utilities</c>.</summary>
 			if (channel != 0)
 			{
-				b.Client.Self.Chat (message, channel, chattype);
+				b.Client.Self.Chat(message, channel, chattype);
 			}
 			else
 			{
@@ -136,6 +136,11 @@ namespace RESTBot
 	/// <summary>
 	/// Class to send instant messages to an avatar (name or UUID).
 	/// </summary>
+	/// <remarks>
+	/// Heavily inspired by LibreMetaverse's TestClient! (gwyneth 20220212)
+	/// It's much cleaner that way; getting the avatar key needed to send the IM is pushed
+	/// to the Utilities class.
+	/// </remarks>
 	public class InstantMessagePlugin : StatefulPlugin
 	{
 		private UUID session;
@@ -160,7 +165,7 @@ namespace RESTBot
 			me = bot;
 			DebugUtilities.WriteDebug($"IM - {session} {MethodName} startup");
 
-			base.Initialize(bot);
+			base.Initialize(bot);	// wtf is this for? (gwyneth 20220212)
 		}
 
 		/// <summary>
@@ -210,7 +215,9 @@ namespace RESTBot
 				// We need to look it up; fortunately, there are plenty of options available to get those.
 				String avatarFullName =
 					avatarFirstName.ToString() + " " + avatarLastName.ToString();
-				avatarKey = Utilities.getKey(b, avatarFullName); // handles conversion to lowercase.
+
+				avatarKey = Utilities.getKeySimple(b, avatarFullName); // handles conversion to lowercase.
+
 				if (avatarKey == UUID.Zero)
 				{
 					DebugUtilities
@@ -235,6 +242,9 @@ namespace RESTBot
 				return "<error>wrong parameters passed; IM not sent</error>";
 			}
 
+			// make sure message is not too big (gwyneth 20220212)
+			message = message.TrimEnd();
+			if (message.Length > 1023) message = message.Remove(1023);
 			b.Client.Self.InstantMessage (avatarKey, message);
 			return "<instant_message><key>" +
 			avatarKey.ToString() +

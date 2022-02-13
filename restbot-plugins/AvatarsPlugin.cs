@@ -143,7 +143,7 @@ namespace RESTBot
 			}
 			lock (NameLookupEvents)
 			{
-				NameLookupEvents.Remove (id);
+				NameLookupEvents.Remove(id);
 			}
 
 			// C# 8+ is stricter with null assignments.
@@ -154,7 +154,7 @@ namespace RESTBot
 				response = avatarNames[id]; // .Name removed
 				lock (avatarNames)
 				{
-					avatarNames.Remove (id);
+					avatarNames.Remove(id);
 				}
 			}
 
