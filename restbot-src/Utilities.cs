@@ -7,7 +7,7 @@
 	LICENSE:
 		This file is part of the RESTBot Project.
 
-		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC; (C) 2021 Gwyneth Llewelyn
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC; (C) 2021,2022 Gwyneth Llewelyn
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU Affero General Public License as

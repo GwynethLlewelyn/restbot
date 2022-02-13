@@ -1,5 +1,7 @@
 /*--------------------------------------------------------------------------------
-	Messages related to avatar information.
+	FILE INFORMATION:
+	Name: AvatarsPlugin.cs [./restbot-plugins/AvatarsPlugin.cs]
+	Description: Messages related to avatar information.
 
 	LICENSE:
 		This file is part of the RESTBot Project.

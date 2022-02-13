@@ -1,8 +1,13 @@
 /*--------------------------------------------------------------------------------
+	FILE INFORMATION:
+	Name: ChatPlugin.cs [./restbot-plugins/ChatPlugin.cs]
+	Description: Handles outgoing messages (chat, public chat, shout/say/whisper)
+							 as well as instant messaging.
+
 	LICENSE:
 		This file is part of the RESTBot Project.
 
-		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC
+		Copyright (C) 2007-2008 PLEIADES CONSULTING, INC and others
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU Affero General Public License as
@@ -17,7 +22,8 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  Author: Brian Krisler bkrisler@gmail.com
+  Author: Brian Krisler <bkrisler@gmail.com>
+	Contributing author: Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
@@ -141,6 +147,9 @@ namespace RESTBot
 	/// It's much cleaner that way; getting the avatar key needed to send the IM is pushed
 	/// to the Utilities class.
 	/// </remarks>
+	/// <author>
+	/// Gwyneth Llewelyn <gwyneth.llewelyn@gwynethllewelyn.net>
+	/// </author>
 	public class InstantMessagePlugin : StatefulPlugin
 	{
 		private UUID session;
@@ -245,12 +254,8 @@ namespace RESTBot
 			// make sure message is not too big (gwyneth 20220212)
 			message = message.TrimEnd();
 			if (message.Length > 1023) message = message.Remove(1023);
-			b.Client.Self.InstantMessage (avatarKey, message);
-			return "<instant_message><key>" +
-			avatarKey.ToString() +
-			"</key><message>" +
-			message +
-			"</message></instant_message>";
+			b.Client.Self.InstantMessage(avatarKey, message);
+			return $"<instant_message><key>{avatarKey.ToString()}</key><message>{message}</message></instant_message>";
 		} // end Process
 	} // end InstantMessagePlugin
 } // end namespace
