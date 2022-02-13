@@ -40,7 +40,7 @@ namespace RESTBot
 		/// <summary>Session ID, possibly UUID.Zero</summary>
     public UUID ID = UUID.Zero;
 		/// <summary>Hostname where RESTbot is running</summary>
-    public string? Hostname;	// possibly nullable (gwyneth 20220109)
+    public string Hostname = "localhost";
 		/// <summary>Permissions (don't know what this is - gwyneth 20220109)</summary>
     public int Permissions;
 		/// <summary>Bot for this session.</summary>
@@ -81,6 +81,13 @@ namespace RESTBot
     {
       DebugUtilities.WriteInfo("Reading config file");
       config = XMLConfig.Configuration.LoadConfiguration(configFile);
+			if (config == null)
+			{
+				// configuration is mandatory! (gwyneth 20220213)
+				DebugUtilities.WriteError("Unable to open configuration file {configFile}! Aborting...");
+				Environment.Exit(1);
+				return;
+			}
 
       DebugUtilities.WriteInfo("Restbot startup");
       Sessions = new Dictionary<UUID, Session>();
@@ -91,6 +98,7 @@ namespace RESTBot
       RegisterAllStatefulPlugins(Assembly.GetExecutingAssembly());
 
       DebugUtilities.WriteInfo("Listening on port " + config.networking.port.ToString());
+
       // Set up the listener / router
       Listener = new RESTBot.Server.Router(IPAddress.Parse(config.networking.ip), config.networking.port);
 
@@ -171,6 +179,12 @@ namespace RESTBot
 		/// <param name="body">Request body (will usually have all parameters from POST)</param>
     public static string DoProcessing(RequestHeaders headers, string body)
     {
+			// Abort if we don't even have a valid configuration; too many things depend on it... (gwyneth 20220213)
+			if (Program.config == null)
+			{
+				return "<error>No valid configuration loaded, aborting</error>";
+			}
+
       //Setup variables
       DebugUtilities.WriteDebug("New request - " + headers.RequestLine.Path);
       //Split the URL
@@ -182,8 +196,8 @@ namespace RESTBot
       string Method = parts[0];
       /// <summary>Process the request params from POST, URL</summary>
       Dictionary<string, string> Parameters = RestBot.HandleDataFromRequest(headers, body);
-      string? debugparams = null;
-      string? debugparts = null;
+      string debugparams = String.Empty;
+      string debugparts = String.Empty;
       foreach (KeyValuePair<string, string> kvp in Parameters)
       {
         debugparams = debugparams + "[" + kvp.Key + "=" + kvp.Value + "] ";
@@ -241,7 +255,7 @@ namespace RESTBot
         }
         else
         {
-          String? result = null;
+          String result = String.Empty;
           if (parts.Length < 2)
           {
             result = "Missing a part.";
@@ -263,7 +277,7 @@ namespace RESTBot
       }
       else if (Method == "server_quit")
       {
-        if (parts[1] == Program.config.security.serverPass )
+        if (parts[1] == Program.config.security.serverPass)
         {
           foreach (KeyValuePair<UUID, Session> s in Sessions)
           {
@@ -297,21 +311,26 @@ namespace RESTBot
       //Session checking
       if (!ValidSession(sess, headers.Hostname))
       {
-        return ("<error>invalidsession</error>");
+        return "<error>invalidsession</error>";
       }
 
       //YEY PROCESSING
       RestBot? r = Sessions[sess].Bot;
+
+			if (r == null)
+			{
+				return "<error>no RestBot found for session {sess.ToString()}</error>";
+			}
       //Last accessed for plugins
       Sessions[sess].LastAccessed = DateTime.Now;
       //Pre-error checking
       if (r.myStatus != RestBot.Status.Connected) //Still logging in?
       {
-        return ("<error>" + r.myStatus.ToString() + "</error>");
+        return "<error>{r.myStatus.ToString()}</error>";
       }
       else if (!r.Client.Network.Connected) //Disconnected?
       {
-      	return ("<error>clientdisconnected</error>");
+      	return "<error>clientdisconnected</error>";
       }
       else if (Method == "exit")
       {

@@ -138,13 +138,18 @@ namespace RESTBot.Server
 
 		public override string ToString()
 		{
-			string headers = ResponseLine.ToString() + "\r\n"; //initial header response line
-			foreach (HeaderLine line in HeaderLines)
+			// Do we have any headers at all? (gwyneth 20220213)
+			if (ResponseLine != null && HeaderLines != null)
 			{
-				headers += line.ToString() + "\r\n";
+				string headers = ResponseLine.ToString() + "\r\n"; //initial header response line
+				foreach (HeaderLine line in HeaderLines)
+				{
+					headers += line.ToString() + "\r\n";
+				}
+				headers += "\r\n"; //finish up the headers.. a \r\n\r\n signifies a change between headers and the body
+				return headers;
 			}
-			headers += "\r\n"; //finish up the headers.. a \r\n\r\n signifies a change between headers and the body
-			return headers;
+			return "\r\n";
 		}
 	}
 }

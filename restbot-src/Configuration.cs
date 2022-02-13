@@ -74,8 +74,8 @@ namespace RESTBot.XMLConfig
 			}
 			try
 			{
-				// fileStream is now nullable; return null if that's the case. (gwyneth 20220127)
-				if (fileStream != null)
+				// fileStream/serializer are now nullable; return null if that's the case. (gwyneth 20220127)
+				if (fileStream != null && serializer != null)
 				{
 					fileStream.Seek(0, SeekOrigin.Begin);
 					return (Configuration) serializer.Deserialize(fileStream);

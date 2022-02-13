@@ -133,7 +133,7 @@ namespace RESTBot
 				NameLookupEvents.Add(id, new AutoResetEvent(false));
 			}
 
-			b.Client.Avatars.RequestAvatarName (id);
+			b.Client.Avatars.RequestAvatarName(id);
 
 			if (!NameLookupEvents[id].WaitOne(15000, true))
 			{

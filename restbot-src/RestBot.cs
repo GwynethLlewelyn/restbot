@@ -152,7 +152,7 @@ namespace RESTBot
 		/// <summary>Reply for the new login code</summary>
 		public struct LoginReply
 		{
-			public bool wasFatal; /// <summary>set to true if the error was fatal; this is necessary because we may get 'unknown' errors that aren't fatal and thus allows the connection to proceed. </summary>
+			public bool wasFatal; /// <summary>set to true if the error was fatal; this is necessary because we may get 'unknown' errors that aren't fatal and thus allows the connection to proceed.</summary>
 
 			public string xmlReply; /// <summary>Login reply message from grid, XML-encoded</summary>
 		}
@@ -193,9 +193,9 @@ namespace RESTBot
 		public delegate void BotStatusCallback(UUID Session, Status status); /// <summary>Callback for the bot status</summary>
 
 		/// <summary>Event called when requesting the bot status</summary>
-		/// <remarks>It's not used here, but invoked from Program.DisposeSession() (declared on Program.cs)</remarks>
-		// (remarks by gwyneth 20220126)
-		public event BotStatusCallback? OnBotStatus = null;
+		/// <remarks><para>It's not used here, but invoked from Program.DisposeSession() (declared on Program.cs)
+		/// (remarks by gwyneth 20220126)</para>
+		public event BotStatusCallback OnBotStatus;
 
 		private System.Timers.Timer updateTimer;
 
@@ -255,6 +255,11 @@ namespace RESTBot
 				sp.Initialize(this);
 			}
 			updateTimer.Start();
+
+			/// The strange lambda assignment is due to insane new rules regarding constructors
+			/// in recent versions of C#. (gwyneth 20220213)
+			/// <see href="https://stackoverflow.com/a/70146798/1035977" />
+			OnBotStatus = new BotStatusCallback((sender, e) => {});
 		}
 
 		/// <summary>
@@ -354,8 +359,32 @@ namespace RESTBot
 			Client.Throttle.Cloud = 0;
 			Client.Throttle.Land = 1000000;
 			Client.Throttle.Task = 1000000;
-			Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri; // ?? RESTBot.XMLConfig.Configuration.defaultLoginURI; // not needed, it's now the default anyway!
 
+			// we add this check here because LOGIN_SERVER should never be assigned null (gwyneth 20220213)
+			if (Program.config != null && Program.config.networking != null && Program.config.networking.loginuri != null)
+			{
+				Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;	// could be String.Empty, so we check below...
+			}
+			else if (RESTBot.XMLConfig.Configuration.defaultLoginURI != null)
+			{
+				Client.Settings.LOGIN_SERVER = RESTBot.XMLConfig.Configuration.defaultLoginURI;	// could ALSO be String.Empty, so we check below...
+			}
+			else
+			{
+				Client.Settings.LOGIN_SERVER = String.Empty;
+			}
+
+			// Any of the above _might_ have set LOGIN_SERVER to an empty string, so we check first if we have
+			// something inside the string. (gwyneth 20220213)
+			// To-do: validate the URL first? It's not clear if .NET 6 already does that at some point...
+			if (Client.Settings.LOGIN_SERVER == String.Empty)
+			{
+				// we don't know where to login to!
+				response.wasFatal = true;
+				response.xmlReply =	"<error fatal=\"true\">No login URI provided</error>";
+				DebugUtilities.WriteError("No login URI provided; aborting...");
+				return response;
+			}
 			DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
 
 			LoginParams loginParams =
@@ -449,15 +478,38 @@ namespace RESTBot
 			Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
 			Client.Settings.MULTIPLE_SIMS = false; //not for now.
 			Client.Settings.SEND_PINGS = true;
-			Client.Settings.LOGIN_SERVER =
-				Program.config.networking.loginuri
-					?? RESTBot.XMLConfig.Configuration.defaultLoginURI;
 			Client.Throttle.Total = Program.config.networking.throttle;
 
-			DebugUtilities
-				.WriteDebug("Login URI: <" + Client.Settings.LOGIN_SERVER + ">");
+			// we add this check here because LOGIN_SERVER should never be assigned null (gwyneth 20220213)
+			if (Program.config != null && Program.config.networking != null && Program.config.networking.loginuri != null)
+			{
+				Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;	// could be String.Empty, so we check below...
+			}
+			else if (RESTBot.XMLConfig.Configuration.defaultLoginURI != null)
+			{
+				Client.Settings.LOGIN_SERVER = RESTBot.XMLConfig.Configuration.defaultLoginURI;	// could ALSO be String.Empty, so we check below...
+			}
+			else
+			{
+				Client.Settings.LOGIN_SERVER = String.Empty;
+			}
 
 			LoginReply response = new LoginReply();
+
+			// Any of the above _might_ have set LOGIN_SERVER to an empty string, so we check first if we have
+			// something inside the string. (gwyneth 20220213)
+			// To-do: validate the URL first? It's not clear if .NET 6 already does that at some point...
+			if (Client.Settings.LOGIN_SERVER == String.Empty)
+			{
+				// we don't know where to login to!
+				response.wasFatal = true;
+				response.xmlReply =	"<error fatal=\"true\">No login URI provided</error>";
+				DebugUtilities.WriteError("No login URI provided; aborting...");
+				return response;
+			}
+			DebugUtilities
+				.WriteDebug("Login URI: <{Client.Settings.LOGIN_SERVER}>");
+
 			string start = "";
 			if (Program.config.location.startSim.Trim() != "")
 				start =

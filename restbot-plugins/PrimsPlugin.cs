@@ -213,6 +213,8 @@ namespace RESTBot
                     PrimsWaiting.Add(objects[i].ID, objects[i]);
                 }
             }
+						if (me == null)	// it _can_ be null these days, so we return false (gwyneth 20220213)
+							return false;
 
             me.Client.Objects.SelectObjects(me.Client.Network.CurrentSim, localids);
 

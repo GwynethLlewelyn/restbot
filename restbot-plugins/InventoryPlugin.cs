@@ -113,8 +113,8 @@ namespace RESTBot
 
 		private void PrintFolder(RestBot b, InventoryFolder f, StringBuilder result)
 		{
-			List<InventoryBase> contents =
-				Manager
+			List<InventoryBase>? contents =
+				Manager?
 					.FolderContents(f.UUID,
 					b.Client.Self.AgentID,
 					true,

@@ -170,7 +170,7 @@ namespace RESTBot
 		/// <param name="bot">A currently active RestBot</param>
 		public override void Initialize(RestBot bot)
 		{
-			session = bot.sessionid;
+			session = bot.sessionid;	// why is this saved? It's never used... (gwyneth 20220213)
 			me = bot;
 			DebugUtilities.WriteDebug($"IM - {session} {MethodName} startup");
 

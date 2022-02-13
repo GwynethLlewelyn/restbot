@@ -41,8 +41,12 @@ namespace RESTBot.Server
 
 			EndPoint? endpoint = client.Client.RemoteEndPoint; // we put it right here to make things easier later on (gwyneth 20220107)
 
-			string ip =
-				(endpoint != null) ? (endpoint.ToString().Split(':'))[0] : String.Empty;
+			string ip = String.Empty;
+
+			if (endpoint != null)
+			{
+				ip = endpoint.ToString().Split(':')[0];
+			}
 
 			DebugUtilities
 				.WriteInfo($"Processing Connection from {IPAddress.Parse(((IPEndPoint) endpoint).Address.ToString())} (ip: {ip})!"); // new syntax, since this is now nullable (gwyneth 20220207)

@@ -66,6 +66,12 @@ namespace RESTBot
 
     static void Reaper_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
+			if (Program.Sessions == null)
+			{
+				// No sessions to worry about, we can return safely.
+				return;
+			}
+
       List<UUID> kc = new List<UUID>();
       foreach (UUID key in Program.Sessions.Keys) //why not just lock() ? :P
       {

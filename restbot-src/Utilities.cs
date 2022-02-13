@@ -291,7 +291,7 @@ namespace RESTBot
 
 		/// <summary>The avatar name is allegedly used by multiple threads? (gwyneth 20220212)</summary>
 		static string ToAvatarName = String.Empty;
-		/// <summary>manual reset events</summary>
+		/// <summary>manual reset event for RequestAvatarNameSearch</summary>
 		static ManualResetEvent NameSearchEvent = new ManualResetEvent(false);
 		/// <summary>cache of already existing keys that we looked up in the past</summary>
 		static Dictionary<string, UUID> Name2Key = new Dictionary<string, UUID>();
@@ -339,7 +339,7 @@ namespace RESTBot
 			}
 		} // end getKeySimple
 
-		private static void Avatars_AvatarPickerReply(object sender, AvatarPickerReplyEventArgs e)
+		private static void Avatars_AvatarPickerReply(object? sender, AvatarPickerReplyEventArgs e)
 		{
 				string lowerName = String.Empty;
 				lock(ToAvatarName)
