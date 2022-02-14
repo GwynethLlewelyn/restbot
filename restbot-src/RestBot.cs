@@ -318,7 +318,7 @@ namespace RESTBot
 		/// <param="sp">Stateful plugin object</param>
 		public void RegisterStatefulPlugin(string method, StatefulPlugin sp)
 		{
-			StatefulPlugins.Add (method, sp);
+			StatefulPlugins.Add(method, sp);
 		}
 
 		/// <summary>
@@ -478,20 +478,25 @@ namespace RESTBot
 			Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
 			Client.Settings.MULTIPLE_SIMS = false; //not for now.
 			Client.Settings.SEND_PINGS = true;
-			Client.Throttle.Total = Program.config.networking.throttle;
 
-			// we add this check here because LOGIN_SERVER should never be assigned null (gwyneth 20220213)
-			if (Program.config != null && Program.config.networking != null && Program.config.networking.loginuri != null)
+
+			// we add this check here because these should never be assigned null (gwyneth 20220214)
+			if (Program.config != null && Program.config.networking != null)
 			{
-				Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;	// could be String.Empty, so we check below...
-			}
-			else if (RESTBot.XMLConfig.Configuration.defaultLoginURI != null)
-			{
-				Client.Settings.LOGIN_SERVER = RESTBot.XMLConfig.Configuration.defaultLoginURI;	// could ALSO be String.Empty, so we check below...
-			}
-			else
-			{
-				Client.Settings.LOGIN_SERVER = String.Empty;
+				if (Program.config.networking.loginuri != null)
+				{
+					Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;	// could be String.Empty, so we check below...
+				}
+				else if (RESTBot.XMLConfig.Configuration.defaultLoginURI != null)
+				{
+					Client.Settings.LOGIN_SERVER = RESTBot.XMLConfig.Configuration.defaultLoginURI;	// could ALSO be String.Empty, so we check below...
+				}
+				else
+				{
+					Client.Settings.LOGIN_SERVER = String.Empty;
+				}
+				// this is now safe to set, we know that the config object is not null. (gwyneth 20220214)
+				Client.Throttle.Total = Program.config.networking.throttle;
 			}
 
 			LoginReply response = new LoginReply();
@@ -511,7 +516,7 @@ namespace RESTBot
 				.WriteDebug("Login URI: <{Client.Settings.LOGIN_SERVER}>");
 
 			string start = "";
-			if (Program.config.location.startSim.Trim() != "")
+			if (Program.config != null && Program.config.location != null && Program.config.location.startSim.Trim() != "")
 				start =
 					OpenMetaverse
 						.NetworkManager

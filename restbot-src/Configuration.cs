@@ -60,7 +60,7 @@ namespace RESTBot.XMLConfig
 		/// <param name="configuration_file">path to the configuration file</param>
 		public static Configuration? LoadConfiguration(string configuration_file)
 		{
-			XmlSerializer? serializer = new XmlSerializer(typeof (Configuration));
+			XmlSerializer? serializer = new XmlSerializer(typeof(Configuration));
 			FileStream? fileStream = null;
 			try
 			{
@@ -78,7 +78,7 @@ namespace RESTBot.XMLConfig
 				if (fileStream != null && serializer != null)
 				{
 					fileStream.Seek(0, SeekOrigin.Begin);
-					return (Configuration) serializer.Deserialize(fileStream);
+					return (Configuration?) serializer.Deserialize(fileStream);
 				}
 			}
 			catch (Exception e)

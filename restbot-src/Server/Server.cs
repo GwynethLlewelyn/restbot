@@ -43,13 +43,22 @@ namespace RESTBot.Server
 
 			string ip = String.Empty;
 
+			// more stupid checks to deal with the many, many ways this can become null... (gwyneth 20220214)
 			if (endpoint != null)
 			{
-				ip = endpoint.ToString().Split(':')[0];
+				string? endpointToString = endpoint.ToString();
+				if (endpointToString != null)
+				{
+					ip = endpointToString.Split(':')[0];
+					DebugUtilities
+						.WriteInfo($"Processing Connection from {IPAddress.Parse(((IPEndPoint) endpoint).Address.ToString())} (ip: {ip})!"); // new syntax, since this is now nullable (gwyneth 20220207)
+				}
+				else
+				{
+					DebugUtilities.WriteError("No IP address received (?) or couldn't parse IP address for connection");
+				}
 			}
 
-			DebugUtilities
-				.WriteInfo($"Processing Connection from {IPAddress.Parse(((IPEndPoint) endpoint).Address.ToString())} (ip: {ip})!"); // new syntax, since this is now nullable (gwyneth 20220207)
 			NetworkStream stream = client.GetStream();
 
 			DebugUtilities.WriteSpecial("Reading Stream");
@@ -71,12 +80,15 @@ namespace RESTBot.Server
 					.Split(new string[] { "\r\n\r\n" },
 					StringSplitOptions.RemoveEmptyEntries);
 
-			string hostname = "unknown";
+			string hostname = "unknown";	// if we can't resolve IP address to a hostname...
 			try
 			{
-				DebugUtilities.WriteDebug("ip: " + ip);
-				IPHostEntry host = Dns.GetHostEntry(IPAddress.Parse(ip));
-				hostname = host.HostName;
+				DebugUtilities.WriteDebug("ip: " + ip ?? "nothing");	// may be an empty string (gwyneth 20220214)
+				if (ip != null)
+				{
+					IPHostEntry host = Dns.GetHostEntry(IPAddress.Parse(ip));
+					hostname = host.HostName;
+				}
 				DebugUtilities.WriteDebug("ENDPOINT HOSTNAME: " + hostname);
 			}
 			catch
@@ -134,7 +146,7 @@ namespace RESTBot.Server
 					DebugUtilities
 						.WriteInfo($"Got continued request, totalling {request.Length} characters");
 
-					DebugUtilities.WriteDebug("Heres what I got: " + request);
+					DebugUtilities.WriteDebug("Here's what I got: {request}");
 					body = request;
 				}
 				catch
@@ -148,7 +160,7 @@ namespace RESTBot.Server
 			string to_return = Program.DoProcessing(x, body);
 			to_return = "<restbot>" + to_return + "</restbot>";
 			DebugUtilities
-				.WriteDebug("What I should return to the client: " + to_return);
+				.WriteDebug("What I should return to the client: {to_return}");
 
 			ResponseHeaders response_headers = new ResponseHeaders(200, "OK");
 			string response = response_headers.ToString() + to_return;

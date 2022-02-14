@@ -62,7 +62,8 @@ namespace RESTBot
 		/// <summary>Don't know when this is used, will document later</summary>
     static bool StillRunning;
 		/// <summary>List of currently running sessions.</summary>
-    public static Dictionary<UUID, Session>? Sessions;
+		/// <remarks>Should never be null!</remarks>
+    public static Dictionary<UUID, Session> Sessions = new Dictionary<UUID, Session>();
 
     /// <summary>config file</summary>
     static string configFile = "configuration.xml";
@@ -90,7 +91,12 @@ namespace RESTBot
 			}
 
       DebugUtilities.WriteInfo("Restbot startup");
-      Sessions = new Dictionary<UUID, Session>();
+			// Sessions should never be null (?) (gwyneth 20220214)
+			if (Sessions == null)
+			{
+				// Trouble expects us later on, when adding and removing sessions...
+				DebugUtilities.WriteError("Error initialising Sessions directory; it was set to null!");
+			}
 
       DebugUtilities.WriteInfo("Loading plugins");
       RegisterAllCommands(Assembly.GetExecutingAssembly());
@@ -215,17 +221,27 @@ namespace RESTBot
           && Parameters.ContainsKey("first") && Parameters.ContainsKey("last") && Parameters.ContainsKey("pass"))
         {
           DebugUtilities.WriteDebug("Found required parameters for establish_session");
-          foreach (KeyValuePair<UUID, Session> ss in Sessions)
-          {
-            DebugUtilities.WriteSpecial("Avatar check: [" + ss.Value.Bot.First.ToLower() + "/" + ss.Value.Bot.Last.ToLower() + "] = [" + Parameters["first"].ToLower() + "/" + Parameters["last"].ToLower() + "]");
-            if (Parameters["first"].ToLower() == ss.Value.Bot.First.ToLower() &&
-                 Parameters["last"].ToLower() == ss.Value.Bot.Last.ToLower()
-                 )
-            {
-                DebugUtilities.WriteWarning("Already running avatar " + Parameters["first"] + " " + Parameters["last"]);
-                return ("<existing_session>true</existing_session>\n<session_id>" + ss.Key.ToString() + "</session_id>");
-            }
-          }
+					if (Sessions != null)
+					{
+						foreach (KeyValuePair<UUID, Session> ss in Sessions)
+						{
+							if (ss.Value != null && ss.Value.Bot != null)
+							{
+								DebugUtilities.WriteSpecial("Avatar check: [" + ss.Value.Bot.First.ToLower() + "/" + ss.Value.Bot.Last.ToLower() + "] = [" + Parameters["first"].ToLower() + "/" + Parameters["last"].ToLower() + "]");
+								if (Parameters["first"].ToLower() == ss.Value.Bot.First.ToLower() &&
+		 								Parameters["last"].ToLower() == ss.Value.Bot.Last.ToLower()
+		 								)
+								{
+										DebugUtilities.WriteWarning("Already running avatar " + Parameters["first"] + " " + Parameters["last"]);
+										return ("<existing_session>true</existing_session>\n<session_id>" + ss.Key.ToString() + "</session_id>");
+								}
+							}
+						}
+					}
+					else
+					{
+						DebugUtilities.WriteDebug("No available sessions...");
+					}
           UUID id = UUID.Random();
           Session s = new Session();
           s.ID = id;
@@ -236,20 +252,36 @@ namespace RESTBot
 						Parameters["pass"] = "$1$" + Parameters["pass"];
           s.Bot = new RestBot(s.ID, Parameters["first"], Parameters["last"], Parameters["pass"]);
 
-          lock (Sessions)
-          {
-            Sessions.Add(id, s);
-          }
+					if (Sessions != null)
+					{
+						lock (Sessions)
+						{
+							Sessions.Add(id, s);
+						}
+					}
+					else
+					{
+						// no "else", we have no dictionary
+						DebugUtilities.WriteWarning("Possible issue: we have null Sessions when adding, which shouldn't happen");
+					}
           RestBot.LoginReply reply = s.Bot.Login();
           if (reply.wasFatal)
           {
-            lock (Sessions)
-            {
-              if (Sessions.ContainsKey(id))
-              {
-                Sessions.Remove(id);
-              }
-            }
+						if (Sessions != null)
+						{
+            	lock (Sessions)
+            	{
+              	if (Sessions.ContainsKey(id))
+              	{
+                	Sessions.Remove(id);
+              	}
+            	}
+						}
+						else
+						{
+							// no "else", we have no dictionary
+							DebugUtilities.WriteWarning("Possible issue: we have null Sessions when removing, which shouldn't happen");
+						}
           }
           return (reply.xmlReply);
         }
@@ -279,12 +311,19 @@ namespace RESTBot
       {
         if (parts[1] == Program.config.security.serverPass)
         {
-          foreach (KeyValuePair<UUID, Session> s in Sessions)
-          {
-            lock (Sessions) DisposeSession(s.Key);
-          }
-          StillRunning = false;
-          return ("<status>success</status>\n");
+					if (Sessions != null)
+					{
+						foreach (KeyValuePair<UUID, Session> s in Sessions)
+						{
+							lock (Sessions) DisposeSession(s.Key);
+						}
+						StillRunning = false;
+						return ("<status>success</status>\n");
+					}
+					else
+					{
+						return "<status>possibly successful, but no sessions dictionary available</status>";
+					}
         }
       }
 
@@ -315,14 +354,22 @@ namespace RESTBot
       }
 
       //YEY PROCESSING
-      RestBot? r = Sessions[sess].Bot;
+      RestBot? r = null;
+
+			if (Sessions != null)
+			{
+				r = Sessions[sess].Bot;
+			}
 
 			if (r == null)
 			{
 				return "<error>no RestBot found for session {sess.ToString()}</error>";
 			}
       //Last accessed for plugins
-      Sessions[sess].LastAccessed = DateTime.Now;
+			if (Sessions != null)
+			{
+      	Sessions[sess].LastAccessed = DateTime.Now;
+			}
       //Pre-error checking
       if (r.myStatus != RestBot.Status.Connected) //Still logging in?
       {
@@ -339,7 +386,7 @@ namespace RESTBot
       }
       else if (Method == "stats")
       {
-        string response = "<bots>" + Sessions.Count.ToString() + "<bots>\n";
+        string response = "<bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "<bots>\n";
         response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>\n";
         return (response);
       }
@@ -347,9 +394,25 @@ namespace RESTBot
       return r.DoProcessing(Parameters, parts);
     }
 
+		/// <summary>Checks if a session key (UUID) is valid and its hostname is set</summary>
+		/// <param name="key">Session UUID to be validated</param>
+		/// <param name="hostname">Hostname to be checked if it's part of the session data</param>
+		/// <returns>boolean — true for a valid session with the correct hostname, false otherwise</returns>
+		/// <remarks>Because there are now plenty of nullable references here, the overall logic is rather
+		/// more complex than before, to avoid any compiler warnings! (gwyneth 20220214)</remarks>
     private static bool ValidSession(UUID key, string hostname)
     {
-      return Sessions.ContainsKey(key) && (!config.security.hostnameLock || Sessions[key].Hostname == hostname);
+      return Sessions != null
+				&& Sessions.ContainsKey(key)
+				&& (
+					config != null
+					&& config.security != null
+					&& !config.security.hostnameLock
+					|| (
+						Sessions[key].Hostname != null
+						&& Sessions[key].Hostname == hostname
+					)
+				);
 		}
 
 		/// <summary>
@@ -359,15 +422,29 @@ namespace RESTBot
     public static void DisposeSession(UUID key)
     {
       DebugUtilities.WriteDebug("Disposing of session " + key.ToString());
-      if (!Sessions.ContainsKey(key))
-        return;
-      Session s = Sessions[key];
-			if (s.StatusCallback is not null)
+			if (Sessions != null)
 			{
-      	s.Bot.OnBotStatus -= s.StatusCallback;
+      	if (!Sessions.ContainsKey(key))
+        	return;
+      	Session s = Sessions[key];
+				if (s != null && s.Bot != null)	// should never happen, we checked before
+				{
+					if (s.StatusCallback != null)
+					{
+      			s.Bot.OnBotStatus -= s.StatusCallback;
+					}
+      		s.Bot.Client.Network.Logout();
+				}
+				else
+				{
+					DebugUtilities.WriteError("Weird error in logging out session {key.ToString()} - it was on the Sessions dictionary, but strangely without a 'bot attached");
+				}
+      	Sessions.Remove(key);
 			}
-      s.Bot.Client.Network.Logout();
-      Sessions.Remove(key);
-    }
+			else
+			{
+				DebugUtilities.WriteError("DisposeSession called on {key.ToString()}, but we have no Sessions dictionary!");
+			}
+    } // end DisposeSession()
   } // end class Program
 } // end namespace RESTbot

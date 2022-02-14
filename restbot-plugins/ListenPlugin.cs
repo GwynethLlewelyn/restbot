@@ -50,7 +50,7 @@ namespace RESTBot
 		ManualResetEvent ListenEvent = new ManualResetEvent(false);
 
 		/// <summary>Chat line to be returned, with associated metadata</summary>
-		ChatEventArgs chatMetaData;
+		ChatEventArgs? chatMetaData;
 
 		/// <summary>Name of avatar or object that is chatting in-world</summary>
 		private volatile string listenAgentName = String.Empty;
@@ -171,17 +171,28 @@ namespace RESTBot
 			// of expediency, we're pretending that all of this is synchronised and single-threaded... (gwyneth 20220213)
 			ListenEvent.WaitOne(30000, false);
 
-			if (chatMetaData != (ChatEventArgs) EventArgs.Empty)
+			/// <summary>Eventually, someone will type something, and that means our <c>chatMetaData</c> will be non-null.</summary>
+			/// <remarks>(gwyneth 20220214)</remarks>
+			if (chatMetaData != null)
 			{
-				string ret = $"<listen><simulator>{chatMetaData.Simulator.ToString()}</simulator><message>{chatMetaData.Message}</message><audiblelevel>{chatMetaData.AudibleLevel.ToString()}</audiblelevel><chattype>{chatMetaData.Type.ToString()}</chattype><sourcetype>{chatMetaData.SourceType.ToString()}</sourcetype><fromname>{chatMetaData.FromName}</fromname><sourceid>{chatMetaData.SourceID.ToString()}</sourceid><ownerid>{chatMetaData.OwnerID.ToString()}</ownerid><position>{chatMetaData.Position.ToString()}</position></listen>";
+				if (chatMetaData != (ChatEventArgs) EventArgs.Empty)
+				{
+					string ret = $"<listen><simulator>{chatMetaData.Simulator.ToString()}</simulator><message>{chatMetaData.Message}</message><audiblelevel>{chatMetaData.AudibleLevel.ToString()}</audiblelevel><chattype>{chatMetaData.Type.ToString()}</chattype><sourcetype>{chatMetaData.SourceType.ToString()}</sourcetype><fromname>{chatMetaData.FromName}</fromname><sourceid>{chatMetaData.SourceID.ToString()}</sourceid><ownerid>{chatMetaData.OwnerID.ToString()}</ownerid><position>{chatMetaData.Position.ToString()}</position></listen>";
 
-				DebugUtilities.WriteDebug($"Captured message XML: {ret}");
-				return ret;
+					DebugUtilities.WriteDebug($"Captured message XML: {ret}");
+					return ret;
+				}
+				else
+				{
+					DebugUtilities.WriteError($"Error retrieving chatMetaData, got: '{chatMetaData.ToString()}'");
+					return "<error>Listen returned error or empty message</error>";
+				}
 			}
 			else
 			{
-				DebugUtilities.WriteDebug($"Error retrieving chatMetaData, got: '{chatMetaData.ToString()}'");
-				return "<error>Listen returned error or empty message</error>";
+				// shouldn't happen...
+				DebugUtilities.WriteError("Error retrieving chatMetaData, was null");
+				return "<error>null</error>";
 			}
 		}
 
@@ -217,13 +228,23 @@ namespace RESTBot
 		/// <summary>Callback that returns something in chat</summary>
 		void Self_ChatFromSimulator(object? sender, ChatEventArgs e)
 		{
-			if (e.Message.Length > 0) {
-			// Check if we have valid key and name
+			if (e.Message.Length > 0 && e.AudibleLevel == ChatAudibleLevel.Fully && e.Type != ChatType.StartTyping && e.Type != ChatType.StopTyping)
+			{
+				// Check if we have valid key and name
 
-				lock (chatMetaData) {
+				// lock only if it is set!
+				if (chatMetaData != null)
+				{
+					lock (chatMetaData)
+					{
+						chatMetaData = e;
+					}
+				}
+				else
+				{
 					chatMetaData = e;
 				}
 			}
-		}
+		} // end Self_ChatFromSimulator
 	} // end class
 } //end namespace
