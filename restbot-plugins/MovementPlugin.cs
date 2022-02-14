@@ -145,7 +145,7 @@ namespace RESTBot
 		}
 	} // end goto
 
-	/// <summary>move to location; parameters are sim, x, y, z</summary>
+	/// <summary>move to location; parameters are x, y, z, distance, run</summary>
 	public class MoveToPlugin : StatefulPlugin
 	{
 		private UUID session;
@@ -222,6 +222,7 @@ namespace RESTBot
 					z = 0.0f,
 					distance = 0.0f;
 				bool check = true;
+				/// <summary>Selects between running (true) or walking (false)</summary>
 				bool run = false;
 
 				if (Parameters.ContainsKey("x"))
@@ -270,7 +271,7 @@ namespace RESTBot
 					b.Client.Self.Movement.AlwaysRun = false;
 				}
 				goalPos = new Vector3((float) x, (float) y, (float) z);
-				b.Client.Self.Movement.TurnToward (goalPos);
+				b.Client.Self.Movement.TurnToward(goalPos);
 				b.Client.Self.Movement.SendUpdate(false);
 
 				// Check for null and, if so, abort with error (gwyneth 20220213)
