@@ -50,7 +50,7 @@ namespace RESTBot
 		ManualResetEvent ListenEvent = new ManualResetEvent(false);
 
 		/// <summary>Chat line to be returned, with associated metadata</summary>
-		ChatEventArgs chatMetaData = (ChatEventArgs) EventArgs.Empty;
+		ChatEventArgs chatMetaData;
 
 		/// <summary>Name of avatar or object that is chatting in-world</summary>
 		private volatile string listenAgentName = String.Empty;
