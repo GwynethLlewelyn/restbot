@@ -60,7 +60,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			// new syntax
 			// bot.Client.Avatars.OnAvatarNames += new AvatarManager.AvatarNamesCallback(Avatars_OnAvatarNames); // obsolete
@@ -100,7 +100,7 @@ namespace RESTBot
 					string response = getName(b, agentKey);
 					DebugUtilities.WriteDebug("TR - Parsed name");
 					DebugUtilities.WriteDebug("TR - Complete");
-					return "<name>" + response.Trim() + "</name>\n";
+					return $"<name>{response.Trim()}</name>\n";
 				}
 				else
 				{
@@ -123,11 +123,7 @@ namespace RESTBot
 		private string getName(RestBot b, UUID id)
 		{
 			DebugUtilities
-				.WriteInfo(session.ToString() +
-				" " +
-				MethodName +
-				" Looking up name for " +
-				id.ToString());
+				.WriteInfo($"{session.ToString()} {MethodName} Looking up name for {id.ToString()}");
 			lock (NameLookupEvents)
 			{
 				NameLookupEvents.Add(id, new AutoResetEvent(false));
@@ -187,11 +183,7 @@ namespace RESTBot
 				if (!avatarNames.ContainsKey(kvp.Key) || avatarNames[kvp.Key] == null)
 				{
 					DebugUtilities
-						.WriteInfo(session.ToString() +
-						" Reply Name: " +
-						kvp.Value +
-						" Key : " +
-						kvp.Key.ToString());
+						.WriteInfo($"{session.ToString()} Reply Name: {kvp.Value} Key: {kvp.Key.ToString()}");
 					lock (avatarNames)
 					{
 						// avatarNames[kvp.Key] = new Avatar(); // why all this trouble?
@@ -237,7 +229,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			// bot.Client.Network.RegisterCallback(PacketType.DirPeopleReply, new NetworkManager.PacketCallback(Avatars_OnDirPeopleReply)); // obsolete, now uses DirectoryManager
 			bot.Client.Directory.DirPeopleReply += Avatars_OnDirPeopleReply;
@@ -265,7 +257,7 @@ namespace RESTBot
 			if (avname != null)
 			{
 				string response = getKey(b, avname).ToString();
-				return "<key>" + response + "</key>\n";
+				return $"<key>{response}</key>\n";
 			}
 			else
 			{
@@ -282,9 +274,9 @@ namespace RESTBot
 		public UUID getKey(RestBot b, String name)
 		{
 			DebugUtilities
-				.WriteInfo(session + " " + MethodName + " Looking up key for " + name);
+				.WriteInfo($"{session} {MethodName} Looking up key for {name}");
 			name = name.ToLower();
-			DebugUtilities.WriteDebug("Looking up: " + name);
+			DebugUtilities.WriteDebug($"Looking up: {name}");
 			DebugUtilities
 				.WriteDebug("Key not in cache, requesting directory lookup");
 			lock (KeyLookupEvents)
@@ -292,9 +284,7 @@ namespace RESTBot
 				KeyLookupEvents.Add(name, new AutoResetEvent(false));
 			}
 			DebugUtilities
-				.WriteDebug("Lookup Event added, KeyLookupEvents now has a total of " +
-				KeyLookupEvents.Count.ToString() +
-				" entries");
+				.WriteDebug($"Lookup Event added, KeyLookupEvents now has a total of {KeyLookupEvents.Count.ToString()} entries");
 			DirFindQueryPacket find = new DirFindQueryPacket();
 			find.AgentData.AgentID = b.Client.Self.AgentID; // was Network and not Self
 			find.AgentData.SessionID = b.Client.Self.SessionID;
@@ -307,26 +297,22 @@ namespace RESTBot
 
 			b.Client.Network.SendPacket((Packet) find);
 			DebugUtilities
-				.WriteDebug("Packet sent - KLE has " +
-				KeyLookupEvents.Count.ToString() +
-				" entries.. now waiting");
+				.WriteDebug($"Packet sent - KLE has {KeyLookupEvents.Count.ToString()} entries... now waiting");
 			KeyLookupEvents[name].WaitOne(15000, true);
 			DebugUtilities.WriteDebug("Waiting done!");
 			lock (KeyLookupEvents)
 			{
-				KeyLookupEvents.Remove (name);
+				KeyLookupEvents.Remove(name);
 			}
 			DebugUtilities
-				.WriteDebug("Done with KLE, now has " +
-				KeyLookupEvents.Count.ToString() +
-				" entries");
+				.WriteDebug($"Done with KLE, now has {KeyLookupEvents.Count.ToString()} entries");
 			UUID response = new UUID();
 			if (avatarKeys.ContainsKey(name))
 			{
 				response = avatarKeys[name];
 				lock (avatarKeys)
 				{
-					avatarKeys.Remove (name);
+					avatarKeys.Remove(name);
 				}
 			}
 			return response;
@@ -394,39 +380,21 @@ namespace RESTBot
 			if (e.MatchedPeople.Count < 1)
 			{
 				DebugUtilities
-					.WriteWarning(session +
-					" " +
-					MethodName +
-					" Error - empty people directory reply");
+					.WriteWarning($"{session} {MethodName} Error - empty people directory reply");
 			}
 			else
 			{
 				int replyCount = e.MatchedPeople.Count;
 
 				DebugUtilities
-					.WriteInfo(session +
-					" " +
-					MethodName +
-					" Processing " +
-					replyCount.ToString() +
-					" DirPeople replies");
+					.WriteInfo($"{session} {MethodName} Processing {replyCount.ToString()} DirPeople replies");
 				for (int i = 0; i < replyCount; i++)
 				{
 					string avatarName =
 						e.MatchedPeople[i].FirstName + " " + e.MatchedPeople[i].LastName;
 					UUID avatarKey = e.MatchedPeople[i].AgentID;
 					DebugUtilities
-						.WriteDebug(session +
-						" " +
-						MethodName +
-						" Reply " +
-						(i + 1).ToString() +
-						" of " +
-						replyCount.ToString() +
-						" Key : " +
-						avatarKey.ToString() +
-						" Name : " +
-						avatarName);
+						.WriteDebug($"{session} {MethodName} Reply {(i + 1).ToString()} of {replyCount.ToString()} Key: {avatarKey.ToString()} Name: {avatarName}");
 
 					if (!avatarKeys.ContainsKey(avatarName))
 					{
@@ -442,7 +410,7 @@ namespace RESTBot
 						if (KeyLookupEvents.ContainsKey(avatarName.ToLower()))
 						{
 							KeyLookupEvents[avatarName.ToLower()].Set();
-							DebugUtilities.WriteDebug(avatarName.ToLower() + " KLE set!");
+							DebugUtilities.WriteDebug($"{avatarName.ToLower()} KLE set!");
 						}
 					}
 				}
@@ -479,7 +447,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			// bot.Client.Network.RegisterCallback(PacketType.AvatarPropertiesReply, new NetworkManager.PacketCallback(AvatarPropertiesReply)); // obsolete
 			bot.Client.Avatars.AvatarPropertiesReply += AvatarPropertiesReply;
@@ -512,7 +480,7 @@ namespace RESTBot
 				if (check)
 				{
 					bool response = getOnline(b, agentKey);
-					return "<online>" + response.ToString() + "</online>\n";
+					return $"<online>{response.ToString()}</online>\n";
 				}
 				else
 				{
@@ -535,11 +503,7 @@ namespace RESTBot
 		public bool getOnline(RestBot b, UUID key)
 		{
 			DebugUtilities
-				.WriteInfo(session +
-				" " +
-				MethodName +
-				" Looking up online status for " +
-				key.ToString());
+				.WriteInfo($"{session} {MethodName} Looking up online status for {key.ToString()}");
 
 			lock (OnlineLookupEvents)
 			{
@@ -597,13 +561,7 @@ namespace RESTBot
 			Properties = e.Properties;
 
 			DebugUtilities
-				.WriteInfo(session +
-				" " +
-				MethodName +
-				" Processing AvatarPropertiesReply for " +
-				e.AvatarID.ToString() +
-				" is " +
-				Properties.Online.ToString());
+				.WriteInfo($"{session} {MethodName} Processing AvatarPropertiesReply for {e.AvatarID.ToString()} is {Properties.Online.ToString()}");
 			lock (avatarOnline)
 			{
 				avatarOnline[e.AvatarID] = Properties.Online;
@@ -644,7 +602,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			// bot.Client.Avatars.OnAvatarProperties += new AvatarManager.AvatarPropertiesCallback(Avatars_OnAvatarProperties); // obsolete
 			bot.Client.Avatars.AvatarPropertiesReply += Avatars_OnAvatarProperties;
@@ -756,7 +714,7 @@ namespace RESTBot
 				response += "</profile>\n";
 				lock (avatarProfile)
 				{
-					avatarProfile.Remove (key);
+					avatarProfile.Remove(key);
 				}
 				return response;
 			}
@@ -820,7 +778,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			// obsolete
 			// bot.Client.Avatars.OnAvatarGroups += new AvatarManager.AvatarGroupsCallback(Avatar_OnAvatarGroups);
@@ -888,11 +846,7 @@ namespace RESTBot
 		public string? getGroups(RestBot b, UUID key)
 		{
 			DebugUtilities
-				.WriteInfo(session +
-				" " +
-				MethodName +
-				" Looking up groups for " +
-				key.ToString());
+				.WriteInfo($"{session} {MethodName} Looking up groups for {key.ToString()}");
 
 			lock (GroupsLookupEvents)
 			{
@@ -910,12 +864,12 @@ namespace RESTBot
 			if (null == avatarGroups)
 			{
 				DebugUtilities
-					.WriteInfo(session + " " + MethodName + " Groups cache failed.");
+					.WriteInfo($"{session} {MethodName} Groups cache failed.");
 				return null;
 			}
 			if (0 == avatarGroups.Count)
 			{
-				DebugUtilities.WriteInfo(session + " " + MethodName + " No groups");
+				DebugUtilities.WriteInfo($"{session} {MethodName} No groups");
 				return null;
 			}
 			if (avatarGroups.ContainsKey(key))
@@ -945,7 +899,7 @@ namespace RESTBot
 
 				lock (avatarGroups)
 				{
-					avatarGroups.Remove (key);
+					avatarGroups.Remove(key);
 				}
 				return response;
 			}
@@ -1006,7 +960,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		/// <summary>
@@ -1051,7 +1005,7 @@ namespace RESTBot
 								.ObjectsAvatars
 								.Find(delegate (Avatar avatar)
 								{
-									DebugUtilities.WriteDebug("Found avatar: " + avatar.Name);
+									DebugUtilities.WriteDebug($"Found avatar: {avatar.Name}");
 									return avatar.Name == name;
 								});
 
@@ -1068,7 +1022,7 @@ namespace RESTBot
 						}
 						else
 						{
-							DebugUtilities.WriteError("Error obtaining the avatar: " + name);
+							DebugUtilities.WriteError($"Error obtaining the avatar: {name}");
 						}
 					}
 				}
@@ -1077,7 +1031,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>" + e.Message + "</error>";
+				return $"<error>{e.Message}</error>";
 			}
 		}
 	} // end avatar_position
@@ -1128,7 +1082,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>" + e.Message + "</error>";
+				return $"<error>{e.Message}</error>";
 			}
 		}
 	} // end my_position
