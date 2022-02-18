@@ -134,10 +134,7 @@ namespace RESTBot
 			if (!NameLookupEvents[id].WaitOne(15000, true))
 			{
 				DebugUtilities
-					.WriteWarning(session +
-					" " +
-					MethodName +
-					" timed out on avatar name lookup");
+					.WriteWarning($"{session.ToString()} {MethodName} timed out on avatar name lookup");
 			}
 			lock (NameLookupEvents)
 			{
