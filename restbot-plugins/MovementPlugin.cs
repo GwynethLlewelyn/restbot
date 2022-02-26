@@ -195,7 +195,7 @@ namespace RESTBot
 						goalPos.Z);
 					me.Client.Self.AutoPilotCancel();
 					DebugUtilities.WriteSpecial("Cancel Autopilot");
-					me.Client.Self.Movement.TurnToward (goalPos);
+					me.Client.Self.Movement.TurnToward(goalPos);
 					me.Client.Self.Movement.SendUpdate(true);
 					Active = false;
 				}
@@ -382,7 +382,7 @@ namespace RESTBot
 						goalPos.Z);
 					me.Client.Self.AutoPilotCancel();
 					DebugUtilities.WriteSpecial("Cancel Autopilot");
-					me.Client.Self.Movement.TurnToward (goalPos);
+					me.Client.Self.Movement.TurnToward(goalPos);
 					me.Client.Self.Movement.SendUpdate(true);
 					Active = false;
 				}
@@ -594,7 +594,7 @@ namespace RESTBot
 										zTarget),
 									me.Client);
 
-								me.Client.Self.AutoPilot (xTarget, yTarget, zTarget);
+								me.Client.Self.AutoPilot(xTarget, yTarget, zTarget);
 							}
 							else
 							{
