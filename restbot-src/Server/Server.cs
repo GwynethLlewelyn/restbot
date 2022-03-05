@@ -146,7 +146,7 @@ namespace RESTBot.Server
 					DebugUtilities
 						.WriteInfo($"Got continued request, totalling {request.Length} characters");
 
-					DebugUtilities.WriteDebug("Here's what I got: {request}");
+					DebugUtilities.WriteDebug($"Here's what I got: {request}");
 					body = request;
 				}
 				catch
@@ -160,7 +160,7 @@ namespace RESTBot.Server
 			string to_return = Program.DoProcessing(x, body);
 			to_return = "<restbot>" + to_return + "</restbot>";
 			DebugUtilities
-				.WriteDebug("What I should return to the client: {to_return}");
+				.WriteDebug($"What I should return to the client: {to_return}");
 
 			ResponseHeaders response_headers = new ResponseHeaders(200, "OK");
 			string response = response_headers.ToString() + to_return;

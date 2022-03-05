@@ -17,7 +17,7 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  Further changes by Gwyneth Llewelyn
+  Further changes & development by Gwyneth Llewelyn
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
@@ -30,25 +30,39 @@ using System.Xml.Serialization;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
 
-// movement functions; based on TestClient.exe code
+/// <summary>movement functions; based on TestClient.exe code</summary>
 namespace RESTBot
 {
-	// show current location
+	/// <summary>show current location</summary>
 	public class CurrentLocationPlugin : StatefulPlugin
 	{
 		private UUID session;
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public CurrentLocationPlugin()
 		{
 			MethodName = "location";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">Unused; refers to the _current_ bot</param>
+		/// <returns>XML-encoded region + avatar/bot position, if found; error otherwise</returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
@@ -69,22 +83,37 @@ namespace RESTBot
 		}
 	} // end location
 
-	// move to location; parameters are sim, x, y, z
+	/// <summary>Move to location; parameters are sim, x, y, z</summary>
+	/// <remarks>This is essentially a _teleport_ to the location (gwyneth 20220303)</remarks>
 	public class GotoPlugin : StatefulPlugin
 	{
 		private UUID session;
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public GotoPlugin()
 		{
 			MethodName = "goto";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the region name (<code>sim</code>) and <code>x, y, z</code> positioning data</param>
+		/// <returns>XML-encoded region name and avatar desired position</returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
@@ -158,51 +187,69 @@ namespace RESTBot
 
 		private float prevDistance;
 
+		/// <summary>Start with 20 attempts to reach destination, abort if destination not reached.</summary>
+		/// <remarks>(gwyneth 20220303)</remarks>
+		private int attempts = 20;
+
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public MoveToPlugin()
 		{
 			MethodName = "moveto";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			me = bot;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		public override void Think()
 		{
-			if (Active && me != null)
+			if (Active && me != null && attempts > 0)
 			{
 				float distance = 0.0f;
 				distance = Vector3.Distance(goalPos, me.Client.Self.SimPosition);
 
 				DebugUtilities
-					.WriteDebug("My pos = " +
-					me.Client.Self.SimPosition +
-					" Goal: " +
-					goalPos +
-					" and distance is: " +
-					distance);
+					.WriteDebug($"My pos = {me.Client.Self.SimPosition} Goal: {goalPos} and distance is: {distance}  (attempts left: {attempts})");
 				if (distance < DISTANCE_BUFFER)
 				{
 					DebugUtilities
-						.WriteDebug("I am close to my goal pos: " +
-						goalPos.X +
-						", " +
-						goalPos.Y +
-						", " +
-						goalPos.Z);
+						.WriteDebug($"I am close to my goal pos: {goalPos.X}, {goalPos.Y}, {goalPos.Z}");
 					me.Client.Self.AutoPilotCancel();
 					DebugUtilities.WriteSpecial("Cancel Autopilot");
 					me.Client.Self.Movement.TurnToward(goalPos);
 					me.Client.Self.Movement.SendUpdate(true);
 					Active = false;
+					attempts = 0;
 				}
+				else
+				{
+					attempts--;
+				}
+			}
+			else if (attempts <= 0)
+			{
+				DebugUtilities.WriteDebug("No more attempts left; aborting...");
+				Active = false;
 			}
 			base.Think();
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing the avatar key UUID to look up</param>
+		/// <returns>XML-encoded avatar name, if found</returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
@@ -289,7 +336,7 @@ namespace RESTBot
 					.Self
 					.AutoPilot(goalPos.X + regionX, goalPos.Y + regionY, goalPos.Z);
 				Active = true;
-
+				attempts = 20;	// reset attempts, or else they'll be stuck at zero... (gwyneth 20220304)
 				while (Active)
 				{
 					Thread.Sleep(1 * 1000);
@@ -318,6 +365,7 @@ namespace RESTBot
 	{
 		private UUID session;
 
+		/// <summary>given destination, as a <code>(x,y,z)</code> vector</summary>
 		private Vector3 goalPos;
 
 		const float DISTANCE_BUFFER = 7.0f;
@@ -328,21 +376,27 @@ namespace RESTBot
 
 		private Avatar? target; // may be null...
 
-		private uint
+		/// <summary>Region coordinates</summary>
+		private uint regionX, regionY;
 
-				regionX,
-				regionY;
-
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public MoveToAvatarPlugin()
 		{
 			MethodName = "moveto-avatar";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			me = bot;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		public override void Think()
@@ -511,7 +565,8 @@ namespace RESTBot
 		}
 	} // end movetoavatar
 
-	// follow an avatar; parameters are:
+	/// <summary>follow an avatar; parameters are:</summary>
+	/// <remarks>The summary line was abruptly cut and left unfinished... (gwyneth 20220303)</remarks>
 	public class FollowPlugin : StatefulPlugin
 	{
 		private UUID session;
@@ -522,16 +577,24 @@ namespace RESTBot
 
 		uint targetLocalID = 0;
 
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
 		public FollowPlugin()
 		{
 			MethodName = "follow";
 		}
 
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
 			me = bot;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		public override void Think()
