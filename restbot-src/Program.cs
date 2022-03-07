@@ -85,7 +85,7 @@ namespace RESTBot
 			if (config == null)
 			{
 				// configuration is mandatory! (gwyneth 20220213)
-				DebugUtilities.WriteError("Unable to open configuration file {configFile}! Aborting...");
+				DebugUtilities.WriteError($"Unable to open configuration file {configFile}! Aborting...");
 				Environment.Exit(1);
 				return;
 			}
@@ -421,7 +421,7 @@ namespace RESTBot
 		/// <param name="key">Session UUID</param>
     public static void DisposeSession(UUID key)
     {
-      DebugUtilities.WriteDebug("Disposing of session " + key.ToString());
+      DebugUtilities.WriteDebug($"Disposing of session {key.ToString()}");
 			if (Sessions != null)
 			{
       	if (!Sessions.ContainsKey(key))
@@ -437,13 +437,13 @@ namespace RESTBot
 				}
 				else
 				{
-					DebugUtilities.WriteError("Weird error in logging out session {key.ToString()} - it was on the Sessions dictionary, but strangely without a 'bot attached");
+					DebugUtilities.WriteError($"Weird error in logging out session {key.ToString()} - it was on the Sessions dictionary, but strangely without a 'bot attached");
 				}
       	Sessions.Remove(key);
 			}
 			else
 			{
-				DebugUtilities.WriteError("DisposeSession called on {key.ToString()}, but we have no Sessions dictionary!");
+				DebugUtilities.WriteError($"DisposeSession called on {key.ToString()}, but we have no Sessions dictionary!");
 			}
     } // end DisposeSession()
   } // end class Program

@@ -339,7 +339,7 @@ namespace RESTBot
 			//Client.Network.LoginProgress +=
 			//    delegate(object? sender, LoginProgressEventArgs e)
 			//    {
-			//        DebugUtilities.WriteDebug(String.Format("Login {0}: {1}", e.Status, e.Message));
+			//        DebugUtilities.WriteDebug($"Login {e.Status}: {e.Message}");
 			//        if (e.Status == LoginStatus.Success)
 			//        {
 			//            DebugUtilities.WriteSpecial("Logged in successfully");
@@ -349,7 +349,7 @@ namespace RESTBot
 			//        }
 			//        else if (e.Status == LoginStatus.Failed)
 			//        {
-			//            DebugUtilities.WriteError("There was an error while connecting: " + Client.Network.LoginErrorKey);
+			//            DebugUtilities.WriteError("$There was an error while connecting: {Client.Network.LoginErrorKey}");
 			//            response.wasFatal = true;
 			//            response.xmlReply = "<error></error>";
 			//        }
@@ -385,7 +385,7 @@ namespace RESTBot
 				DebugUtilities.WriteError("No login URI provided; aborting...");
 				return response;
 			}
-			DebugUtilities.WriteDebug("Login URI: " + Client.Settings.LOGIN_SERVER);
+			DebugUtilities.WriteDebug($"Login URI: {Client.Settings.LOGIN_SERVER}");
 
 			LoginParams loginParams =
 				Client
@@ -405,8 +405,7 @@ namespace RESTBot
 			else
 			{
 				DebugUtilities
-					.WriteError("There was an error while connecting: " +
-					Client.Network.LoginErrorKey);
+					.WriteError($"There was an error while connecting: {Client.Network.LoginErrorKey}");
 				switch (Client.Network.LoginErrorKey)
 				{
 					case "connect":
@@ -438,9 +437,7 @@ namespace RESTBot
 						break;
 					default:
 						DebugUtilities
-							.WriteError(sessionid.ToString() +
-							" UNKNOWN ERROR ATTEMPTING TO LOGIN: " +
-							Client.Network.LoginErrorKey);
+							.WriteError($"{sessionid.ToString()} - UNKNOWN ERROR ATTEMPTING TO LOGIN: {Client.Network.LoginErrorKey}");
 						response.wasFatal = true;
 						response.xmlReply =
 							"<error fatal=\"true\">Unknown error has occurred.</error>";
@@ -513,7 +510,7 @@ namespace RESTBot
 				return response;
 			}
 			DebugUtilities
-				.WriteDebug("Login URI: <{Client.Settings.LOGIN_SERVER}>");
+				.WriteDebug($"Login URI: <{Client.Settings.LOGIN_SERVER}>");
 
 			string start = "";
 			if (Program.config != null && Program.config.location != null && Program.config.location.startSim.Trim() != "")
@@ -549,8 +546,7 @@ namespace RESTBot
 			else
 			{
 				DebugUtilities
-					.WriteError("There was an error while connecting: " +
-					Client.Network.LoginErrorKey);
+					.WriteError($"There was an error while connecting: {Client.Network.LoginErrorKey}");
 				switch (Client.Network.LoginErrorKey)
 				{
 					case "connect":
@@ -582,9 +578,7 @@ namespace RESTBot
 						break;
 					default:
 						DebugUtilities
-							.WriteError(sessionid.ToString() +
-							" UNKNOWN ERROR ATTEMPTING TO LOGIN: : " +
-							Client.Network.LoginErrorKey);
+							.WriteError($"{sessionid.ToString()} - UNKNOWN ERROR ATTEMPTING TO LOGIN: {Client.Network.LoginErrorKey}");
 						response.wasFatal = true;
 						response.xmlReply =
 							"<error fatal=\"true\">Unknown error has occurred.</error>";
@@ -613,11 +607,7 @@ namespace RESTBot
 				debugparams = debugparams + "[ " + kvp.Key + "=" + kvp.Value + "] ";
 			}
 			DebugUtilities
-				.WriteDebug(sessionid +
-				"Method - " +
-				Method +
-				" Parameters - " +
-				debugparams);
+				.WriteDebug($"{sessionid}: Method - {Method}, Parameters - {debugparams}");
 
 			//Actual processing
 			if (Plugins.ContainsKey(Method))
