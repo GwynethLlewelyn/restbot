@@ -230,7 +230,7 @@ namespace RESTBot
 				if (avatarKey == UUID.Zero)
 				{
 					DebugUtilities
-						.WriteWarning("Key not found for unknown avatar '{avatarFullName}'");
+						.WriteWarning($"Key not found for unknown avatar '{avatarFullName}'");
 					check = false;
 				}
 			}
