@@ -160,16 +160,14 @@ namespace RESTBot
 				}
 
 				if (b.Client.Self.Teleport(sim, new Vector3(x, y, z)))
-					return "<teleport>" + b.Client.Network.CurrentSim + "</teleport>";
+					return $"<teleport>{b.Client.Network.CurrentSim}</teleport>";
 				else
-					return "<error>Teleport failed: " +
-					b.Client.Self.TeleportMessage +
-					"</error>";
+					return $"<error>Teleport failed: {b.Client.Self.TeleportMessage}</error>";
 			}
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>" + e.Message + "</error>";
+				return $"<error>{MethodName} error: {e.Message}</error>";
 			}
 		}
 	} // end goto
@@ -248,7 +246,7 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot</param>
-		/// <param name="Parameters">A dictionary containing the avatar key UUID to look up</param>
+		/// <param name="Parameters">A dictionary containing the </param>
 		/// <returns>XML-encoded avatar name, if found</returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
@@ -275,7 +273,7 @@ namespace RESTBot
 				if (Parameters.ContainsKey("x"))
 				{
 					check &= double.TryParse(Parameters["x"], out x);
-					DebugUtilities.WriteDebug("Parse: " + Parameters["x"] + " into " + x);
+					DebugUtilities.WriteDebug($"Parse: {Parameters["x"]} into {x}");
 				}
 				else
 					check = false;
@@ -325,7 +323,7 @@ namespace RESTBot
 				if (me == null)
 				{
 					DebugUtilities.WriteError("'me' was null!");
-					return "<error>'me' was null</error>";
+					return $"<error>{MethodName}: 'me' was null</error>";
 				}
 
 				prevDistance = Vector3.Distance(goalPos, me.Client.Self.SimPosition);
@@ -341,25 +339,21 @@ namespace RESTBot
 				{
 					Thread.Sleep(1 * 1000);
 				}
-				DebugUtilities.WriteSpecial("End Thread!");
-				return String
-					.Format("<move>{0},{1},{2}</move>",
-					b.Client.Self.GlobalPosition.X,
-					b.Client.Self.GlobalPosition.Y,
-					b.Client.Self.GlobalPosition.Z);
+				DebugUtilities.WriteSpecial($"End {MethodName} Thread!");
+				return $"<{MethodName}>{b.Client.Self.GlobalPosition.X},{b.Client.Self.GlobalPosition.Y},{b.Client.Self.GlobalPosition.Z}</{MethodName}>";
 			}
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>" + e.Message + "</error>";
+				return $"<error>moveto error: {e.Message}</error>";
 			}
 		}
 	} // end moveto
 
 	/// <summary>
-	/// Move to avatar location; parameters are sim, avatar
+	/// Move to avatar location; parameters are the name of the destination avatar.
 	/// </summary>
-	/// <remarks>AvatarPositionPlugin just _returns_ the position of the target avatar,
+	/// <remarks>Note that AvatarPositionPlugin just _returns_ the position of the target avatar,
 	/// but doesn't actually _move_ to it (gwyneth 20220120)</remarks>
 	public class MoveToAvatarPlugin : StatefulPlugin
 	{
@@ -448,8 +442,7 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot.</param>
-		/// <param name="Parameters">A dictionary containing the destination in-world coordinates
-		/// <code>x, y, z</code> and optionally the maximum <code>distance</code> to move
+		/// <param name="Parameters">A dictionary containing the destination <code>avatar</code> name
 		/// as well as if the bot should run (<code>run</code>, default false).</param>
 		/// <returns>XML-encoded position<code>x, y, z</code></returns>
 		public override string
@@ -477,9 +470,15 @@ namespace RESTBot
 				else
 					check = false;
 
+				// added it here, but I'm not sure if it's correct... (gwyneth 20220409)
+				if (Parameters.ContainsKey("run"))
+				{
+					check &= bool.TryParse(Parameters["run"], out run);
+				}
+
 				if (!check)
 				{
-					return "<error>parameters have to be x, y, z, [distance, run]</error>";
+					return "<error>parameters have to be avatar name to follow</error>";
 				}
 
 				if (run)
@@ -496,8 +495,7 @@ namespace RESTBot
 					for (int i = 0; i < b.Client.Network.Simulators.Count; i++)
 					{
 						DebugUtilities
-							.WriteDebug("Found Avatars: " +
-							b.Client.Network.Simulators[i].ObjectsAvatars.Count);
+							.WriteDebug($"Found {b.Client.Network.Simulators[i].ObjectsAvatars.Count}Avatar(s)");
 						target =
 							b
 								.Client
@@ -506,7 +504,7 @@ namespace RESTBot
 								.ObjectsAvatars
 								.Find(delegate (Avatar avatar)
 								{
-									DebugUtilities.WriteDebug("Found avatar: " + avatar.Name);
+									DebugUtilities.WriteDebug($"Found avatar: {avatar.Name}");
 									return avatar.Name == avatarName;
 								});
 
@@ -517,8 +515,8 @@ namespace RESTBot
 						else
 						{
 							DebugUtilities
-								.WriteError("Error obtaining the avatar: " + avatarName);
-							return String.Format("<error>Error obtaining the avatar</error>");
+								.WriteError($"{MethodName} - Error finding position of '{avatarName}'");
+							return "<error>{MethodName} error finding position of '{avatarName}'</error>";
 						}
 					}
 				}
@@ -558,23 +556,21 @@ namespace RESTBot
 				{
 					Thread.Sleep(1 * 1000);
 				}
-				DebugUtilities.WriteSpecial("End Thread!");
-				return String
-					.Format("<move>{0},{1},{2}</move>",
-					b.Client.Self.GlobalPosition.X,
-					b.Client.Self.GlobalPosition.Y,
-					b.Client.Self.GlobalPosition.Z);
+				DebugUtilities.WriteSpecial($"End {MethodName} Thread!");
+				return $"<{MethodName}>{b.Client.Self.GlobalPosition.X},{b.Client.Self.GlobalPosition.Y},{b.Client.Self.GlobalPosition.Z}</{MethodName}>";
 			}
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>" + e.Message + "</error>";
+				return $"<error>{MethodName} error: {e.Message}</error>";
 			}
 		}
 	} // end movetoavatar
 
 	/// <summary>follow an avatar; parameters are:</summary>
-	/// <remarks>The summary line was abruptly cut and left unfinished... (gwyneth 20220303)</remarks>
+	/// <remarks><para>The summary line was abruptly cut and left unfinished... (gwyneth 20220303)</para>
+	/// <para>But there seems to be only one parameter, <code>target</code>, the avatar UUID to follow.
+	/// (gwyneth 20220409)</para></remarks>
 	public class FollowPlugin : StatefulPlugin
 	{
 		private UUID session;
@@ -683,9 +679,8 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot.</param>
-		/// <param name="Parameters">A dictionary containing the destination <code>x, y, z</code> and optionally
-		/// the maximum <code>distance</code> to move and if the bot should run (<code>run</code>, default false).
-		/// </param>
+		/// <param name="Parameters">A dictionary containing the name of the <code>target</code> avatar
+		/// to follow; empty or <code>off</code> means stop following the avatar.</param>
 		/// <returns>XML-encoded position<code>x, y, z</code></returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
@@ -712,7 +707,7 @@ namespace RESTBot
 				}
 				else
 				{
-					return "<error>arguments</error>";
+					return $"<error>{MethodName}: missing argument for target</error>";
 				}
 
 				if (target.Length == 0 || target == "off")
@@ -727,13 +722,13 @@ namespace RESTBot
 					if (Follow(target))
 						return "<follow>on</follow>";
 					else
-						return "<follow>error</follow>";
+						return $"<error>cannot follow {target}</error>";
 				}
 			}
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<follow>error: " + e.Message + "</follow>";
+				return $"<error>follow error: {e.Message}</error>";
 			}
 		}
 
@@ -832,7 +827,7 @@ namespace RESTBot
 				}
 
 				// If we get to this point means that we have a correctly parsed key for the target prim
-				DebugUtilities.WriteDebug($"{b.sessionid} {MethodName} - Trying to sit on {sitTargetID}...");
+				DebugUtilities.WriteDebug($"{b.sessionid} {MethodName} - Trying to sit on {sitTargetID.ToString()}...");
 
 				Primitive targetPrim = b.Client.Network.CurrentSim.ObjectsPrimitives.Find(
 					prim => prim.ID == sitTargetID
@@ -853,6 +848,6 @@ namespace RESTBot
 				return $"<error>{e.Message}</error>";
 			}
 		}
-	} // end movetoavatar
+	} // end SitOnPlugin
 
 } // end namespace RESTBot
