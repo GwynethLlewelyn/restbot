@@ -444,6 +444,14 @@ namespace RESTBot
 			base.Think();
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot.</param>
+		/// <param name="Parameters">A dictionary containing the destination in-world coordinates
+		/// <code>x, y, z</code> and optionally the maximum <code>distance</code> to move
+		/// as well as if the bot should run (<code>run</code>, default false).</param>
+		/// <returns>XML-encoded position<code>x, y, z</code></returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
@@ -671,6 +679,14 @@ namespace RESTBot
 			base.Think();
 		}
 
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot.</param>
+		/// <param name="Parameters">A dictionary containing the destination <code>x, y, z</code> and optionally
+		/// the maximum <code>distance</code> to move and if the bot should run (<code>run</code>, default false).
+		/// </param>
+		/// <returns>XML-encoded position<code>x, y, z</code></returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
@@ -757,6 +773,86 @@ namespace RESTBot
 			}
 
 			return false;
+		} // end Follow()
+	} // end FollowPlugin
+
+	// new plugin for sitting on prim
+	/// <summary>
+	/// Sit On (Prim); parameter is UUID of object to sit on
+	/// </summary>
+	/// <since>8.1.5</since>
+	/// <remarks>RESTful interface to the SitOn command on LibreMetaverse's own SitOn</remarks>
+	public class SitOnPlugin : StatefulPlugin
+	{
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+		public SitOnPlugin()
+		{
+			MethodName = "siton";
 		}
-	} // end follow
-}
+
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
+		public override void Initialize(RestBot bot)
+		{
+			DebugUtilities.WriteDebug($"{bot.sessionid} {MethodName} startup");
+		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot.</param>
+		/// <param name="Parameters">A dictionary containing the destination prim <code>target</code>.</param>
+		/// <returns>XML-encoded status of sit attempt</returns>
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			/// <summary>UUID for the prim/object that we intend the bot to sit on</summary>
+			UUID sitTargetID = UUID.Zero;
+
+			DebugUtilities.WriteDebug($"{b.sessionid} {MethodName} - Searching for prim to sit on");
+			try
+			{
+				bool check = false;
+				if (Parameters.ContainsKey("target"))
+				{
+					check =
+						UUID
+							.TryParse(Parameters["target"].ToString().Replace("_", " "),
+							out sitTargetID);
+				}
+
+				if (!check)
+				{
+					return "<error>no sit target specified</error>";
+				}
+
+				// If we get to this point means that we have a correctly parsed key for the target prim
+				DebugUtilities.WriteDebug($"{b.sessionid} {MethodName} - Trying to sit on {sitTargetID}...");
+
+				Primitive targetPrim = b.Client.Network.CurrentSim.ObjectsPrimitives.Find(
+					prim => prim.ID == sitTargetID
+				);
+
+				if (targetPrim != null)
+				{
+					b.Client.Self.RequestSit(targetPrim.ID, Vector3.Zero);
+					b.Client.Self.Sit();
+					return $"<{MethodName}>sitting on {targetPrim.ID.ToString()} ({targetPrim.LocalID})</{MethodName}>";
+				}
+
+				return $"<error>no prim with UUID {sitTargetID} found</error>";
+			}
+			catch (Exception e)
+			{
+				DebugUtilities.WriteError(e.Message);
+				return $"<error>{e.Message}</error>";
+			}
+		}
+	} // end movetoavatar
+
+} // end namespace RESTBot
