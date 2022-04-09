@@ -850,4 +850,51 @@ namespace RESTBot
 		}
 	} // end SitOnPlugin
 
+
+	/// <summary>
+	/// Stand (avatar will inconditionally stand up)
+	/// </summary>
+	/// <since>8.1.5</since>
+	/// <remarks>RESTful interface to the Stand command on LibreMetaverse's own Stand</remarks>
+	public class StandPlugin : StatefulPlugin
+	{
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+		public StandPlugin()
+		{
+			MethodName = "stand";
+		}
+
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
+		public override void Initialize(RestBot bot)
+		{
+			DebugUtilities.WriteDebug($"{bot.sessionid} {MethodName} startup");
+		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot.</param>
+		/// <param name="Parameters">void</returns>
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			try
+			{
+				b.Client.Self.Stand();
+				return $"<{MethodName}>standing</{MethodName}>";
+			}
+			catch (Exception e)
+			{
+				DebugUtilities.WriteError(e.Message);
+				return $"<error>{MethodName} error: {e.Message}</error>";
+			}
+		}
+	} // end StandPlugin
+
 } // end namespace RESTBot
