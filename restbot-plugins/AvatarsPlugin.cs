@@ -1083,4 +1083,81 @@ namespace RESTBot
 			}
 		}
 	} // end my_position
-}
+
+	/// <summary>
+	/// Touch prim; parameter is UUID of object to touch
+	/// </summary>
+	/// <since>8.1.5</since>
+	/// <remarks>RESTful interface to the Touch command on LibreMetaverse's own Touch</remarks>
+	public class TouchPlugin : StatefulPlugin
+	{
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+		public TouchPlugin()
+		{
+			MethodName = "touch";
+		}
+
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
+		public override void Initialize(RestBot bot)
+		{
+			DebugUtilities.WriteDebug($"{bot.sessionid} {MethodName} startup");
+		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot.</param>
+		/// <param name="Parameters">A dictionary containing the <code>prim</code> (UUID) to touch.</param>
+		/// <returns>XML-encoded status of sit attempt</returns>
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			/// <summary>UUID for the prim/object that we intend the bot to touch</summary>
+			UUID touchTargetID = UUID.Zero;
+
+			DebugUtilities.WriteDebug($"{b.sessionid} {MethodName} - Searching for prim to touch");
+			try
+			{
+				bool check = false;
+				if (Parameters.ContainsKey("prim"))
+				{
+					check =
+						UUID
+							.TryParse(Parameters["prim"].ToString().Replace("_", " "),
+							out touchTargetID);
+				}
+
+				if (!check)
+				{
+					return "<error>prim to touch not specified</error>";
+				}
+
+				// If we get to this point means that we have a correctly parsed key for the target prim
+				DebugUtilities.WriteDebug($"{b.sessionid} {MethodName} - Trying to touch {touchTargetID.ToString()}...");
+
+				Primitive targetPrim = b.Client.Network.CurrentSim.ObjectsPrimitives.Find(
+					prim => prim.ID == touchTargetID
+				);
+
+				if (targetPrim != null)
+				{
+					b.Client.Self.Touch(targetPrim.LocalID);
+					return $"<{MethodName}>touching {targetPrim.ID.ToString()} ({targetPrim.LocalID})</{MethodName}>";
+				}
+
+				return $"<error>no prim with UUID {touchTargetID} found</error>";
+			}
+			catch (Exception e)
+			{
+				DebugUtilities.WriteError(e.Message);
+				return $"<error>{e.Message}</error>";
+			}
+		}
+	} // end TouchPlugin
+} // end namespace RESTbot
