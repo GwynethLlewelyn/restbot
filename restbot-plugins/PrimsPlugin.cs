@@ -96,7 +96,7 @@ namespace RESTBot
                     string? name = p.Properties != null ? p.Properties.Name : null;
                     if (String.IsNullOrEmpty(type) || ((name != null) && (name.Contains(type))))
                     {
-                        resultSet += String.Format("<prim><name>{0}</name><pos>{1},{2},{3}</pos></prim>", name, p.Position.X, p.Position.Y, p.Position.Z);
+                        resultSet += String.Format("<prim><name>{0}</name><pos>{1},{2},{3}</pos><id>{4}</id></prim>", name, p.Position.X, p.Position.Y, p.Position.Z, p.ID);
                     }
                 }
                 return "<nearby_prims>" + resultSet + "</nearby_prims>";
