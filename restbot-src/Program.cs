@@ -119,12 +119,7 @@ namespace RESTBot
       	//TODO: Replace above with a manualresetevent
 
 				if (stupidCounter % 3600000 == 0) {	// stop every hour and check available memory (gwyneth 20220210)
-					DateTime t = DateTime.Now;
-
-					DebugUtilities.WriteInfo($"{t.ToString("yyyy-MM-dd HH:mm:ss")} - Memory in use before GC.Collect: {(GC.GetTotalMemory(false)):N0} bytes");
-					GC.Collect(); // collect garbage (gwyneth 20220207) and wait for GC to finish.
-					t = DateTime.Now;
-					DebugUtilities.WriteInfo($"{t.ToString("yyyy-MM-dd HH:mm:ss")} - Memory in use after  GC.Collect: {(GC.GetTotalMemory(true)):N0} bytes");
+					CollectGarbage();
 				}
 				stupidCounter++;
 			}
@@ -416,8 +411,25 @@ namespace RESTBot
 		}
 
 		/// <summary>
+		/// Calls the C# garbage collector
+		///
+		/// We have major memory leaks, this is an attempt to keep them under control. (gwyneth 20220411)
+		/// </summary>
+		/// <param />
+		/// <returns>void</returns>
+		private static void CollectGarbage()
+		{
+			DateTime t = DateTime.Now;
+			DebugUtilities.WriteInfo($"{t.ToString("yyyy-MM-dd HH:mm:ss")} - Memory in use before GC.Collect: {(GC.GetTotalMemory(false)):N0} bytes");
+			GC.Collect(); // collect garbage (gwyneth 20220207) and wait for GC to finish.
+			t = DateTime.Now;
+			DebugUtilities.WriteInfo($"{t.ToString("yyyy-MM-dd HH:mm:ss")} - Memory in use after  GC.Collect: {(GC.GetTotalMemory(true)):N0} bytes");
+		}
+
+		/// <summary>
 		/// Get rid of a specific session.
 		/// </summary>
+		/// <remarks>Also calls the garbage collector after a successful bot logout (gwyneth 20220411)</remarks>
 		/// <param name="key">Session UUID</param>
     public static void DisposeSession(UUID key)
     {
@@ -434,6 +446,9 @@ namespace RESTBot
       			s.Bot.OnBotStatus -= s.StatusCallback;
 					}
       		s.Bot.Client.Network.Logout();
+
+					// Run garbage collector every time a bot logs out.
+					CollectGarbage();
 				}
 				else
 				{
