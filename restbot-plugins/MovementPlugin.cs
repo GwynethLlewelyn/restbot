@@ -160,10 +160,22 @@ namespace RESTBot
 				}
 				// debug: calculate destination vector, show data, just to make sure it's correct (gwyneth 20220411)
 				Vector3 teleportPoint = new Vector3(x, y, z);
-				DebugUtilities.WriteDebug($"attempting to teleport to ({x}), ({y}), ({z}) - vector: {teleportPoint.ToString()}");
+				DebugUtilities.WriteDebug($"attempting teleport to ({x}), ({y}), ({z}) - vector: {teleportPoint.ToString()}");
 
 				if (b.Client.Self.Teleport(sim, teleportPoint))
-					return $"<teleport>{b.Client.Network.CurrentSim} {teleportPoint.ToString()}</teleport>";
+					if (b.Client.Network.CurrentSim != null)
+					{
+						return String
+						.Format("<teleport><CurrentSim>{0}</CurrentSim><Position>{1},{2},{3}</Position></teleport>",
+						b.Client.Network.CurrentSim.ToString(),
+						b.Client.Self.SimPosition.X,
+						b.Client.Self.SimPosition.Y,
+						b.Client.Self.SimPosition.Z);
+					}
+					else
+					{
+						return $"<error>Teleport failed, no sim handle found: {b.Client.Self.TeleportMessage}</error>";
+					}
 				else
 					return $"<error>Teleport failed: {b.Client.Self.TeleportMessage}</error>";
 			}
