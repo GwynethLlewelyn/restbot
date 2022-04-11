@@ -158,9 +158,12 @@ namespace RESTBot
 				{
 					return "<error>parameters have to be simulator name, x, y, z</error>";
 				}
+				// debug: calculate destination vector, show data, just to make sure it's correct (gwyneth 20220411)
+				Vector3 teleportPoint = new Vector3(x, y, z);
+				DebugUtilities.WriteDebug($"attempting to teleport to ({x}), ({y}), ({z}) - vector: {teleportPoint.ToString()}");
 
-				if (b.Client.Self.Teleport(sim, new Vector3(x, y, z)))
-					return $"<teleport>{b.Client.Network.CurrentSim}</teleport>";
+				if (b.Client.Self.Teleport(sim, teleportPoint))
+					return $"<teleport>{b.Client.Network.CurrentSim} {teleportPoint.ToString()}</teleport>";
 				else
 					return $"<error>Teleport failed: {b.Client.Self.TeleportMessage}</error>";
 			}
