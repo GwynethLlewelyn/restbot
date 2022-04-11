@@ -801,7 +801,9 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot.</param>
-		/// <param name="Parameters">A dictionary containing the destination prim <code>target</code>.</param>
+		/// <param name="Parameters">A dictionary containing the destination prim <code>target</code>.
+		/// Optionally, <code>force=true</code> can be given to skip the prim detection.
+		/// </param>
 		/// <returns>XML-encoded status of sit attempt</returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
@@ -813,6 +815,9 @@ namespace RESTBot
 			try
 			{
 				bool check = false;
+				/// <summary>optionally, we can skip prim search and force sitting on UUID</summary>
+				bool force = false;
+
 				if (Parameters.ContainsKey("target"))
 				{
 					check =
@@ -826,21 +831,44 @@ namespace RESTBot
 					return "<error>no sit target specified</error>";
 				}
 
+				// optional
+				if (Parameters.ContainsKey("force"))
+				{
+					check = bool.TryParse(Parameters["force"], out force);
+				}
+
+				if (!check)
+				{
+					return "<error>force attempted with wrong setting; only true/false are allowed</error>";
+				}
+
 				// If we get to this point means that we have a correctly parsed key for the target prim
 				DebugUtilities.WriteDebug($"{b.sessionid} {MethodName} - Trying to sit on {sitTargetID.ToString()}...");
 
-				Primitive targetPrim = b.Client.Network.CurrentSim.ObjectsPrimitives.Find(
-					prim => prim.ID == sitTargetID
-				);
-
-				if (targetPrim != null)
+				// If not forcing, we'll search for a prim with this UUID in the 'bot interest list
+				// and retrieve the information from that prim. (gwyneth 20220410)
+				if (!force)
 				{
-					b.Client.Self.RequestSit(targetPrim.ID, Vector3.Zero);
+					Primitive targetPrim = b.Client.Network.CurrentSim.ObjectsPrimitives.Find(
+						prim => prim.ID == sitTargetID
+					);
+
+					if (targetPrim != null)
+					{
+						b.Client.Self.RequestSit(targetPrim.ID, Vector3.Zero);
+						b.Client.Self.Sit();
+						return $"<{MethodName}>sitting on {targetPrim.ID.ToString()} ({targetPrim.LocalID})</{MethodName}>";
+					}
+
+					return $"<error>no prim with UUID {sitTargetID} found</error>";
+				}
+				else	// forcing to sit on a prim we KNOW that exists! (gwyneth 20220410)
+				{
+					b.Client.Self.RequestSit(sitTargetID, Vector3.Zero);
 					b.Client.Self.Sit();
-					return $"<{MethodName}>sitting on {targetPrim.ID.ToString()} ({targetPrim.LocalID})</{MethodName}>";
+					return $"<{MethodName}>forced sitting on {sitTargetID.ToString()})</{MethodName}>";
 				}
 
-				return $"<error>no prim with UUID {sitTargetID} found</error>";
 			}
 			catch (Exception e)
 			{
