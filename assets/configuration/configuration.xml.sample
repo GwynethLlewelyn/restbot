@@ -1,6 +1,6 @@
 <restbot>
 	<networking>
-		<!-- IPv4 address of the machine running RESTbot; leave 127.0.0.1 for running it on yur own laptop/desktop -->
+		<!-- IPv4 address of the machine running RESTbot; leave 127.0.0.1 for running it on yur own laptop/desktop and not exposing anything to the Internet -->
 		<ip>127.0.0.1</ip>
 		<port>9080</port>
 		<!-- Login URI for your grid; default is Linden Lab's main grid -->
@@ -8,6 +8,7 @@
 	</networking>
 	<security>
 		<hostnamelock>false</hostnamelock>
+		<!-- please change the password below! this is not enterprise-grade security... -->
 		<serverpassword>pass</serverpassword>
 	</security>
 	<location>
@@ -22,4 +23,10 @@
 		<libsl>true</libsl>
 		<restbot>true</restbot>
 	</debug>
+	<!-- some plugins may only be configured from here -->
+	<plugin>
+		<!-- reaper configuration: this plugin will remove 'stale' sessions that have been around for one hour -->
+		<reaper>true</reaper>
+		<reaper-sweep-interval>10000</reaper-sweep-interval>
+	</plugin>
 </restbot>

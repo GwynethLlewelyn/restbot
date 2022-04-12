@@ -21,6 +21,8 @@
 
   	You should have received a copy of the GNU Affero General Public License
   	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+		Additional (sub)classes by Gwyneth Llewelyn in 2022
 --------------------------------------------------------------------------------*/
 using System;
 using System.Collections;
@@ -35,7 +37,7 @@ namespace RESTBot.XMLConfig
 	/// <summary>
 	/// Configuration class designed for the `bots array found in the xml config file
 	/// </summary>
-	/// <remarks>To find a copy of this class, see the Configuration class</remarks>
+	/// <remarks>To find a copy of this class, see the <code>Configuration</code> class</remarks>
 	[XmlRoot("restbot")]
 	public class Configuration
 	{
@@ -51,6 +53,10 @@ namespace RESTBot.XMLConfig
 		[XmlElement("security")]
 		public SecurityConfig security = new SecurityConfig();
 
+		[XmlElement("plugin")]
+		public PluginConfig plugin = new PluginConfig();
+
+		/// <summary>The default URI to connect to the Linden Lab grid</summary>
 		public static string
 			defaultLoginURI = "https://login.agni.lindenlab.com/cgi-bin/login.cgi";
 
@@ -99,19 +105,23 @@ namespace RESTBot.XMLConfig
 	public class NetworkConfig
 	{
 		[XmlElement("ip")]
+		/// <summary>IP address ought to be set to 127.0.0.1 for localhost connections only;
+		///					 use 0.0.0.0 to have it bound to _all_ interfaces and be accessible from the Internet</summary>
 		public string ip = "0.0.0.0";
 
 		[XmlElement("port")]
 		public int port = 9080;
 
 		[XmlElement("loginuri")]
-		public string loginuri = Configuration.defaultLoginURI; //for special login url. You gotta have a compatible libsl version though!!
+		/// <summary>for special login url. You gotta have a compatible libsl version though!!</summary>
+		public string loginuri = Configuration.defaultLoginURI;
 
 		[XmlElement("throttle")]
 		public float throttle = 1572864.0f;
 
 		[XmlElement("webapi-url")]
-		public string backendURL = "https://localhost/actorbot/pipe.php"; // What _is_ this!? It's not included anywhere... (gwyneth 20220109)
+		/// <summary>What _is_ this!? It's not included anywhere... (gwyneth 20220109)</summary>
+		public string backendURL = "https://localhost/actorbot/pipe.php";
 	}
 
 	/// <summary>Class to configure the start location</summary>
@@ -119,6 +129,7 @@ namespace RESTBot.XMLConfig
 	{
 		//TODO: Make x,y,z floats but round them off when using them (this is so the parser can read a decimal instead of errroring out)
 		[XmlElement("sim")]
+		/// <summary>Name of the region for the RESTbot to start, by default</summary>
 		public string startSim = "strace island"; // 'Ahern' ought to be a better default... (gwyneth 20220109)
 
 		[XmlElement("x")]
@@ -135,13 +146,18 @@ namespace RESTBot.XMLConfig
 	/// <remarks>
 	///   <para>[Original comment:] itty bitty file - can be expanded onto later</para>
 	///		<para>Note that the DebugUtilities class checks if the <code>restbotDebug</code> variable is set, falling back to hard-coded #defines if not (gwyneth 20220109)</para>
+	///   <para>Also note that you can have both settings simultaneously configured</para>
+	///   <para>Note that if <code>Log4Net</code> is wrongly configured (using <code>restbot.exe.config</code>),
+	///					everything will get logged to the console instead (duplicate messages possible)</para>
 	///  </remarks>
 	public class DebugConfig
 	{
 		[XmlElement("restbot")]
+		/// <summary>Log debugging specific to RESTbot</summary>
 		public bool restbotDebug = false;
 
 		[XmlElement("libsl")]
+		/// <summary>Log debugging specific to the underlying LibreMetaverse layer</summary>
 		public bool slDebug = true;
 	}
 
@@ -154,5 +170,28 @@ namespace RESTBot.XMLConfig
 
 		[XmlElement("serverpassword")]
 		public string serverPass = "pass"; // Change me!
+	}
+
+	/// <summary>
+	/// Class to deal with specific plugin configurations
+  ///
+	/// <para>Since 8.1.5</para>
+	///	<para>Here we will have a few special debug flags for plugins that have zero configuration
+	/// and were never meant to be configured manually.</para>
+	/// <para>Currently only used for the Reaper plugin, but more may be added in the future!</para>
+	/// </summary>
+	public class PluginConfig
+	{
+		[XmlElement("reaper")]
+		/// <summary>The Reaper plugin seems to have no possible configuration to turn on/off, so we set it here</summary>
+		public bool reaper = true;
+
+		[XmlElement("reaper-session-timeout")]
+		/// <summary>Session timeout timespan</summary>
+		public TimeSpan reaperSessionTimeout = new TimeSpan(1, 0, 0); // default: one hour (h, m, s)
+
+		[XmlElement("reaper-sweep-interval")]
+		/// <summary>interval between reaper sweeps in ms</summary>
+		public double reaperSweepInterval = 10000; // default: 10 seconds
 	}
 }

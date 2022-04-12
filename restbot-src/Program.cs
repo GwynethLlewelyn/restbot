@@ -77,7 +77,7 @@ namespace RESTBot
 		/// Bootstrap method.
 		/// </summary>
 		/// <param name="args">Arguments passed to the application</param>
-		/// <remarks>The arguments seem to get promptly ignored! (gwyneth 20220109)</param>
+		/// <remarks>The arguments seem to get promptly ignored! (gwyneth 20220109)</remarks>
     static void Main(string[] args)
     {
       DebugUtilities.WriteInfo("Reading config file");

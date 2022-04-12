@@ -36,13 +36,13 @@ namespace RESTBot
   public static class Reaper
   {
     /// <summary>
-    /// Session timeout timespan
+    /// Session timeout timespan; default is one hour
     /// </summary>
-    static readonly TimeSpan SESSION_TIMEOUT = new TimeSpan(1, 0, 0); // one hour (h, m, s)
+    static readonly TimeSpan SESSION_TIMEOUT = Program.config != null ? Program.config.plugin.reaperSessionTimeout : TimeSpan.Zero;
     /// <summary>
-    /// interval between reaper sweeps in ms
+    /// interval between reaper sweeps in ms; default is 10 seconds
     /// </summary>
-    const double REAPER_INTERVAL = 10000;
+    static readonly double REAPER_INTERVAL = Program.config != null ? Program.config.plugin.reaperSweepInterval : 10000;
 
     private static bool hasAlreadyStarted = false;
 
@@ -54,7 +54,7 @@ namespace RESTBot
 		/// </summary>
     public static void Init()
     {
-      if (!hasAlreadyStarted)
+      if (!hasAlreadyStarted && Program.config != null && Program.config.plugin.reaper != false)
       {
         hasAlreadyStarted = true;
         ReaperTimer = new System.Timers.Timer();
@@ -69,6 +69,12 @@ namespace RESTBot
 			if (Program.Sessions == null)
 			{
 				// No sessions to worry about, we can return safely.
+				return;
+			}
+
+			// If the configuration says we shouldn't run the Reaper, return. (gwyneth 20220412)
+			if (Program.config != null && Program.config.plugin.reaper != true)
+			{
 				return;
 			}
 
@@ -109,8 +115,17 @@ namespace RESTBot
     public override void Initialize(RestBot bot)
     {
       session = bot.sessionid;
-      DebugUtilities.WriteDebug(session + " REAPER startup");
-      Reaper.Init(); //start up the reaper if we havent already (the check to see if we have is in this function)
+			// double-checking this, because I really, really want to force a configuration override to turn this off!
+			// (gwyneth 20220412)
+			if (Program.config != null && Program.config.plugin.reaper == true)
+			{
+      	DebugUtilities.WriteDebug(session + " REAPER startup");
+      	Reaper.Init(); //start up the reaper if we havent already (the check to see if we have is in this function)
+			}
+			else
+			{
+				DebugUtilities.WriteDebug(session + " REAPER not starting due to configuration override");
+			}
     }
 
 		/// <summary>Whatever needs to get processed... apparently. nothing</summary>

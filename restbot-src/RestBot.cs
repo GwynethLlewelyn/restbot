@@ -361,7 +361,7 @@ namespace RESTBot
 			Client.Throttle.Task = 1000000;
 
 			// we add this check here because LOGIN_SERVER should never be assigned null (gwyneth 20220213)
-			if (Program.config != null && Program.config.networking != null && Program.config.networking.loginuri != null)
+			if (Program.config != null && Program.config.networking.loginuri != null)
 			{
 				Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;	// could be String.Empty, so we check below...
 			}
@@ -471,15 +471,27 @@ namespace RESTBot
 			myStatus = Status.LoggingIn;
 
 			//Set up some settings
-			//Client.Settings.DEBUG = Program.config.debug.slDebug; //obsolete setting?
+			//Client.Settings.DEBUG = Program.config != null ? Program.config.debug.slDebug : true; //deprecated setting?
+			// There seems to be no (obvious) way
 			Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
 			Client.Settings.MULTIPLE_SIMS = false; //not for now.
 			Client.Settings.SEND_PINGS = true;
 
-
 			// we add this check here because these should never be assigned null (gwyneth 20220214)
-			if (Program.config != null && Program.config.networking != null)
+			if (Program.config != null)
 			{
+				if (Program.config.debug.slDebug == true)
+				{
+					// TODO(gwyneth): figure out how to force a different log level from LibreMetaverse! Now it seems to be
+					// statically compiled (you can change it only via compilation flags). (gwyneth 20220412)
+					// [... insert missing code here ...]
+					//
+					// On the other hand, this interesting setting, with luck, may get us a bit more insight
+					// about a nasty error we have deep down in the layers...
+					// (gwyneth 20220412)
+					Client.Settings.LOG_ALL_CAPS_ERRORS = true;
+				}
+
 				if (Program.config.networking.loginuri != null)
 				{
 					Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;	// could be String.Empty, so we check below...
@@ -513,7 +525,7 @@ namespace RESTBot
 				.WriteDebug($"Login URI: <{Client.Settings.LOGIN_SERVER}>");
 
 			string start = "";
-			if (Program.config != null && Program.config.location != null && Program.config.location.startSim.Trim() != "")
+			if (Program.config != null && Program.config.location.startSim.Trim() != "")
 				start =
 					OpenMetaverse
 						.NetworkManager
