@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web" DefaultTargets="Build">
 	<PropertyGroup Label="Globals">
 		<TargetFramework>net6.0</TargetFramework>
@@ -13,27 +13,19 @@
 		<ApplicationIcon>$(AssetsFolder)images\RESTbot.ico</ApplicationIcon>
 		<PackageId>RESTbot</PackageId>
 		<Authors>Gwyneth Llewelyn, Pleiades, others</Authors>
-		<Copyright
-		>Copyright © Pleiades 2007. Copyright © Gwyneth Llewelyn 2010,2021. Some rights reserved</Copyright>
-		<PackageIconUrl
-		>https://github.com/GwynethLlewelyn/restbot/raw/master/assets/images/RESTbot-logo.png</PackageIconUrl>
+		<Copyright>Copyright © Pleiades 2007. Copyright © Gwyneth Llewelyn 2010,2021. Some rights reserved</Copyright>
+		<PackageIconUrl>https://github.com/GwynethLlewelyn/restbot/raw/master/assets/images/RESTbot-logo.png</PackageIconUrl>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-		<PackageLicenseUrl
-		>https://github.com/GwynethLlewelyn/restbot/blob/master/LICENSE.md</PackageLicenseUrl>
-		<PackageProjectUrl
-		>https://github.com/GwynethLlewelyn/restbot</PackageProjectUrl>
+		<PackageLicenseUrl>https://github.com/GwynethLlewelyn/restbot/blob/master/LICENSE.md</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/GwynethLlewelyn/restbot</PackageProjectUrl>
 		<Owners>Gwyneth Llewelyn</Owners>
-		<PackageTags
-		>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</PackageTags>
-		<PackageDescription
-		>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</PackageDescription>
+		<PackageTags>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</PackageTags>
+		<PackageDescription>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</PackageDescription>
 		<RepositoryUrl>https://github.com/GwynethLlewelyn/restbot</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<Title>RESTbot</Title>
-		<Summary
-		>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Summary>
-		<Description
-		>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Description>
+		<Summary>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Summary>
+		<Description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Description>
 		<ProjectGuid>{F6E2EED5-AE02-45D9-A129-7E759F326D4C}</ProjectGuid>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
@@ -59,27 +51,17 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="LibreMetaverse" Version="1.9.16.420" />
-	  <PackageReference
-			Include="LibreMetaverse.StructuredData"
-			Version="1.9.16.420"
-		/>
-	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.16.420" />
-		<PackageReference
-			Include="LibreMetaverse.Utilities"
-			Version="1.9.16.420"
-		/>	<!-- this allows us to include the cool Realism class for chatting! (gwyneth 20210121) -->
+	  <PackageReference Include="LibreMetaverse" Version="1.9.20.450" />
+	  <PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.20.450" />
+	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.20.450" />
+		<PackageReference Include="LibreMetaverse.Utilities" Version="1.9.20.450" />	<!-- this allows us to include the cool Realism class for chatting! (gwyneth 20210121) -->
 	  <PackageReference Include="log4net" Version="2.0.14" />
 	</ItemGroup>
 	<!-- <ItemGroup>
 	  <None Remove="assets\*" />
 	  <None Remove="restbot-tools\*" />
 	</ItemGroup> -->
-	<Target
-		Name="Build"
-		Inputs="@(Compile)"
-		Outputs="$(OutputPath)$(AssemblyName).exe"
-	>
+	<Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe">
 		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
 		<Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
 	</Target>
@@ -95,14 +77,9 @@
 		<ItemGroup>
 				<FilesToClean Include="$(OutputPath)..\**\*.*" />
 				<!-- Bit of .Net to get all folders and subfolders -->
-				<FoldersToClean
-				Include="$([System.IO.Directory]::GetDirectories('$(OutputPath)..'))"
-			/>
+				<FoldersToClean Include="$([System.IO.Directory]::GetDirectories('$(OutputPath)..'))" />
 		</ItemGroup>
-		<Message
-			Text="Cleaning up everything in $(OutputPath)..: Files=@(FilesToClean) Folders=@(FoldersToClean); ..."
-			Importance="high"
-		/>
+		<Message Text="Cleaning up everything in $(OutputPath)..: Files=@(FilesToClean) Folders=@(FoldersToClean); ..." Importance="high" />
 		<Delete Files="@(FilesToClean)" />
 		<RemoveDir Directories="@(FoldersToClean)" />
 	</Target>
@@ -116,33 +93,17 @@
 				<AssetsFolder>assets\</AssetsFolder>
 				<AssetsConfigFolderName>$(AssetsFolder)configuration</AssetsConfigFolderName>
 				<OpenMetaverseData>openmetaverse_data\</OpenMetaverseData>
-				<OpenMetaverseDataFolderName
-			>$(AssetsFolder)$(OpenMetaverseData)</OpenMetaverseDataFolderName>
+				<OpenMetaverseDataFolderName>$(AssetsFolder)$(OpenMetaverseData)</OpenMetaverseDataFolderName>
 		</PropertyGroup>
 		<ItemGroup>
 				<AssetsDataFolder Include="$(OpenMetaverseDataFolderName)\*.*" />
 		</ItemGroup>
 		<!--<Message Text="[DEBUG] AssetsFolder=$(AssetsFolder); AssetsConfigFolderName=$(AssetsConfigFolderName); OpenMetaverseData=$(OpenMetaverseData); OpenMetaverseDataFolderName=$(OpenMetaverseDataFolderName); AssetsDataFolder=@(AssetsDataFolder)" Importance="High" />
 		<Message Text="Preparing to copy asset files..." Importance="High" />-->
-		<Copy
-			SourceFiles="$(AssetsConfigFolderName)\configuration.xml"
-			DestinationFolder="$(OutputPath)"
-			ContinueOnError="true"
-		/>
-		<Copy
-			SourceFiles="$(AssetsConfigFolderName)\restbot.exe.config"
-			DestinationFiles="$(OutputPath)$(AssemblyName).config"
-			ContinueOnError="true"
-		/>
-		<MakeDir
-			Directories="$(OutputPath)$(OpenMetaverseData)"
-			Condition="!Exists('$(OutputPath)$(OpenMetaverseData)')"
-		/>
-		<Copy
-			SourceFiles="@(AssetsDataFolder)"
-			DestinationFolder="$(OutputPath)$(OpenMetaverseData)"
-			ContinueOnError="true"
-		/>
+		<Copy SourceFiles="$(AssetsConfigFolderName)\configuration.xml" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
+		<Copy SourceFiles="$(AssetsConfigFolderName)\restbot.exe.config" DestinationFiles="$(OutputPath)$(AssemblyName).config" ContinueOnError="true" />
+		<MakeDir Directories="$(OutputPath)$(OpenMetaverseData)" Condition="!Exists('$(OutputPath)$(OpenMetaverseData)')" />
+		<Copy SourceFiles="@(AssetsDataFolder)" DestinationFolder="$(OutputPath)$(OpenMetaverseData)" ContinueOnError="true" />
 		<Message Text="Asset files copied." Importance="High" />
 	</Target>
 </Project>
