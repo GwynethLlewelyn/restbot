@@ -98,6 +98,13 @@ namespace RESTBot
 				DebugUtilities.WriteError("Error initialising Sessions directory; it was set to null!");
 			}
 
+			/// <summary>Get the file version of LibreMetaverse.</summary>
+			/// <remarks><see href="https://stackoverflow.com/a/14612480/1035977"/> (gwyneth 20220414)</remarks>
+			FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(@"LibreMetaverse.dll");
+
+			// Print the file name and version number.
+			DebugUtilities.WriteInfo($"LibreMetaverse DLL: {myFileVersionInfo.FileDescription}\nVersion number: {myFileVersionInfo.FileVersion}");
+
       DebugUtilities.WriteInfo("Loading plugins");
       RegisterAllCommands(Assembly.GetExecutingAssembly());
       DebugUtilities.WriteDebug("Loading stateful plugins");
