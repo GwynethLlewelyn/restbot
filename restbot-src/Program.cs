@@ -30,6 +30,7 @@ using System.Threading;
 using System.Reflection;
 using System.IO;
 using System.ComponentModel;
+using System.Diagnostics;			// useful to get the file version info of LibreMetaverse (gwyneth 20220414)
 using RESTBot.Server;
 
 namespace RESTBot
