@@ -232,8 +232,8 @@ namespace RESTBot
 							{
 								DebugUtilities.WriteSpecial("Avatar check: [" + ss.Value.Bot.First.ToLower() + "/" + ss.Value.Bot.Last.ToLower() + "] = [" + Parameters["first"].ToLower() + "/" + Parameters["last"].ToLower() + "]");
 								if (Parameters["first"].ToLower() == ss.Value.Bot.First.ToLower() &&
-		 								Parameters["last"].ToLower() == ss.Value.Bot.Last.ToLower()
-		 								)
+										Parameters["last"].ToLower() == ss.Value.Bot.Last.ToLower()
+										)
 								{
 										DebugUtilities.WriteWarning("Already running avatar " + Parameters["first"] + " " + Parameters["last"]);
 										return ("<existing_session>true</existing_session>\n<session_id>" + ss.Key.ToString() + "</session_id>");
@@ -310,8 +310,13 @@ namespace RESTBot
           return ("<error>arguments: " + result + "</error>");
         }
       }
+			// Note: formerly undocumented functionality!! (gwyneth 20220414)
       else if (Method == "server_quit")
       {
+				if (parts.Length < 2)
+				{
+					return ("<error>missing 'pass' arg.</error>");
+				}
         if (parts[1] == Program.config.security.serverPass)
         {
 					if (Sessions != null)
@@ -321,13 +326,21 @@ namespace RESTBot
 							lock (Sessions) DisposeSession(s.Key);
 						}
 						StillRunning = false;
-						return ("<status>success</status>\n");
+						// note: a caveat of this undocumented method is that it requires a _new_
+						// incoming request to actually kill the server... could be a ping, though. (gwyneth 20220414)
+						return ("<status>success - all bot sessions very logged out and a request for queued shutdown</status>\n");
 					}
 					else
 					{
-						return "<status>possibly successful, but no sessions dictionary available</status>";
+						// it's fine if there are no sessions (gwyneth 20220414)
+						return "<status>success - no sessions were active</status>";
 					}
         }
+				else
+				{
+					// wrong password sent! (gwyneth 20220414)
+					return ("<error>server authentication failure</error>");
+				}
       }
 
       //Only a method? pssh.
