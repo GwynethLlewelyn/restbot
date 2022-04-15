@@ -72,7 +72,7 @@ There will be quite a lot of warnings, mostly due to the lack of XML comments on
 
 There are also a few warnings not related to documentation, basically some stricter checking on initialisation values. These will also be addressed over time; the main goal, for now, is to get it compiled and running.
 
-Once compiled, the new executable should be generated under `testbot-bin/net6.0`, `RESTbot`. This is a standalone executable — actually, the runtime which will load `RESTbot.dll` (also compiled on the same directory). The amazing thing is that, these days, Microsoft doesn't even require people to _use_ Mono at all — they get their Roslyn compiler to generate native code wrapped around the DLL. What could be more amazing? (Note to self: grumble to the OpenSimulator guys to get them to do the same.) We truly live in interesting times.
+Once compiled, the new executable should be generated under `restbot-bin/net6.0`, `RESTbot`. This is a standalone executable — actually, the runtime which will load `RESTbot.dll` (also compiled on the same directory). The amazing thing is that, these days, Microsoft doesn't even require people to _use_ Mono at all — they get their Roslyn compiler to generate native code wrapped around the DLL. What could be more amazing? (Note to self: grumble to the OpenSimulator guys to get them to do the same.) We truly live in interesting times.
 
 Also note that if you managed to install the pre-requisites using Homebrew, you _should_ also be able to compile things for your brand new Apple Silicon CPU. Aye, Microsoft is _that_ nice with their latest-generation Roslyn compiler.
 
