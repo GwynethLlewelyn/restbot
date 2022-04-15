@@ -16,9 +16,9 @@
 		<PackageId>RESTbot</PackageId>
 		<Authors>Gwyneth Llewelyn, Pleiades, others</Authors>
 		<Copyright>Copyright © Pleiades 2007. Copyright © Gwyneth Llewelyn 2010,2021. Some rights reserved</Copyright>
-		<PackageIconUrl>https://github.com/GwynethLlewelyn/restbot/raw/master/assets/images/RESTbot-logo.png</PackageIconUrl>
-		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-		<PackageLicenseUrl>https://github.com/GwynethLlewelyn/restbot/blob/master/LICENSE.md</PackageLicenseUrl>
+		<PackageIcon>RESTbot-logo.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/GwynethLlewelyn/restbot</PackageProjectUrl>
 		<Owners>Gwyneth Llewelyn</Owners>
 		<PackageTags>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</PackageTags>
@@ -58,6 +58,10 @@
 	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.20.453-gwyn" />
 		<PackageReference Include="LibreMetaverse.Utilities" Version="1.9.20.453-gwyn" />	<!-- this allows us to include the cool Realism class for chatting! (gwyneth 20210121) -->
 	  <PackageReference Include="log4net" Version="2.0.14" />
+	</ItemGroup>
+	<ItemGroup>
+			<None Include="$(AssetsFolder)images\RESTbot-logo.png" Pack="true" PackagePath="" />
+			<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
 	<!-- <ItemGroup>
 	  <None Remove="assets\*" />

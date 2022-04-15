@@ -9,6 +9,8 @@
 - Revised November 21, 2021 - Gwyneth Llewelyn (updates for a lot of things)
 - Dramatic changes made on November 23, 2021 - Gwyneth Llewelyn
 
+[![Build status](https://ci.appveyor.com/api/projects/status/2eg76jrrds4ru46j?svg=true)](https://ci.appveyor.com/project/GwynethLlewelyn/restbot)
+
 # Overview
 
 RESTBot is a C# webserver that uses [RESTful transactions](https://en.wikipedia.org/wiki/Representational_state_transfer) to interact with a _bot_ in [Second Life](https://secondlife.com) or [OpenSimulator](http://opensimulator.org). This bot (or a collection of bots) is started through a REST command and can be stopped the same way. The software is extremely modular, and is designed to easily accept plugins that developers can write (in C#) to add more complex interaction between a web application and a Second Life® bot (a non-human-controlled avatar). More information about Plugins is on the [wiki](https://github.com/GwynethLlewelyn/restbot/wiki).

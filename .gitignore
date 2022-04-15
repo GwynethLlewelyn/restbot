@@ -81,3 +81,7 @@ restbot-bin/
 
 # From Visual Studio
 .vs
+
+# NuGet packages
+*.nupkg
+*.snupkg
