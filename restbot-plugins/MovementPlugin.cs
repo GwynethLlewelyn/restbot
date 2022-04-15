@@ -881,7 +881,7 @@ namespace RESTBot
 				{
 					b.Client.Self.RequestSit(sitTargetID, Vector3.Zero);
 					b.Client.Self.Sit();
-					return $"<{MethodName}>forced sitting on {sitTargetID.ToString()})</{MethodName}>";
+					return $"<{MethodName}>forced sitting on {sitTargetID.ToString()}</{MethodName}>";
 				}
 
 			}
