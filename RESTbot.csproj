@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web" DefaultTargets="Build">
 	<PropertyGroup Label="Globals">
 		<!-- although intended target is at least net6.0, net5.0 is also defined for the CI to work -->
-		<TargetFramework>net6.0;net5.0</TargetFramework>
+		<TargetFrameworks>net6.0;net5.0</TargetFrameworsk>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>RESTbot</AssemblyName>
