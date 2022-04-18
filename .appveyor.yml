@@ -33,4 +33,4 @@ for:
   -
     matrix:
       only:
-        - job_name: Linux Build
+      - job_name: Linux Build
