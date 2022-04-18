@@ -1,10 +1,4 @@
 version: 8.2.0.{build}
-build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-  use_snupkg_format: true
-  parallel: true
-  verbosity: minimal
 
 environment:
 	matrix:
@@ -17,8 +11,15 @@ matrix:
 	allow_failures:
 	- image: Ubuntu
 
-nuget:
-	disable_publish_on_pr: true
+# nuget:
+# 	disable_publish_on_pr: true
+
+build:
+	publish_nuget: false
+	publish_nuget_symbols: false
+	use_snupkg_format: true
+	parallel: true
+	verbosity: minimal
 
 before_build:
 	- dotnet --info
