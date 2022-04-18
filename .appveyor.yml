@@ -6,13 +6,20 @@ build:
   parallel: true
   verbosity: minimal
 
+environment:
+	matrix:
+	- job_name: Linux Build
+		platform: x64
+		appveyor_build_worker_image: Ubuntu
+		configuration: RESTbot
+
 matrix:
 	allow_failures:
-		- image: Ubuntu
+	- image: Ubuntu
 
 nuget:
-		disable_publish_on_pr: true
+	disable_publish_on_pr: true
 
 before_build:
-		- dotnet --info
-		- dotnet restore RESTbot.sln
+	- dotnet --info
+	- dotnet restore RESTbot.sln
