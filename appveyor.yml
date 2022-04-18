@@ -1,7 +1,0 @@
-version: 8.2.0.{build}
-build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-  use_snupkg_format: true
-  parallel: true
-  verbosity: minimal

@@ -1,0 +1,18 @@
+version: 8.2.0.{build}
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  use_snupkg_format: true
+  parallel: true
+  verbosity: minimal
+
+matrix:
+	allow_failures:
+		- image: Ubuntu
+
+nuget:
+		disable_publish_on_pr: true
+
+before_build:
+		- dotnet --info
+		- dotnet restore RESTbot.sln
