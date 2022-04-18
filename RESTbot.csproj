@@ -11,7 +11,8 @@
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<Version>8.2.0.3</Version>
+		<!-- Version gets set by AppVeyor -->
+<!--		<Version>8.2.0.3</Version>-->
 		<AssetsFolder>assets\</AssetsFolder>
 		<ApplicationIcon>$(AssetsFolder)images\RESTbot.ico</ApplicationIcon>
 		<PackageId>RESTbot</PackageId>
