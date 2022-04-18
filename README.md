@@ -1,5 +1,9 @@
 ![RESTbot logo](assets/images/RESTbot-logo.png)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/2eg76jrrds4ru46j?svg=true)](https://ci.appveyor.com/project/GwynethLlewelyn/restbot)![CodeQL](https://github.com/gwynethllewelyn/restbot/workflows/CodeQL/badge.svg)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Keybase](https://img.shields.io/keybase/pgp/gwynethllewelyn)](https://keybase.io/gwynethllewelyn)
+
 # README File - RESTBot
 
 ## Revisions
@@ -8,8 +12,6 @@
 - Revised June 5, 2010 - Gwyneth Llewelyn (notes on compilation)
 - Revised November 21, 2021 - Gwyneth Llewelyn (updates for a lot of things)
 - Dramatic changes made on November 23, 2021 - Gwyneth Llewelyn
-
-[![Build status](https://ci.appveyor.com/api/projects/status/2eg76jrrds4ru46j?svg=true)](https://ci.appveyor.com/project/GwynethLlewelyn/restbot)
 
 # Overview
 
