@@ -4,33 +4,33 @@ init:
 - ps: Write-Host "Setting version to '$env:TAG_VERSION'"
 - ps: Update-AppveyorBuild -Version "$env:TAG_VERSION"
 
-# environment:
-# 	matrix:
-# 	- job_name: Linux Build
-# 		platform: x64
-# 		appveyor_build_worker_image: Ubuntu
-# 		configuration: RESTbot
-#
-# matrix:
-# 	allow_failures:
-# 	- image: Ubuntu
+environment:
+  matrix:
+  - job_name: Linux Build
+    platform: x64
+    appveyor_build_worker_image: Ubuntu
+    configuration: RESTbot
 
-# nuget:
-# 	disable_publish_on_pr: true
+matrix:
+  allow_failures:
+  - image: Ubuntu
+
+nuget:
+  disable_publish_on_pr: true
 
 build:
-	publish_nuget: false
-	publish_nuget_symbols: false
-	use_snupkg_format: true
-	parallel: true
-	verbosity: minimal
+  publish_nuget: false
+  publish_nuget_symbols: false
+  use_snupkg_format: true
+  parallel: true
+  verbosity: minimal
 
 before_build:
-	- dotnet --info
-	- dotnet restore RESTbot.csproj
+  - dotnet --info
+  - dotnet restore RESTbot.csproj
 
-# for:
-# 	-
-# 		matrix:
-# 			only:
-# 				- job_name: Linux Build
+for:
+  -
+    matrix:
+      only:
+        - job_name: Linux Build

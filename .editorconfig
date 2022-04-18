@@ -17,3 +17,10 @@ word_wrap = true
 # Markdown sometimes uses two spaces at the end to
 #  mark soft line breaks
 trim_trailing_whitespace = false
+
+[*.yml]
+end_of_line = lf
+charset = utf-8
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
