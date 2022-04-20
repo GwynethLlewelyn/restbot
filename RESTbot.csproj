@@ -54,19 +54,19 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="LibreMetaverse" Version="1.9.20.453-gwyn" />
-	  <PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.20.453-gwyn" />
-	  <PackageReference Include="LibreMetaverse.Types" Version="1.9.20.453-gwyn" />
-		<PackageReference Include="LibreMetaverse.Utilities" Version="1.9.20.453-gwyn" />	<!-- this allows us to include the cool Realism class for chatting! (gwyneth 20210121) -->
-	  <PackageReference Include="log4net" Version="2.0.14" />
+		<PackageReference Include="LibreMetaverse" Version="1.9.20.453-gwyn" />
+		<PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.20.453-gwyn" />
+		<PackageReference Include="LibreMetaverse.Types" Version="1.9.20.453-gwyn" />
+		<PackageReference Include="LibreMetaverse.Utilities" Version="1.9.20.453-gwyn" /><!-- this allows us to include the cool Realism class for chatting! (gwyneth 20210121) -->
+		<PackageReference Include="log4net" Version="2.0.14" />
 	</ItemGroup>
 	<ItemGroup>
 			<None Include="$(AssetsFolder)images\RESTbot-logo.png" Pack="true" PackagePath="" />
 			<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
 	<!-- <ItemGroup>
-	  <None Remove="assets\*" />
-	  <None Remove="restbot-tools\*" />
+		<None Remove="assets\*" />
+		<None Remove="restbot-tools\*" />
 	</ItemGroup> -->
 	<Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe">
 		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />

@@ -186,6 +186,12 @@ namespace RESTBot
 
 		private DateTime uptime = new DateTime();
 
+		/// <summary><para>The agents starting location home or last</para>
+		/// <para>Equivalent to LibreMetaverse's own Start variable</para></summary>
+		/// <remarks>Either "last", "home", or a string encoded URI
+		/// containing the simulator name and x/y/z coordinates e.g: uri:hooper&amp;128&amp;152&amp;17</remarks>
+		public string Start;
+
 		private readonly Dictionary<string, StatefulPlugin> StatefulPlugins;
 
 		private readonly System.Timers.Timer ReloginTimer;
@@ -206,7 +212,8 @@ namespace RESTBot
 		/// <param name="f">Login first name</param>
 		/// <param name="l">Login last name</param>
 		/// <param name="p">MD5-encoded password</param>
-		public RestBot(UUID session, string f, string l, string p)
+		/// <param name="s">Start location</param>
+		public RestBot(UUID session, string f, string l, string p, string s)
 		{
 			//setting up some class variables
 			sessionid = session;
@@ -216,6 +223,7 @@ namespace RESTBot
 			Last = l;
 			MD5Password = p;
 			uptime = DateTime.Now;
+			Start = (s == String.Empty) ? "last" : "s";
 			ReloginTimer = new System.Timers.Timer();
 			ReloginTimer.Elapsed += new ElapsedEventHandler(ReloginTimer_Elapsed);
 
@@ -391,6 +399,8 @@ namespace RESTBot
 				Client
 					.Network
 					.DefaultLoginParams(First, Last, MD5Password, "RestBot", VERSION);
+
+			loginParams.Start = Start;
 
 			if (Client.Network.Login(loginParams))
 			{

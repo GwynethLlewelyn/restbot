@@ -253,7 +253,10 @@ namespace RESTBot
           // Needs the $1$ for the md5 on the login for libsl
           if (!Parameters["pass"].StartsWith("$1$"))
 						Parameters["pass"] = "$1$" + Parameters["pass"];
-          s.Bot = new RestBot(s.ID, Parameters["first"], Parameters["last"], Parameters["pass"]);
+					// check if user has provided us with a starting location (default is to use the last location)
+					// (gwyneth 20220420)
+					string gridLocation = Parameters.ContainsKey("start") ? Parameters["start"] : "last";
+          s.Bot = new RestBot(s.ID, Parameters["first"], Parameters["last"], Parameters["pass"], gridLocation);
 
 					if (Sessions != null)
 					{
