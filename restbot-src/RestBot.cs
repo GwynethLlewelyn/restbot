@@ -223,7 +223,7 @@ namespace RESTBot
 			Last = l;
 			MD5Password = p;
 			uptime = DateTime.Now;
-			Start = (s == String.Empty) ? "last" : "s";
+			Start = (s == String.Empty) ? "last" : s;
 			ReloginTimer = new System.Timers.Timer();
 			ReloginTimer.Elapsed += new ElapsedEventHandler(ReloginTimer_Elapsed);
 
