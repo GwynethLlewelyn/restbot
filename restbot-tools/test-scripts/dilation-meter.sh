@@ -17,6 +17,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# To use this script, make sure you have the following dependencies installed:
+# - perl
+# - dialog (Ubuntu/Debian: 'apt install dialog'; macOS: 'brew install dialog')
+
 if [ $# -ne 3 ] ; then
 	echo "dilation-meter.sh firstname lastname password" ;
 	exit 1 ;
@@ -28,6 +32,6 @@ while [ 1 ] ; do
 	if [ $LEN -eq 1 ] ; then
 		DILATION=100 ;
 	fi ;
-done | /sw/bin/dialog --gauge "Time Dilation" 7 80
+done | dialog --gauge "Time Dilation" 7 80
 
 perl botquit.pl $SESSION

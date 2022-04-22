@@ -47,7 +47,7 @@ function getGridStatus()
 }
 function gridStatus()
 {
-	$gridStatus;
+	global $gridStatus;
 	$result = doQuery(
 		"SELECT UNIX_TIMESTAMP(state.time) AS timestamp, value, id FROM state WHERE state.key = 'gridStatus'"
 	);

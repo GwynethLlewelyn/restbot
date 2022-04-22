@@ -21,6 +21,8 @@
 require_once "sql.php";
 #require_once 'config.php';
 
+global $debug;
+
 function genPipeError($error)
 {
 	if ($error == "param") {
@@ -58,7 +60,7 @@ function logMessage($type, $level, $message)
 	global $debug;
 	global $use_syslog;
 	if ($use_syslog) {
-		define_syslog_variables();
+		// define_syslog_variables(); // deprecated and not needed any longer (gwyneth 20220422)
 		if ($debug) {
 		}
 		if ($level == 0) {
@@ -99,7 +101,6 @@ function doRest($method, $arguments, $hostname, $session)
 function rest($method, $arguments)
 {
 	global $restbots;
-	global $debug;
 	$tries = count($restbots) + 3;
 	$lastid = 0;
 	while ($tries > 0) {
@@ -203,7 +204,7 @@ function restbotConnect($first, $last, $pass, $host, $hostpass)
 function newRestBot()
 {
 	global $restbots;
-	global $debug;
+
 	$thisbot = $restbots[rand(0, count($restbots) - 1)];
 	$bot = restbotConnect(
 		$thisbot["first"],
@@ -221,7 +222,7 @@ function newRestBot()
 			}
 		}
 		if (
-			$xml->existing_session != "true" ||
+//			$xml->existing_session != "true" ||		// this is weird, where does it come from? (gwyneth 20220422)
 			!sessionAlreadyExists($restbot["session"])
 		) {
 			restbotRemoveBySession($restbot["session"]);

@@ -18,9 +18,12 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
+
+// Don't forget to change th $url to reflect your configuration!
+
 if ($argv[1] == null || $argv[2] == null || $argv[3] == null) {
 	print "Usage " . $argv[0] . " session firstname lastname\n";
-	end;
+	exit(1);
 }
 $url = "http://127.0.0.1:9080/avatar_key/" . $argv[1] . "/";
 $ch = curl_init($url);
@@ -32,7 +35,7 @@ $stuff = curl_exec($ch);
 curl_close($ch);
 if (empty($stuff)) {
 	print "Nothing returned from server\n";
-	end;
+	exit(2);
 }
 $xml = new SimpleXMLElement($stuff);
 print $xml->key . "\n";

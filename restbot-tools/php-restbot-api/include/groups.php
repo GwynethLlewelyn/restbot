@@ -18,19 +18,40 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-$debugdb = false;
-$debug = false;
-$dburi = "mysql://root:yqeiduyi@localhost:3305/restbot";
+require_once "db.php";
+require_once "funktions.php";
+/*
+function groupList($key) {
+	global $debug;
+	$result = rest("get_groups", "");
+	if ( $result == null ) {
+		logMessage('sl', 0, "Error retrieving group list for", null, null);
+		return null;
+	}
+	$xml = new SimpleXMLElement($result);
+	$return = "";
+	foreach ($xml->groups->group as $group) {
+		$return += $group->key . "," . $group->name . ",";
+	}
+	return $return;
+}*/
 
-$ownername = "otakup0pe Neumann";
-$authuser = "lolwhut";
-
-$cache_expore = 300;
-
-$use_syslog = false;
-
-$restbots = [
-	["first" => "", "last" => "", "pass" => "", "host" => "", "key" => ""],
-];
+function groupInfo($key)
+{
+//	global $debug; // not used, so not included.
+	$result = rest("get_group_profile", "group=$key");
+	if ($result == null) {
+		logMessage("sl", 0, "Error retrieving group profile for $key", null, null);
+		return null;
+	}
+	$xml = new SimpleXMLElement($result);
+	return $xml->groupprofile->name .
+		"," .
+		$xml->groupprofile->insignia .
+		"," .
+		$xml->groupprofile->maturepublish .
+		"," .
+		$xml->groupprofile->charter;
+}
 
 ?>

@@ -23,8 +23,9 @@ require_once "funktions.php";
 
 function regionHandle($sim)
 {
-	global $debug;
-	$cached = getFromCache("regionhandle", $key);
+//	global $debug;	// if not used, don't declare it! (gwyneth 20220422)
+//	$cached = getFromCache("regionhandle", $key);	// this was on the original code; typo? (gwyneth 20220422)
+	$cached = getFromCache("regionhandle", $sim);
 	if ($cached["value"] != null) {
 		return $cached["value"];
 	} else {
@@ -67,8 +68,9 @@ function getRegionHandle($sim)
 }
 function regionMap($sim)
 {
-	global $debug;
-	$cached = getFromCache("regionmap", $key);
+	// global $debug; // if not used, don't include it (gwyneth 20220422)
+//	$cached = getFromCache("regionmap", $key);	// probably a typo? (gwyneth 20220422)
+	$cached = getFromCache("regionmap", $sim);
 	if ($cached["value"] != null) {
 		return $cached["value"];
 	} else {

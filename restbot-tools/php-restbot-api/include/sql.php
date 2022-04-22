@@ -130,6 +130,8 @@ function getForceFromCache($type, $key)
 }
 function removeFromCache($type, $key)
 {
+	global $debug;
+
 	if ($debug) {
 		logMessage("db", 3, "Removing $key from $type cache");
 	}
@@ -139,6 +141,8 @@ function removeFromCache($type, $key)
 }
 function updateInCache($type, $key, $value)
 {
+	global $debug;
+
 	if ($debug) {
 		logMessage("db", 3, "Updating $key in $type cache with $value");
 	}
@@ -148,6 +152,8 @@ function updateInCache($type, $key, $value)
 }
 function putInCache($type, $key, $value)
 {
+	global $debug;
+
 	if ($debug) {
 		logMessagE("db", 3, "Inserting $key into $type cache with $value");
 	}

@@ -20,10 +20,11 @@
 --------------------------------------------------------------------------------*/
 require_once "db.php";
 require_once "funktions.php";
+require_once "util.php";
 
 function avatarName($key)
 {
-	global $debug;
+// global $debug;
 	$cached = getFromCache("key2name", $key);
 	if (!empty($cached["value"])) {
 		logMessage(
@@ -36,7 +37,8 @@ function avatarName($key)
 		$avatarname = getAvatarName($key);
 		if (empty($avatarname)) {
 			logMessage("rest", 3, "Response not received.");
-			$cached = getForceFromCache("regionhandle", $sim);
+			// $cached = getForceFromCache("regionhandle", $sim);	// typo?
+			$cached = getForceFromCache("regionhandle", $key);
 			if (!empty($cached)) {
 				logMessage(
 					"db",
@@ -64,7 +66,7 @@ function avatarName($key)
 
 function avatarKey($name)
 {
-	global $debug;
+//	global $debug;	// if it's not used, why declare it? (gwyneth 20220422)
 	$cached = getFromCache("name2key", $name);
 	if (!empty($cached["value"])) {
 		return $cached["value"];
@@ -79,11 +81,11 @@ function avatarKey($name)
 			return $avatarkey;
 		} else {
 			$cached = getForceFromCache("name2key", $name);
-			if (empty($cached["value"]) {
+			if (empty($cached["value"])) {
 				logMessage("rest", 3, "Response not received.");
 				return null;
 			} elseif ($cached["value"] == 0) {
-				logMessage("db", 1, "Failed to lookup avatar name for " . $key);
+				logMessage("db", 1, "Failed to lookup avatar name for " . $name);
 				return null;
 			} else {
 				logMessage(

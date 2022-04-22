@@ -18,7 +18,10 @@
 		You should have received a copy of the GNU Affero General Public License
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------*/
-require_once "DB.php";
+
+// Note: You can get DB.php using `pear install DB`
+// However, this PEAR package is deprecated in favour of MDB2; caveat utilitor
+require_once "/usr/local/share/pear/DB.php";
 
 function getConn()
 {
