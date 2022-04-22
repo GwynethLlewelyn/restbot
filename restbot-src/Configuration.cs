@@ -37,7 +37,7 @@ namespace RESTBot.XMLConfig
 	/// <summary>
 	/// Configuration class designed for the `bots array found in the xml config file
 	/// </summary>
-	/// <remarks>To find a copy of this class, see the <code>Configuration</code> class</remarks>
+	/// <remarks>To find a copy of this class, see the <c>Configuration</c> class</remarks>
 	[XmlRoot("restbot")]
 	public class Configuration
 	{
@@ -145,9 +145,9 @@ namespace RESTBot.XMLConfig
 	/// <summary>Class to deal with debugging</summary>
 	/// <remarks>
 	///   <para>[Original comment:] itty bitty file - can be expanded onto later</para>
-	///		<para>Note that the DebugUtilities class checks if the <code>restbotDebug</code> variable is set, falling back to hard-coded #defines if not (gwyneth 20220109)</para>
+	///		<para>Note that the DebugUtilities class checks if the <c>restbotDebug</c> variable is set, falling back to hard-coded #defines if not (gwyneth 20220109)</para>
 	///   <para>Also note that you can have both settings simultaneously configured</para>
-	///   <para>Note that if <code>Log4Net</code> is wrongly configured (using <code>restbot.exe.config</code>),
+	///   <para>Note that if <c>Log4Net</c> is wrongly configured (using <c>restbot.exe.config</c>),
 	///					everything will get logged to the console instead (duplicate messages possible)</para>
 	///  </remarks>
 	public class DebugConfig

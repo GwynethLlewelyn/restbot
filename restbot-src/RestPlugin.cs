@@ -44,8 +44,7 @@ namespace RESTBot
 		/// <param name="b">The RestBot that is doing the processing</param>
 		/// <param name="Parameters">QueryString and POST parameters</param>
 		/// <returns>XML output</returns>
-		public abstract string
-		Process(RestBot b, Dictionary<string, string> Parameters);
+		public abstract string Process(RestBot b, Dictionary<string, string> Parameters);
 	}
 
 	/// <summary>

@@ -52,15 +52,18 @@ namespace RESTBot
     public RestBot.BotStatusCallback? StatusCallback;	// possibly nullable (gwyneth 20220109)
 		/// <summary>Thread this bot is running on.</summary>
     public Thread? BotThread;	// possibly nullable (gwyneth 20220109)
-  }
+  } // end class Session
 
 	/// <summary>Program class</summary>
+	/// <remarks>This is the main class that will be launched to read configuration files,
+	/// do all plugin initialisation, and even deal with logins!</remarks>
   class Program
   {
     //static HttpListener Listener;
 		/// <summary>(Internal) Web server for the RESTful API</summary>
     static Server.Router? Listener;
 		/// <summary>Don't know when this is used, will document later</summary>
+		/// <remark>I believe this comes from the Think() method on the plugins (gwyneth 20220421)</remark>
     static bool StillRunning;
 		/// <summary>List of currently running sessions.</summary>
 		/// <remarks>Should never be null!</remarks>
@@ -91,7 +94,7 @@ namespace RESTBot
 				return;
 			}
 
-      DebugUtilities.WriteInfo("Restbot startup");
+      DebugUtilities.WriteInfo("RESTbot startup");
 			// Sessions should never be null (?) (gwyneth 20220214)
 			if (Sessions == null)
 			{
@@ -104,14 +107,14 @@ namespace RESTBot
 			FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(@"LibreMetaverse.dll");
 
 			// Print the file name and version number.
-			DebugUtilities.WriteInfo($"LibreMetaverse DLL: {myFileVersionInfo.FileDescription}\nVersion number: {myFileVersionInfo.FileVersion}");
+			DebugUtilities.WriteInfo($"LibreMetaverse DLL version: {myFileVersionInfo.FileDescription} {myFileVersionInfo.FileVersion}");
 
       DebugUtilities.WriteInfo("Loading plugins");
       RegisterAllCommands(Assembly.GetExecutingAssembly());
       DebugUtilities.WriteDebug("Loading stateful plugins");
       RegisterAllStatefulPlugins(Assembly.GetExecutingAssembly());
 
-      DebugUtilities.WriteInfo("Listening on port " + config.networking.port.ToString());
+      DebugUtilities.WriteInfo($"Listening on port {config.networking.port.ToString()}");
 
       // Set up the listener / router
       Listener = new RESTBot.Server.Router(IPAddress.Parse(config.networking.ip), config.networking.port);
@@ -195,7 +198,7 @@ namespace RESTBot
 			}
 
       //Setup variables
-      DebugUtilities.WriteDebug("New request - " + headers.RequestLine.Path);
+      DebugUtilities.WriteDebug($"New request - {headers.RequestLine.Path}");
       //Split the URL
       string[] parts = headers.RequestLine.Path.Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
       if (parts.Length < 1)
@@ -220,6 +223,7 @@ namespace RESTBot
       {
         DebugUtilities.WriteDebug("We have an establish_session method.");
         // Alright, we're going to try to establish a session
+				// Start location is optional (gwyneth 20220421)
         if (parts.Length >= 2 && parts[1] == Program.config.security.serverPass
           && Parameters.ContainsKey("first") && Parameters.ContainsKey("last") && Parameters.ContainsKey("pass"))
         {
@@ -235,8 +239,8 @@ namespace RESTBot
 										Parameters["last"].ToLower() == ss.Value.Bot.Last.ToLower()
 										)
 								{
-										DebugUtilities.WriteWarning("Already running avatar " + Parameters["first"] + " " + Parameters["last"]);
-										return ("<existing_session>true</existing_session>\n<session_id>" + ss.Key.ToString() + "</session_id>");
+										DebugUtilities.WriteWarning($"Already running avatar {Parameters["first"]} {Parameters["last"]}");
+										return $"<existing_session>true</existing_session>\n<session_id>{ss.Key.ToString()}</session_id>";
 								}
 							}
 						}
@@ -310,7 +314,7 @@ namespace RESTBot
           {
             result = result + " Missing 'pass' arg.";
           }
-          return ("<error>arguments: " + result + "</error>");
+          return $"<error>arguments: {result}</error>";
         }
       }
 			// Note: formerly undocumented functionality!! (gwyneth 20220414)
@@ -331,7 +335,7 @@ namespace RESTBot
 						StillRunning = false;
 						// note: a caveat of this undocumented method is that it requires a _new_
 						// incoming request to actually kill the server... could be a ping, though. (gwyneth 20220414)
-						return ("<status>success - all bot sessions very logged out and a request for queued shutdown</status>\n");
+						return ("<status>success - all bot sessions were logged out and a request was made for queued shutdown</status>\n");
 					}
 					else
 					{
@@ -382,7 +386,7 @@ namespace RESTBot
 
 			if (r == null)
 			{
-				return "<error>no RestBot found for session {sess.ToString()}</error>";
+				return $"<error>no RestBot found for session {sess.ToString()}</error>";
 			}
       //Last accessed for plugins
 			if (Sessions != null)
@@ -392,7 +396,7 @@ namespace RESTBot
       //Pre-error checking
       if (r.myStatus != RestBot.Status.Connected) //Still logging in?
       {
-        return "<error>{r.myStatus.ToString()}</error>";
+        return $"<error>{r.myStatus.ToString()}</error>";
       }
       else if (!r.Client.Network.Connected) //Disconnected?
       {

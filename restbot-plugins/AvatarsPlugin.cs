@@ -1113,7 +1113,7 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot.</param>
-		/// <param name="Parameters">A dictionary containing the <code>prim</code> (UUID) to touch.</param>
+		/// <param name="Parameters">A dictionary containing the <c>prim</c> (UUID) to touch.</param>
 		/// <returns>XML-encoded status of sit attempt</returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)

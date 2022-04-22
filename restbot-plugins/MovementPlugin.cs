@@ -112,7 +112,7 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot</param>
-		/// <param name="Parameters">A dictionary containing the region name (<code>sim</code>) and <code>x, y, z</code> positioning data</param>
+		/// <param name="Parameters">A dictionary containing the region name (<c>sim</c>) and <c>x, y, z</c> positioning data</param>
 		/// <returns>XML-encoded region name and avatar desired position</returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
@@ -374,7 +374,7 @@ namespace RESTBot
 	{
 		private UUID session;
 
-		/// <summary>given destination, as a <code>(x,y,z)</code> vector</summary>
+		/// <summary>given destination, as a <c>(x,y,z)</c> vector</summary>
 		private Vector3 goalPos;
 
 		const float DISTANCE_BUFFER = 7.0f;
@@ -457,9 +457,9 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot.</param>
-		/// <param name="Parameters">A dictionary containing the destination <code>avatar</code> name
-		/// as well as if the bot should run (<code>run</code>, default false).</param>
-		/// <returns>XML-encoded position<code>x, y, z</code></returns>
+		/// <param name="Parameters">A dictionary containing the destination <c>avatar</c> name
+		/// as well as if the bot should run (<c>run</c>, default false).</param>
+		/// <returns>XML-encoded position<c>x, y, z</c></returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
@@ -584,7 +584,7 @@ namespace RESTBot
 
 	/// <summary>follow an avatar; parameters are:</summary>
 	/// <remarks><para>The summary line was abruptly cut and left unfinished... (gwyneth 20220303)</para>
-	/// <para>But there seems to be only one parameter, <code>target</code>, the avatar UUID to follow.
+	/// <para>But there seems to be only one parameter, <c>target</c>, the avatar UUID to follow.
 	/// (gwyneth 20220409)</para></remarks>
 	public class FollowPlugin : StatefulPlugin
 	{
@@ -694,9 +694,9 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot.</param>
-		/// <param name="Parameters">A dictionary containing the name of the <code>target</code> avatar
-		/// to follow; empty or <code>off</code> means stop following the avatar.</param>
-		/// <returns>XML-encoded position<code>x, y, z</code></returns>
+		/// <param name="Parameters">A dictionary containing the name of the <c>target</c> avatar
+		/// to follow; empty or <c>off</c> means stop following the avatar.</param>
+		/// <returns>XML-encoded position<c>x, y, z</c></returns>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
@@ -816,8 +816,8 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot.</param>
-		/// <param name="Parameters">A dictionary containing the destination prim <code>target</code>.
-		/// Optionally, <code>force=true</code> can be given to skip the prim detection.
+		/// <param name="Parameters">A dictionary containing the destination prim <c>target</c>.
+		/// Optionally, <c>force=true</c> can be given to skip the prim detection.
 		/// </param>
 		/// <returns>XML-encoded status of sit attempt</returns>
 		public override string

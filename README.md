@@ -144,7 +144,7 @@ The most important command you will use is `establish_session` so I will first i
 Let's say we have a hypothetical bot account whose name is `Restbot Resident` and uses the password `omgrestbot` to login. To log into this bot, we would issue this command in curl:
 
 ```bash
-curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Resident -d pass=77e854984fd6a73ece3aedab7ee9e21c
+curl http://localhost:9080/establish_session/pass -d first=Restbot -d last=Resident -d pass=77e854984fd6a73ece3aedab7ee9e21c -d start=home
 ```
 
 Some things to note in this command... everything after `-d` is a **post field**. In reality, _all_ of the post fields are spliced together as a single string separated by &'s. Also, the password **must** be `md5`'d. Lastly, notice how the `establish_session` URL is formatted. http://localhost:9080 is the RESTbot server address (`localhost` on port 9080) and that is followed by a forward slash, the word `establish_session` (the command name), and the password (which is `pass` by default). If this is not formatted correctly, an argument
