@@ -25,7 +25,7 @@ function avatarName($key)
 {
 	global $debug;
 	$cached = getFromCache("key2name", $key);
-	if ($cached["value"] != null) {
+	if (!empty($cached["value"])) {
 		logMessage(
 			"rest",
 			3,
@@ -34,10 +34,10 @@ function avatarName($key)
 		return $cached["value"];
 	} else {
 		$avatarname = getAvatarName($key);
-		if ($avatarname == null) {
+		if (empty($avatarname)) {
 			logMessage("rest", 3, "Response not received.");
 			$cached = getForceFromCache("regionhandle", $sim);
-			if ($cached != null) {
+			if (!empty($cached)) {
 				logMessage(
 					"db",
 					1,
@@ -61,15 +61,16 @@ function avatarName($key)
 		}
 	}
 }
+
 function avatarKey($name)
 {
 	global $debug;
 	$cached = getFromCache("name2key", $name);
-	if ($cached["value"] != null) {
+	if (!empty($cached["value"])) {
 		return $cached["value"];
 	} else {
 		$avatarkey = getAvatarKey($name);
-		if ($avatarkey != null) {
+		if (!empty($avatarkey)) {
 			if (existsInCache("name2key", $name)) {
 				updateInCache("name2key", $name, $avatarkey);
 			} else {
@@ -78,7 +79,7 @@ function avatarKey($name)
 			return $avatarkey;
 		} else {
 			$cached = getForceFromCache("name2key", $name);
-			if ($cached["value"] == null) {
+			if (empty($cached["value"]) {
 				logMessage("rest", 3, "Response not received.");
 				return null;
 			} elseif ($cached["value"] == 0) {
