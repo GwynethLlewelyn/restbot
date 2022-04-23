@@ -33,9 +33,9 @@ function genPipeError($error)
 			"auth",
 			1,
 			"Authentication issue from " .
-				$_SERVER["REMOTE_ADDR"] .
+				$_SERVER["REMOTE_ADDR"] ?: "(unknown remote address)" .
 				" on " .
-				$_SERVER["REQUEST_URI"]
+				$_SERVER["REQUEST_URI"] ?: "(unknown URI request)"
 		);
 	} elseif ($error == "db") {
 		print "DB\n";
