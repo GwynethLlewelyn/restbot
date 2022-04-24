@@ -50,7 +50,7 @@ namespace RESTBot
 
 						string dilation = b.Client.Network.CurrentSim.Stats.Dilation.ToString();
 						b.Client.Settings.ALWAYS_DECODE_OBJECTS = false;
-						return("<dilation>" + dilation + "</dilation>\n");
+						return($"<{MethodName}>{dilation}</{MethodName}>\n");
 				}
 		}
 
@@ -116,4 +116,47 @@ namespace RESTBot
 				return (response);
 				}
 		}
-}
+
+		/// <summary>
+		/// Class to return all currently valid sessions and associated avatar key.
+		/// </summary>
+		/// <remarks><para>I need this to check upstream which RESTbots have valid sessions.</para>
+		/// <para>(gwyneth 20220424)</para>
+		/// <para><seealso cref="SessionPlugin"></para></remarks>
+		public class SessionListPlugin : RestPlugin
+		{
+				/// <summary>
+				/// Sets the plugin name for the router.
+				/// </summary>
+				public SessionListPlugin()
+				{
+						MethodName = "session_list";
+				}
+
+				/// <summary>
+				/// Handler event for this plugin.
+				/// </summary>
+				/// <param name="b">A currently active RestBot</param>
+				/// <param name="Parameters">not used</param>
+				/// <remarks>This will list all currently known sessions.</remarks>
+				public override string Process(RestBot b, Dictionary<string, string> Parameters)
+				{
+						bool check = false;
+						if (Program.Sessions.Count != 0) // no sessions? that's fine, no need to abort
+						{
+							check = true;
+						}
+
+						string response = $"<{MethodName}>\n";
+						if (check)	// optimisation: if empty, no need to run the foreach (gwyneth 20220424)
+						{
+								foreach(KeyValuePair<OpenMetaverse.UUID, RESTBot.Session> kvp in Program.Sessions)
+								{
+										response += $"\t<session key={kvp.Key.ToString()}>{kvp.Value.ID}</session>\n";
+								}
+						}
+						response += "</{MethodName}>\n";
+						return (response);
+				} // end Process
+		} // end SessionListPlugin
+} // end namespace

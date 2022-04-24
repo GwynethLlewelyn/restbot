@@ -45,13 +45,16 @@ namespace RESTBot
 		/// <summary>Permissions (don't know what this is - gwyneth 20220109)</summary>
     public int Permissions;
 		/// <summary>Bot for this session.</summary>
-    public RestBot? Bot;	// possibly nullable (gwyneth 20220109)
+		/// <remarks>possibly nullable (gwyneth 20220109)</remarks>
+    public RestBot? Bot;
 		/// <summary>Unknown (gwyneth 20220109)</summary>
     public DateTime LastAccessed;
 		/// <summary>Called when we need this bot's status</summary>
-    public RestBot.BotStatusCallback? StatusCallback;	// possibly nullable (gwyneth 20220109)
+		/// <remarks>possibly nullable (gwyneth 20220109)</remarks>
+    public RestBot.BotStatusCallback? StatusCallback;
 		/// <summary>Thread this bot is running on.</summary>
-    public Thread? BotThread;	// possibly nullable (gwyneth 20220109)
+		/// <remarks>possibly nullable (gwyneth 20220109)</remarks>
+    public Thread? BotThread;
   } // end class Session
 
 	/// <summary>Program class</summary>

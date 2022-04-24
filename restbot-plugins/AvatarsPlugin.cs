@@ -1089,6 +1089,8 @@ namespace RESTBot
 	/// </summary>
 	/// <since>8.1.5</since>
 	/// <remarks>RESTful interface to the Touch command on LibreMetaverse's own Touch</remarks>
+	/// <author>Gwyneth Llewelyn</author>
+	/// <date>20220401</date>
 	public class TouchPlugin : StatefulPlugin
 	{
 		/// <summary>
@@ -1160,4 +1162,73 @@ namespace RESTBot
 			}
 		}
 	} // end TouchPlugin
+
+	/// <summary>
+	/// Class to return avatar data for its session ID
+	/// </summary>
+	/// <remarks><seealso cref="SessionListPlugin"></remarks>
+	/// <author>Gwyneth Llewelyn</author>
+	/// <date>20220424</date>
+	public class SessionPlugin : RestPlugin
+	{
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+		public SessionPlugin()
+		{
+			MethodName = "session";
+		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">none</param>
+		/// <remarks>This will return (some) avatar data associated with the current session ID</remarks>
+		/// if that session is known to exist.</remarks>
+		public override string Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+				if (b == null)	// should be impossible
+				{
+					return ("<error>invalid request</error>");
+				}
+
+				/// <value>Constructs a XML response with the following data:
+				/// <list type="bullet">
+				///   <item>
+				///     <description>Avatar first name</description>
+				///   </item>
+				///   <item>
+				///     <description>Avatar last name</description>
+				///   </item>
+				///   <item>
+				///     <description>Avatar last namekey (UUID)</description>
+				///   </item>
+				///   <item>
+				///     <description>Current status, same as returned by the "status" member function</description>
+				///   </item>
+				///   <item>
+				///     <description>Session ID (redundant)</description>
+				///   </item>
+				///   <item>
+				///     <description>Uptime (not sure if it's just seconds since login, or date/time of login; assuming the latter)</description>
+				///   </item>
+				///   <item>
+				///     <description>Start position: can be "home", "last", or an URI describing region and position</description>
+				///   </item>
+				/// </list>
+				/// </value>
+				string response = $@"<{MethodName}>
+	<first>{b.First}</first>
+	<last>{b.Last}</last>
+	<key>{b.Client.Self.AgentID.ToString()}</key>
+	<status>{b.myStatus.ToString()}</status>
+	<sessionid>{b.sessionid.ToString()}</sessionid>
+	<uptime>{b.getUptimeISO8601()}</uptime>
+	<start>{b.Start}</start>
+</{MethodName}>
+";
+				return (response);
+		} // end Process
+	} // end SessionListPlugin
 } // end namespace RESTbot

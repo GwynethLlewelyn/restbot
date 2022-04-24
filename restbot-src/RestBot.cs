@@ -146,8 +146,6 @@ namespace RESTBot
 		}
 #endregion // Static Junk
 
-
-
 #region SomeNewLoginCode
 		/// <summary>Reply for the new login code</summary>
 		public struct LoginReply
@@ -170,7 +168,7 @@ namespace RESTBot
 			UnknownError
 		}
 
-		private const string VERSION = "8.3.1";
+		private const string VERSION = "8.3.1";	// where does *this* come from?! (gwyneth 20220424)
 
 		public string First; /// <summary>Avatar first name</summary>
 
@@ -204,6 +202,35 @@ namespace RESTBot
 		public event BotStatusCallback OnBotStatus;
 
 		private System.Timers.Timer updateTimer;
+
+		#region Uptime Retrieval Functions
+		// There seemed to be some reasons for keeping the uptime hidden.
+		// So we expose it via a few useful methods (gwyneth 20220424).
+
+		/// <summary>Returns the uptime as a <c>DateTime</c> object</summary>
+		/// <returns>uptime as <c>DateTime</c></returns>
+		public DateTime getUptime()
+		{
+			return uptime;
+		}
+
+		/// <summary>Returns the uptime as a formatted string</summary>
+		/// <param name="string">DateTime format string, same as <see cref="DateTime" /></param>
+		/// <returns>uptime expressed as a string</returns>
+		public string getUptime(string format)
+		{
+			return uptime.ToString(format);
+		}
+
+		/// <summary>Returns the uptime as a string, formatted according to <see href="https://www.iso.org/iso-8601-date-and-time-format.html">ISO 8601</see></summary>
+		/// <returns>uptime expressed as a string formatted according to ISO 8601</returns>
+		/// <remarks>C# does not offer ISO 8601 as a 'default' time format</remarks>
+		public string getUptimeISO8601()
+		{
+			return uptime.ToString("yyyyMMddTHH:mm:ssZ");
+		}
+
+		#endregion Uptime Retrieval Functions
 
 		/// <summary>
 		/// Main entry point for logging in with a bot.

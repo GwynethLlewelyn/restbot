@@ -39,7 +39,7 @@ namespace RESTBot
 		public string MethodName = "unknown"; // cannot be null! (gwyneth 20220126)
 
 		/// <summary>
-		/// Process the request through this method
+		/// Process the request through this method.
 		/// </summary>
 		/// <param name="b">The RestBot that is doing the processing</param>
 		/// <param name="Parameters">QueryString and POST parameters</param>
@@ -48,15 +48,16 @@ namespace RESTBot
 	}
 
 	/// <summary>
-	/// A base class for stateful plugins, ie those requiring actions on events from a specific instance of libsecondlife
-	/// or RestBot
+	/// A base class for stateful plugins, ie those requiring actions on events from a specific
+	/// instance of LibreMetaverse or RestBot
 	/// </summary>
-	public abstract class StatefulPlugin
+	/// <remarks>Shouldn't be this a derived class from RestPlugin? 🤔 (gwyneth 20220424)</remarks>
+	public abstract class StatefulPlugin : RestPlugin
 	{
 		/// <summary>
 		/// The name of the method. Should be set in the constructor.
 		/// </summary>
-		public string MethodName = "unknown"; // making sure it's never null. (gwyneth 20220126)
+		// public string MethodName = "unknown"; // making sure it's never null. (gwyneth 20220126)
 
 		/// <summary>
 		/// An optionally overridable method for setting up events and callbacks from a RestBot
@@ -72,8 +73,7 @@ namespace RESTBot
 		/// <param name="b">The RestBot that is doing the processing</param>
 		/// <param name="Parameters">QueryString and POST parameters</param>
 		/// <returns>XML output</returns>
-		public abstract string
-		Process(RestBot b, Dictionary<string, string> Parameters);
+		// public abstract string Process(RestBot b, Dictionary<string, string> Parameters);
 
 		// Indicates that the current plugin is actively running.
 		public bool Active;
