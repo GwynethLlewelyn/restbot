@@ -2,6 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/2eg76jrrds4ru46j?svg=true)](https://ci.appveyor.com/project/GwynethLlewelyn/restbot)![CodeQL](https://github.com/gwynethllewelyn/restbot/workflows/CodeQL/badge.svg)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7d1017329cc34e47a9806a3cbeebe6f3)](https://www.codacy.com/gh/GwynethLlewelyn/restbot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GwynethLlewelyn/restbot&amp;utm_campaign=Badge_Grade)
 [![Keybase](https://img.shields.io/keybase/pgp/gwynethllewelyn)](https://keybase.io/gwynethllewelyn)
 
 # README File - RESTBot
