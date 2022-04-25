@@ -44,7 +44,7 @@ namespace RESTBot.Server
 		private Thread _router_thread;
 
 		private ManualResetEvent
-			_proccessed_connection = new ManualResetEvent(false);
+			_processed_connection = new ManualResetEvent(false);
 
 		public bool StillRunning;
 
@@ -63,11 +63,11 @@ namespace RESTBot.Server
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Could not bind to the specified IP address", e);
+				throw new Exception($"Could not bind to the specified IP address ({IP}:{Port})", e);
 			}
 
 			DebugUtilities
-				.WriteDebug("Router was able to bind to specified ip/port combination.. starting thread");
+				.WriteDebug($"Router was able to bind to specified ip/port combination ({IP}:{Port})... starting thread");
 
 			ManualResetEvent waitingForStart = new ManualResetEvent(false);
 			try
@@ -108,7 +108,7 @@ namespace RESTBot.Server
 			trigger.Set();
 			do
 			{
-				_proccessed_connection.Reset();
+				_processed_connection.Reset();
 				try
 				{
 					_listener
@@ -118,9 +118,9 @@ namespace RESTBot.Server
 				catch (Exception e)
 				{
 					DebugUtilities
-						.WriteError("Failed to listen to client thread: " + e.Message);
+						.WriteError($"Failed to listen to client thread: {e.Message}");
 				}
-				_proccessed_connection.WaitOne();
+				_processed_connection.WaitOne();
 			}
 			while (StillRunning);
 			_listener.Stop();

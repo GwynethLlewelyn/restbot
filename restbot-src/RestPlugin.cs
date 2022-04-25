@@ -75,10 +75,10 @@ namespace RESTBot
 		/// <returns>XML output</returns>
 		// public abstract string Process(RestBot b, Dictionary<string, string> Parameters);
 
-		// Indicates that the current plugin is actively running.
+		/// <value>Indicates that the current plugin is actively running.</value>
 		public bool Active;
 
-		// Implement to perform actions that require updates over time.
+		/// <summary>Implement to perform actions that require updates over time.</summary>
 		public virtual void Think()
 		{
 		}

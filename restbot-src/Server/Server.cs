@@ -37,7 +37,7 @@ namespace RESTBot.Server
 		private void AcceptClientThread(IAsyncResult result)
 		{
 			TcpClient client = _listener.EndAcceptTcpClient(result);
-			_proccessed_connection.Set();
+			_processed_connection.Set();
 
 			EndPoint? endpoint = client.Client.RemoteEndPoint; // we put it right here to make things easier later on (gwyneth 20220107)
 
