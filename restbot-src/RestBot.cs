@@ -435,9 +435,14 @@ namespace RESTBot
 				myStatus = Status.Connected;
 				response.wasFatal = false;
 				response.xmlReply =
-					"<success><session_id>" +
-					sessionid.ToString() +
-					"</session_id></success>";
+					$@"<success>
+	<session_id>
+		{sessionid.ToString()}
+	</session_id>
+	<key>
+		{Client.Self.AgentID.ToString()}
+	</key>
+</success>";
 			}
 			else
 			{
@@ -450,9 +455,7 @@ namespace RESTBot
 					case "disabled":
 						response.wasFatal = true;
 						response.xmlReply =
-							"<error fatal=\"true\">" +
-							Client.Network.LoginMessage +
-							"</error>";
+							$"<error fatal=\"true\">{Client.Network.LoginMessage}</error>";
 						break;
 					case "presence":
 					case "timed out":
@@ -461,11 +464,7 @@ namespace RESTBot
 							.WriteWarning("Nonfatal error while logging in.. this may be normal");
 						response.wasFatal = false;
 						response.xmlReply =
-							"<error fatal=\"false\">" +
-							Client.Network.LoginMessage +
-							"</error><retry>10</retry>\n<session_id>" +
-							sessionid +
-							"</session_id>";
+							$"<error fatal=\"false\">{Client.Network.LoginMessage}</error><retry>10</retry>\n<session_id>{sessionid}</session_id>";
 
 						DebugUtilities
 							.WriteSpecial("Relogin attempt will be made in 10 minutes");
@@ -486,160 +485,7 @@ namespace RESTBot
 
 			//Client.Network.BeginLogin(loginParams);
 			return response;
-		}
-
-		/// <summary>
-		/// Old login block
-		/// </summary>
-		/// <remarks>Obsolete and superceded by Login()</remarks>
-		[Obsolete("Please use Login() instead.")]
-		public LoginReply LoginOLD()
-		{
-			DebugUtilities.WriteSpecial("(old) Login block was called");
-			if (Client.Network.Connected)
-			{
-				DebugUtilities
-					.WriteError("Uhm, Login() was called when we where already connected. Hurr");
-				return new LoginReply();
-			}
-
-			ReloginTimer.Stop(); //to stop any relogin timers
-
-			myStatus = Status.LoggingIn;
-
-			//Set up some settings
-			//Client.Settings.DEBUG = Program.config != null ? Program.config.debug.slDebug : true; //deprecated setting?
-			// There seems to be no (obvious) way
-			Client.Settings.SIMULATOR_TIMEOUT = 30000; //30 seconds
-			Client.Settings.MULTIPLE_SIMS = false; //not for now.
-			Client.Settings.SEND_PINGS = true;
-
-			// we add this check here because these should never be assigned null (gwyneth 20220214)
-			if (Program.config != null)
-			{
-				if (Program.config.debug.slDebug == true)
-				{
-					// TODO(gwyneth): figure out how to force a different log level from LibreMetaverse! Now it seems to be
-					// statically compiled (you can change it only via compilation flags). (gwyneth 20220412)
-					// [... insert missing code here ...]
-					//
-					// On the other hand, this interesting setting, with luck, may get us a bit more insight
-					// about a nasty error we have deep down in the layers...
-					// (gwyneth 20220412)
-					Client.Settings.LOG_ALL_CAPS_ERRORS = true;
-				}
-
-				if (Program.config.networking.loginuri != null)
-				{
-					Client.Settings.LOGIN_SERVER = Program.config.networking.loginuri;	// could be String.Empty, so we check below...
-				}
-				else if (RESTBot.XMLConfig.Configuration.defaultLoginURI != null)
-				{
-					Client.Settings.LOGIN_SERVER = RESTBot.XMLConfig.Configuration.defaultLoginURI;	// could ALSO be String.Empty, so we check below...
-				}
-				else
-				{
-					Client.Settings.LOGIN_SERVER = String.Empty;
-				}
-				// this is now safe to set, we know that the config object is not null. (gwyneth 20220214)
-				Client.Throttle.Total = Program.config.networking.throttle;
-			}
-
-			LoginReply response = new LoginReply();
-
-			// Any of the above _might_ have set LOGIN_SERVER to an empty string, so we check first if we have
-			// something inside the string. (gwyneth 20220213)
-			// To-do: validate the URL first? It's not clear if .NET 6 already does that at some point...
-			if (Client.Settings.LOGIN_SERVER == String.Empty)
-			{
-				// we don't know where to login to!
-				response.wasFatal = true;
-				response.xmlReply =	"<error fatal=\"true\">No login URI provided</error>";
-				DebugUtilities.WriteError("No login URI provided; aborting...");
-				return response;
-			}
-			DebugUtilities
-				.WriteDebug($"Login URI: <{Client.Settings.LOGIN_SERVER}>");
-
-			string start = "";
-			if (Program.config != null && Program.config.location.startSim.Trim() != "")
-				start =
-					OpenMetaverse
-						.NetworkManager
-						.StartLocation(Program.config.location.startSim,
-						Program.config.location.x,
-						Program.config.location.y,
-						Program.config.location.z);
-			else
-				start = "last";
-
-			if (
-				Client
-					.Network
-					.Login(First,
-					Last,
-					MD5Password,
-					"RESTBot",
-					start,
-					"Jesse Malthus / Pleiades Consulting")
-			)
-			{
-				DebugUtilities.WriteSpecial("Logged in successfully");
-				myStatus = Status.Connected;
-				response.wasFatal = false;
-				response.xmlReply =
-					"<success><session_id>" +
-					sessionid.ToString() +
-					"</session_id></success>";
-			}
-			else
-			{
-				DebugUtilities
-					.WriteError($"There was an error while connecting: {Client.Network.LoginErrorKey}");
-				switch (Client.Network.LoginErrorKey)
-				{
-					case "connect":
-					case "key":
-					case "disabled":
-						response.wasFatal = true;
-						response.xmlReply =
-							"<error fatal=\"true\">" +
-							Client.Network.LoginMessage +
-							"</error>";
-						break;
-					case "presence":
-					case "timed out":
-					case "god":
-						DebugUtilities
-							.WriteWarning("Nonfatal error while logging in.. this may be normal");
-						response.wasFatal = false;
-						response.xmlReply =
-							"<error fatal=\"false\">" +
-							Client.Network.LoginMessage +
-							"</error><retry>10</retry>\n<session_id>" +
-							sessionid +
-							"</session_id>";
-
-						DebugUtilities
-							.WriteSpecial("Relogin attempt will be made in 10 minutes");
-						ReloginTimer.Interval = 10 * 60 * 1000; //10 minutes
-						ReloginTimer.Start();
-						break;
-					default:
-						DebugUtilities
-							.WriteError($"{sessionid.ToString()} - UNKNOWN ERROR ATTEMPTING TO LOGIN: {Client.Network.LoginErrorKey}");
-						response.wasFatal = true;
-						response.xmlReply =
-							"<error fatal=\"true\">Unknown error has occurred.</error>";
-						break;
-				}
-
-				if (response.wasFatal == false) myStatus = Status.Reconnecting;
-			}
-
-			//yay return
-			return response;
-		}
+		} // end Login()
 
 		/// <summary>
 		/// Checks for a method in the list of registered plugins, and, if found, executes it.
@@ -653,10 +499,10 @@ namespace RESTBot
 			string? debugparams = null; // must allow null (gwyneth 20220109)
 			foreach (KeyValuePair<string, string> kvp in Parameters)
 			{
-				debugparams = debugparams + "[ " + kvp.Key + "=" + kvp.Value + "] ";
+				debugparams = $"{debugparams} [{kvp.Key}={kvp.Value}] ";
 			}
 			DebugUtilities
-				.WriteDebug($"{sessionid}: Method - {Method}, Parameters - {debugparams}");
+				.WriteDebug($"Session ID: {sessionid}, Method: {Method}, Parameters: {debugparams}");
 
 			//Actual processing
 			if (Plugins.ContainsKey(Method))
@@ -670,20 +516,23 @@ namespace RESTBot
 			}
 			else if (Method == "stat")
 			{
-				string response =
-					"<name>" +
-					Client.Self.FirstName +
-					" " +
-					Client.Self.LastName +
-					"</name>\n";
-				response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>\n";
+				string response = $@"<name>
+	{Client.Self.FirstName} {Client.Self.LastName}
+</name>
+<key>
+	{Client.Self.AgentID.ToString()}
+</key>
+<uptime>
+	{(DateTime.Now - uptime)}
+</uptime>
+";
 				return response;
 			}
 			else if (Method == "status")
 			{
-				return ("<status>" + myStatus.ToString() + "</status>");
+				return ($"<status>{myStatus.ToString()}</status>");
 			}
 			return ("<error>novalidplugin</error>");
-		}
-	}
-}
+		} // end DoProcessing
+	} // end class RestBot
+} // end namespace RestBot
