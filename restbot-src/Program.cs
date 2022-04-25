@@ -243,7 +243,7 @@ namespace RESTBot
 										)
 								{
 										DebugUtilities.WriteWarning($"Already running avatar {Parameters["first"]} {Parameters["last"]}");
-										return $"<existing_session>true</existing_session>\n<session_id>{ss.Key.ToString()}</session_id>\n<key>{ss.Value.Bot.AgentID.ToString()}</key>\n";
+										return $"<existing_session>true</existing_session>\n<session_id>{ss.Key.ToString()}</session_id>\n<key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>\n";
 								}
 							}
 						}
