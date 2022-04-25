@@ -59,8 +59,7 @@ namespace RESTBot
 		{
 			session = bot.sessionid;
 			me = bot;
-			DebugUtilities
-				.WriteDebug("SP - " + session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			base.Initialize(bot);
 		}
@@ -172,7 +171,7 @@ namespace RESTBot
 		{
 			session = bot.sessionid;	// why is this saved? It's never used... (gwyneth 20220213)
 			me = bot;
-			DebugUtilities.WriteDebug($"IM - {session} {MethodName} startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			base.Initialize(bot);	// wtf is this for? (gwyneth 20220212)
 		}

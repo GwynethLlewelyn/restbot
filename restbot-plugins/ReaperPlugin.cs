@@ -119,7 +119,7 @@ namespace RESTBot
 			// (gwyneth 20220412)
 			if (Program.config != null && Program.config.plugin.reaper == true)
 			{
-      	DebugUtilities.WriteDebug(session + " REAPER startup");
+				DebugUtilities.WriteDebug($"{session} {MethodName} startup");
       	Reaper.Init(); //start up the reaper if we havent already (the check to see if we have is in this function)
 			}
 			else

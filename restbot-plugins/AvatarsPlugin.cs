@@ -254,7 +254,7 @@ namespace RESTBot
 			if (avname != null)
 			{
 				string response = getKey(b, avname).ToString();
-				return $"<key>{response}</key>\n";
+				return $"<key>{response}</key>";
 			}
 			else
 			{
@@ -1057,7 +1057,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		/// <summary>

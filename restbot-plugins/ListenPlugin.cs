@@ -46,6 +46,8 @@ namespace RESTBot
 		/// <remarks>We'll probably not use it</remarks>
 		// static private Dictionary<UUID, String> ListenCallbacks;
 
+		private UUID session;
+
 		/// <summary>manual reset event for listen</summary>
 		ManualResetEvent ListenEvent = new ManualResetEvent(false);
 
@@ -73,7 +75,8 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			// ListenCallbacks = new Dictionary<UUID, String>();
-			DebugUtilities.WriteDebug($"{MethodName} initialised.");
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
 			base.Initialize(bot);
 		}

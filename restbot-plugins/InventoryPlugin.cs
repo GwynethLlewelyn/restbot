@@ -51,7 +51,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		public override string
@@ -155,7 +155,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		public override string
@@ -297,7 +297,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		public override string
@@ -418,7 +418,7 @@ namespace RESTBot
 		public override void Initialize(RestBot bot)
 		{
 			session = bot.sessionid;
-			DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		public override string

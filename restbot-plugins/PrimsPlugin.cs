@@ -44,7 +44,7 @@ namespace RESTBot
         {
             session = bot.sessionid;
             me = bot;
-            DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+						DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
             base.Initialize(bot);
         }
@@ -149,7 +149,7 @@ namespace RESTBot
         {
             session = bot.sessionid;
             me = bot;
-            DebugUtilities.WriteDebug(session + " " + MethodName + " startup");
+						DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 
             base.Initialize(bot);
         }

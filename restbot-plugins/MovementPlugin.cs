@@ -794,6 +794,8 @@ namespace RESTBot
 	/// <remarks>RESTful interface to the SitOn command on LibreMetaverse's own SitOn</remarks>
 	public class SitOnPlugin : StatefulPlugin
 	{
+		private UUID session;
+
 		/// <summary>
 		/// Sets the plugin name for the router.
 		/// </summary>
@@ -809,7 +811,8 @@ namespace RESTBot
 		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
-			DebugUtilities.WriteDebug($"{bot.sessionid} {MethodName} startup");
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		/// <summary>
@@ -901,6 +904,8 @@ namespace RESTBot
 	/// <remarks>RESTful interface to the Stand command on LibreMetaverse's own Stand</remarks>
 	public class StandPlugin : StatefulPlugin
 	{
+		private UUID session;
+
 		/// <summary>
 		/// Sets the plugin name for the router.
 		/// </summary>
@@ -916,7 +921,8 @@ namespace RESTBot
 		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
-			DebugUtilities.WriteDebug($"{bot.sessionid} {MethodName} startup");
+			session = bot.sessionid;
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 
 		/// <summary>
