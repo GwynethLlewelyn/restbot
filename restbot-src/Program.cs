@@ -63,22 +63,25 @@ namespace RESTBot
   class Program
   {
     //static HttpListener Listener;
-		/// <summary>(Internal) Web server for the RESTful API</summary>
+		/// <value>(Internal) Web server for the RESTful API</value>
     static Server.Router? Listener;
-		/// <summary>Don't know when this is used, will document later</summary>
-		/// <remark>I believe this comes from the Think() method on the plugins (gwyneth 20220421)</remark>
+		/// <summary>Boolean flag requesting associated request thread to start or stop</summary>
+		/// <remark><seealso cref="Server.Router" /></remark>
     static bool StillRunning;
-		/// <summary>List of currently running sessions.</summary>
+		/// <value>List of currently running sessions.</value>
 		/// <remarks>Should never be null!</remarks>
     public static Dictionary<UUID, Session> Sessions = new Dictionary<UUID, Session>();
 
-    /// <summary>config file</summary>
+    /// <value>config file</value>
     static string configFile = "configuration.xml";
-    /// <summary>configuration object ^-- uses this file --^</summary>
+    /// <value>configuration object ^-- uses this file --^</value>
     public static XMLConfig.Configuration? config;
 
-    /// <summary>We need to move this to the security configuration block</summary>
+    /// <value>We need to move this to the security configuration block</value>
+		/// <remarks>Why? And where is this 'security configuration block', anyway? (gwyneth 20220425)</remarks>
     private static DateTime uptime = new DateTime();
+
+		public static string Version { get; set; } = "0.0.0.0";					// will be filled in later by Main() (gwyneth 20220425)
 
 		/// <summary>
 		/// Bootstrap method.
@@ -87,12 +90,21 @@ namespace RESTBot
 		/// <remarks>The arguments seem to get promptly ignored! (gwyneth 20220109)</remarks>
     static void Main(string[] args)
     {
-      DebugUtilities.WriteInfo("Reading config file");
+			// new function to parse some useful arguments and do interesting things (gwyneth 20220425)
+			ParseArguments(args);
+
+			// see if we can get the version string
+			var assembly = Assembly.GetExecutingAssembly();
+			var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+			var Version = fileVersionInfo.FileVersion;
+			DebugUtilities.WriteInfo($"RESTbot file version: {Version}");
+
+      DebugUtilities.WriteInfo($"Reading config file '{configFile}'...");
       config = XMLConfig.Configuration.LoadConfiguration(configFile);
 			if (config == null)
 			{
 				// configuration is mandatory! (gwyneth 20220213)
-				DebugUtilities.WriteError($"Unable to open configuration file {configFile}! Aborting...");
+				DebugUtilities.WriteError($"Unable to open configuration file '{configFile}'! Aborting...");
 				Environment.Exit(1);
 				return;
 			}
@@ -141,6 +153,35 @@ namespace RESTBot
       Listener.StillRunning = false;
     }
 
+		/// <summary>Parses some arguments and acts upon them</summary>
+		/// <param name="args">Array of strings, directly from the command line</param>
+		/// <remarks>We have no arguments for now, this is mostly a placeholder (gwyneth 20220425)</remarks>
+		private static void ParseArguments(string[] args)
+		{
+			// Very, very basic and naïve args passing.
+			// There is probably a library to deal with this (gwyneth 20220425)
+			if (args.Count() == 0)
+			{
+				DebugUtilities.WriteDebug("Good, no command-line arguments to parse.");
+			}
+			else if (args.Count() == 1 || args.Count() > 2)
+			{
+				// if (args[0] == "--help")
+				// {
+					DebugUtilities.WriteSpecial("Usage: RESTbot --config /path/to/configfile");
+					Environment.Exit(10);
+				// }
+			}
+			else if (args.Count() == 2)
+			{
+				if (args[0] == "--config")
+				{
+					configFile = args[1];	// should sanitise first (gwyneth 20220425)
+					DebugUtilities.WriteDebug($"Command-line argument set configuration file to '{configFile}'");
+				}
+			}
+		} // end ParseArguments
+
     /// <summary>
     /// Register all RestPlugins to the RestBot static plugin dictionary
     /// </summary>
@@ -153,10 +194,11 @@ namespace RESTBot
         {
           if (t.IsSubclassOf(typeof(RestPlugin)))
           {
-            ConstructorInfo? info = t.GetConstructor(Type.EmptyTypes);
+            ConstructorInfo? info = t.GetConstructor(Type.EmptyTypes);	// ask for parameter-less constructor for this class, if it exists (gwyneth 20220425)
 						if (info == null)
 						{
-							DebugUtilities.WriteError("Couldn't get constructor for plugin!");
+							// Not a serious warning, some plugins might be incorrectly configured but still work well
+							DebugUtilities.WriteWarning($"Couldn't get constructor without parameters for plugin {t.GetType().Name}!");
 						}
 						else
 						{

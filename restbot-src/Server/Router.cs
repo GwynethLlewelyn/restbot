@@ -32,7 +32,12 @@ using System.Threading;
 
 namespace RESTBot.Server
 {
-	/// <summary>HTTP router for incoming REST requests</summary>
+	/// <summary>
+	/// HTTP router for incoming REST requests.
+	///
+	/// Processes each request on a separate thread, and includes a basic (but working)
+	/// mechanism to start/stop the thread.
+	/// </summary>
 	public partial class Router
 	{
 		private IPAddress _bounded_ip;
@@ -46,9 +51,13 @@ namespace RESTBot.Server
 		private ManualResetEvent
 			_processed_connection = new ManualResetEvent(false);
 
+		/// <value>Checks/sets this router thread to running/stopping</value>
+		/// <remarks>How this works is a mystery to me, but it seems to work rather well! (gwyneth 20220425)</remarks>
 		public bool StillRunning;
 
 		/// <summary>Constructor</summary>
+		/// <param name="IP">IP address to bind to</param>
+		/// <param name="Port">A valid port number</param>
 		public Router(IPAddress IP, int Port)
 		{
 			_bounded_ip = IP;
@@ -56,7 +65,7 @@ namespace RESTBot.Server
 
 			try
 			{
-				DebugUtilities.WriteInfo("Starting HTTP server...");
+				DebugUtilities.WriteInfo($"Starting HTTP server on {IP}:{Port}...");
 
 				_listener = new TcpListener(_bounded_ip, _port);
 				_listener.Start();
@@ -73,7 +82,7 @@ namespace RESTBot.Server
 			try
 			{
 				_router_thread = new Thread(new ParameterizedThreadStart(RunListener));
-				_router_thread.Start (waitingForStart);
+				_router_thread.Start(waitingForStart);
 				DebugUtilities.WriteDebug("Waiting for thread to initialize");
 				if (!waitingForStart.WaitOne(15000, true))
 				{

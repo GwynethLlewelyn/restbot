@@ -28,6 +28,7 @@ using System.Text;
 
 namespace RESTBot.Server
 {
+	/// <summary>Key/Value storage class for headers extracted from a request.</summary>
 	public class HeaderLine
 	{
 		private string _key = "";
@@ -53,19 +54,23 @@ namespace RESTBot.Server
 		}
 #endregion
 
-
+		/// <summary>Converts the internal key/value to a string</summary>
+		/// <returns>A valid string, even if it's just a colon followed by a single space character</returns>
 		public override string ToString()
 		{
-			return Key + ": " + Value;
+			return "${Key}: {Value}";
 		}
 
-		//Constructors!
+		/// <summary>Constructors!</summary>
 		public HeaderLine(string key, string value)
 		{
 			_key = key;
 			_value = value;
 		}
 
+		/// <summary>Constructors, overloaded!</summary>
+		/// <remarks>This is the one doing all the work of actually parsing the line
+		/// into its key/value components... (gwyneth 20220425)</remarks>
 		public HeaderLine(string entire_line)
 		{
 			entire_line = entire_line.Trim();
@@ -85,16 +90,16 @@ namespace RESTBot.Server
 			else if (split.Length < 2)
 			{
 				DebugUtilities
-					.WriteWarning("Could not parse header line! (" + entire_line + ")");
+					.WriteWarning($"Could not parse header line! ({entire_line})");
 
 				//no exception needed, just a warning
 				return;
 			}
 
-			//DebugUtilities.WriteDebug("key=[" + split[0] + "] value=[" + split[1] + "]");
+			//DebugUtilities.WriteDebug($"key=[{split[0]}] value=[{split[1]}]");
 			_key = split[0].Trim();
 			_value = split[1].Trim();
-			//DebugUtilities.WriteDebug("[" + _value + "]");
+			//DebugUtilities.WriteDebug($"[{_value}]");
 		}
 	}
 }

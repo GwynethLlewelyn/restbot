@@ -89,7 +89,7 @@ namespace RESTBot.Server
 					IPHostEntry host = Dns.GetHostEntry(IPAddress.Parse(ip));
 					hostname = host.HostName;
 				}
-				DebugUtilities.WriteDebug("ENDPOINT HOSTNAME: " + hostname);
+				DebugUtilities.WriteDebug($"ENDPOINT HOSTNAME: {hostname}");
 			}
 			catch
 			{
@@ -97,12 +97,13 @@ namespace RESTBot.Server
 					.WriteWarning("Could not parse ip address to get the hostname (ipv6?) -  hostname is set as 'unknown'");
 			}
 
-			RequestHeaders x = new RequestHeaders(split[0], hostname);
+			///<value>get request headers into the appropriate class</value>
+			RequestHeaders _request_headers = new RequestHeaders(split[0], hostname);
 
 			string body = "";
 
 			bool foundExpectContinue = false;
-			foreach (HeaderLine line in x.HeaderLines)
+			foreach (HeaderLine line in _request_headers.HeaderLines)
 			{
 				if (line.ToString() == "Expect: 100-continue")
 				{
@@ -157,8 +158,8 @@ namespace RESTBot.Server
 			}
 			else if (split.Length > 1) body = split[1];
 
-			string to_return = Program.DoProcessing(x, body);
-			to_return = "<restbot>" + to_return + "</restbot>";
+			string to_return = Program.DoProcessing(_request_headers, body);
+			to_return = $"<restbot>\n{to_return}\n</restbot>\n";
 			DebugUtilities
 				.WriteDebug($"What I should return to the client: {to_return}");
 

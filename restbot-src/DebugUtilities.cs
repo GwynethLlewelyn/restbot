@@ -27,8 +27,8 @@ using System;
 using log4net;
 using log4net.Config;
 #if VERBOSE_MESSAGES
-/// <see><href="https://stackoverflow.com/a/12556789/1035977">StackOverflow</see>
-/// <see><href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/caller-information">Microsoft Documentation</see>
+/// <see href="https://stackoverflow.com/a/12556789/1035977">StackOverflow</see>
+/// <see href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/caller-information">Microsoft Documentation</see>
 using System.Runtime.CompilerServices;
 using System.IO; // for Path.GetFileName()
 #endif
@@ -89,18 +89,10 @@ namespace RESTBot
 		)
 		{
 #if VERBOSE_MESSAGES
-			message =
-				message +
-				"; from " +
-				callingMethod +
-				"(" +
-				Path.GetFileName(callingFilePath) +
-				":" +
-				callingFileLineNumber +
-				")";
+			message = $"{message} ➥ {callingMethod}({Path.GetFileName(callingFilePath)}:{callingFileLineNumber})";
 #endif
 			restbotLog.Info(message);
-			Output("[INFO] " + message, ConsoleColor.White);
+			Output($"[INFO] {message}", ConsoleColor.White);
 		}
 
 
@@ -126,15 +118,7 @@ namespace RESTBot
 		)
 		{
 #if VERBOSE_MESSAGES
-			message =
-				message +
-				"; from " +
-				callingMethod +
-				"(" +
-				Path.GetFileName(callingFilePath) +
-				":" +
-				callingFileLineNumber +
-				")";
+			message = $"{message} ➥ {callingMethod}({Path.GetFileName(callingFilePath)}:{callingFileLineNumber})";
 #endif
 			try
 			{
@@ -143,7 +127,7 @@ namespace RESTBot
 					Program.config.debug != null &&
 					Program.config.debug.restbotDebug != false
 				) restbotLog.Debug(message);
-				Output("[DEBUG] " + message, ConsoleColor.Gray);
+				Output($"[DEBUG] {message}", ConsoleColor.Gray);
 			}
 			catch
 			{
@@ -151,7 +135,7 @@ namespace RESTBot
 				//Note: STARTUP_DEBUG is now _also_ defined in the csproj! (gwyneth 20220109)
 #if STARTUP_DEBUG
 				restbotLog.Debug(message);
-				Output("[DEBUG] " + message, ConsoleColor.Gray);
+				Output($"[DEBUG] {message}", ConsoleColor.Gray);
 #endif
 			}
 		}
@@ -178,18 +162,10 @@ namespace RESTBot
 		)
 		{
 #if VERBOSE_MESSAGES
-			message =
-				message +
-				"; from " +
-				callingMethod +
-				"(" +
-				Path.GetFileName(callingFilePath) +
-				":" +
-				callingFileLineNumber +
-				")";
+			message = $"{message} ➥ {callingMethod}({Path.GetFileName(callingFilePath)}:{callingFileLineNumber})";
 #endif
 			restbotLog.Warn(message);
-			Output("[WARN] " + message, ConsoleColor.Yellow);
+			Output($"[WARN] {message}", ConsoleColor.Yellow);
 		}
 
 		/// <summary>
@@ -214,18 +190,10 @@ namespace RESTBot
 		)
 		{
 #if VERBOSE_MESSAGES
-			message =
-				message +
-				"; from " +
-				callingMethod +
-				"(" +
-				Path.GetFileName(callingFilePath) +
-				":" +
-				callingFileLineNumber +
-				")";
+			message = $"{message} ➥ {callingMethod}({Path.GetFileName(callingFilePath)}:{callingFileLineNumber})";
 #endif
 			restbotLog.Error(message);
-			Output("[ERROR] " + message, ConsoleColor.Red);
+			Output($"[ERROR] {message}", ConsoleColor.Red);
 		}
 
 		/// <summary>
@@ -250,18 +218,10 @@ namespace RESTBot
  		)
 		{
 #if VERBOSE_MESSAGES
-			message =
-				message +
-				"; from " +
-				callingMethod +
-				"(" +
-				Path.GetFileName(callingFilePath) +
-				":" +
-				callingFileLineNumber +
-				")";
+			message = $"{message} ➥ {callingMethod}({Path.GetFileName(callingFilePath)}:{callingFileLineNumber})";
 #endif
 			restbotLog.Info(message);
-			Output("[SPEC] " + message, ConsoleColor.Blue);
+			Output($"[SPEC] {message}", ConsoleColor.Blue);
 		}
 	}
 }

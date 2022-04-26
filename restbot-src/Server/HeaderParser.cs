@@ -33,14 +33,22 @@ using RESTBot;
 
 namespace RESTBot.Server
 {
+	/// <summary>Extract the actual request and all the other headers from a HTTP request</summary>
+	/// <remarks>Who was insane enough to reinvent the wheel?! Microsoft already
+	/// provides everything and the kitchen sink, and is (probably) future-proof
+	/// (gwyneth 20220425)</remarks>
 	public class RequestHeaders
 	{
 		public HeaderRequestLine RequestLine;
 
 		public List<HeaderLine> HeaderLines;
 
+		/// <value>FQDN host name</value>
 		public string Hostname = "";
 
+		/// <summary>Constructor</summary>
+		/// <param name="headers_section">All lines from the HTTP stream captured so far</param>
+		/// <param name="host_name">FQDN host name, extracted from the socket stream and reverse-DNSified</param>
 		public RequestHeaders(string headers_section, string host_name)
 		{
 			Hostname = host_name;
@@ -65,10 +73,11 @@ namespace RESTBot.Server
 				HeaderLines.Add(new HeaderLine(split_up[i]));
 			}
 			DebugUtilities
-				.WriteDebug("HTTP request has " + HeaderLines.Count + " headers");
+				.WriteDebug($"HTTP request has {HeaderLines.Count} headers");
 		}
 	}
 
+	/// <summary>Represents one valid header, received from the request.</summary>
 	public class HeaderRequestLine
 	{
 		private string _method = ""; //GET/POST/etc
@@ -77,6 +86,7 @@ namespace RESTBot.Server
 
 		private string _http_version = ""; //Something that might be usefull, eg. HTTP/1.1
 
+		/// <summary>Returns GET/PUT/POST/DELETE... etc.</summary>
 		public string Method
 		{
 			get
@@ -85,6 +95,7 @@ namespace RESTBot.Server
 			}
 		}
 
+		/// <summary>Path part of the URL</summary>
 		public string Path
 		{
 			get
@@ -93,6 +104,8 @@ namespace RESTBot.Server
 			}
 		}
 
+		/// <summary>HTTP Version of this request</summary>
+		/// <remarks>Very likely, just HTTP/1.0 or HTTP/1.1 are supported...</remarks>
 		public string HttpVersion
 		{
 			get
@@ -101,6 +114,7 @@ namespace RESTBot.Server
 			}
 		}
 
+		/// <summary>Constructor (parsed line)</summary>
 		public HeaderRequestLine(string method, string path, string http_version)
 		{
 			_method = method;
@@ -108,6 +122,7 @@ namespace RESTBot.Server
 			_http_version = http_version;
 		}
 
+		/// <summary>Constructor (overloaded, for a single raw line)</summary>
 		public HeaderRequestLine(string entire_line)
 		{
 			string[] split = entire_line.Trim().Split(' ');
@@ -116,9 +131,7 @@ namespace RESTBot.Server
 				//this is more serious than a header line, this is the request line batch!
 				DebugUtilities.WriteError("Could not parse request line");
 				throw new Exception("Could not parse request line",
-					new Exception("Line has " +
-						(split.Length - 1) +
-						" spaces instead of 2 [requestline]"));
+					new Exception($"Line has {(split.Length - 1)} spaces instead of 2 [requestline]"));
 			}
 
 			//ok, we got three entries
@@ -127,12 +140,7 @@ namespace RESTBot.Server
 			_http_version = split[2].ToUpper().Trim();
 
 			DebugUtilities
-				.WriteDebug("Request Line Parsed: method=" +
-				_method +
-				"; path=" +
-				_path +
-				"; version=" +
-				_http_version);
+				.WriteDebug($"Request Line Parsed: method={_method}; path={_path}; version={_http_version}");
 		}
 	}
-}
+} // namespace RESTBot.Server

@@ -43,9 +43,9 @@ namespace RESTBot
 			Plugins = new Dictionary<string, RestPlugin>();
 
 		/// <summary>
-		/// Add a new plugin to the system
+		/// Add a new plugin to the system.
 		/// </summary>
-		/// <param name="Plugin">Plugin name</param>
+		/// <param name="Plugin">Plugin object</param>
 		public static void AddPlugin(RestPlugin Plugin)
 		{
 			lock (Plugins)
@@ -55,7 +55,7 @@ namespace RESTBot
 			}
 		}
 
-		/// <summary>List of all possible plugin definitions</summary>
+		/// <summary>List of all possible plugin definitions.</summary>
 		static List<Type> StatefulPluginDefinitions = new List<Type>();
 
 		/// <summary>
@@ -66,14 +66,14 @@ namespace RESTBot
 		{
 			lock (StatefulPluginDefinitions)
 			{
-				DebugUtilities.WriteDebug("Plugin Def: " + defn.FullName);
-				if (defn.IsSubclassOf(typeof (StatefulPlugin)))
+				DebugUtilities.WriteDebug($"Plugin definition: {defn.FullName}");
+				if (defn.IsSubclassOf(typeof(StatefulPlugin)))
 					StatefulPluginDefinitions.Add(defn);
 			}
 		}
 
 		/// <summary>
-		/// Get the data from the request and parse it
+		/// Get the data from the request and parse it.
 		/// </summary>
 		/// <param name="request">Request HTTP headers</param>
 		/// <param name="body">Request HTTP body</param>
@@ -90,7 +90,7 @@ namespace RESTBot
 				}
 			}
 			DebugUtilities
-				.WriteDebug("HandleDataFromRequest; body is: '" + body + "'");
+				.WriteDebug($"HandleDataFromRequest: body is: '{body}'");
 			if (content_type == "text/xml" || content_type == "xml")
 			{
 				// make it a string
@@ -150,9 +150,9 @@ namespace RESTBot
 		/// <summary>Reply for the new login code</summary>
 		public struct LoginReply
 		{
-			public bool wasFatal; /// <summary>set to true if the error was fatal; this is necessary because we may get 'unknown' errors that aren't fatal and thus allows the connection to proceed.</summary>
+			public bool wasFatal; /// <value>set to true if the error was fatal; this is necessary because we may get 'unknown' errors that aren't fatal and thus allows the connection to proceed.</value>
 
-			public string xmlReply; /// <summary>Login reply message from grid, XML-encoded</summary>
+			public string xmlReply; /// <value>Login reply message from grid, XML-encoded</value>
 		}
 #endregion // SomeNewLoginCode
 
@@ -168,24 +168,24 @@ namespace RESTBot
 			UnknownError
 		}
 
-		private const string VERSION = "8.3.1";	// where does *this* come from?! (gwyneth 20220424)
+		// private const string VERSION = "8.3.1";	// this is clearly a 'fake' version; the variable was moved to class Program, so that we don't need to call it every time we instantiate a new RestBot object
 
-		public string First; /// <summary>Avatar first name</summary>
+		public string First; /// <value>Avatar first name</value>
 
-		public string Last; /// <summary>Avatar last name</summary>
+		public string Last; /// <value>Avatar last name</value>
 
-		public string MD5Password; /// <summary>Avatar password, MD5-encoded</summary>
+		public string MD5Password; /// <value>Avatar password, MD5-encoded</value>
 
-		public GridClient Client; /// <summary>LibreMetaverse grid client, i.e. this app</summary>
+		public GridClient Client; /// <value>LibreMetaverse grid client, i.e. this app</value>
 
-		public Status myStatus; /// <summary>Current bot's connection status</summary>
+		public Status myStatus; /// <value>Current bot's connection status</value>
 
-		public UUID sessionid; /// <summary>Session ID for the current bot (it's an UUID)</summary>
+		public UUID sessionid; /// <value>Session ID for the current bot (it's an UUID)</value>
 
 		private DateTime uptime = new DateTime();
 
-		/// <summary><para>The agents starting location home or last</para>
-		/// <para>Equivalent to LibreMetaverse's own Start variable</para></summary>
+		/// <value><para>The agents starting location home or last</para>
+		/// <para>Equivalent to LibreMetaverse's own Start variable</para></value>
 		/// <remarks>Either "last", "home", or a string encoded URI
 		/// containing the simulator name and x/y/z coordinates e.g: uri:hooper&amp;128&amp;152&amp;17</remarks>
 		public string Start;
@@ -196,7 +196,7 @@ namespace RESTBot
 
 		public delegate void BotStatusCallback(UUID Session, Status status); /// <summary>Callback for the bot status</summary>
 
-		/// <summary>Event called when requesting the bot status</summary>
+		/// <value>Event called when requesting the bot status</value>
 		/// <remarks><para>It's not used here, but invoked from Program.DisposeSession() (declared on Program.cs)
 		/// (remarks by gwyneth 20220126)</para>
 		public event BotStatusCallback OnBotStatus;
@@ -425,7 +425,7 @@ namespace RESTBot
 			LoginParams loginParams =
 				Client
 					.Network
-					.DefaultLoginParams(First, Last, MD5Password, "RestBot", VERSION);
+					.DefaultLoginParams(First, Last, MD5Password, "RestBot", Program.Version);
 
 			loginParams.Start = Start;
 
