@@ -492,7 +492,15 @@ namespace RESTBot
 						{
 							if (kvp.Value.Bot != null)
 							{
-								response += $"<session><session_id>{kvp.Key.ToString()}</session_id><key>{kvp.Value.Bot.Client.Self.AgentID.ToString()}</key><FirstName>{kvp.Value.Bot.Client.Self.FirstName}</FirstName><LastName>{kvp.Value.Bot.Client.Self.LastName}</LastName><CurrentSim>{kvp.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim><Position>{kvp.Value.Bot.Client.Self.SimPosition.X},{kvp.Value.Bot.Client.Self.SimPosition.Y},{kvp.Value.Bot.Client.Self.SimPosition.Z}</Position></session>";
+								response += $@"
+	<session>
+		<session_id>{kvp.Key.ToString()}</session_id>
+		<key>{kvp.Value.Bot.Client.Self.AgentID.ToString()}</key>
+		<FirstName>{kvp.Value.Bot.Client.Self.FirstName}</FirstName>
+		<LastName>{kvp.Value.Bot.Client.Self.LastName}</LastName>
+		<CurrentSim>{kvp.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim>
+		<Position>{kvp.Value.Bot.Client.Self.SimPosition.X},{kvp.Value.Bot.Client.Self.SimPosition.Y},{kvp.Value.Bot.Client.Self.SimPosition.Z}</Position>
+	</session>";
 							}
 							else
 							{

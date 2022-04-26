@@ -139,7 +139,7 @@ namespace RESTBot
 				/// <param name="b">A currently active RestBot</param>
 				/// <param name="Parameters">not used</param>
 				/// <remarks><para>This will list all currently known sessions.</para>
-				/// <para>Also note that there is a way to retrieve all sessions (same method)
+				/// <para>Also note that there is a way to retrieve all sessions (same method name)
 				/// without requiring a valid bot session, just for my own purposes; <see cref="Program.Main" /></para>
 				/// </remarks>
 				public override string Process(RestBot b, Dictionary<string, string> Parameters)
@@ -155,7 +155,24 @@ namespace RESTBot
 						{
 								foreach(KeyValuePair<OpenMetaverse.UUID, RESTBot.Session> kvp in Program.Sessions)
 								{
-										response += $"<session key={kvp.Key.ToString()}>{kvp.Value.ID}</session>";
+									if (kvp.Value.Bot != null)
+									{
+										response += $@"
+	<session>
+		<session_id>{kvp.Key.ToString()}</session_id>
+		<key>{kvp.Value.Bot.Client.Self.AgentID.ToString()}</key>
+		<FirstName>{kvp.Value.Bot.Client.Self.FirstName}</FirstName>
+		<LastName>{kvp.Value.Bot.Client.Self.LastName}</LastName>
+		<CurrentSim>{kvp.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim>
+		<Position>{kvp.Value.Bot.Client.Self.SimPosition.X},{kvp.Value.Bot.Client.Self.SimPosition.Y},{kvp.Value.Bot.Client.Self.SimPosition.Z}</Position>
+	</session>";
+									}
+									else
+									{
+										// Somehow, we have a session ID that has no bot assigned;
+										// this should never be the case, but... (gwyneth 20220426)
+										response += $"<session><session_id>{kvp.Key.ToString()}</session_id><key>{UUID.Zero.ToString()}</key></session>";
+									}
 								}
 						}
 						else
