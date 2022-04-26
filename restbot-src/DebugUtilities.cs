@@ -48,9 +48,22 @@ namespace RESTBot
 			restbotLog = LogManager.GetLogger(typeof(RestBot));
 // log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+		/// <value>stores the overall ability to debug statically, to save time</value>
+		/// <remarks><see href="https://logging.apache.org/log4net/release/sdk/html/P_log4net_ILog_IsDebugEnabled.htm">Apache log4net package documentation</see></remarks>
+		private static readonly bool isDebugEnabled = restbotLog.IsDebugEnabled;
+
 		/// <summary>init log4net logging</summary>
 		static DebugUtilities()
 		{
+			isDebugEnabled = false;
+			if (
+				Program.config != null &&
+				Program.config.debug != null &&
+				Program.config.debug.restbotDebug != false
+			)
+			{
+				isDebugEnabled = restbotLog.IsDebugEnabled;
+			}
 			log4net.Config.XmlConfigurator.Configure();
 		}
 
@@ -129,19 +142,16 @@ namespace RESTBot
 #endif
 			try
 			{
-				if (
-					Program.config != null &&
-					Program.config.debug != null &&
-					Program.config.debug.restbotDebug != false
-				) restbotLog.Debug(message);
-				Output($"[DEBUG] {message}", ConsoleColor.Gray);
+				if (isDebugEnabled)
+				{
+					restbotLog.Debug(message);
+				}
 			}
 			catch
 			{
 				//well, ok.. the restbotDebug setting wasnt set yet.. lets just do whatever the define tells us to do
 				//Note: STARTUP_DEBUG is now _also_ defined in the csproj! (gwyneth 20220109)
 #if STARTUP_DEBUG
-				restbotLog.Debug(message);
 				Output($"[DEBUG] {message}", ConsoleColor.Gray);
 #endif
 			}
