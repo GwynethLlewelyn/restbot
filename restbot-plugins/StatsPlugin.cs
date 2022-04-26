@@ -50,7 +50,7 @@ namespace RESTBot
 
 						string dilation = b.Client.Network.CurrentSim.Stats.Dilation.ToString();
 						b.Client.Settings.ALWAYS_DECODE_OBJECTS = false;
-						return($"<{MethodName}>{dilation}</{MethodName}>\n");
+						return($"<{MethodName}>{dilation}</{MethodName}>");
 				}
 		}
 
@@ -152,7 +152,7 @@ namespace RESTBot
 						{
 								foreach(KeyValuePair<OpenMetaverse.UUID, RESTBot.Session> kvp in Program.Sessions)
 								{
-										response += $"\t<session key={kvp.Key.ToString()}>{kvp.Value.ID}</session>";
+										response += $"<session key={kvp.Key.ToString()}>{kvp.Value.ID}</session>";
 								}
 						}
 						response += "</{MethodName}>";

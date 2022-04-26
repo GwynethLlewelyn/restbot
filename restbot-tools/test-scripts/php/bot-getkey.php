@@ -22,7 +22,7 @@
 // Don't forget to change th $url to reflect your configuration!
 
 if ($argv[1] == null || $argv[2] == null || $argv[3] == null) {
-	print "Usage " . $argv[0] . " session firstname lastname\n";
+	print "Usage " . $argv[0] . " session firstname lastname" . PHP_EOL;
 	exit(1);
 }
 $url = "http://127.0.0.1:9080/avatar_key/" . $argv[1] . "/";
@@ -34,8 +34,8 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, "name=" . $argv[2] . " " . $argv[3]);
 $stuff = curl_exec($ch);
 curl_close($ch);
 if (empty($stuff)) {
-	print "Nothing returned from server\n";
+	print "Nothing returned from server" . PHP_EOL;
 	exit(2);
 }
 $xml = new SimpleXMLElement($stuff);
-print $xml->key . "\n";
+print $xml->key . PHP_EOL;

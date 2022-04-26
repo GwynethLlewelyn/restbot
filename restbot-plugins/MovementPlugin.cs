@@ -68,17 +68,12 @@ namespace RESTBot
 		{
 			try
 			{
-				return String
-					.Format("<location><CurrentSim>{0}</CurrentSim><Position>{1},{2},{3}</Position></location>",
-					b.Client.Network.CurrentSim.ToString(),
-					b.Client.Self.SimPosition.X,
-					b.Client.Self.SimPosition.Y,
-					b.Client.Self.SimPosition.Z);
+				return $"<{MethodName}><CurrentSim>{b.Client.Network.CurrentSim.ToString()}</CurrentSim><Position>{b.Client.Self.SimPosition.X},{b.Client.Self.SimPosition.Y},{b.Client.Self.SimPosition.Z}</Position></{MethodName}>";
 			}
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>" + e.Message + "</error>";
+				return $"<error>{MethodName}: {e.Message}</error>";
 			}
 		}
 	} // end location
@@ -156,7 +151,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>parameters have to be simulator name, x, y, z</error>";
+					return "<error>{MethodName} parameters have to be simulator name, x, y, z</error>";
 				}
 				// debug: calculate destination vector, show data, just to make sure it's correct (gwyneth 20220411)
 				Vector3 teleportPoint = new Vector3(x, y, z);
@@ -182,7 +177,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return $"<error>{MethodName} error: {e.Message}</error>";
+				return $"<error>{MethodName}: {e.Message}</error>";
 			}
 		}
 	} // end goto
@@ -251,7 +246,7 @@ namespace RESTBot
 			}
 			else if (attempts <= 0)
 			{
-				DebugUtilities.WriteDebug("No more attempts left; aborting...");
+				DebugUtilities.WriteDebug("{MethodName}: No more attempts left; aborting...");
 				Active = false;
 			}
 			base.Think();
@@ -288,7 +283,7 @@ namespace RESTBot
 				if (Parameters.ContainsKey("x"))
 				{
 					check &= double.TryParse(Parameters["x"], out x);
-					DebugUtilities.WriteDebug($"Parse: {Parameters["x"]} into {x}");
+					DebugUtilities.WriteDebug($"{MethodName} Parse: {Parameters["x"]} into {x}");
 				}
 				else
 					check = false;
@@ -319,7 +314,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>parameters have to be x, y, z, [distance, run]</error>";
+					return "<error>{MethodName} parameters have to be x, y, z, [distance, run]</error>";
 				}
 
 				if (run)
@@ -360,7 +355,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return $"<error>moveto error: {e.Message}</error>";
+				return $"<error>{MethodName}: {e.Message}</error>";
 			}
 		}
 	} // end moveto
@@ -427,22 +422,10 @@ namespace RESTBot
 				{
 					me.Client.Self.Movement.AlwaysRun = false;
 				}
-				DebugUtilities
-					.WriteDebug("My pos = " +
-					me.Client.Self.SimPosition +
-					" Goal: " +
-					goalPos +
-					" and distance is: " +
-					distance);
+				DebugUtilities.WriteDebug($"My pos = {me.Client.Self.SimPosition} Goal: {goalPos} and distance is: {distance}");
 				if (distance < DISTANCE_BUFFER)
 				{
-					DebugUtilities
-						.WriteDebug("I am close to my goal pos: " +
-						goalPos.X +
-						", " +
-						goalPos.Y +
-						", " +
-						goalPos.Z);
+					DebugUtilities.WriteDebug($"I am close to my goal pos: <{goalPos.X}, {goalPos.Y}, {goalPos.Z}");
 					me.Client.Self.AutoPilotCancel();
 					DebugUtilities.WriteSpecial("Cancel Autopilot");
 					me.Client.Self.Movement.TurnToward(goalPos);
@@ -493,7 +476,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>parameters have to be avatar name to follow</error>";
+					return "<error>{MethodName} parameters have to be avatar name to follow</error>";
 				}
 
 				if (run)
@@ -577,7 +560,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return $"<error>{MethodName} error: {e.Message}</error>";
+				return $"<error>{MethodName}: {e.Message}</error>";
 			}
 		}
 	} // end movetoavatar
@@ -668,13 +651,7 @@ namespace RESTBot
 								double zTarget = targetAv.Position.Z - 2f;
 
 								Logger
-									.DebugLog(String
-										.Format("[Autopilot] {0} meters away from the target, starting autopilot to <{1},{2},{3}>",
-										distance,
-										xTarget,
-										yTarget,
-										zTarget),
-									me.Client);
+									.DebugLog($"[Autopilot] {distance} meters away from the target, starting autopilot to <{xTarget},{yTarget},{zTarget}>", me.Client);
 
 								me.Client.Self.AutoPilot(xTarget, yTarget, zTarget);
 							}
@@ -730,12 +707,12 @@ namespace RESTBot
 					Active = false;
 					targetLocalID = 0;
 					b.Client.Self.AutoPilotCancel();
-					return "<follow>off</follow>";
+					return $"<{MethodName}>off</{MethodName}>";
 				}
 				else
 				{
 					if (Follow(target))
-						return "<follow>on</follow>";
+						return $"<{MethodName}>on</{MethodName}>";
 					else
 						return $"<error>cannot follow {target}</error>";
 				}
@@ -743,7 +720,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return $"<error>follow error: {e.Message}</error>";
+				return $"<error>{MethodName}: {e.Message}</error>";
 			}
 		}
 
@@ -846,7 +823,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>no sit target specified</error>";
+					return $"<error>{MethodName} no sit target specified</error>";
 				}
 
 				// optional
@@ -857,7 +834,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>force attempted with wrong setting; only true/false are allowed</error>";
+					return $"<error>{MethodName} force sit attempted with wrong setting; only true/false are allowed</error>";
 				}
 
 				// If we get to this point means that we have a correctly parsed key for the target prim
@@ -878,7 +855,7 @@ namespace RESTBot
 						return $"<{MethodName}>sitting on {targetPrim.ID.ToString()} ({targetPrim.LocalID})</{MethodName}>";
 					}
 
-					return $"<error>no prim with UUID {sitTargetID} found</error>";
+					return $"<error>{MethodName}: no prim with UUID {sitTargetID} found</error>";
 				}
 				else	// forcing to sit on a prim we KNOW that exists! (gwyneth 20220410)
 				{
@@ -891,7 +868,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return $"<error>{e.Message}</error>";
+				return $"<error>{MethodName}: {e.Message}</error>";
 			}
 		}
 	} // end SitOnPlugin
@@ -941,7 +918,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return $"<error>{MethodName} error: {e.Message}</error>";
+				return $"<error>{MethodName}: {e.Message}</error>";
 			}
 		}
 	} // end StandPlugin

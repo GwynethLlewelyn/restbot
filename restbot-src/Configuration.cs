@@ -74,8 +74,7 @@ namespace RESTBot.XMLConfig
 			}
 			catch (Exception e)
 			{
-				DebugUtilities.WriteError("Could not open configuration file!");
-				DebugUtilities.WriteError("\t" + e.Message);
+				DebugUtilities.WriteError("Could not open configuration file; error was: " + e.Message);
 				Environment.Exit(1);
 			}
 			try
@@ -89,8 +88,7 @@ namespace RESTBot.XMLConfig
 			}
 			catch (Exception e)
 			{
-				DebugUtilities.WriteError("Could not parse XML file!");
-				DebugUtilities.WriteError("\t" + e.Message);
+				DebugUtilities.WriteError("Could not parse XML file - error was: " + e.Message);
 				Environment.Exit(1); // this is overkill... we might be able to deal with most errors using reasonable defaults... (gwyneth 20220127)
 			}
 			return null;

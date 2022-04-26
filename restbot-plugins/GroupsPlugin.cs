@@ -70,39 +70,39 @@ namespace RESTBot
 		public override string Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID groupUUID;
-			DebugUtilities.WriteDebug("TR - Entering group key parser");
+			DebugUtilities.WriteDebug("Entering group key parser");
 			try
 			{
 				bool check = false;
 				if (Parameters.ContainsKey("key"))
 				{
-					DebugUtilities.WriteDebug("TR - Attempting to parse from POST");
+					DebugUtilities.WriteDebug("Attempting to parse from POST");
 					check = UUID.TryParse(Parameters["key"].ToString().Replace("_"," "), out groupUUID);
-					DebugUtilities.WriteDebug("TR - Succesfully parsed POST");
+					DebugUtilities.WriteDebug("Succesfully parsed POST");
 				}
 				else
 				{
-					return "<error>invalid arguments</error>\n";
+					return $"<error>{MethodName}: invalid arguments</error>";
 				}
 				if (check)
 				{
-					DebugUtilities.WriteDebug("TR - Activating group");
+					DebugUtilities.WriteDebug("Activating group");
 					string? response = activateGroup(b, groupUUID);
-					DebugUtilities.WriteDebug("TR - Complete");
+					DebugUtilities.WriteDebug("Complete");
 					if (response != null)
-						return "<active>" + response.Trim() + "</active>\n";
+						return $"<active>{response.Trim()}</active>";
 					else
-						return "<error>group could not be activated</error>\n";
+						return $"<error>{MethodName}: group could not be activated</error>";
 				}
 				else
 				{
-					return "<error>parsekey</error>\n";
+					return $"<error>{MethodName}: parsekey</error>";
 				}
 			}
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>parsekey</error>\n";
+				return $"<error>{MethodName}: parsekey</error>";
 			}
 		}
 
@@ -114,14 +114,14 @@ namespace RESTBot
 		/// <returns>String with the group name, or null if group not found</returns>
 		private string? activateGroup(RestBot b, UUID groupUUID)
 		{
-			DebugUtilities.WriteInfo(session.ToString() + " " + MethodName + " Activating group " + groupUUID.ToString());
+			DebugUtilities.WriteInfo($"{session.ToString()} {MethodName} Activating group {groupUUID.ToString()}");
 			EventHandler<PacketReceivedEventArgs> pcallback = AgentDataUpdateHandler;
 			b.Client.Network.RegisterCallback(PacketType.AgentDataUpdate, pcallback);
 			b.Client.Groups.ActivateGroup(groupUUID);
 
 			if (!GroupsEvent.WaitOne(15000, true))
 			{
-				DebugUtilities.WriteWarning(session + " " + MethodName + " timed out on setting active group");
+				DebugUtilities.WriteWarning($"{session.ToString()} {MethodName} timed out on setting active group");
 			}
 
 			// ignore everything and just reset the event
@@ -129,7 +129,7 @@ namespace RESTBot
 			GroupsEvent.Reset();
 
 			if (String.IsNullOrEmpty(activeGroup))
-				  	DebugUtilities.WriteWarning(session + " " + MethodName + " Failed to activate the group " + groupUUID);
+				  	DebugUtilities.WriteWarning($"{session.ToString()} {MethodName} Failed to activate the group {groupUUID.ToString()}");
 
 			return activeGroup;
 		}
@@ -185,7 +185,7 @@ namespace RESTBot
 		{
 			UUID groupUUID;
 			string groupName;
-			DebugUtilities.WriteDebug("TR - Entering group key parser");
+			DebugUtilities.WriteDebug("Entering group key parser");
 			try
 			{
 				if (Parameters.ContainsKey("name"))
@@ -194,30 +194,30 @@ namespace RESTBot
 				}
 				else
 				{
-					return "<error>arguments</error>";
+					return "<error>{MethodName}: arguments</error>";
 				}
-				DebugUtilities.WriteDebug("TR - Activating group");
+				DebugUtilities.WriteDebug("Activating group");
 
 				groupUUID = GroupName2UUID(b, groupName);
 				if (UUID.Zero != groupUUID)
 				{
 					string response = activateGroup(b, groupUUID);
-					DebugUtilities.WriteDebug("TR - Complete");
+					DebugUtilities.WriteDebug("Complete");
 					if (response != null)
-						return "<active>" + response.Trim() + "</active>\n";
+						return $"<active>{response.Trim()}</active>";
 					else
-						return "<error>group could not be activated</error>\n";
+						return $"<error>{MethodName}: group could not be activated</error>";
 				}
 				else
 				{
-					DebugUtilities.WriteDebug("TR - Error: group " + groupName + " doesn't exist");
-					return "<error>group name '" + groupName + "' doesn't exist.</error>";
+					DebugUtilities.WriteDebug($"Error: group {groupName} doesn't exist");
+					return $"<error>{MethodName}: group name '{groupName}' doesn't exist.</error>";
 				}
 			}
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>parsekey</error>";
+				return "<error>{MethodName}: parsekey</error>";
 			}
 		}
 
@@ -390,9 +390,9 @@ namespace RESTBot
 				string response = sendIMGroup(b, groupUUID, message);
 
 				if (string.IsNullOrEmpty(response))
-					return "<error>group message not sent, or answer was empty</error>\n";
+					return "<error>group message not sent, or answer was empty</error>";
 
-				return "<message>" + response.Trim() + "</message>\n";
+				return "<message>" + response.Trim() + "</message>";
 			}
 			catch (Exception e)
 			{
@@ -542,7 +542,7 @@ namespace RESTBot
 
 				b.Client.Groups.Invite(group, roles, avatar);
 
-				return "<invitation>invited " + avatar + " to " + group + "</invitation>\n";
+				return "<invitation>invited " + avatar + " to " + group + "</invitation>";
 			}
 			catch (Exception e)
 			{
@@ -660,7 +660,7 @@ namespace RESTBot
 
 				DebugUtilities.WriteDebug(session + " " + MethodName + " Sent Notice from avatar " + notice.OwnerID.ToString() + " to group: " + groupUUID.ToString() + " subject: '" + notice.Subject.ToString() + "' message: '" + notice.Message.ToString() + "' Optional attachment: " + notice.AttachmentID.ToString() + " Serialisation: " + Utils.BytesToString(notice.SerializeAttachment()));
 
-				return "<notice>sent</notice>\n";
+				return "<notice>sent</notice>";
 			}
 			catch (Exception e)
 			{

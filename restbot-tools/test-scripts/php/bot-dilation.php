@@ -22,7 +22,7 @@
 // Don't forget to change th $url to reflect your configuration!
 
 if ($argv[1] == null) {
-	print "Usage bot-dilation.php session\n";
+	print "Usage bot-dilation.php session" . PHP_EOL;
 	exit(0);
 }
 $url = "http://lumo.eghetto.ca:9080/dilation/" . $argv[1] . "/";
@@ -33,9 +33,9 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 $stuff = curl_exec($ch);
 curl_close($ch);
 if (empty($stuff)) {
-	print "Nothing returned from server\n";
+	print "Nothing returned from server" . PHP_EOL;
 	exit(1);
 }
 #print "$stuff";
 $xml = new SimpleXMLElement($stuff);
-print $xml->dilation . "\n";
+print $xml->dilation . PHP_EOL;

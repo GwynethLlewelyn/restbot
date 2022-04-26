@@ -464,7 +464,7 @@ namespace RESTBot
 							.WriteWarning("Nonfatal error while logging in.. this may be normal");
 						response.wasFatal = false;
 						response.xmlReply =
-							$"<error fatal=\"false\">{Client.Network.LoginMessage}</error><retry>10</retry>\n<session_id>{sessionid}</session_id>";
+							$"<error fatal=\"false\">{Client.Network.LoginMessage}</error><retry>10</retry><session_id>{sessionid}</session_id>";
 
 						DebugUtilities
 							.WriteSpecial("Relogin attempt will be made in 10 minutes");

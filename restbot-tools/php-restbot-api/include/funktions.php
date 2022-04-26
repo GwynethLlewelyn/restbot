@@ -26,9 +26,9 @@ global $debug;
 function genPipeError($error)
 {
 	if ($error == "param") {
-		print "PARAMATER_ERROR\n";
+		print "PARAMETER_ERROR" . PHP_EOL;
 	} elseif ($error == "auth") {
-		print "AUTHENTICATION\n";
+		print "AUTHENTICATION" . PHP_EOL;
 		logMessage(
 			"auth",
 			1,
@@ -38,19 +38,19 @@ function genPipeError($error)
 				$_SERVER["REQUEST_URI"] ?: "(unknown URI request)"
 		);
 	} elseif ($error == "db") {
-		print "DB\n";
+		print "DB" . PHP_EOL;
 	} elseif ($error == "found") {
-		print "NOTFOUND\n";
+		print "NOTFOUND" . PHP_EOL;
 	} elseif ($error == "lookup") {
-		print "LOOKUPERROR\n";
+		print "LOOKUPERROR" . PHP_EOL;
 	} else {
-		print "UNKNOWN ERROR\n";
+		print "UNKNOWN ERROR" . PHP_EOL;
 	}
 	die();
 }
 function genPipeResponse($resp)
 {
-	print "OK" . $resp . "\n";
+	print "OK" . $resp . PHP_EOL;
 	die();
 }
 
@@ -166,7 +166,7 @@ function rest($method, $arguments)
 		releaseBot($restbot["session"]);
 		return $response;
 	}
-	logMessage("rest", 3, "Unable to do rest magic");
+	logMessage("rest", 3, "Unable to do REST magic");
 }
 
 function restbotConnect($first, $last, $pass, $host, $hostpass)
