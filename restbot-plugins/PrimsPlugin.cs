@@ -96,7 +96,7 @@ namespace RESTBot
                     string? name = p.Properties != null ? p.Properties.Name : null;
                     if (String.IsNullOrEmpty(type) || ((name != null) && (name.Contains(type))))
                     {
-                        resultSet += String.Format("<prim><name>{0}</name><pos>{1},{2},{3}</pos><id>{4}</id></prim>", name, p.Position.X, p.Position.Y, p.Position.Z, p.ID);
+                        resultSet += $"<prim><name>{name}</name><pos>{p.Position.X},{p.Position.Y},{p.Position.Z}</pos><id>{p.ID}</id></prim>";
                     }
                 }
                 return "<nearby_prims>" + resultSet + "</nearby_prims>";
@@ -104,7 +104,7 @@ namespace RESTBot
             catch (Exception e)
             {
                 DebugUtilities.WriteError(e.Message);
-                return "<error>" + e.Message + "</error>";
+                return $"<error>{e.Message}</error>";
             }
         }
 

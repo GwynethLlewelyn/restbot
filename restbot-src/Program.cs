@@ -340,7 +340,13 @@ namespace RESTBot
 										)
 								{
 										DebugUtilities.WriteWarning($"Already running avatar {Parameters["first"]} {Parameters["last"]}");
-										return $"<existing_session>true</existing_session><session_id>{ss.Key.ToString()}</session_id><key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>";
+										return $@"<existing_session>true</existing_session>
+<session_id>{ss.Key.ToString()}</session_id>
+<key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>
+<FirstName>{ss.Value.Bot.Client.Self.FirstName}</FirstName>
+<LastName>{ss.Value.Bot.Client.Self.LastName}</LastName>
+<CurrentSim>{ss.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim>
+<Position>{ss.Value.Bot.Client.Self.SimPosition.X},{ss.Value.Bot.Client.Self.SimPosition.Y},{ss.Value.Bot.Client.Self.SimPosition.Z}</Position>";
 								}
 							}
 						}
@@ -486,13 +492,13 @@ namespace RESTBot
 						{
 							if (kvp.Value.Bot != null)
 							{
-								response += $"<session key=\"{kvp.Key.ToString()}\">{kvp.Value.Bot.Client.Self.AgentID.ToString()}</session>";
+								response += $"<session><session_id>{kvp.Key.ToString()}</session_id><key>{kvp.Value.Bot.Client.Self.AgentID.ToString()}</key><FirstName>{kvp.Value.Bot.Client.Self.FirstName}</FirstName><LastName>{kvp.Value.Bot.Client.Self.LastName}</LastName><CurrentSim>{kvp.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim><Position>{kvp.Value.Bot.Client.Self.SimPosition.X},{kvp.Value.Bot.Client.Self.SimPosition.Y},{kvp.Value.Bot.Client.Self.SimPosition.Z}</Position></session>";
 							}
 							else
 							{
 								// Somehow, we have a session ID that has no bot assigned;
 								// this should never be the case, but... (gwyneth 20220426)
-								response += $"<session key=\"{kvp.Key.ToString()}\">{UUID.Zero.ToString()}</session>";
+								response += $"<session><session_id>{kvp.Key.ToString()}</session_id><key>{UUID.Zero.ToString()}</key></session>";
 							}
 						}
 					}
@@ -586,7 +592,7 @@ namespace RESTBot
       }
       else if (Method == "stats")
       {
-        string response = "<bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "<bots>";
+        string response = "<bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "</bots>";
         response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>";
         return response;
       }

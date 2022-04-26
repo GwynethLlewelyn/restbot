@@ -437,12 +437,12 @@ namespace RESTBot
 				response.wasFatal = false;
 				response.xmlReply =
 					$@"<success>
-	<session_id>
-		{sessionid.ToString()}
-	</session_id>
-	<key>
-		{Client.Self.AgentID.ToString()}
-	</key>
+	<session_id>{sessionid.ToString()}</session_id>
+	<key>{Client.Self.AgentID.ToString()}</key>
+	<FirstName>{Client.Self.FirstName}</FirstName>
+	<LastName>{Client.Self.LastName}</LastName>
+	<CurrentSim>{Client.Network.CurrentSim.ToString()}</CurrentSim>
+	<Position>{Client.Self.SimPosition.X},{Client.Self.SimPosition.Y},{Client.Self.SimPosition.Z}</Position>
 </success>";
 			}
 			else
