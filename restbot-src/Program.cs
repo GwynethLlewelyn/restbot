@@ -81,6 +81,7 @@ namespace RESTBot
 		/// <remarks>Why? And where is this 'security configuration block', anyway? (gwyneth 20220425)</remarks>
     private static DateTime uptime = new DateTime();
 
+		/// <value>Some sort of version number that we'll send to LibreMetaverse for its debugging purposes</value>
 		public static string Version { get; set; } = "0.0.0.0";					// will be filled in later by Main() (gwyneth 20220425)
 
 		/// <summary>
@@ -116,10 +117,19 @@ namespace RESTBot
 					// finally, our last choice is trying the Informational Version
 					try
 					{
-						var assembly = Assembly.GetExecutingAssembly();
-						if ((assembly != null && assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>() != null && assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion != null))
+						var assembly = Assembly.GetEntryAssembly();
+						if (assembly != null)
 						{
-							Version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+							var customAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+							if (customAttribute != null)
+							{
+								var infoVersion = customAttribute.InformationalVersion;
+
+								if (infoVersion != null)
+								{
+									Version = infoVersion;
+								}
+							}
 						}
 					}
 					catch (Exception e3)
@@ -316,13 +326,13 @@ namespace RESTBot
 						{
 							if (ss.Value != null && ss.Value.Bot != null)
 							{
-								DebugUtilities.WriteSpecial("Avatar check: [" + ss.Value.Bot.First.ToLower() + "/" + ss.Value.Bot.Last.ToLower() + "] = [" + Parameters["first"].ToLower() + "/" + Parameters["last"].ToLower() + "]");
+								DebugUtilities.WriteSpecial($"Avatar check: [{ss.Value.Bot.First.ToLower()}/{ss.Value.Bot.Last.ToLower()}] = [{Parameters["first"].ToLower()}/{Parameters["last"].ToLower()}]");
 								if (Parameters["first"].ToLower() == ss.Value.Bot.First.ToLower() &&
 										Parameters["last"].ToLower() == ss.Value.Bot.Last.ToLower()
 										)
 								{
 										DebugUtilities.WriteWarning($"Already running avatar {Parameters["first"]} {Parameters["last"]}");
-										return $"<existing_session>true</existing_session>\n<session_id>{ss.Key.ToString()}</session_id>\n<key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>\n";
+										return $"<existing_session>true</existing_session><session_id>{ss.Key.ToString()}</session_id><key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>";
 								}
 							}
 						}
@@ -417,7 +427,7 @@ namespace RESTBot
 						StillRunning = false;
 						// note: a caveat of this undocumented method is that it requires a _new_
 						// incoming request to actually kill the server... could be a ping, though. (gwyneth 20220414)
-						return ("<status>success - all bot sessions were logged out and a request was made for queued shutdown</status>\n");
+						return ("<status>success - all bot sessions were logged out and a request was made for queued shutdown</status>");
 					}
 					else
 					{
@@ -491,8 +501,8 @@ namespace RESTBot
       }
       else if (Method == "stats")
       {
-        string response = "<bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "<bots>\n";
-        response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>\n";
+        string response = "<bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "<bots>";
+        response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>";
         return (response);
       }
 
