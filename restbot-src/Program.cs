@@ -91,6 +91,8 @@ namespace RESTBot
 		/// <remarks>The arguments seem to get promptly ignored! (gwyneth 20220109)</remarks>
     static void Main(string[] args)
     {
+			// LogManager.GetLogger(typeof(RestBot));
+
 			// new function to parse some useful arguments and do interesting things (gwyneth 20220425)
 			ParseArguments(args);
 
@@ -101,7 +103,7 @@ namespace RESTBot
 #if Windows
 				var fileVersionInfo = FileVersionInfo.GetVersionInfo("@RESTbot.dll");
 #else
-				var fileVersionInfo = FileVersionInfo.GetVersionInfo("@RESTbot.exe");
+				var fileVersionInfo = FileVersionInfo.GetVersionInfo("@RESTbot");
 #endif
 				Version = fileVersionInfo.FileVersion + "-file";
 			}
@@ -484,13 +486,13 @@ namespace RESTBot
 						{
 							if (kvp.Value.Bot != null)
 							{
-								response += $"<session key={kvp.Key.ToString()}>{kvp.Value.Bot.Client.Self.AgentID.ToString()}</session>";
+								response += $"<session key=\"{kvp.Key.ToString()}\">{kvp.Value.Bot.Client.Self.AgentID.ToString()}</session>";
 							}
 							else
 							{
 								// Somehow, we have a session ID that has no bot assigned;
 								// this should never be the case, but... (gwyneth 20220426)
-								response += $"<session key={kvp.Key.ToString()}>{UUID.Zero.ToString()}</session>";
+								response += $"<session key=\"{kvp.Key.ToString()}\">{UUID.Zero.ToString()}</session>";
 							}
 						}
 					}

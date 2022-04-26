@@ -68,6 +68,7 @@ logs/*
 *.pdb
 obj/
 packages/
+restbot.exe-backup.config
 # This will be overwritten by a successful compilation anyway (gwyneth 20211129)
 restbot-bin/
 

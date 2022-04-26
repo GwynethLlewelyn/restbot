@@ -240,6 +240,7 @@ namespace RESTBot
 		/// <param name="l">Login last name</param>
 		/// <param name="p">MD5-encoded password</param>
 		/// <param name="s">Start location is "last", "home" or could be a <seealso cref="T:OpenMetaverse.URI"/></param>
+
 		public RestBot(UUID session, string f, string l, string p, string s)
 		{
 			//setting up some class variables

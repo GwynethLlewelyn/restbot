@@ -41,11 +41,18 @@ namespace RESTBot
 	/// </summary>
 	public static class DebugUtilities
 	{
-		/// <summary>
+		/// <value>
 		/// Define a new logger for RestBot.
-		/// </summary>
-		private static readonly ILog
+		/// </value>
+		private static readonly log4net.ILog
 			restbotLog = LogManager.GetLogger(typeof(RestBot));
+// log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+		/// <summary>init log4net logging</summary>
+		static DebugUtilities()
+		{
+			log4net.Config.XmlConfigurator.Configure();
+		}
 
 		/// <summary>
 		/// Generic outputting method, used internally.
