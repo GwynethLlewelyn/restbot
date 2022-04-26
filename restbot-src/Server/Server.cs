@@ -97,11 +97,15 @@ namespace RESTBot.Server
 					.WriteWarning("Could not parse ip address to get the hostname (ipv6?) -  hostname is set as 'unknown'");
 			}
 
-			///<value>get request headers into the appropriate class</value>
+			/// <value>get request headers into the appropriate class</value>
 			RequestHeaders _request_headers = new RequestHeaders(split[0], hostname);
 
 			string body = "";
 
+			/// <value>
+			/// For some reason, the RESTbot HTTP server takes pleasure in waiting for 100-continue,
+			/// so we set a flag here.
+			/// </value>
 			bool foundExpectContinue = false;
 			foreach (HeaderLine line in _request_headers.HeaderLines)
 			{
@@ -123,19 +127,21 @@ namespace RESTBot.Server
 
 					//send the 100 continue message and then go back to the above.
 					DebugUtilities.WriteSpecial("Writing 100 continue response");
-					stream
-						.Write(byte_continue_response, 0, byte_continue_response.Length);
-					DebugUtilities
-						.WriteSpecial($"Finished writing - {byte_continue_response.Length} bytes total sent");
+					stream.Write(byte_continue_response, 0, byte_continue_response.Length);
+					DebugUtilities.WriteSpecial($"Finished writing - {byte_continue_response.Length} bytes total sent");
 
 					request = "";
 					buffer = new byte[512];
+					/// <value>stream chunk counter</value>
 					i = 0;
 					if (stream.DataAvailable)
+					{
 						DebugUtilities.WriteSpecial("DATA AVALIABLE!!");
+					}
 					else
+					{
 						DebugUtilities.WriteWarning("NO DATA AVALIABLE? Hurr");
-
+					}
 					do
 					{
 						i = stream.Read(buffer, 0, buffer.Length); //add the next set of data into the buffer..
@@ -144,39 +150,46 @@ namespace RESTBot.Server
 					}
 					while (stream.DataAvailable); //and repeat :)
 
-					DebugUtilities
-						.WriteInfo($"Got continued request, totalling {request.Length} characters");
-
+					DebugUtilities.WriteInfo($"Got continued request, totalling {request.Length} characters");
 					DebugUtilities.WriteDebug($"Here's what I got: {request}");
 					body = request;
 				}
-				catch
+				catch (Exception e)
 				{
-					DebugUtilities
-						.WriteError("An error occured while trying to talk to the client (100 expectation response)");
+					DebugUtilities.WriteError("An error occured while trying to talk to the client (100 expectation response): " + e.Message);
 				}
 			}
-			else if (split.Length > 1) body = split[1];
-
+			else
+			{
+				if (split.Length > 1)
+				{
+					body = split[1];
+				}
+			}
+			/// <value>Status message to return to the client that made the request</value>
+			/// <remarks>Likely XML-formatted (there are very few exceptions)</remarks>
 			string to_return = Program.DoProcessing(_request_headers, body);
 			// The next line is DELIBERATELY not using interpolated strings, because there might have
-			// been some issues with those (gwyneth 20220426)
+			// been some issues with those. (gwyneth 20220426)
 			to_return = "<restbot>" + to_return + "</restbot>";
-			DebugUtilities
-				.WriteDebug($"What I should return to the client: {to_return}");
+			// commented out until I figure out how to write a DebugUtilities.WriteTrace() method. (gwyneth 20220426)
+			// DebugUtilities.WriteDebug($"What I should return to the client: {to_return}");
 
 			ResponseHeaders response_headers = new ResponseHeaders(200, "OK");
 			string response = response_headers.ToString() + to_return;
 
 			try
 			{
+				/// <value>stream of bytes to send over the HTTP stream as response</value>
+				/// <remarks>TODO(gwyneth): This comes as XML, but we might wish to convert it first to JSON or
+				/// something else. Note: this would require changing the headers, too</remarks>
 				byte[] the_buffer = System.Text.Encoding.UTF8.GetBytes(response);
 				response = ""; //unset for the hell of it
 				stream.Write(the_buffer, 0, the_buffer.Length);
 			}
-			catch
+			catch (Exception e)
 			{
-				DebugUtilities.WriteError("Could not write to the network stream!");
+				DebugUtilities.WriteError("Could not write to the network stream, error was: " + e.Message);
 				//see below
 			}
 
@@ -187,8 +200,9 @@ namespace RESTBot.Server
 			}
 			catch
 			{
-				DebugUtilities.WriteError("An error occured while closing the stream");
-				//ignore, sometimes the connection was closed by the client
+				DebugUtilities.WriteWarning("An error occured while closing the stream");
+				// ignore, sometimes the connection was closed by the client
+				// if it's to be ignored, I've downgraded it to a warning. (gwyneth 20220426)
 			}
 		}
 	}

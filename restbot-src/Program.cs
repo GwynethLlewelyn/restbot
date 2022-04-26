@@ -428,7 +428,7 @@ namespace RESTBot
       {
 				if (parts.Length < 2)
 				{
-					return "<error>missing 'pass' arg.</error>";
+					return $"<error>{Method}: missing 'pass' arg.</error>";
 				}
         if (parts[1] == Program.config.security.serverPass)
         {
@@ -452,23 +452,23 @@ namespace RESTBot
 				else
 				{
 					// wrong password sent! (gwyneth 20220414)
-					return "<error>server authentication failure</error>";
+					return $"<error>{Method}: server authentication failure</error>";
 				}
       }
 			else if (Method == "ping")
 			{
 				if (parts.Length < 2)
 				{
-					return "<error>missing 'pass' arg.</error>";
+					return $"<error>{Method}: missing 'pass' arg.</error>";
 				}
 				if (parts[1] == Program.config.security.serverPass)
 				{
-					return "<ping>I'm alive!</ping>";
+					return $"<{Method}>I'm alive!</{Method}>";
 				}
 				else
 				{
 					// wrong password sent! (gwyneth 20220414)
-					return "<error>server authentication failure</error>";
+					return $"<error>{Method}: server authentication failure</error>";
 				}
 			}
 			else if (Method == "session_list")
@@ -512,7 +512,7 @@ namespace RESTBot
 				else
 				{
 					// wrong password sent! (gwyneth 20220414)
-					return "<error>server authentication failure</error>";
+					return $"<error>{Method}: server authentication failure</error>";
 				}
 			}
 			else if (Method == "stats")
@@ -529,14 +529,14 @@ namespace RESTBot
 				}
 				else
 				{
-					return "<error>server authentication failure</error>";
+					return $"<error>{Method}: server authentication failure</error>";
 				}
 			}
 
       //Only a method? pssh.
       if (parts.Length == 1)
       {
-        return "<error>nosessionkey</error>";
+        return "<error>no session key found</error>";
       }
 
       UUID sess = new UUID();
@@ -546,7 +546,7 @@ namespace RESTBot
       }
       catch (FormatException)
       {
-        return "<error>parsesessionkey</error>";
+        return "<error>cannot parse the session key</error>";
       }
       catch (Exception e)
       {
