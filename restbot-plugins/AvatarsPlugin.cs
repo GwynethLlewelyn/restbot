@@ -77,18 +77,18 @@ namespace RESTBot
 		Process(RestBot b, Dictionary<string, string> Parameters)
 		{
 			UUID agentKey;
-			DebugUtilities.WriteDebug("TR - Entering avatarname parser");
+			DebugUtilities.WriteDebug("Entering avatarname parser");
 			try
 			{
 				bool check = false;
 				if (Parameters.ContainsKey("key"))
 				{
-					DebugUtilities.WriteDebug("TR - Attempting to parse from POST");
+					DebugUtilities.WriteDebug("Attempting to parse from POST");
 					check =
 						UUID
 							.TryParse(Parameters["key"].ToString().Replace("_", " "),
 							out agentKey);
-					DebugUtilities.WriteDebug("TR - Succesfully parsed POST");
+					DebugUtilities.WriteDebug("Succesfully parsed POST");
 				}
 				else
 				{
@@ -96,11 +96,11 @@ namespace RESTBot
 				}
 				if (check)
 				{
-					DebugUtilities.WriteDebug("TR - Parsing name");
+					DebugUtilities.WriteDebug("Parsing name");
 					string response = getName(b, agentKey);
-					DebugUtilities.WriteDebug("TR - Parsed name");
-					DebugUtilities.WriteDebug("TR - Complete");
-					return $"<name>{response.Trim()}</name>\n";
+					DebugUtilities.WriteDebug("Parsed name");
+					DebugUtilities.WriteDebug("Complete");
+					return $"<name>{response.Trim()}</name>";
 				}
 				else
 				{
@@ -324,8 +324,7 @@ namespace RESTBot
 		/// <returns>UUID of corresponding avatar, if it exists</returns>
 		public UUID getKey(RestBot b, String avatarFirstName, String avatarLastName)
 		{
-			String avatarFullName =
-				avatarFirstName.ToString() + " " + avatarLastName.ToString();
+			String avatarFullName = avatarFirstName.ToString() + " " + avatarLastName.ToString();
 			return getKey(b, avatarFullName.ToLower());
 		}
 
@@ -336,14 +335,14 @@ namespace RESTBot
 			DirPeopleReplyPacket reply = (DirPeopleReplyPacket)packet;
 			DebugUtilities.WriteDebug("Got DirPeopleReply!");
 			if (reply.QueryReplies.Length < 1) {
-				DebugUtilities.WriteWarning(session + " " + MethodName + " Error - empty people directory reply");
+				DebugUtilities.WriteWarning(session + " {MethodName + " Error - empty people directory reply");
 			} else {
 				int replyCount = reply.QueryReplies.Length;
-				DebugUtilities.WriteInfo(session + " " + MethodName + " Proccesing " + replyCount.ToString() + " DirPeople replies");
+				DebugUtilities.WriteInfo(session + " {MethodName + " Proccesing {replyCount.ToString() + " DirPeople replies");
 				for ( int i = 0 ; i <  replyCount ; i++ ) {
-					string avatarName = Utils.BytesToString(reply.QueryReplies[i].FirstName) + " " + Utils.BytesToString(reply.QueryReplies[i].LastName);
+					string avatarName = Utils.BytesToString(reply.QueryReplies[i].FirstName) + " {Utils.BytesToString(reply.QueryReplies[i].LastName);
 					UUID avatarKey = reply.QueryReplies[i].AgentID;
-					DebugUtilities.WriteDebug(session + " " + MethodName + " Reply " + (i + 1).ToString() + " of " + replyCount.ToString() + " Key : " + avatarKey.ToString() + " Name : " + avatarName);
+					DebugUtilities.WriteDebug(session + " {MethodName + " Reply {(i + 1).ToString() + " of {replyCount.ToString() + " Key : {avatarKey.ToString() + " Name : {avatarName);
 
 					if ( !avatarKeys.ContainsKey(avatarName) ) // || avatarKeys[avatarName] == null ) { // apparently dictionary entries cannot be null
 						lock ( avatarKeys ) {
@@ -387,9 +386,8 @@ namespace RESTBot
 					.WriteInfo($"{session} {MethodName} Processing {replyCount.ToString()} DirPeople replies");
 				for (int i = 0; i < replyCount; i++)
 				{
-					string avatarName =
-						e.MatchedPeople[i].FirstName + " " + e.MatchedPeople[i].LastName;
-					UUID avatarKey = e.MatchedPeople[i].AgentID;
+					string avatarName =	e.MatchedPeople[i].FirstName + e.MatchedPeople[i].LastName;
+					UUID avatarKey 		= e.MatchedPeople[i].AgentID;
 					DebugUtilities
 						.WriteDebug($"{session} {MethodName} Reply {(i + 1).ToString()} of {replyCount.ToString()} Key: {avatarKey.ToString()} Name: {avatarName}");
 
@@ -477,7 +475,7 @@ namespace RESTBot
 				if (check)
 				{
 					bool response = getOnline(b, agentKey);
-					return $"<online>{response.ToString()}</online>\n";
+					return $"<online>{response.ToString()}</online>";
 				}
 				else
 				{
@@ -684,31 +682,27 @@ namespace RESTBot
 			if (avatarProfile.ContainsKey(key))
 			{
 				Avatar.AvatarProperties p = avatarProfile[key];
-				string response = "\t<profile>\n";
-				response += "\t<publish>" + p.AllowPublish.ToString() + "</publish>\n";
-				response += "\t<firstlife>\n";
-				response +=
-					"\t\t<text>" +
-					p.FirstLifeText.Replace(">", "%3C").Replace("<", "%3E") +
-					"</text>\n";
-				response += "\t\t<image>" + p.FirstLifeImage.ToString() + "</image>\n";
-				response += "\t</firstlife>\n";
-				response += "\t<partner>" + p.Partner.ToString() + "</partner>\n";
-				response += "\t<born>" + p.BornOn + "</born>\n";
-				response +=
-					"\t<about>" +
-					p.AboutText.Replace(">", "%3C").Replace("<", "%3E") +
-					"</about>\n";
-				response += "\t<charter>" + p.CharterMember + "</charter>\n";
-				response +=
-					"\t<profileimage>" + p.ProfileImage.ToString() + "</profileimage>\n";
-				response += "\t<mature>" + p.MaturePublish.ToString() + "</mature>\n";
-				response +=
-					"\t<identified>" + p.Identified.ToString() + "</identified>\n";
-				response +=
-					"\t<transacted>" + p.Transacted.ToString() + "</transacted>\n";
-				response += "\t<url>" + p.ProfileURL + "</url>\n";
-				response += "</profile>\n";
+				string response = $@"
+	<profile>
+		<publish>{p.AllowPublish.ToString()}</publish>
+		<firstlife>
+			<text>
+				{p.FirstLifeText.Replace(">", "%3C").Replace("<", "%3E")}
+			</text>
+			<image>{p.FirstLifeImage.ToString()}</image>
+		</firstlife>
+		<partner>{p.Partner.ToString()}</partner>
+		<born>{p.BornOn}</born>
+		<about>
+			{p.AboutText.Replace(">", "%3C").Replace("<", "%3E")}
+		</about>
+		<charter>{p.CharterMember}</charter>
+		<profileimage>{p.ProfileImage.ToString()}</profileimage>
+		<mature>{p.MaturePublish.ToString()}</mature>
+		<identified>{p.Identified.ToString()}</identified>
+		<transacted>{p.Transacted.ToString()}</transacted>
+		<url>{p.ProfileURL}</url>
+	</profile>";
 				lock (avatarProfile)
 				{
 					avatarProfile.Remove(key);
@@ -871,28 +865,25 @@ namespace RESTBot
 			}
 			if (avatarGroups.ContainsKey(key))
 			{
-				string response = "<groups>\n";
+				string response = "<groups>";
 
 				foreach (AvatarGroup g in avatarGroups[key])
 				{
-					response += "\t<group>\n";
-					response +=
-						"\t\t<name>" +
-						g.GroupName.Replace(">", "%3C").Replace("<", "%3E") +
-						"</name>\n";
-					response += "\t\t<key>" + g.GroupID.ToString() + "</key>\n";
-					response +=
-						"\t\t<title>" +
-						g.GroupTitle.Replace(">", "%3C").Replace("<", "%3E") +
-						"</title>\n";
-					response +=
-						"\t\t<notices>" + g.AcceptNotices.ToString() + "</notices>\n";
-					response += "\t\t<powers>" + g.GroupPowers.ToString() + "</powers>\n";
-					response +=
-						"\t\t<insignia>" + g.GroupInsigniaID.ToString() + "</insignia>\n";
-					response += "\t</group>\n";
+					response += $@"
+	<group>
+		<name>
+			{g.GroupName.Replace(">", "%3C").Replace("<", "%3E")}
+		</name>
+		<key>{g.GroupID.ToString()}</key>
+		<title>
+			{g.GroupTitle.Replace(">", "%3C").Replace("<", "%3E")}
+		</title>
+		<notices>{g.AcceptNotices.ToString()}</notices>
+		<powers>{g.GroupPowers.ToString()}</powers>
+		<insignia>{g.GroupInsigniaID.ToString()}</insignia>
+	</group>";
 				}
-				response += "</groups>\n";
+				response += "</groups>";
 
 				lock (avatarGroups)
 				{

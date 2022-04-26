@@ -81,38 +81,38 @@ namespace RESTBot
 								check = true;
 						}
 				}
-				string response = "<stats>\n";
-				response += "\t<dilation>" + b.Client.Network.CurrentSim.Stats.Dilation.ToString() + "</dilation>\n";
-				response += "\t<inbps>" + b.Client.Network.CurrentSim.Stats.IncomingBPS.ToString() + "</inbps>\n";
-				response += "\t<outbps>" + b.Client.Network.CurrentSim.Stats.OutgoingBPS.ToString() + "</outbps>\n";
-				response += "\t<resentout>" + b.Client.Network.CurrentSim.Stats.ResentPackets.ToString() + "</resentout>\n";
-				response += "\t<resentin>" + b.Client.Network.CurrentSim.Stats.ReceivedResends.ToString() + "</resentin>\n";
-				response += "\t<queue>" + b.Client.Network.InboxCount.ToString() + "</queue>\n";
-				response += "\t<fps>" + b.Client.Network.CurrentSim.Stats.FPS.ToString() + "</fps>\n";
-				response += "\t<physfps>" + b.Client.Network.CurrentSim.Stats.PhysicsFPS.ToString() + "</physfps>\n";
-				response += "\t<agentupdates>" + b.Client.Network.CurrentSim.Stats.AgentUpdates.ToString() + "</agentupdates>\n";
-				response += "\t<objects>" + b.Client.Network.CurrentSim.Stats.Objects.ToString() + "</objects>\n";
-				response += "\t<scriptedobjects>" + b.Client.Network.CurrentSim.Stats.ScriptedObjects.ToString() + "</scriptedobjects>\n";
-				response += "\t<agents>" + b.Client.Network.CurrentSim.Stats.Agents.ToString() + "</agents>\n";
-				response += "\t<childagents>" + b.Client.Network.CurrentSim.Stats.ChildAgents.ToString() + "</childagents>\n";
-				response += "\t<activescripts>" + b.Client.Network.CurrentSim.Stats.ActiveScripts.ToString() + "</activescripts>\n";
-				response += "\t<lslips>" + b.Client.Network.CurrentSim.Stats.LSLIPS.ToString() + "</lslips>\n";
-				response += "\t<inpps>" + b.Client.Network.CurrentSim.Stats.INPPS.ToString() + "</inpps>\n";
-				response += "\t<outpps>" + b.Client.Network.CurrentSim.Stats.OUTPPS.ToString() + "</outpps>\n";
-				response += "\t<pendingdownloads>" + b.Client.Network.CurrentSim.Stats.PendingDownloads.ToString() + "</pendingdownloads>\n";
-				response += "\t<pendinguploads>" + b.Client.Network.CurrentSim.Stats.PendingUploads.ToString() + "</pendinguploads>\n";
-				response += "\t<virtualsize>" + b.Client.Network.CurrentSim.Stats.VirtualSize.ToString() + "</virtualsize>\n";
-				response += "\t<residentsize>" + b.Client.Network.CurrentSim.Stats.ResidentSize.ToString() + "</residentsize>\n";
-				response += "\t<pendinglocaluploads>" + b.Client.Network.CurrentSim.Stats.PendingLocalUploads.ToString() + "</pendinglocaluploads>\n";
-				response += "\t<unackedbytes>" + b.Client.Network.CurrentSim.Stats.UnackedBytes.ToString() + "</unackedbytes>\n";
-				response += "\t<time>\n";
-				response += "\t\t<frame>" + b.Client.Network.CurrentSim.Stats.FrameTime.ToString() + "</frame>\n";
-				response += "\t\t<image>" + b.Client.Network.CurrentSim.Stats.ImageTime.ToString() + "</image>\n";
-				response += "\t\t<physics>" + b.Client.Network.CurrentSim.Stats.PhysicsTime.ToString() + "</physics>\n";
-				response += "\t\t<script>" + b.Client.Network.CurrentSim.Stats.ScriptTime.ToString() + "</script>\n";
-				response += "\t\t<other>" + b.Client.Network.CurrentSim.Stats.OtherTime.ToString() + "</other>\n";
-				response += "\t\t</time>\n";
-				response += "\t\t</stats>\n";
+				string response = $@"<stats>
+	<dilation>{b.Client.Network.CurrentSim.Stats.Dilation.ToString()}</dilation>
+	<inbps>{b.Client.Network.CurrentSim.Stats.IncomingBPS.ToString()}</inbps>
+	<outbps>{b.Client.Network.CurrentSim.Stats.OutgoingBPS.ToString()}</outbps>
+	<resentout>{b.Client.Network.CurrentSim.Stats.ResentPackets.ToString()}</resentout>
+	<resentin>{b.Client.Network.CurrentSim.Stats.ReceivedResends.ToString()}</resentin>
+	<queue>{b.Client.Network.InboxCount.ToString()}</queue>
+	<fps>{b.Client.Network.CurrentSim.Stats.FPS.ToString()}</fps>
+	<physfps>{b.Client.Network.CurrentSim.Stats.PhysicsFPS.ToString()}</physfps>
+	<agentupdates>{b.Client.Network.CurrentSim.Stats.AgentUpdates.ToString()}</agentupdates>
+	<objects>{b.Client.Network.CurrentSim.Stats.Objects.ToString()}</objects>
+	<scriptedobjects>{b.Client.Network.CurrentSim.Stats.ScriptedObjects.ToString()}</scriptedobjects>
+	<agents>{b.Client.Network.CurrentSim.Stats.Agents.ToString()}</agents>
+	<childagents>{b.Client.Network.CurrentSim.Stats.ChildAgents.ToString()}</childagents>
+	<activescripts>{b.Client.Network.CurrentSim.Stats.ActiveScripts.ToString()}</activescripts>
+	<lslips>{b.Client.Network.CurrentSim.Stats.LSLIPS.ToString()}</lslips>
+	<inpps>{b.Client.Network.CurrentSim.Stats.INPPS.ToString()}</inpps>
+	<outpps>{b.Client.Network.CurrentSim.Stats.OUTPPS.ToString()}</outpps>
+	<pendingdownloads>{b.Client.Network.CurrentSim.Stats.PendingDownloads.ToString()}</pendingdownloads>
+	<pendinguploads>{b.Client.Network.CurrentSim.Stats.PendingUploads.ToString()}</pendinguploads>
+	<virtualsize>{b.Client.Network.CurrentSim.Stats.VirtualSize.ToString()}</virtualsize>
+	<residentsize>{b.Client.Network.CurrentSim.Stats.ResidentSize.ToString()}</residentsize>
+	<pendinglocaluploads>{b.Client.Network.CurrentSim.Stats.PendingLocalUploads.ToString()}</pendinglocaluploads>
+	<unackedbytes>{b.Client.Network.CurrentSim.Stats.UnackedBytes.ToString()}</unackedbytes>
+	<time>
+		<frame>{b.Client.Network.CurrentSim.Stats.FrameTime.ToString()}</frame>
+		<image>{b.Client.Network.CurrentSim.Stats.ImageTime.ToString()}</image>
+		<physics>{b.Client.Network.CurrentSim.Stats.PhysicsTime.ToString()}</physics>
+		<script>{b.Client.Network.CurrentSim.Stats.ScriptTime.ToString()}</script>
+		<other>{b.Client.Network.CurrentSim.Stats.OtherTime.ToString()}</other>
+	</time>
+</stats>";
 				return (response);
 				}
 		}
@@ -147,15 +147,15 @@ namespace RESTBot
 							check = true;
 						}
 
-						string response = $"<{MethodName}>\n";
+						string response = $"<{MethodName}>";
 						if (check)	// optimisation: if empty, no need to run the foreach (gwyneth 20220424)
 						{
 								foreach(KeyValuePair<OpenMetaverse.UUID, RESTBot.Session> kvp in Program.Sessions)
 								{
-										response += $"\t<session key={kvp.Key.ToString()}>{kvp.Value.ID}</session>\n";
+										response += $"\t<session key={kvp.Key.ToString()}>{kvp.Value.ID}</session>";
 								}
 						}
-						response += "</{MethodName}>\n";
+						response += "</{MethodName}>";
 						return (response);
 				} // end Process
 		} // end SessionListPlugin

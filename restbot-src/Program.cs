@@ -117,7 +117,7 @@ namespace RESTBot
 					try
 					{
 						var assembly = Assembly.GetExecutingAssembly();
-						if (assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion != null)
+						if ((assembly != null && assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>() != null && assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion != null))
 						{
 							Version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 						}

@@ -159,7 +159,9 @@ namespace RESTBot.Server
 			else if (split.Length > 1) body = split[1];
 
 			string to_return = Program.DoProcessing(_request_headers, body);
-			to_return = $"<restbot>\n{to_return}\n</restbot>\n";
+			// The next line is DELIBERATELY not using interpolated strings, because there might have
+			// been some issues with those (gwyneth 20220426)
+			to_return = "<restbot>" + to_return + "</restbot>";
 			DebugUtilities
 				.WriteDebug($"What I should return to the client: {to_return}");
 
