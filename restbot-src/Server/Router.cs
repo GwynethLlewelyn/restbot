@@ -112,7 +112,7 @@ namespace RESTBot.Server
 			}
 			DebugUtilities.WriteDebug("Router thread started successfully");
 
-			ManualResetEvent trigger = (ManualResetEvent) ResetTrigger;
+			ManualResetEvent trigger = (ManualResetEvent)ResetTrigger;
 			StillRunning = true;
 			trigger.Set();
 			do

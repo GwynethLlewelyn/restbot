@@ -94,9 +94,46 @@ namespace RESTBot
 			ParseArguments(args);
 
 			// see if we can get the version string
-			var assembly = Assembly.GetExecutingAssembly();
-			var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-			var Version = fileVersionInfo.FileVersion;
+			try
+			{
+				var fileVersionInfo = FileVersionInfo.GetVersionInfo("@RESTbot.dll");
+				Version = fileVersionInfo.FileVersion + "-file";
+			}
+			catch (Exception e1)
+			{
+				// nope, this doesn't work under macOS
+				DebugUtilities.WriteDebug($"Cannot retrieve file version, exception caught: {e1.Message}");
+				// let's try to get the assembly name instead
+				try
+				{
+					var assembly = Assembly.GetExecutingAssembly();
+					Version = assembly.GetName().Version + "-assembly";
+				}
+				catch (Exception e2)
+				{
+					// nope, that didn't work either
+					DebugUtilities.WriteDebug($"Cannot retrieve assembly version either, exception caught: {e2.Message}");
+					// finally, our last choice is trying the Informational Version
+					try
+					{
+						var assembly = Assembly.GetExecutingAssembly();
+						if (assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion != null)
+						{
+							Version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+						}
+					}
+					catch (Exception e3)
+					{
+						// we're out of luck today, we cannot even get the Informational Versoin
+						DebugUtilities.WriteDebug($"Also cannot retrieve informational version, exception caught: {e3.Message}");
+						// we'll have to stick with the hard-coded default Version instead...
+					}
+				}
+			}
+			if (Version == null)
+			{
+				Version = "0.0.0.0";
+			}
 			DebugUtilities.WriteInfo($"RESTbot file version: {Version}");
 
       DebugUtilities.WriteInfo($"Reading config file '{configFile}'...");
