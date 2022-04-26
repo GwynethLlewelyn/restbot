@@ -12,6 +12,8 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<!-- Version gets set by AppVeyor -->
 <!--		<Version>8.2.0.3</Version>-->
+		<!-- The following sadly doesn't work! -->
+		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<AssetsFolder>assets\</AssetsFolder>
 		<ApplicationIcon>$(AssetsFolder)images\RESTbot.ico</ApplicationIcon>
 		<PackageId>RESTbot</PackageId>
@@ -31,6 +33,20 @@
 		<Description>RESTBot is a C# webserver that uses RESTful transactions to interact with a bot in Second Life or OpenSimulator. It relies on LibreMetaverse.</Description>
 		<ProjectGuid>{F6E2EED5-AE02-45D9-A129-7E759F326D4C}</ProjectGuid>
 		<IsPackable>true</IsPackable>
+		<!-- The following conditions will allow us to do conditional compilation based on operating system -->
+		<IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
+		<IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
+		<IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+	</PropertyGroup>
+	<!-- Define nice constants depending on what OS we run; see https://blog.magnusmontin.net/2018/11/05/platform-conditional-compilation-in-net-core/ (gwyneth 20220426) -->
+	<PropertyGroup Condition="'$(IsWindows)'=='true'">
+		<DefineConstants>Windows</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(IsOSX)'=='true'">
+		<DefineConstants>OSX</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(IsLinux)'=='true'">
+		<DefineConstants>Linux</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>

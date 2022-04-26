@@ -97,7 +97,12 @@ namespace RESTBot
 			// see if we can get the version string
 			try
 			{
+				// Note: we ought to also extract the Assembly name, we presume it's the default (gwyneth 20220426)
+#if Windows
 				var fileVersionInfo = FileVersionInfo.GetVersionInfo("@RESTbot.dll");
+#else
+				var fileVersionInfo = FileVersionInfo.GetVersionInfo("@RESTbot.exe");
+#endif
 				Version = fileVersionInfo.FileVersion + "-file";
 			}
 			catch (Exception e1)
@@ -295,7 +300,7 @@ namespace RESTBot
       string[] parts = headers.RequestLine.Path.Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
       if (parts.Length < 1)
       {
-        return ("<error>invalidmethod</error>");
+        return "<error>invalidmethod</error>";
       }
       string Method = parts[0];
       /// <summary>Process the request params from POST, URL</summary>
@@ -306,11 +311,12 @@ namespace RESTBot
       {
         debugparams = debugparams + "[" + kvp.Key + "=" + kvp.Value + "] ";
       }
+			DebugUtilities.WriteDebug($"Parameters (total: {Parameters.Count()}) - '{debugparams}'");
       foreach (string s in parts)
       {
         debugparts = debugparts + "[ " + s + " ]";
       }
-      DebugUtilities.WriteDebug("Parameters - " + debugparams);
+      DebugUtilities.WriteDebug($"Parts (total: {parts.Count()}) - '{debugparts}'");
       if (Method == "establish_session")
       {
         DebugUtilities.WriteDebug("We have an establish_session method.");
@@ -385,7 +391,7 @@ namespace RESTBot
 							DebugUtilities.WriteWarning("Possible issue: we have null Sessions when removing, which shouldn't happen");
 						}
           }
-          return (reply.xmlReply);
+          return reply.xmlReply;
         }
         else
         {
@@ -414,7 +420,7 @@ namespace RESTBot
       {
 				if (parts.Length < 2)
 				{
-					return ("<error>missing 'pass' arg.</error>");
+					return "<error>missing 'pass' arg.</error>";
 				}
         if (parts[1] == Program.config.security.serverPass)
         {
@@ -427,7 +433,7 @@ namespace RESTBot
 						StillRunning = false;
 						// note: a caveat of this undocumented method is that it requires a _new_
 						// incoming request to actually kill the server... could be a ping, though. (gwyneth 20220414)
-						return ("<status>success - all bot sessions were logged out and a request was made for queued shutdown</status>");
+						return "<status>success - all bot sessions were logged out and a request was made for queued shutdown</status>";
 					}
 					else
 					{
@@ -438,14 +444,91 @@ namespace RESTBot
 				else
 				{
 					// wrong password sent! (gwyneth 20220414)
-					return ("<error>server authentication failure</error>");
+					return "<error>server authentication failure</error>";
 				}
       }
+			else if (Method == "ping")
+			{
+				if (parts.Length < 2)
+				{
+					return "<error>missing 'pass' arg.</error>";
+				}
+				if (parts[1] == Program.config.security.serverPass)
+				{
+					return "<ping>I'm alive!</ping>";
+				}
+				else
+				{
+					// wrong password sent! (gwyneth 20220414)
+					return "<error>server authentication failure</error>";
+				}
+			}
+			else if (Method == "session_list")
+			{
+				if (parts.Length < 2)
+				{
+					return "<error>missing 'pass' arg.</error>";
+				}
+				if (parts[1] == Program.config.security.serverPass)
+				{
+					bool check = false;
+					if (Program.Sessions.Count != 0) // no sessions? that's fine, no need to abort
+					{
+						check = true;
+					}
+
+					string response = $"<{Method}>";
+					if (check)	// optimisation: if empty, no need to run the foreach (gwyneth 20220424)
+					{
+						foreach(KeyValuePair<OpenMetaverse.UUID, RESTBot.Session> kvp in Program.Sessions)
+						{
+							if (kvp.Value.Bot != null)
+							{
+								response += $"<session key={kvp.Key.ToString()}>{kvp.Value.Bot.Client.Self.AgentID.ToString()}</session>";
+							}
+							else
+							{
+								// Somehow, we have a session ID that has no bot assigned;
+								// this should never be the case, but... (gwyneth 20220426)
+								response += $"<session key={kvp.Key.ToString()}>{UUID.Zero.ToString()}</session>";
+							}
+						}
+					}
+					else
+					{
+						response += "no sessions";
+					}
+					response += $"</{Method}>";
+					return response;
+				}
+				else
+				{
+					// wrong password sent! (gwyneth 20220414)
+					return "<error>server authentication failure</error>";
+				}
+			}
+			else if (Method == "stats")
+			{
+				if (parts.Length < 2)
+				{
+					return "<error>missing 'pass' arg.</error>";
+				}
+				if (parts[1] == Program.config.security.serverPass)
+				{
+					string response = "<stats><bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "<bots>";
+					response += "<uptime>" + (DateTime.Now - uptime) + "</uptime></stats>";
+					return response;
+				}
+				else
+				{
+					return "<error>server authentication failure</error>";
+				}
+			}
 
       //Only a method? pssh.
       if (parts.Length == 1)
       {
-        return ("<error>nosession</error>");
+        return "<error>nosessionkey</error>";
       }
 
       UUID sess = new UUID();
@@ -455,7 +538,7 @@ namespace RESTBot
       }
       catch (FormatException)
       {
-        return ("<error>parsesessionkey</error>");
+        return "<error>parsesessionkey</error>";
       }
       catch (Exception e)
       {
@@ -497,17 +580,17 @@ namespace RESTBot
       else if (Method == "exit")
       {
         DisposeSession(sess);
-        return ("<disposed>true</disposed>");
+        return "<disposed>true</disposed>";
       }
       else if (Method == "stats")
       {
         string response = "<bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "<bots>";
         response += "<uptime>" + (DateTime.Now - uptime) + "</uptime>";
-        return (response);
+        return response;
       }
 
       return r.DoProcessing(Parameters, parts);
-    }
+    } // end DoProcessing
 
 		/// <summary>Checks if a session key (UUID) is valid and its hostname is set</summary>
 		/// <param name="key">Session UUID to be validated</param>

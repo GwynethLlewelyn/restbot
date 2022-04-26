@@ -1181,7 +1181,7 @@ namespace RESTBot
 		{
 				if (b == null)	// should be impossible
 				{
-					return ("<error>invalid request</error>");
+					return "<error>invalid request</error>";
 				}
 
 				/// <value>Constructs a XML response with the following data:
@@ -1219,7 +1219,7 @@ namespace RESTBot
 	<start>{b.Start}</start>
 </{MethodName}>
 ";
-				return (response);
+				return response;
 		} // end Process
 	} // end SessionListPlugin
 } // end namespace RESTbot

@@ -530,9 +530,9 @@ namespace RESTBot
 			}
 			else if (Method == "status")
 			{
-				return ($"<status>{myStatus.ToString()}</status>");
+				return $"<status>{myStatus.ToString()}</status>";
 			}
-			return ("<error>novalidplugin</error>");
+			return "<error>novalidplugin</error>";
 		} // end DoProcessing
 	} // end class RestBot
 } // end namespace RestBot

@@ -50,7 +50,7 @@ namespace RESTBot
 
 						string dilation = b.Client.Network.CurrentSim.Stats.Dilation.ToString();
 						b.Client.Settings.ALWAYS_DECODE_OBJECTS = false;
-						return($"<{MethodName}>{dilation}</{MethodName}>");
+						return $"<{MethodName}>{dilation}</{MethodName}>";
 				}
 		}
 
@@ -113,7 +113,7 @@ namespace RESTBot
 		<other>{b.Client.Network.CurrentSim.Stats.OtherTime.ToString()}</other>
 	</time>
 </stats>";
-				return (response);
+				return response;
 				}
 		}
 
@@ -138,7 +138,10 @@ namespace RESTBot
 				/// </summary>
 				/// <param name="b">A currently active RestBot</param>
 				/// <param name="Parameters">not used</param>
-				/// <remarks>This will list all currently known sessions.</remarks>
+				/// <remarks><para>This will list all currently known sessions.</para>
+				/// <para>Also note that there is a way to retrieve all sessions (same method)
+				/// without requiring a valid bot session, just for my own purposes; <see cref="Program.Main" /></para>
+				/// </remarks>
 				public override string Process(RestBot b, Dictionary<string, string> Parameters)
 				{
 						bool check = false;
@@ -155,8 +158,12 @@ namespace RESTBot
 										response += $"<session key={kvp.Key.ToString()}>{kvp.Value.ID}</session>";
 								}
 						}
-						response += "</{MethodName}>";
-						return (response);
+						else
+						{
+							response += "no sessions";
+						}
+						response += $"</{MethodName}>";
+						return response;
 				} // end Process
 		} // end SessionListPlugin
 } // end namespace
