@@ -56,7 +56,7 @@ namespace RESTBot.XMLConfig
 		[XmlElement("plugin")]
 		public PluginConfig plugin = new PluginConfig();
 
-		/// <summary>The default URI to connect to the Linden Lab grid</summary>
+		/// <value>The default URI to connect to the Linden Lab grid</value>
 		public static string
 			defaultLoginURI = "https://login.agni.lindenlab.com/cgi-bin/login.cgi";
 
@@ -103,8 +103,8 @@ namespace RESTBot.XMLConfig
 	public class NetworkConfig
 	{
 		[XmlElement("ip")]
-		/// <summary>IP address ought to be set to 127.0.0.1 for localhost connections only;
-		///					 use 0.0.0.0 to have it bound to _all_ interfaces and be accessible from the Internet</summary>
+		/// <value>IP address ought to be set to 127.0.0.1 for localhost connections only;
+		///					 use 0.0.0.0 to have it bound to _all_ interfaces and be accessible from the Internet</value>
 		public string ip = "0.0.0.0";
 
 		[XmlElement("port")]
@@ -118,7 +118,7 @@ namespace RESTBot.XMLConfig
 		public float throttle = 1572864.0f;
 
 		[XmlElement("webapi-url")]
-		/// <summary>What _is_ this!? It's not included anywhere... (gwyneth 20220109)</summary>
+		/// <value>What _is_ this!? It's not included anywhere... (gwyneth 20220109)</value>
 		public string backendURL = "https://localhost/actorbot/pipe.php";
 	}
 
@@ -127,7 +127,7 @@ namespace RESTBot.XMLConfig
 	{
 		//TODO: Make x,y,z floats but round them off when using them (this is so the parser can read a decimal instead of errroring out)
 		[XmlElement("sim")]
-		/// <summary>Name of the region for the RESTbot to start, by default</summary>
+		/// <value>Name of the region for the RESTbot to start, by default</value>
 		public string startSim = "strace island"; // 'Ahern' ought to be a better default... (gwyneth 20220109)
 
 		[XmlElement("x")]
@@ -151,11 +151,12 @@ namespace RESTBot.XMLConfig
 	public class DebugConfig
 	{
 		[XmlElement("restbot")]
-		/// <summary>Log debugging specific to RESTbot</summary>
+		/// <value>Log debugging specific to RESTbot</value>
 		public bool restbotDebug = false;
 
 		[XmlElement("libsl")]
-		/// <summary>Log debugging specific to the underlying LibreMetaverse layer</summary>
+		/// <value>Log debugging specific to the underlying LibreMetaverse layer</value>
+		/// <remarks>probably ignored (gwyneth 20220427)</remarks>
 		public bool slDebug = true;
 	}
 
@@ -164,9 +165,12 @@ namespace RESTBot.XMLConfig
 	public class SecurityConfig
 	{
 		[XmlElement("hostnamelock")]
+		/// <value>I have no idea what this is for...</value>
 		public bool hostnameLock = false;
 
 		[XmlElement("serverpassword")]
+		/// <value>Main server password, used in the API; please change it!</value>
+		/// <remarks>Should be a URL-safe password, so beware of very strange unencoded characters.. (gwyneth 20220427)
 		public string serverPass = "pass"; // Change me!
 	}
 
@@ -181,15 +185,15 @@ namespace RESTBot.XMLConfig
 	public class PluginConfig
 	{
 		[XmlElement("reaper")]
-		/// <summary>The Reaper plugin seems to have no possible configuration to turn on/off, so we set it here</summary>
+		/// <value>The Reaper plugin seems to have no possible configuration to turn on/off, so we set it here</value>
 		public bool reaper = true;
 
 		[XmlElement("reaper-session-timeout")]
-		/// <summary>Session timeout timespan</summary>
+		/// <value>Session timeout timespan</value>
 		public TimeSpan reaperSessionTimeout = new TimeSpan(1, 0, 0); // default: one hour (h, m, s)
 
 		[XmlElement("reaper-sweep-interval")]
-		/// <summary>interval between reaper sweeps in ms</summary>
+		/// <value>interval between reaper sweeps in ms</value>
 		public double reaperSweepInterval = 10000; // default: 10 seconds
 	}
 }

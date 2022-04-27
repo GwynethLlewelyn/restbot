@@ -124,7 +124,10 @@
 		<!--<Message Text="[DEBUG] AssetsFolder=$(AssetsFolder); AssetsConfigFolderName=$(AssetsConfigFolderName); OpenMetaverseData=$(OpenMetaverseData); OpenMetaverseDataFolderName=$(OpenMetaverseDataFolderName); AssetsDataFolder=@(AssetsDataFolder)" Importance="High" />
 		<Message Text="Preparing to copy asset files..." Importance="High" />-->
 		<Copy SourceFiles="$(AssetsConfigFolderName)\configuration.xml" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
-		<Copy SourceFiles="$(AssetsConfigFolderName)\restbot.exe.config" DestinationFiles="$(OutputPath)$(AssemblyName).config" ContinueOnError="true" />
+<!--
+		<Copy SourceFiles="$(AssetsConfigFolderName)\log4net.config" DestinationFiles="$(OutputPath)$(AssemblyName).config" ContinueOnError="true" />
+-->
+		<Copy SourceFiles="$(AssetsConfigFolderName)\log4net.config" DestinationFolder="$(OutputPath)" ContinueOnError="true" />
 		<MakeDir Directories="$(OutputPath)$(OpenMetaverseData)" Condition="!Exists('$(OutputPath)$(OpenMetaverseData)')" />
 		<Copy SourceFiles="@(AssetsDataFolder)" DestinationFolder="$(OutputPath)$(OpenMetaverseData)" ContinueOnError="true" />
 		<Message Text="Asset files copied." Importance="High" />

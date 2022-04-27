@@ -47,6 +47,7 @@ assets/configuration/configuration.xml
 
 # Logging files
 logs/*
+*.log
 
 *.test
 *.prof

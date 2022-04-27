@@ -33,7 +33,7 @@ using System.Runtime.CompilerServices;
 using System.IO; // for Path.GetFileName()
 #endif
 
-[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
 namespace RESTBot
 {
 	/// <summary>
@@ -44,8 +44,7 @@ namespace RESTBot
 		/// <value>
 		/// Define a new logger for RestBot.
 		/// </value>
-		private static readonly log4net.ILog
-			restbotLog = LogManager.GetLogger(typeof(RestBot));
+		private static readonly log4net.ILog restbotLog = LogManager.GetLogger(typeof(RestBot));
 // log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		/// <value>stores the overall ability to debug statically, to save time</value>
@@ -55,7 +54,7 @@ namespace RESTBot
 		/// <summary>init log4net logging</summary>
 		static DebugUtilities()
 		{
-			isDebugEnabled = false;
+	 		isDebugEnabled = false;
 			if (
 				Program.config != null &&
 				Program.config.debug != null &&
@@ -64,7 +63,7 @@ namespace RESTBot
 			{
 				isDebugEnabled = restbotLog.IsDebugEnabled;
 			}
-			log4net.Config.XmlConfigurator.Configure();
+			// log4net.Config.XmlConfigurator.Configure();	// needed only if we need more complex configuration; see https://stackoverflow.com/a/69172718/1035977 (gwyneth 20220427)
 		}
 
 		/// <summary>
@@ -145,6 +144,7 @@ namespace RESTBot
 				if (isDebugEnabled)
 				{
 					restbotLog.Debug(message);
+					Output($"[DEBUG] {message}", ConsoleColor.Gray);
 				}
 			}
 			catch
