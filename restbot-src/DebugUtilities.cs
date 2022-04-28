@@ -54,15 +54,16 @@ namespace RESTBot
 		/// <summary>init log4net logging</summary>
 		static DebugUtilities()
 		{
-	 		isDebugEnabled = false;
+	 		isDebugEnabled = restbotLog.IsDebugEnabled;
 			if (
 				Program.config != null &&
-				Program.config.debug != null &&
-				Program.config.debug.restbotDebug != false
+				Program.config.debug != null
 			)
 			{
-				isDebugEnabled = restbotLog.IsDebugEnabled;
+				Output($"[INFO] Is debug enabled on config? {Program.config.debug.restbotDebug.ToString()}", ConsoleColor.White);
+				isDebugEnabled = Program.config.debug.restbotDebug;	// cannot be null, is either true or false
 			}
+			Output($"[INFO] isDebugEnabled={isDebugEnabled.ToString()} restbotLog.IsDebugEnabled={restbotLog.IsDebugEnabled.ToString()}", ConsoleColor.White);
 			// log4net.Config.XmlConfigurator.Configure();	// needed only if we need more complex configuration; see https://stackoverflow.com/a/69172718/1035977 (gwyneth 20220427)
 		}
 

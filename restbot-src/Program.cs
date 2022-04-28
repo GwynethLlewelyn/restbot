@@ -218,13 +218,17 @@ namespace RESTBot
 			{
 				DebugUtilities.WriteDebug("Good, no command-line arguments to parse.");
 			}
-			else if (args.Count() == 1 || args.Count() > 2)
+			else if (args.Count() == 1)
 			{
-				// if (args[0] == "--help")
-				// {
-					DebugUtilities.WriteSpecial("Usage: RESTbot --config /path/to/configfile");
+				if (args[0] == "--help")
+				{
+					DebugUtilities.WriteSpecial("Usage: RESTbot --config /path/to/configfile|--debug|--help");
 					Environment.Exit(10);
-				// }
+				}
+				else if (args[0] == "--debug")
+				{
+					DebugUtilities.WriteSpecial("`--debug` doesn't work yet...");
+				}
 			}
 			else if (args.Count() == 2)
 			{
@@ -233,6 +237,11 @@ namespace RESTBot
 					configFile = args[1];	// should sanitise first (gwyneth 20220425)
 					DebugUtilities.WriteDebug($"Command-line argument set configuration file to '{configFile}'");
 				}
+			}
+			else
+			{
+				DebugUtilities.WriteSpecial("Usage: RESTbot --config /path/to/configfile|--debug|--help");
+				Environment.Exit(10);
 			}
 		} // end ParseArguments
 
@@ -340,13 +349,30 @@ namespace RESTBot
 										)
 								{
 										DebugUtilities.WriteWarning($"Already running avatar {Parameters["first"]} {Parameters["last"]}");
-										return $@"<existing_session>true</existing_session>
+
+										/// <value>Temporary string to construct a full response, if possible; if not, we catch the
+										/// exception and return a much shorter version</value>
+										/// <remarks>This is a hack. The issue is that we're probably acessing nullable
+										/// elements without checking. (gwyneth 20220428)</remarks>
+										string returnString = "";
+
+										try
+										{
+											// Attempt to get a
+											returnString = $@"<existing_session>true</existing_session>
 <session_id>{ss.Key.ToString()}</session_id>
 <key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>
 <FirstName>{ss.Value.Bot.Client.Self.FirstName}</FirstName>
 <LastName>{ss.Value.Bot.Client.Self.LastName}</LastName>
 <CurrentSim>{ss.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim>
 <Position>{ss.Value.Bot.Client.Self.SimPosition.X},{ss.Value.Bot.Client.Self.SimPosition.Y},{ss.Value.Bot.Client.Self.SimPosition.Z}</Position>";
+										}
+										catch (Exception e)
+										{
+											DebugUtilities.WriteError($"Could not generate full response, error was: '{e.Message}'; falling back to the simple, minimalistic answer");
+											returnString = $"<existing_session>true</existing_session><session_id>{ss.Key.ToString()}</session_id>";
+										}
+										return returnString;
 								}
 							}
 						}
