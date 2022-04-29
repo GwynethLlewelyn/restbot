@@ -170,17 +170,12 @@ namespace RESTBot
 		/// <remarks>obsolete syntax changed</remarks>
 		private void Avatars_OnAvatarNames(object? sender, UUIDNameReplyEventArgs e)
 		{
-			DebugUtilities
-				.WriteInfo(session.ToString() +
-				" Processing " +
-				e.Names.Count.ToString() +
-				" AvatarNames replies");
+			DebugUtilities.WriteDebug($"{session.ToString()} Processing {e.Names.Count.ToString()} AvatarNames replies");
 			foreach (KeyValuePair<UUID, string> kvp in e.Names)
 			{
 				if (!avatarNames.ContainsKey(kvp.Key) || avatarNames[kvp.Key] == null)
 				{
-					DebugUtilities
-						.WriteInfo($"{session.ToString()} Reply Name: {kvp.Value} Key: {kvp.Key.ToString()}");
+					DebugUtilities.WriteDebug($"{session.ToString()} Reply Name: {kvp.Value} Key: {kvp.Key.ToString()}");
 					lock (avatarNames)
 					{
 						// avatarNames[kvp.Key] = new Avatar(); // why all this trouble?
