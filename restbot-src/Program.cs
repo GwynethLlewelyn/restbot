@@ -306,7 +306,7 @@ namespace RESTBot
 			}
 
       //Setup variables
-      DebugUtilities.WriteDebug($"New request - {headers.RequestLine.Path}");
+      DebugUtilities.WriteInfo($"New request - {headers.RequestLine.Path}");
       //Split the URL
       string[] parts = headers.RequestLine.Path.Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
       if (parts.Length < 1)
@@ -330,7 +330,7 @@ namespace RESTBot
       DebugUtilities.WriteDebug($"Parts (total: {parts.Count()}) - '{debugparts}'");
       if (Method == "establish_session")
       {
-        DebugUtilities.WriteDebug("We have an establish_session method.");
+        DebugUtilities.WriteDebug("We have an `establish_session` method.");
         // Alright, we're going to try to establish a session
 				// Start location is optional (gwyneth 20220421)
         if (parts.Length >= 2 && parts[1] == Program.config.security.serverPass
