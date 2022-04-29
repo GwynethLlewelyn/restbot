@@ -89,8 +89,10 @@ namespace RESTBot
 					content_type = line.Value.ToLower();
 				}
 			}
-			DebugUtilities
-				.WriteDebug($"HandleDataFromRequest: body is: '{body}'");
+			if body != String.Empty
+			{
+				DebugUtilities.WriteDebug($"request body is: '{body}'");
+			}
 			if (content_type == "text/xml" || content_type == "xml")
 			{
 				// make it a string
@@ -419,15 +421,13 @@ namespace RESTBot
 			DebugUtilities.WriteDebug($"Login URI: {Client.Settings.LOGIN_SERVER}");
 
 			LoginParams loginParams =
-				Client
-					.Network
-					.DefaultLoginParams(First, Last, MD5Password, "RestBot", Program.Version);
+				Client.Network.DefaultLoginParams(First, Last, MD5Password, "RestBot", Program.Version);
 
 			loginParams.Start = Start;
 
 			if (Client.Network.Login(loginParams))
 			{
-				DebugUtilities.WriteSpecial("Logged in successfully");
+				DebugUtilities.WriteSpecial($"{First} {Last} logged in successfully");
 				myStatus = Status.Connected;
 				response.wasFatal = false;
 				response.xmlReply =
@@ -469,10 +469,10 @@ namespace RESTBot
 						break;
 					default:
 						DebugUtilities
-							.WriteError($"{sessionid.ToString()} - UNKNOWN ERROR ATTEMPTING TO LOGIN: {Client.Network.LoginErrorKey}");
+							.WriteError($"{sessionid.ToString()} UNKNOWN ERROR {Client.Network.LoginErrorKey} WHILE ATTEMPTING TO LOGIN");
 						response.wasFatal = true;
 						response.xmlReply =
-							"<error fatal=\"true\">Unknown error has occurred.</error>";
+							$"<error fatal=\"true\">Unknown error '{Client.Network.LoginErrorKey}' has occurred.</error>";
 						break;
 				}
 
