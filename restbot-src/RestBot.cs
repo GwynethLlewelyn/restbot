@@ -336,11 +336,7 @@ namespace RESTBot
 			if (e.Reason != NetworkManager.DisconnectType.ClientInitiated)
 			{
 				myStatus = Status.Reconnecting;
-				DebugUtilities
-					.WriteWarning(sessionid.ToString() +
-					" was disconnected (" +
-					e.Message.ToString() +
-					"), but I'm logging back in again in 5 minutes.");
+				DebugUtilities.WriteWarning($"{sessionid.ToString()} was disconnected ({e.Message.ToString()}), but I'm logging back in again in 5 minutes.");
 				ReloginTimer.Stop();
 				ReloginTimer.Interval = 5 * 60 * 1000;
 				ReloginTimer.Start();
@@ -367,8 +363,7 @@ namespace RESTBot
 			DebugUtilities.WriteSpecial("Login block was called in Login()");
 			if (Client.Network.Connected)
 			{
-				DebugUtilities
-					.WriteError("Uhm, Login() was called when we where already connected. Hurr");
+				DebugUtilities.WriteError("Uhm, Login() was called when we where already connected. Hurr");
 				return new LoginReply();
 			}
 
@@ -502,8 +497,7 @@ namespace RESTBot
 			{
 				debugparams = $"{debugparams} [{kvp.Key}={kvp.Value}] ";
 			}
-			DebugUtilities
-				.WriteDebug($"Session ID: {sessionid}, Method: {Method}, Parameters: {debugparams}");
+			DebugUtilities.WriteDebug($"Session ID: {sessionid}, Method: {Method}, Parameters: {debugparams}");
 
 			//Actual processing
 			if (Plugins.ContainsKey(Method))
@@ -517,21 +511,17 @@ namespace RESTBot
 			}
 			else if (Method == "stat")
 			{
-				string response = $@"<name>
-	{Client.Self.FirstName} {Client.Self.LastName}
-</name>
-<key>
-	{Client.Self.AgentID.ToString()}
-</key>
-<uptime>
-	{(DateTime.Now - uptime)}
-</uptime>
+				string response = $@"<{Method}>
+	<name>{Client.Self.FirstName} {Client.Self.LastName}</name>
+	<key>{Client.Self.AgentID.ToString()}</key>
+	<uptime>{(DateTime.Now - uptime)}</uptime>
+</{Method}>
 ";
 				return response;
 			}
 			else if (Method == "status")
 			{
-				return $"<status>{myStatus.ToString()}</status>";
+				return $"<{Method}>{myStatus.ToString()}</{Method}>";
 			}
 			return "<error>novalidplugin</error>";
 		} // end DoProcessing

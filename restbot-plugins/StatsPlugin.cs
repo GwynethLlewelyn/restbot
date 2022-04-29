@@ -81,7 +81,7 @@ namespace RESTBot
 								check = true;
 						}
 				}
-				string response = $@"<stats>
+				string response = $@"<{MethodName}>
 	<dilation>{b.Client.Network.CurrentSim.Stats.Dilation.ToString()}</dilation>
 	<inbps>{b.Client.Network.CurrentSim.Stats.IncomingBPS.ToString()}</inbps>
 	<outbps>{b.Client.Network.CurrentSim.Stats.OutgoingBPS.ToString()}</outbps>
@@ -112,7 +112,7 @@ namespace RESTBot
 		<script>{b.Client.Network.CurrentSim.Stats.ScriptTime.ToString()}</script>
 		<other>{b.Client.Network.CurrentSim.Stats.OtherTime.ToString()}</other>
 	</time>
-</stats>";
+</{MethodName}>";
 				return response;
 				}
 		}

@@ -553,12 +553,12 @@ namespace RESTBot
 			{
 				if (parts.Length < 2)
 				{
-					return "<error>missing 'pass' arg.</error>";
+					return "<error>{Method}: missing 'pass' arg.</error>";
 				}
 				if (parts[1] == Program.config.security.serverPass)
 				{
-					string response = "<stats><bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "NaN") + "<bots>";
-					response += "<uptime>" + (DateTime.Now - uptime) + "</uptime></stats>";
+					string response = "<stats><bots>" + ((Sessions != null) ? Sessions.Count.ToString() : "0") + "</bots>"
+						+ "<uptime>" + (DateTime.Now - uptime) + "</uptime></stats>";
 					return response;
 				}
 				else
