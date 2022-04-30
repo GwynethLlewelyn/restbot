@@ -89,7 +89,7 @@ namespace RESTBot
 					content_type = line.Value.ToLower();
 				}
 			}
-			if body != String.Empty
+			if (body != String.Empty)
 			{
 				DebugUtilities.WriteDebug($"request body is: '{body}'");
 			}
