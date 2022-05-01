@@ -110,7 +110,7 @@ namespace RESTBot
 
 			if (!check)
 			{
-				return "<error>missing required parameters</error>";
+				return $"<error>{MethodName}: missing required parameters</error>";
 			}
 
 			// Make sure we are not in autopilot.
@@ -128,13 +128,7 @@ namespace RESTBot
 				Realism.Chat(b.Client, message, chattype, 3); // 3 means typing 3 characters per second (gwyneth 20220121)
 			}
 
-			return "<say><channel>" +
-			channel.ToString() +
-			"</channel><message>" +
-			message +
-			"</message><chattype>" +
-			chattype.ToString() +
-			"</chattype></say>";
+			return $"<{MethodName}><channel>{channel.ToString()}</channel><message>{message}</message><chattype>{chattype.ToString()}</chattype></{MethodName}>";
 		} // end Process
 	} // end SayPlugin
 
@@ -228,9 +222,12 @@ namespace RESTBot
 
 				if (avatarKey == UUID.Zero)
 				{
-					DebugUtilities
-						.WriteWarning($"Key not found for unknown avatar '{avatarFullName}'");
+					DebugUtilities.WriteWarning($"Key not found for unknown avatar '{avatarFullName}'");
 					check = false;
+				}
+				else
+				{
+					DebugUtilities.WriteDebug($"Avatar '{avatarFullName}' has key '{avatarKey}'");
 				}
 			}
 
@@ -247,14 +244,17 @@ namespace RESTBot
 
 			if (!check)
 			{
-				return "<error>wrong parameters passed; IM not sent</error>";
+				return $"<error>{MethodName}: wrong parameters passed; IM not sent</error>";
 			}
 
 			// make sure message is not too big (gwyneth 20220212)
 			message = message.TrimEnd();
-			if (message.Length > 1023) message = message.Remove(1023);
+			if (message.Length > 1023)	/// <see href="https://wiki.secondlife.com/wiki/LlInstantMessage" />
+			{
+				message = message.Remove(1023);
+			}
 			b.Client.Self.InstantMessage(avatarKey, message);
-			return $"<instant_message><key>{avatarKey.ToString()}</key><message>{message}</message></instant_message>";
+			return $"<{MethodName}><key>{avatarKey.ToString()}</key><message>{message}</message></{MethodName}>";
 		} // end Process
 	} // end InstantMessagePlugin
 } // end namespace
