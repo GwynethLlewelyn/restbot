@@ -360,12 +360,18 @@ namespace RESTBot
 										{
 											// Attempt to get a
 											returnString = $@"<existing_session>true</existing_session>
-<session_id>{ss.Key.ToString()}</session_id>
-<key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>
-<FirstName>{ss.Value.Bot.Client.Self.FirstName}</FirstName>
-<LastName>{ss.Value.Bot.Client.Self.LastName}</LastName>
-<CurrentSim>{ss.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim>
-<Position>{ss.Value.Bot.Client.Self.SimPosition.X},{ss.Value.Bot.Client.Self.SimPosition.Y},{ss.Value.Bot.Client.Self.SimPosition.Z}</Position>";
+	<session_id>{ss.Key.ToString()}</session_id>
+	<key>{ss.Value.Bot.Client.Self.AgentID.ToString()}</key>
+	<name>{ss.Value.Bot.Client.Self.FirstName} {ss.Value.Bot.Client.Self.LastName}</name>
+	<FirstName>{ss.Value.Bot.Client.Self.FirstName}</FirstName>
+	<LastName>{ss.Value.Bot.Client.Self.LastName}</LastName>
+	<status>{ss.Value.Bot.myStatus.ToString()}</status>
+	<uptime>{ss.Value.Bot.getUptimeISO8601()}</uptime>
+	<start>{ss.Value.Bot.Start}</start>
+	<CurrentSim>{ss.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim>
+	<Position>{ss.Value.Bot.Client.Self.SimPosition.X},{ss.Value.Bot.Client.Self.SimPosition.Y},{ss.Value.Bot.Client.Self.SimPosition.Z}</Position>
+	<Rotation>{ss.Value.Bot.Client.Self.SimRotation.X},{ss.Value.Bot.Client.Self.SimRotation.Y},{ss.Value.Bot.Client.Self.SimRotation.Z},{ss.Value.Bot.Client.Self.SimRotation.W}</Rotation>
+";
 										}
 										catch (Exception e)
 										{

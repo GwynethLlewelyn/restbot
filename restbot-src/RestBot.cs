@@ -434,10 +434,12 @@ namespace RESTBot
 					$@"<success>
 	<session_id>{sessionid.ToString()}</session_id>
 	<key>{Client.Self.AgentID.ToString()}</key>
+	<name>{Client.Self.FirstName} {Client.Self.LastName}</name>
 	<FirstName>{Client.Self.FirstName}</FirstName>
 	<LastName>{Client.Self.LastName}</LastName>
 	<CurrentSim>{Client.Network.CurrentSim.ToString()}</CurrentSim>
 	<Position>{Client.Self.SimPosition.X},{Client.Self.SimPosition.Y},{Client.Self.SimPosition.Z}</Position>
+	<Rotation>{Client.Self.SimRotation.X},{Client.Self.SimRotation.Y},{Client.Self.SimRotation.Z},{Client.Self.SimRotation.W}</Rotation>
 </success>";
 			}
 			else

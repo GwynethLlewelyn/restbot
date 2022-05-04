@@ -161,10 +161,15 @@ namespace RESTBot
 	<session>
 		<session_id>{kvp.Key.ToString()}</session_id>
 		<key>{kvp.Value.Bot.Client.Self.AgentID.ToString()}</key>
+		<name>{kvp.Value.Bot.Client.Self.FirstName} {kvp.Value.Bot.Client.Self.LastName}</name>
 		<FirstName>{kvp.Value.Bot.Client.Self.FirstName}</FirstName>
 		<LastName>{kvp.Value.Bot.Client.Self.LastName}</LastName>
+		<status>{kvp.Value.Bot.myStatus.ToString()}</status>
+		<uptime>{kvp.Value.Bot.getUptimeISO8601()}</uptime>
+		<start>{kvp.Value.Bot.Start}</start>
 		<CurrentSim>{kvp.Value.Bot.Client.Network.CurrentSim.ToString()}</CurrentSim>
 		<Position>{kvp.Value.Bot.Client.Self.SimPosition.X},{kvp.Value.Bot.Client.Self.SimPosition.Y},{kvp.Value.Bot.Client.Self.SimPosition.Z}</Position>
+		<Rotation>{kvp.Value.Bot.Client.Self.SimRotation.X},{kvp.Value.Bot.Client.Self.SimRotation.Y},{kvp.Value.Bot.Client.Self.SimRotation.Z},{kvp.Value.Bot.Client.Self.SimRotation.W}</Rotation>
 	</session>";
 									}
 									else

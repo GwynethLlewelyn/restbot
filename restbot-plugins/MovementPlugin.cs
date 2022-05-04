@@ -923,4 +923,8 @@ namespace RESTBot
 		}
 	} // end StandPlugin
 
+	/// Upcoming plugins: turnto and turnto_avatar
+	/// me.Client.Self.Movement.TurnToward(Pos);
+	/// me.Client.Self.Movement.SendUpdate(true);
+
 } // end namespace RESTBot

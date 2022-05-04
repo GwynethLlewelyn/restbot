@@ -180,7 +180,17 @@ namespace RESTBot
 			{
 				if (chatMetaData != (ChatEventArgs) EventArgs.Empty)
 				{
-					string ret = $"<listen><simulator>{chatMetaData.Simulator.ToString()}</simulator><message>{chatMetaData.Message}</message><audiblelevel>{chatMetaData.AudibleLevel.ToString()}</audiblelevel><chattype>{chatMetaData.Type.ToString()}</chattype><sourcetype>{chatMetaData.SourceType.ToString()}</sourcetype><fromname>{chatMetaData.FromName}</fromname><sourceid>{chatMetaData.SourceID.ToString()}</sourceid><ownerid>{chatMetaData.OwnerID.ToString()}</ownerid><position>{chatMetaData.Position.ToString()}</position></listen>";
+					string ret = $@"<{MethodName}>
+		<simulator>{chatMetaData.Simulator.ToString()}</simulator>
+		<message>{chatMetaData.Message}</message>
+		<audiblelevel>{chatMetaData.AudibleLevel.ToString()}</audiblelevel>
+		<chattype>{chatMetaData.Type.ToString()}</chattype>
+		<sourcetype>{chatMetaData.SourceType.ToString()}</sourcetype>
+		<fromname>{chatMetaData.FromName}</fromname>
+		<sourceid>{chatMetaData.SourceID.ToString()}</sourceid>
+		<ownerid>{chatMetaData.OwnerID.ToString()}</ownerid>
+		<position>{chatMetaData.Position.ToString()}</position>
+	</{MethodName}>";
 
 					DebugUtilities.WriteDebug($"Captured message XML: {ret}");
 					return ret;

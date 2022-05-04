@@ -1179,6 +1179,7 @@ namespace RESTBot
 					return "<error>invalid request</error>";
 				}
 
+				/// Note: the description below is outdated! (gwyneth 20220504)
 				/// <value>Constructs a XML response with the following data:
 				/// <list type="bullet">
 				///   <item>
@@ -1205,13 +1206,17 @@ namespace RESTBot
 				/// </list>
 				/// </value>
 				string response = $@"<{MethodName}>
-	<first>{b.First}</first>
-	<last>{b.Last}</last>
+	<FirstName>{b.First}</FirstName>
+	<LastName>{b.Last}</LastName>
+	<name>{b.First} {b.Last}</name>
 	<key>{b.Client.Self.AgentID.ToString()}</key>
 	<status>{b.myStatus.ToString()}</status>
-	<sessionid>{b.sessionid.ToString()}</sessionid>
+	<session_id>{b.sessionid.ToString()}</session_id>
 	<uptime>{b.getUptimeISO8601()}</uptime>
 	<start>{b.Start}</start>
+	<CurrentSim>{b.Client.Network.CurrentSim.ToString()}</CurrentSim>
+	<Position>{b.Client.Self.SimPosition.X},{b.Client.Self.SimPosition.Y},{b.Client.Self.SimPosition.Z}</Position>
+	<Rotation>{b.Client.Self.SimRotation.X},{b.Client.Self.SimRotation.Y},{b.Client.Self.SimRotation.Z},{b.Client.Self.SimRotation.W}</Rotation>
 </{MethodName}>
 ";
 				return response;
