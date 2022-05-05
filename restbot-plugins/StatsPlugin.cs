@@ -155,7 +155,7 @@ namespace RESTBot
 						{
 								foreach(KeyValuePair<OpenMetaverse.UUID, RESTBot.Session> kvp in Program.Sessions)
 								{
-									if (kvp.Value.Bot != null)
+									if (kvp.Value.Bot != null && kvp.Value.Bot.Client != null && kvp.Value.Bot.Client.Self != null && kvp.Value.Bot.Client.Network != null)
 									{
 										response += $@"
 	<session>
