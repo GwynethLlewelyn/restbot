@@ -1,0 +1,20 @@
+[Unit]
+Description=RESTbot
+After=syslog.target
+After=network.target
+
+[Service]
+Type=forking
+User=
+Group=
+WorkingDirectory=/full/path/to/bin/directory
+ExecStart=/usr/bin/screen -dmS "RESTbot" /full/path/to/bin/RESTbot
+ExecStop=/usr/bin/screen -p 0 -S "RESTbot" -X kill
+KillSignal=SIGCONT
+Restart=always
+RestartSec=30s
+RemainAfterExit=false
+SuccessExitStatus=1
+
+[Install]
+WantedBy=multi-user.target
