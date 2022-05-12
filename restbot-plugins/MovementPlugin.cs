@@ -852,7 +852,7 @@ namespace RESTBot
 					{
 						b.Client.Self.RequestSit(targetPrim.ID, Vector3.Zero);
 						b.Client.Self.Sit();
-						return $"<{MethodName}>sitting on {targetPrim.ID.ToString()} ({targetPrim.LocalID})</{MethodName}>";
+						return $"<{MethodName}>sitting on \"{targetPrim.Properties.Name}\" ({targetPrim.ID.ToString()} [Local ID: {targetPrim.LocalID}])</{MethodName}>";
 					}
 
 					return $"<error>{MethodName}: no prim with UUID {sitTargetID} found</error>";
