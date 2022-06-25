@@ -926,6 +926,7 @@ namespace RESTBot
 	/// <summary>Turn avatar towards a point; parameters are x, y, z</summary>
 	public class TurnToPlugin : StatefulPlugin
 	{
+		private UUID session;
 		private Vector3 goalPos;
 
 		/// <summary>
@@ -943,6 +944,7 @@ namespace RESTBot
 		/// <returns>void</returns>
 		public override void Initialize(RestBot bot)
 		{
+			session = bot.sessionid;
 			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
 		}
 

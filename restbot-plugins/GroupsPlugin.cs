@@ -194,7 +194,7 @@ namespace RESTBot
 				}
 				else
 				{
-					return "<error>{MethodName}: arguments</error>";
+					return $"<error>{MethodName}: arguments</error>";
 				}
 				DebugUtilities.WriteDebug("Activating group");
 
@@ -217,7 +217,7 @@ namespace RESTBot
 			catch (Exception e)
 			{
 				DebugUtilities.WriteError(e.Message);
-				return "<error>{MethodName}: parsekey</error>";
+				return $"<error>{MethodName}: parsekey</error>";
 			}
 		}
 
@@ -658,7 +658,7 @@ namespace RESTBot
 
 				b.Client.Groups.SendGroupNotice(groupUUID, notice);
 
-				DebugUtilities.WriteDebug(session + " " + MethodName + " Sent Notice from avatar " + notice.OwnerID.ToString() + " to group: " + groupUUID.ToString() + " subject: '" + notice.Subject.ToString() + "' message: '" + notice.Message.ToString() + "' Optional attachment: " + notice.AttachmentID.ToString() + " Serialisation: " + Utils.BytesToString(notice.SerializeAttachment()));
+				DebugUtilities.WriteDebug($"{session} {MethodName} Sent Notice from avatar {notice.OwnerID.ToString()} to group: {groupUUID.ToString()} subject: '{notice.Subject.ToString()}' message: '{notice.Message.ToString()}' Optional attachment: {notice.AttachmentID.ToString()} Serialisation: {Utils.BytesToString(notice.SerializeAttachment())}");
 
 				return "<notice>sent</notice>";
 			}

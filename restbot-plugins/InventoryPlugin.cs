@@ -564,7 +564,7 @@ namespace RESTBot
 				}
 				else
 				{
-					return "<error>Notecard creation failed: " + message + "</error>";
+					return $"<error>Notecard creation failed: {message}</error>";
 				}
 			} // end try
 			catch (Exception e)
