@@ -1004,7 +1004,7 @@ namespace RESTBot
 				goalPos = new Vector3((float) x, (float) y, (float) z);
 				b.Client.Self.Movement.TurnToward(goalPos, false);
 
-				return $"<{MethodName}><location></location><rotation>{b.Client.Self.GlobalPosition.X},{b.Client.Self.GlobalPosition.Y},{b.Client.Self.GlobalPosition.Z}</location><rotation>{b.Client.Self.SimRotation.X},{b.Client.Self.SimRotation.Y},{b.Client.Self.SimRotation.Z},{b.Client.Self.SimRotation.W}</rotation></{MethodName}>";
+				return $"<{MethodName}><location>{b.Client.Self.GlobalPosition.X},{b.Client.Self.GlobalPosition.Y},{b.Client.Self.GlobalPosition.Z}</location><rotation>{b.Client.Self.SimRotation.X},{b.Client.Self.SimRotation.Y},{b.Client.Self.SimRotation.Z},{b.Client.Self.SimRotation.W}</rotation></{MethodName}>";
 			}
 			catch (Exception e)
 			{
