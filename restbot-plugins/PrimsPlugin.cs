@@ -188,13 +188,12 @@ namespace RESTBot
                     });
 
 
-                return "<nearby_prim>" + String.Format("<pos>{1},{2},{3}</pos>",
-                    found.Position.X, found.Position.Y, found.Position.Z) + "</nearby_prim>";
+                return $"<nearby_prim><pos>{found.Position.X},{found.Position.Y},{found.Position.Z}</pos></nearby_prim>";
             }
             catch (Exception e)
             {
                 DebugUtilities.WriteError(e.Message);
-                return "<error>" + e.Message + "</error>";
+                return $"<error>{MethodName}: {e.Message}</error>";
             }
         }
 

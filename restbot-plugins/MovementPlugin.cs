@@ -151,7 +151,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>{MethodName} parameters have to be simulator name, x, y, z</error>";
+					return $"<error>{MethodName} parameters have to be simulator name, x, y, z</error>";
 				}
 				// debug: calculate destination vector, show data, just to make sure it's correct (gwyneth 20220411)
 				Vector3 teleportPoint = new Vector3(x, y, z);
@@ -234,8 +234,7 @@ namespace RESTBot
 						.WriteDebug($"I am close to my goal pos: {goalPos.X}, {goalPos.Y}, {goalPos.Z}");
 					me.Client.Self.AutoPilotCancel();
 					DebugUtilities.WriteSpecial("Cancel Autopilot");
-					me.Client.Self.Movement.TurnToward(goalPos);
-					me.Client.Self.Movement.SendUpdate(true);
+					me.Client.Self.Movement.TurnToward(goalPos, true);
 					Active = false;
 					attempts = 0;
 				}
@@ -314,7 +313,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>{MethodName} parameters have to be x, y, z, [distance, run]</error>";
+					return $"<error>{MethodName} parameters have to be x, y, z, [distance, run]</error>";
 				}
 
 				if (run)
@@ -326,8 +325,7 @@ namespace RESTBot
 					b.Client.Self.Movement.AlwaysRun = false;
 				}
 				goalPos = new Vector3((float) x, (float) y, (float) z);
-				b.Client.Self.Movement.TurnToward(goalPos);
-				b.Client.Self.Movement.SendUpdate(false);
+				b.Client.Self.Movement.TurnToward(goalPos, false);
 
 				// Check for null and, if so, abort with error (gwyneth 20220213)
 				if (me == null)
@@ -428,8 +426,7 @@ namespace RESTBot
 					DebugUtilities.WriteDebug($"I am close to my goal pos: <{goalPos.X}, {goalPos.Y}, {goalPos.Z}");
 					me.Client.Self.AutoPilotCancel();
 					DebugUtilities.WriteSpecial("Cancel Autopilot");
-					me.Client.Self.Movement.TurnToward(goalPos);
-					me.Client.Self.Movement.SendUpdate(true);
+					me.Client.Self.Movement.TurnToward(goalPos, true);
 					Active = false;
 				}
 			}
@@ -476,7 +473,7 @@ namespace RESTBot
 
 				if (!check)
 				{
-					return "<error>{MethodName} parameters have to be avatar name to follow</error>";
+					return $"<error>{MethodName} parameters have to be avatar name to follow</error>";
 				}
 
 				if (run)
@@ -493,7 +490,7 @@ namespace RESTBot
 					for (int i = 0; i < b.Client.Network.Simulators.Count; i++)
 					{
 						DebugUtilities
-							.WriteDebug($"Found {b.Client.Network.Simulators[i].ObjectsAvatars.Count}Avatar(s)");
+							.WriteDebug($"Found {b.Client.Network.Simulators[i].ObjectsAvatars.Count} Avatar(s)");
 						target =
 							b
 								.Client
@@ -514,14 +511,13 @@ namespace RESTBot
 						{
 							DebugUtilities
 								.WriteError($"{MethodName} - Error finding position of '{avatarName}'");
-							return "<error>{MethodName} error finding position of '{avatarName}'</error>";
+							return $"<error>{MethodName} error finding position of '{avatarName}'</error>";
 						}
 					}
 				}
 
 				goalPos = new Vector3((float) x, (float) y, (float) z);
-				b.Client.Self.Movement.TurnToward(goalPos);
-				b.Client.Self.Movement.SendUpdate(false);
+				b.Client.Self.Movement.TurnToward(goalPos, false);
 
 				// C# 8+ is stricter with nulls; if 'me' is null, we got a problem,
 				// because there is no way to calculate the distance; so we simply set it to zero
@@ -565,7 +561,7 @@ namespace RESTBot
 		}
 	} // end movetoavatar
 
-	/// <summary>follow an avatar; parameters are:</summary>
+	/// <summary>Follow an avatar; parameters are:</summary>
 	/// <remarks><para>The summary line was abruptly cut and left unfinished... (gwyneth 20220303)</para>
 	/// <para>But there seems to be only one parameter, <c>target</c>, the avatar UUID to follow.
 	/// (gwyneth 20220409)</para></remarks>
@@ -763,6 +759,7 @@ namespace RESTBot
 		} // end Follow()
 	} // end FollowPlugin
 
+
 	// new plugin for sitting on prim
 	/// <summary>
 	/// Sit On (Prim); parameter is UUID of object to sit on
@@ -923,8 +920,96 @@ namespace RESTBot
 		}
 	} // end StandPlugin
 
-	/// Upcoming plugins: turnto and turnto_avatar
-	/// me.Client.Self.Movement.TurnToward(Pos);
-	/// me.Client.Self.Movement.SendUpdate(true);
+	/// Upcoming plugins: turnto (a point) and turnto_avatar (avatar UUID)
+	/// me.Client.Self.Movement.TurnToward(Pos, true);
+
+	/// <summary>Turn avatar towards a point; parameters are x, y, z</summary>
+	public class TurnToPlugin : StatefulPlugin
+	{
+		private Vector3 goalPos;
+
+		/// <summary>
+		/// Sets the plugin name for the router.
+		/// </summary>
+		public TurnToPlugin()
+		{
+			MethodName = "turnto";
+		}
+
+		/// <summary>
+		/// Initialises the plugin.
+		/// </summary>
+		/// <param name="bot">A currently active RestBot</param>
+		/// <returns>void</returns>
+		public override void Initialize(RestBot bot)
+		{
+			DebugUtilities.WriteDebug($"{session} {MethodName} startup");
+		}
+
+		/// <summary>
+		/// Handler event for this plugin.
+		/// </summary>
+		/// <param name="b">A currently active RestBot</param>
+		/// <param name="Parameters">A dictionary containing (x,y,z) coordinates for
+		/// the point to turn to.</param>
+		/// <returns>Avatar's current position and rotation</returns>
+		public override string
+		Process(RestBot b, Dictionary<string, string> Parameters)
+		{
+			// uint
+			// 	regionX,
+			// 	regionY;
+			// Utils
+			// 	.LongToUInts(b.Client.Network.CurrentSim.Handle,
+			// 	out regionX,
+			// 	out regionY);
+
+			try
+			{
+				double
+					x = 0.0f,
+					y = 0.0f,
+					z = 0.0f;
+				bool check = true;
+
+				if (Parameters.ContainsKey("x"))
+				{
+					check &= double.TryParse(Parameters["x"], out x);
+					DebugUtilities.WriteDebug($"{MethodName} Parse: {Parameters["x"]} into {x}");
+				}
+				else
+					check = false;
+
+				if (Parameters.ContainsKey("y"))
+				{
+					check &= double.TryParse(Parameters["y"], out y);
+				}
+				else
+					check = false;
+
+				if (Parameters.ContainsKey("z"))
+				{
+					check &= double.TryParse(Parameters["z"], out z);
+				}
+				else
+					check = false;
+
+				if (!check)
+				{
+					return $"<error>{MethodName} parameters have to be x, y, z</error>";
+				}
+
+				goalPos = new Vector3((float) x, (float) y, (float) z);
+				b.Client.Self.Movement.TurnToward(goalPos, false);
+
+				return $"<{MethodName}><location></location><rotation>{b.Client.Self.GlobalPosition.X},{b.Client.Self.GlobalPosition.Y},{b.Client.Self.GlobalPosition.Z}</location><rotation>{b.Client.Self.SimRotation.X},{b.Client.Self.SimRotation.Y},{b.Client.Self.SimRotation.Z},{b.Client.Self.SimRotation.W}</rotation></{MethodName}>";
+			}
+			catch (Exception e)
+			{
+				DebugUtilities.WriteError(e.Message);
+				return $"<error>{MethodName}: {e.Message}</error>";
+			}
+		} // end turnto process
+	} // end turnto plugin
 
 } // end namespace RESTBot
