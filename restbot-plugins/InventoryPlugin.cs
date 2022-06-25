@@ -96,11 +96,11 @@ namespace RESTBot
 					PrintFolder (b, startFolder, response);
 					DebugUtilities.WriteDebug("Complete");
 
-					return "<inventory>" + response + "</inventory>";
+					return $"<inventory>{response}</inventory>";
 				}
 				else
 				{
-					return "<error>{MethodName}: parsekey</error>";
+					return $"<error>{MethodName}: parsekey</error>";
 				}
 			}
 			catch (Exception e)
