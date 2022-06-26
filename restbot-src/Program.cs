@@ -564,7 +564,7 @@ namespace RESTBot
 			{
 				if (parts.Length < 2)
 				{
-					return "<error>{Method}: missing 'pass' arg.</error>";
+					return $"<error>{Method}: missing 'pass' arg.</error>";
 				}
 				if (parts[1] == Program.config.security.serverPass)
 				{
