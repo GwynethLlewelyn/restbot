@@ -58,7 +58,8 @@ namespace RESTBot.Server
 		/// <returns>A valid string, even if it's just a colon followed by a single space character</returns>
 		public override string ToString()
 		{
-			return "${Key}: {Value}";
+			// return "${Key}: {Value}";	// duh... if *I* wrote this, I must have been insane!
+			return $"{_key}: {_value}";
 		}
 
 		/// <summary>Constructors!</summary>
