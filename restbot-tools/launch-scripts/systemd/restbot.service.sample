@@ -7,6 +7,7 @@ After=network.target
 Type=forking
 User=
 Group=
+Environment="DOTNET=/usr/lib/dotnet"
 WorkingDirectory=/full/path/to/bin/directory
 ExecStart=/usr/bin/screen -dmS "RESTbot" /full/path/to/bin/RESTbot
 ExecStop=/usr/bin/screen -p 0 -S "RESTbot" -X kill
