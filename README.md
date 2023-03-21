@@ -26,7 +26,7 @@ _**Note:** The wiki is still under reformulation and may not correctly represent
 
 Probably you only need to get the Community version of [Visual Studio](https://visualstudio.microsoft.com/), which should install everything you need.
 
-Make sure you select a version that supports **.NET** 6.0.
+Make sure you select a version that supports (at least) **.NET** 6.0.
 
 ### Under macOS:
 
@@ -54,11 +54,11 @@ brew install mono-libgdiplus
 #### Add the .NET environment
 
 ```bash
-brew install dotnet-sdk-preview
+brew install dotnet-sdk
 export DOTNET_ROOT=/usr/local/share/dotnet/
 ```
 
-At the time of writing, you need **.NET** 6.0 (the latest and greatest!). This requires installing the _preview_ version from Homebrew; the default long-term service (LTS) version is still 5.X, although Microsoft admits that it will switch to 6.0 as soon as it's feasible. This also means that, once Homebrew catches up with Microsoft, you might need to do a `brew remove dotnet-sdk-preview` and do a `brew install dotnet-sdk` instead.
+At the time of writing, you need at least **.NET** 6.0.15 (a long-term support version). If you use `brew install dotnet-sdk` in 2023, it should give you version 7 by default. `brew install dotnet-sdk-preview` should give you version 8. 
 
 #### Compile it
 

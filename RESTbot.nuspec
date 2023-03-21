@@ -10,7 +10,7 @@
 	<icon>assets\images\RESTbot-logo.png</icon>
 	<readme>README.md</readme>
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<copyright>Copyright 2007,2010,2021</copyright>
+	<copyright>Copyright 2007,2010,2021,2023</copyright>
 	<tags>LMV OMV OpenMetaverse OpenSim OpenSimulator Halcyon OpenMetaverseFoundation VirtualWorld Radegast SecondLife</tags>
 	<repository type="git" url="https://github.com/GwynethLlewelyn/restbot.git" />
 	<title>RESTbot</title>

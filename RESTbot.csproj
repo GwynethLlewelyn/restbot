@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web" DefaultTargets="Build">
 	<PropertyGroup Label="Globals">
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>RESTbot</AssemblyName>
@@ -11,14 +11,13 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<!-- Version gets set by AppVeyor -->
-<!--		<Version>8.2.0.3</Version>-->
 		<!-- The following sadly doesn't work! -->
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<AssetsFolder>assets\</AssetsFolder>
 		<ApplicationIcon>$(AssetsFolder)images\RESTbot.ico</ApplicationIcon>
 		<PackageId>RESTbot</PackageId>
 		<Authors>Gwyneth Llewelyn, Pleiades, others</Authors>
-		<Copyright>Copyright © Pleiades 2007. Copyright © Gwyneth Llewelyn 2010,2021. Some rights reserved</Copyright>
+		<Copyright>Copyright © Pleiades 2007. Copyright © Gwyneth Llewelyn 2010,2021,2023. Some rights reserved</Copyright>
 		<PackageIcon>RESTbot-logo.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>

@@ -68,7 +68,7 @@ namespace RESTBot
 		/// Handler event for this plugin.
 		/// </summary>
 		/// <param name="b">A currently active RestBot</param>
-		/// <param name="Parameters">A dictionary containing the channel, the message, and possibly the chat type</param>
+		/// <param name="Parameters">A dictionary containing the channel, the message, possibly the chat type, and if realistic chat should be used or not (and if so, how many characters per second to type</param>
 		/// <remarks>channel defaults to 0 (public channel), while chattype defaults to normal chat.</remarks>
 		public override string
 		Process(RestBot b, Dictionary<string, string> Parameters)
@@ -77,6 +77,8 @@ namespace RESTBot
 			bool check = true;
 			string message = String.Empty;
 			ChatType chattype = ChatType.Normal;
+			bool realism = false;		// allows chat to be more realistic, i.e. with typing animation etc.
+			int charspersecond = 3;	// a human types 3 characters per second on average
 
 			if (Parameters.ContainsKey("channel"))
 			{
@@ -89,7 +91,7 @@ namespace RESTBot
 				message = Parameters["message"];
 			}
 			else
-				check = false;
+				check = false;	// *must* have a message!
 
 			// if chattype is not specified, we use normal chat by default.
 			if (Parameters.ContainsKey("chattype"))
@@ -108,6 +110,18 @@ namespace RESTBot
 				}
 			}
 
+			// optional parameters, don't affect the check flag (gwyneth 20220318)
+			if (Parameters.ContainsKey("realism"))
+			{
+				bool.TryParse(Parameters["realism"], out realism);
+			}
+
+			if (Parameters.ContainsKey("charspersecond"))
+			{
+				// default is 3
+				int.TryParse(Parameters["charspersecond"], out charspersecond);
+			}
+
 			if (!check)
 			{
 				return $"<error>{MethodName}: missing required parameters</error>";
@@ -119,13 +133,13 @@ namespace RESTBot
 
 			// Note: when channel is zero, we'll attempt to use Realism.Chat instead, because it looks cooler! (gwyneth 20220121)
 			/// <summary><c>Realism</c> is a class in <c>Openmetaverse.Utilities</c>.</summary>
-			if (channel != 0)
+			if (channel != 0 || !realism)
 			{
 				b.Client.Self.Chat(message, channel, chattype);
 			}
-			else
+			else if (realism)
 			{
-				Realism.Chat(b.Client, message, chattype, 3); // 3 means typing 3 characters per second (gwyneth 20220121)
+				Realism.Chat(b.Client, message, chattype, charspersecond);	// 3 chars per second will be default
 			}
 
 			return $"<{MethodName}><channel>{channel.ToString()}</channel><message>{message}</message><chattype>{chattype.ToString()}</chattype></{MethodName}>";
