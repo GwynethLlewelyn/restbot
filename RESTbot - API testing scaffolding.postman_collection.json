@@ -2,7 +2,9 @@
 	"info": {
 		"_postman_id": "60eb7df8-b2f7-472a-acea-cc89f641e1e7",
 		"name": "RESTbot: API testing scaffolding",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"description": "The original instructions are minimalistic, they just deal with establishing a connection and exiting a bot.\n\nExcept for establishing a connection, the _original_ REST API is as follows:\n\nCall `http://your-host-where-RESTbot-lives.com:9080//`\n\nwhile on the POST data, you put the actual parameters.\n\nEstablishing a connection will give you the `session_id`.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14772119"
 	},
 	"item": [
 		{
@@ -12,17 +14,22 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"if (pm.environment.has(\"sl_password\")) {",
-							"    var sl_password = pm.environment.get(\"sl_password\");",
+							"if (!pm.collectionVariables.has(\"avatarFirstName\") || !pm.collectionVariables.has(\"avatarLastName\")) {",
+							"    console.warn(\"missing avatar name...\");",
+							"    return;",
+							"}",
+							"",
+							"if (pm.collectionVariables.has(\"avatarPassword\")) {",
+							"    var sl_password = pm.collectionVariables.get(\"avatarPassword\");",
 							"    var my_sl_password = CryptoJS.MD5(sl_password).toString();",
 							"    ",
-							"    console.log(\"Password: \" + sl_password + \"; MD5'ed: \" + my_sl_password);",
+							"    console.log(\"avatar password: \" + sl_password + \"; MD5'ed: \" + my_sl_password);",
 							"",
 							"    // Inject MD5'ed password into environment.",
 							"    // This avoids losing the initial value of the password (gwyneth 20220107).",
-							"    pm.environment.set(\"sl_md5_password\", my_sl_password);",
+							"    pm.collectionVariables.set(\"sl_md5_password\", my_sl_password);",
 							"} else {",
-							"    console.log(\"sl_password not found...\");",
+							"    console.warn(\"avatar password not found...\");",
 							"}"
 						],
 						"type": "text/javascript"
@@ -35,15 +42,23 @@
 							"console.log(\"Response body was: \", pm.response.text());",
 							"var jsonObject = xml2Json(pm.response.text());",
 							"console.log(\"After converting from XML to JSON:\", jsonObject);",
-							"if (jsonObject.restbot.session_id) {",
-							"    console.log(\"Already logged in; session_id is: '\" + jsonObject.restbot.session_id + \"'\");",
-							"    pm.environment.set(\"session_id\", jsonObject.restbot.session_id);",
-							"} else if (jsonObject.restbot.success.session_id) {",
+							"if (typeof jsonObject.restbot.error !== 'undefined') {",
+							"    // couldn't log in for some reason...",
+							"    console.error(\"Failed to log in avatar with error from the grid; no session_id was returned!\");",
+							"    return;",
+							"}",
+							"if (typeof jsonObject.restbot.session_id !== 'undefined') {",
+							"    console.info(\"Already logged in; session_id is: '\" + jsonObject.restbot.session_id + \"'\");",
+							"    pm.collectionVariables.set(\"session_id\", jsonObject.restbot.session_id);",
+							"    return;",
+							"}",
+							"if (typeof jsonObject.restbot.success.session_id !== 'undefined') {",
 							"    console.log(\"Successfully logged in; session_id is: '\" + jsonObject.restbot.success.session_id + \"'\");",
-							"    pm.environment.set(\"session_id\", jsonObject.restbot.success.session_id);",
-							"} else {",
-							"    console.log(\"Either session_id was empty, or we couldn't extract it from XML...\");",
-							"}"
+							"    pm.collectionVariables.set(\"session_id\", jsonObject.restbot.success.session_id);",
+							"    return;",
+							"}",
+							"console.error(\"Either session_id was empty, or we couldn't extract it from XML...\");",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -57,13 +72,13 @@
 					"urlencoded": [
 						{
 							"key": "first",
-							"value": "MyAvatarFirstName",
+							"value": "{{avatarFirstName}}",
 							"description": "Avatar first name",
 							"type": "text"
 						},
 						{
 							"key": "last",
-							"value": "Test",
+							"value": "{{avatarLastName}}",
 							"description": "Avatar last name (or 'Resident' if no last name)",
 							"type": "text"
 						},
@@ -71,24 +86,80 @@
 							"key": "pass",
 							"value": "{{sl_md5_password}}",
 							"description": "Calculated MD5 of password",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "pass",
+							"value": "{{avatarPassword}}",
+							"description": "Avatar password in plaintext",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{protocol}}://{{server}}:9080/establish_session/pass",
-					"protocol": "{{protocol}}",
+					"raw": "{{baseURL}}/establish_session/{{restBotPassword}}",
 					"host": [
-						"{{server}}"
+						"{{baseURL}}"
 					],
-					"port": "9080",
 					"path": [
 						"establish_session",
-						"pass"
+						"{{restBotPassword}}"
 					]
-				}
+				},
+				"description": "**RESTbot password:** the default is simply `pass`. You can (and should!) change it on `configuration.xml`.\n\nThe _avatar_ password is another story. Under OpenSimulator, you can get away with your own generated MD5'ed password; the underlying libraries will add the `\"$1$\"` prefix (that properly identifies MD5 encoding as, well, MD5 encoding) and it works fine. Second Life, however, mumbles and grumbles and ultimately refuses to use your MD5'd password. Why that happens is completely beyond my knowledge and understanding.\n\nHowever, LibreMetaverse has added a neat feature — if a password is passed in plaintext (i.e. _not_ MD5-encoded), _then_ it will go through all proper steps to ensure that the Second Life Grid gets a properly MD5'd password _that SL accepts_. Weird, but it certainly works! So, if you are unable to login to SL with your MD5'd password, try to use your non-encoded password instead. A safety issue? Sure, _if_ you connect via `http` and not `https` to your RESTbot instance. The truth is that MD5 is easily breakable anyway, so encoding a password with MD5 and passing it unencrypted is not really safe these days (it might have been the case in 2003, but [today it's reasonably easy to crack](https://www.4armed.com/blog/hashcat-crack-md5-hashes/).\n\n`start` allows the avatar to start from its last location using the parameter value `last` (this is the default starting location), or optionally `home` (avatar will get rezzed at their previously set home position, if possible) or even using a specially formatted URI (allows teleport to a specific region and point inside that region), such as: Either \"last\", \"home\", or a string encoded URI with the body part (like this: `uri:hooper&128&152&`).\n\nIf successful, this call will return a _session identification key_:\n\n``` xml\n<restbot><success><session_id>5defa00c-1590-410b-a9e1-98066abd5ae4</session_id><key>53d9df15-7d7e-4422-b65f-f7f286d2c54d</key></success></restbot>\n\n```\n\nIf the wrong username or password was sent, you'll get (for Second Life):\n\n``` xml\n<restbot>\n    <restbot>\n    <error fatal=\"true\">Sorry! We couldn't log you in.\nPlease check to make sure you entered the right\n    * Username (like bobsmith12 or steller.sunshine)\n    * Password\n    * Second Factor Token (if enabled)\nAlso, please make sure your Caps Lock key is off. If you feel this is an error, please contact support@secondlife.com.</error>\n</restbot>\n\n```\n\n(of course, Linden Lab may change the message at any time)\n\nIf this bot avatar had already been logged in by RESTbot, it detects that the session already exists, and returns:\n\n``` xml\n<restbot>\n    <existing_session>true</existing_session>\n    <session_id>aa3c8fad-32fd-4347-8ed8-15026354df71</session_id>\n    <key>11817ab3-dafa-4ad7-98cc-0f454910f332</key>\n</restbot>\n\n```\n\n### Notes\n\n- Starting with v8.2.0, the session identification key (`session_id`) and avatar key (`key`, a UUID) are _also_ returned.\n- Other errors preventing the session to be instantiated _might_ be possible (not tested as of 20220111!), they're usually returned within `error` tags."
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "first",
+									"value": "Sample",
+									"description": "Avatar first name",
+									"type": "text"
+								},
+								{
+									"key": "last",
+									"value": "Resident",
+									"description": "Avatar last name (or 'Resident' if no last name)",
+									"type": "text"
+								},
+								{
+									"key": "pass",
+									"value": "",
+									"description": "Calculated MD5 of password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9080/establish_session/pass",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9080",
+							"path": [
+								"establish_session",
+								"pass"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
 		},
 		{
 			"name": "Logout",
@@ -97,7 +168,33 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							""
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Response body was: \", pm.response.text());",
+							"var jsonObject = xml2Json(pm.response.text());",
+							"console.log(\"After converting from XML to JSON:\", jsonObject);",
+							"if (typeof jsonObject.restbot.error !== 'undefined') {",
+							"    // couldn't log in for some reason...",
+							"    console.error(\"Failed to logout avatar with error from the grid; old session_id '\" + pm.collectionVariables.get(\"session_id\") + \"' retained\");",
+							"    return;",
+							"}",
+							"if (typeof jsonObject.restbot.disposed !== 'undefined') {",
+							"    if (jsonObject.restbot.disposed == 'true') {",
+							"        pm.collectionVariables.set(\"session_id\",  \"00000000-0000-0000-0000-000000000000\");",
+							"        console.info(\"session disposed successfully; session_id reset to NULL_UUID\");    ",
+							"    } else {",
+							"        console.info(\"Failed to logout avatar; old session_id '\" + pm.collectionVariables.get(\"session_id\") + \"' retained\");",
+							"    }",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -111,17 +208,16 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "{{protocol}}://{{server}}:9080/exit/{{session_id}}",
-					"protocol": "{{protocol}}",
+					"raw": "{{baseURL}}/exit/{{session_id}}",
 					"host": [
-						"{{server}}"
+						"{{baseURL}}"
 					],
-					"port": "9080",
 					"path": [
 						"exit",
 						"{{session_id}}"
 					]
-				}
+				},
+				"description": "`session_id` is the session identification key received on the previous call.\n\n### Returns:\n\n``` xml\n<restbot><status>success - all bot sessions very logged out and a request for queued shutdown</status></restbot>\n\n```"
 			},
 			"response": []
 		},
@@ -132,7 +228,12 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							""
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"    return;",
+							"}",
+							"",
+							"// if (pm.request.body.formdata(\"key\").)"
 						],
 						"type": "text/javascript"
 					}
@@ -146,25 +247,159 @@
 					"urlencoded": [
 						{
 							"key": "name",
-							"value": "OneAvatar Resident",
+							"value": "Governor Linden",
 							"description": "Name of avatar for which we're retrieving its key (UUID).",
 							"type": "default"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{protocol}}://{{server}}:9080/avatar_key/{{session_id}}/",
-					"protocol": "{{protocol}}",
+					"raw": "{{baseURL}}/avatar_key/{{session_id}}/",
 					"host": [
-						"{{server}}"
+						"{{baseURL}}"
 					],
-					"port": "9080",
 					"path": [
 						"avatar_key",
 						"{{session_id}}",
 						""
 					]
+				},
+				"description": "### Returns:\n\n```xml\n<restbot><key>d2cdf457-5027-4887-abd8-573c62a85226</key></restbot>\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "avatar_name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"    return;",
+							"}",
+							"",
+							"// if (pm.request.body.formdata(\"key\").)"
+						],
+						"type": "text/javascript"
+					}
 				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "3d6181b0-6a4b-97ef-18d8-722652995cf1",
+							"description": "Avatar key (UUID) to search for name. Note: either name or key can be set, but not both!",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}/avatar_name/{{session_id}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"avatar_name",
+						"{{session_id}}",
+						""
+					]
+				},
+				"description": "### Returns:\n\n``` xml\n<restbot><name>Gwyneth Llewelyn</name></restbot>\n\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "avatar_online",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "3d6181b0-6a4b-97ef-18d8-722652995cf1",
+							"description": "Avatar key (UUID) for which retrieve the online status.",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}/avatar_online/{{session_id}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"avatar_online",
+						"{{session_id}}",
+						""
+					]
+				},
+				"description": "### Returns:\n\n``` xml\n<restbot><online>False</online></restbot>\n\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "avatar_profile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "3d6181b0-6a4b-97ef-18d8-722652995cf1",
+							"description": "Avatar key (UUID) to retrieve the profile for.",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}/avatar_profile/{{session_id}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"avatar_profile",
+						"{{session_id}}",
+						""
+					]
+				},
+				"description": "### Returns:\n\n``` xml\n<restbot><online>False</online></restbot>\n\n```"
 			},
 			"response": []
 		},
@@ -175,7 +410,9 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							""
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -189,18 +426,145 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "{{protocol}}://{{server}}:9080/location/{{session_id}}/",
-					"protocol": "{{protocol}}",
+					"raw": "{{baseURL}}/location/{{session_id}}/",
 					"host": [
-						"{{server}}"
+						"{{baseURL}}"
 					],
-					"port": "9080",
 					"path": [
 						"location",
 						"{{session_id}}",
 						""
 					]
+				},
+				"description": "Shows the current region name, the IP and port addresses of that region, and the actual position of the 'bot inside it.\n\n### Returns:\n\n``` xml\n<restbot>\n\t<location>\n\t\t<CurrentSim>Beta Technologies (216.82.45.92:13000)</CurrentSim>\n\t\t<Position>103.0242,211.2815,30.03234</Position>\n\t</location>\n</restbot>\n\n```\n\n_Note:_ The  parameter includes not only the name, but also the IP address of the simulator, for reasons unknown. Future versions might separate such information with different XML sub-tags, to ease parsing (important for LSL scripts, which might not have good XML parsing ability). There are a few more elements that can be returned, such as the _global_ position, the simulator version that is currently running on this region, and other statistics that are not currently being reported by the [Stats Plugin](https://github.com/GwynethLlewelyn/restbot/wiki/RESTbot-API#stats-plugin)."
+			},
+			"response": []
+		},
+		{
+			"name": "goto",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
 				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "sim",
+							"value": "Ahern",
+							"description": "Region simulator to teleport to (spaces should work fine if properly quoted)",
+							"type": "text"
+						},
+						{
+							"key": "x",
+							"value": "128",
+							"description": "Coordinates inside the region (floats)",
+							"type": "text"
+						},
+						{
+							"key": "y",
+							"value": "128",
+							"type": "text"
+						},
+						{
+							"key": "z",
+							"value": "30",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}/goto/{{session_id}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"goto",
+						"{{session_id}}",
+						""
+					]
+				},
+				"description": "Teleports 'bot to a specific simulator and a position `(x,y,z)` inside that sim. Position coordinates are floats.\n\n### Returns:\n\n``` xml\n<restbot>\n\t<teleport>\n\t\t<CurrentSim>Beta Technologies (216.82.45.92:13000)</CurrentSim>\n\t\t<Position>103.0242,211.2815,30.03234</Position>\n\t</teleport>\n</restbot>\n\n```\n\n_Note:_ The result is now consistent with the [Location](https://github.com/GwynethLlewelyn/restbot/wiki/RESTbot-API#location) plugin. See also the note about the simulator IP address."
+			},
+			"response": []
+		},
+		{
+			"name": "say",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get(\"session_id\") == \"00000000-0000-0000-0000-000000000000\") {",
+							"    console.warn(\"Empty or invalid session_id; did you remember to login first?\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "message",
+							"value": "I am not yelling!",
+							"description": "Message to send (max. about 1024 bytes)",
+							"type": "text"
+						},
+						{
+							"key": "channel",
+							"value": "0",
+							"description": "[Optional] channel to send (signed integer); 0 is public chat (default)",
+							"type": "text"
+						},
+						{
+							"key": "chattype",
+							"value": "normal",
+							"description": "[Optional] can be: _normal_, _shout_ or _whisper_.",
+							"type": "text"
+						},
+						{
+							"key": "realism",
+							"value": "false",
+							"description": "[Optional] enables or disables realism mode (bot uses typing animation); default is _false_.",
+							"type": "text"
+						},
+						{
+							"key": "charspersecond",
+							"value": "3",
+							"description": "[Optional] simulates the number of characters typed by a minute per second; default is 3.",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}/say/{{session_id}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"say",
+						"{{session_id}}",
+						""
+					]
+				},
+				"description": "Sends a message to chat. Any channel can be chosen (default is 0, also known as 'public chat') as well as the chat type: normal, shout or whisper.\n\nSince v8.3.0, this call also includes the ability to use the 'realism' mode, hidden deep in LibreMetaverse, and which attempts to mimic how a human normally types. Default is off (realism=false). charspersecond is by default 3, which, according to the LibreMetaverse developers, is about the average typing time of humans. The 'bot avatar will engage the typing animation during this time (and a viewer with bubbles enabled will see the three dots until the 'bot avatar stops typing).\n\n### Returns:\n\nIf successful, returns what was sent in chat (or an error if it failed):\n``` xml\n<restbot><say><channel>0</channel><message>I am not yelling</message><chattype>normal</chattype></say></restbot>\n```"
 			},
 			"response": []
 		}
@@ -223,6 +587,42 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://127.0.0.1:9080",
+			"type": "string"
+		},
+		{
+			"key": "restBotPassword",
+			"value": "pass",
+			"type": "string"
+		},
+		{
+			"key": "avatarFirstName",
+			"value": "Sample",
+			"type": "string"
+		},
+		{
+			"key": "avatarLastName",
+			"value": "Resident",
+			"type": "string"
+		},
+		{
+			"key": "avatarPassword",
+			"value": "aPlainTextPassword",
+			"type": "string"
+		},
+		{
+			"key": "session_id",
+			"value": "00000000-0000-0000-0000-000000000000",
+			"type": "string"
+		},
+		{
+			"key": "sl_md5_password",
+			"value": ""
 		}
 	]
 }
