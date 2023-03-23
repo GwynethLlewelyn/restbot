@@ -381,7 +381,7 @@ namespace RESTBot
 					.WriteInfo($"{session} {MethodName} Processing {replyCount.ToString()} DirPeople replies");
 				for (int i = 0; i < replyCount; i++)
 				{
-					string avatarName =	e.MatchedPeople[i].FirstName + e.MatchedPeople[i].LastName;
+					string avatarName =	e.MatchedPeople[i].FirstName.ToLower() + " " + e.MatchedPeople[i].LastName.ToLower();
 					UUID avatarKey 		= e.MatchedPeople[i].AgentID;
 					DebugUtilities
 						.WriteDebug($"{session} {MethodName} Reply {(i + 1).ToString()} of {replyCount.ToString()} Key: {avatarKey.ToString()} Name: {avatarName}");
@@ -391,16 +391,22 @@ namespace RESTBot
 						/* || avatarKeys[avatarName] == null )	 // apparently dictionary entries cannot be null */
 						lock (avatarKeys)
 						{
-							avatarKeys[avatarName.ToLower()] = avatarKey;
+						//	avatarKeys[avatarName.ToLower()] = avatarKey;
+							avatarKeys[avatarName] = avatarKey;
 						}
 					}
 
 					lock (KeyLookupEvents)
 					{
-						if (KeyLookupEvents.ContainsKey(avatarName.ToLower()))
+/* 						if (KeyLookupEvents.ContainsKey(avatarName.ToLower()))
 						{
 							KeyLookupEvents[avatarName.ToLower()].Set();
 							DebugUtilities.WriteDebug($"{avatarName.ToLower()} KLE set!");
+						} */
+						if (KeyLookupEvents.ContainsKey(avatarName))
+						{
+							KeyLookupEvents[avatarName].Set();
+							DebugUtilities.WriteDebug($"{avatarName} KLE set!");
 						}
 					}
 				}
