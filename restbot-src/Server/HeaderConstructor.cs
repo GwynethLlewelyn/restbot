@@ -150,7 +150,7 @@ namespace RESTBot.Server
 			HeaderLines
 				.Add(new HeaderLine("Date",
 					DateTime.Now.ToUniversalTime().ToLongDateString()));
-			HeaderLines.Add(new HeaderLine("Server", "RestBotRV/0.1"));
+			HeaderLines.Add(new HeaderLine("Server", "RestBotRV/" + Program.Version));
 			HeaderLines.Add(new HeaderLine("Content-type", content_type));
 		}
 
