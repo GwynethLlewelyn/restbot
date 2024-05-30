@@ -4,7 +4,7 @@
 	xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
 	xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	schemaLocation="Microsoft.Build.xsd"
+	schemaLocation="./Microsoft.Build.xsd"
 	elementFormDefault="qualified">
 	<PropertyGroup Label="Globals">
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
@@ -79,7 +79,7 @@
 		<PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.20.453-gwyn" />
 		<PackageReference Include="LibreMetaverse.Types" Version="1.9.20.453-gwyn" />
 		<PackageReference Include="LibreMetaverse.Utilities" Version="1.9.20.453-gwyn" /><!-- this allows us to include the cool Realism class for chatting! (gwyneth 20210121) -->
-		<PackageReference Include="log4net" Version="2.0.14" />
+		<PackageReference Include="log4net" Version="2.0.17" />
 	</ItemGroup>
 	<ItemGroup>
 			<None Include="$(AssetsFolder)images\RESTbot-logo.png" Pack="true" PackagePath="" />
