@@ -106,6 +106,7 @@ namespace RESTBot
 				var fileVersionInfo = FileVersionInfo.GetVersionInfo("@RESTbot");
 #endif
 				Version = fileVersionInfo.FileVersion + "-file";
+				DebugUtilities.WriteDebug($"File: {fileVersionInfo.FileVersion} Version: {fileVersionInfo.FileVersion} System directory (path): {Environment.SystemDirectory}");
 			}
 			catch (Exception e1)
 			{
