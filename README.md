@@ -1,4 +1,7 @@
 ![RESTbot logo](assets/images/RESTbot-logo.png)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Build status](https://ci.appveyor.com/api/projects/status/2eg76jrrds4ru46j?svg=true)](https://ci.appveyor.com/project/GwynethLlewelyn/restbot)![CodeQL](https://github.com/gwynethllewelyn/restbot/workflows/CodeQL/badge.svg)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
@@ -166,3 +169,25 @@ You can read more about the history of _LibreMetaverse_ on this project's [wiki]
 RESTbot is therefore just 'wrapper' code that launches a mini-webserver and exposes a RESTful API to selected LibreMetaverse commands.
 
 _Original documentation written by an anonymous collaborator at Pleiades; several changes were been made by Gwyneth Llewelyn, but trying to keep the original, light-hearted style of explaining things (gwyneth 20211121)._
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/iDJHost"><img src="https://avatars.githubusercontent.com/u/21136403?v=4?s=100" width="100px;" alt="iDJHost"/><br /><sub><b>iDJHost</b></sub></a><br /><a href="https://github.com/GwynethLlewelyn/restbot/commits?author=iDJHost" title="Tests">⚠️</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
