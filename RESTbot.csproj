@@ -79,7 +79,7 @@
 		<PackageReference Include="LibreMetaverse.StructuredData" Version="1.9.20.453-gwyn" />
 		<PackageReference Include="LibreMetaverse.Types" Version="1.9.20.453-gwyn" />
 		<PackageReference Include="LibreMetaverse.Utilities" Version="1.9.20.453-gwyn" /><!-- this allows us to include the cool Realism class for chatting! (gwyneth 20210121) -->
-		<PackageReference Include="log4net" Version="2.0.17" />
+		<PackageReference Include="log4net" Version="3.3.0" />
 	</ItemGroup>
 	<ItemGroup>
 			<None Include="$(AssetsFolder)images\RESTbot-logo.png" Pack="true" PackagePath="" />
